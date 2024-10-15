@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Fonts */
+    --main-font: "Jost", sans-serif;
+
+    --btn-color-one: #024959;
+    --text-color-one: #3D3D3D;
+    --text-color-two: #F2F2F2;
+    --bg-color: #D9D9D9;
+    --card-color: #F2F2F2;
+}

@@ -1,0 +1,87 @@
+.nav-container {
+    display: flex;
+    flex-direction: column;
+    background: var(--card-color);
+}
+
+.top-nav {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    font-family: var(--main-font);
+}
+
+.top-item {
+    font-size: 12px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.top-local {
+    color: var(--btn-color-one);
+}
+
+.top-icon {
+    color: var(--text-color-one);
+}
+
+.nav-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.nav-logo-item {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-logo-img {
+    width: 9rem;
+}
+
+.nav-logo {
+    color: var(--text-color-one);
+    font-family: var(--main-font);
+}
+
+.nav-unorderd-list {
+    display: flex;
+    gap: 2rem;
+    padding: 2rem;
+    margin: 0;
+    font-family: var(--main-font);
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.nav-link-item {
+    text-decoration: none;
+    color: var(--text-color-one);
+}
+
+.nav-btn {
+    gap: 2rem;
+    display: flex;
+    font-family: var(--main-font);
+}
+
+.nav-login-btn {
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-color-one);
+}
+
+.nav-register-btn {
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0;
+    color: var(--text-color-one);
+    border-radius: 5px;
+}
