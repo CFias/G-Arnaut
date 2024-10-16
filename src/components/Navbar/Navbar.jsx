@@ -1,36 +1,74 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
+import { Phone, Menu } from "@mui/icons-material";
+import Logo from "../../assets/image/garnaut-gray-logo-two.png";
+import Logo2 from "../../assets/image/garnaut-gray-logo-icon.png";
 import "./styles.css";
-import { Phone } from "@mui/icons-material";
-import Logo from "../../assets/image/garnaut-gray-logo-two.png"
 
 export const Navbar = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const closeSidebar = () => {
+    setIsSidebarOpen(false);
+  };
+
   return (
     <header className="nav-container">
       <div className="top-nav">
         <h5 className="top-item">
-          O seu corretor de imoveis em{" "}
+          O seu corretor de imóveis em{" "}
           <span className="top-local">Salvador-BA</span>
         </h5>
         <h5 className="top-item">
           <Phone fontSize="10" className="top-icon" /> 71 9190-0974
         </h5>
       </div>
+
       <nav className="nav-content">
         <NavLink className="nav-logo-item">
-          <img className="nav-logo-img" src={Logo} alt="" />
+          <div className="menu-icon">
+            <Menu className="nav-menu-icon" onClick={toggleSidebar} />
+          </div>
+          <img className="nav-logo-img" src={Logo} alt="Logo" />
         </NavLink>
+
         <ul className="nav-unorderd-list">
+          <NavLink className="nav-link-item">Início</NavLink>
           <NavLink className="nav-link-item">Venda</NavLink>
           <NavLink className="nav-link-item">Locação</NavLink>
           <NavLink className="nav-link-item">O corretor</NavLink>
           <NavLink className="nav-link-item">Contato</NavLink>
         </ul>
-        <div className="nav-btn">
-          <NavLink className="nav-login-btn">Login</NavLink>
-          <NavLink className="nav-register-btn">Cadastrar</NavLink>
-        </div>
       </nav>
+
+      {isSidebarOpen && <div className="overlay" onClick={closeSidebar}></div>}
+
+      <aside className={`sidebar ${isSidebarOpen ? "open" : ""}`}>
+        <div className="side-logo">
+          <img className="nav-logo-img-side" src={Logo2} alt="Logo" />
+        </div>
+        <ul className="sidebar-list">
+          <NavLink className="sidebar-link-item" onClick={closeSidebar}>
+            Início
+          </NavLink>
+          <NavLink className="sidebar-link-item" onClick={closeSidebar}>
+            Venda
+          </NavLink>
+          <NavLink className="sidebar-link-item" onClick={closeSidebar}>
+            Locação
+          </NavLink>
+          <NavLink className="sidebar-link-item" onClick={closeSidebar}>
+            O corretor
+          </NavLink>
+          <NavLink className="sidebar-link-item" onClick={closeSidebar}>
+            Contato
+          </NavLink>
+        </ul>
+      </aside>
     </header>
   );
 };
