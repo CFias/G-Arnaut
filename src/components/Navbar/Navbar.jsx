@@ -1,6 +1,15 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { Phone, Menu } from "@mui/icons-material";
+import {
+  Phone,
+  Menu,
+  Home,
+  HomeRounded,
+  StoreRounded,
+  LocationCityRounded,
+  InfoRounded,
+  ShareRounded,
+} from "@mui/icons-material";
 import Logo from "../../assets/image/garnaut-gray-logo-two.png";
 import Logo2 from "../../assets/image/garnaut-gray-logo-icon.png";
 import "./styles.css";
@@ -54,18 +63,23 @@ export const Navbar = () => {
         <ul className="sidebar-list">
           <NavLink className="sidebar-link-item" onClick={closeSidebar}>
             Início
+            <HomeRounded fontSize="small" />
           </NavLink>
           <NavLink className="sidebar-link-item" onClick={closeSidebar}>
             Venda
+            <StoreRounded fontSize="small" />
           </NavLink>
           <NavLink className="sidebar-link-item" onClick={closeSidebar}>
             Locação
+            <LocationCityRounded fontSize="small" />
           </NavLink>
           <NavLink className="sidebar-link-item" onClick={closeSidebar}>
             O corretor
+            <InfoRounded fontSize="small" />
           </NavLink>
           <NavLink className="sidebar-link-item" onClick={closeSidebar}>
             Contato
+            <ShareRounded fontSize="small" />
           </NavLink>
         </ul>
       </aside>

@@ -110,7 +110,7 @@
     }
 
     .sidebar-link-item:hover {
-        color: #ffcc00;
+        color: #304275;
     }
 
     .overlay {
@@ -166,6 +166,10 @@
         font-size: 14px;
         font-weight: 500;
         color: var(--text-color-one);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid rgba(128, 128, 128, 0.11);
     }
 
     .side-logo {
