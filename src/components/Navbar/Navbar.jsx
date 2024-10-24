@@ -3,19 +3,21 @@ import { NavLink } from "react-router-dom";
 import {
   Phone,
   Menu,
-  Home,
   HomeRounded,
   StoreRounded,
   LocationCityRounded,
   InfoRounded,
   ShareRounded,
 } from "@mui/icons-material";
+import { useAuth } from "../../contexts/AuthContext"; // Importando o contexto de autenticação
+import { logout } from "../../services/FirebaseConfig"; // Função de logout
 import Logo from "../../assets/image/garnaut-gray-logo-two.png";
 import Logo2 from "../../assets/image/garnaut-gray-logo-icon.png";
 import "./styles.css";
 
 export const Navbar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { currentUser, loading } = useAuth(); // Obtendo o usuário autenticado e o estado de carregamento
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -24,6 +26,17 @@ export const Navbar = () => {
   const closeSidebar = () => {
     setIsSidebarOpen(false);
   };
+
+  const handleLogout = async () => {
+    try {
+      await logout(); // Chama a função de logout
+      console.log("Logged out successfully");
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
+  };
+
+  if (loading) return <div className="loading-main">Loading...</div>; // Exibe um carregando enquanto espera a autenticação
 
   return (
     <header className="nav-container">
@@ -38,7 +51,7 @@ export const Navbar = () => {
       </div>
 
       <nav className="nav-content">
-        <NavLink className="nav-logo-item">
+        <NavLink to="/" className="nav-logo-item">
           <div className="menu-icon">
             <Menu className="nav-menu-icon" onClick={toggleSidebar} />
           </div>
@@ -46,11 +59,32 @@ export const Navbar = () => {
         </NavLink>
 
         <ul className="nav-unorderd-list">
-          <NavLink className="nav-link-item">Início</NavLink>
+          <NavLink to="/" className="nav-link-item">
+            Início
+          </NavLink>
           <NavLink className="nav-link-item">Venda</NavLink>
           <NavLink className="nav-link-item">Locação</NavLink>
           <NavLink className="nav-link-item">O corretor</NavLink>
           <NavLink className="nav-link-item">Contato</NavLink>
+
+          {!currentUser ? (
+            <>
+              <NavLink to="/login" className="nav-link-item">
+                Login
+              </NavLink>
+              <NavLink to="/register" className="nav-link-item">
+                Criar conta
+              </NavLink>
+            </>
+          ) : (
+            <li className="nav-link-item">
+              Bem-vindo, {currentUser.userName || currentUser.email}{" "}
+              {/* Exibe o nome ou email */}
+              <button onClick={handleLogout} className="logout-button">
+                Sair
+              </button>
+            </li>
+          )}
         </ul>
       </nav>
 
@@ -62,24 +96,19 @@ export const Navbar = () => {
         </div>
         <ul className="sidebar-list">
           <NavLink className="sidebar-link-item" onClick={closeSidebar}>
-            Início
-            <HomeRounded fontSize="small" />
+            Início <HomeRounded fontSize="small" />
           </NavLink>
           <NavLink className="sidebar-link-item" onClick={closeSidebar}>
-            Venda
-            <StoreRounded fontSize="small" />
+            Venda <StoreRounded fontSize="small" />
           </NavLink>
           <NavLink className="sidebar-link-item" onClick={closeSidebar}>
-            Locação
-            <LocationCityRounded fontSize="small" />
+            Locação <LocationCityRounded fontSize="small" />
           </NavLink>
           <NavLink className="sidebar-link-item" onClick={closeSidebar}>
-            O corretor
-            <InfoRounded fontSize="small" />
+            O corretor <InfoRounded fontSize="small" />
           </NavLink>
           <NavLink className="sidebar-link-item" onClick={closeSidebar}>
-            Contato
-            <ShareRounded fontSize="small" />
+            Contato <ShareRounded fontSize="small" />
           </NavLink>
         </ul>
       </aside>

@@ -9,22 +9,24 @@
     justify-content: space-around;
     width: 100%;
     font-family: var(--main-font);
+    background: var(--btn-color-one);
 }
 
 .top-item {
     font-size: 12px;
-    font-weight: 500;
+    font-weight: 300;
     display: flex;
     align-items: center;
     gap: 4px;
+    color: var(--text-color-two);
 }
 
 .top-local {
-    color: var(--btn-color-one);
+    color: var(--text-color-two);
 }
 
 .top-icon {
-    color: var(--text-color-one);
+    color: var(--text-color-two);
 }
 
 .nav-content {
