@@ -6,6 +6,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
+import { getFirestore } from "firebase/firestore"; // Importar o Firestore
 
 // Sua configuração do Firebase
 const firebaseConfig = {
@@ -20,6 +21,7 @@ const firebaseConfig = {
 // Inicializar Firebase
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
+export const db = getFirestore(app); // Inicializa e exporta o Firestore
 
 // Função para registrar usuário
 export function signup(email, password) {
