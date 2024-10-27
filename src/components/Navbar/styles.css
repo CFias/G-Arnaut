@@ -13,7 +13,8 @@
 }
 
 .top-item {
-    font-size: 12px;
+    font-size: 16px;
+    padding: 1rem;
     font-weight: 300;
     display: flex;
     align-items: center;
@@ -23,6 +24,7 @@
 
 .top-local {
     color: var(--text-color-two);
+    font-weight: 400;
 }
 
 .top-icon {

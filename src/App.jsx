@@ -14,7 +14,6 @@ import Register from "./pages/RegisterPage/Register";
 function App() {
   return (
     <AuthProvider>
-      <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
