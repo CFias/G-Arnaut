@@ -24,8 +24,8 @@ export const auth = getAuth(app);
 export const db = getFirestore(app); // Inicializa e exporta o Firestore
 
 // Função para registrar usuário
-export function signup(email, password) {
-  return createUserWithEmailAndPassword(auth, email, password);
+export function signup(userName, email, password) {
+  return createUserWithEmailAndPassword(auth, userName, email, password);
 }
 
 // Função para fazer login
