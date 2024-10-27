@@ -1,9 +1,15 @@
-import React from 'react'
+import React from "react";
+import { Navbar } from "../../components/Navbar/Navbar";
+import { Footer } from "../../components/Footer/Footer";
 
 export const Home = () => {
   return (
-    <main>
+    <>
+      <Navbar />
+      <main className="home-container">
         
-    </main>
-  )
-}
+      </main>
+      <Footer />
+    </>
+  );
+};
