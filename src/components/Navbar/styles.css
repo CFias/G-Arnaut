@@ -14,7 +14,7 @@
 
 .top-item {
     font-size: 16px;
-    padding: 1rem;
+    padding: .5rem;
     font-weight: 300;
     display: flex;
     align-items: center;
@@ -57,19 +57,47 @@
     display: none;
 }
 
+/* Posição padrão */
 .nav-unorderd-list {
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
+    transition: all 0.4s ease;
+    /* Aumente a duração da transição */
     gap: 3rem;
-    padding: 2rem;
+    padding: 1.5rem 2rem;
     margin: 0;
     font-family: var(--main-font);
     font-size: 16px;
     font-weight: 400;
     border-top: 1px solid rgba(128, 128, 128, 0.24);
     width: 100%;
+    background: var(--text-color-two);
 }
+
+/* Aplica a posição fixa enquanto a rolagem é ativada */
+.sticky {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transform: translateY(0);
+    /* Para suavizar a transição de movimento */
+    transition: all 0.4s ease;
+    /* Suavizar a transição */
+}
+
+/* Adicione uma leve transição de cor no background */
+.sticky:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+    /* Leve transparência */
+}
+
+
 
 .nav-link-item {
     text-decoration: none;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import {
   Phone,
@@ -9,15 +9,16 @@ import {
   InfoRounded,
   ShareRounded,
 } from "@mui/icons-material";
-import { useAuth } from "../../contexts/AuthContext"; // Importando o contexto de autenticação
-import { logout } from "../../services/FirebaseConfig"; // Função de logout
+import { useAuth } from "../../contexts/AuthContext";
+import { logout } from "../../services/FirebaseConfig";
 import Logo from "../../assets/image/garnaut-gray-logo-two.png";
 import Logo2 from "../../assets/image/garnaut-gray-logo-icon.png";
 import "./styles.css";
 
 export const Navbar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const { currentUser, loading } = useAuth(); // Obtendo o usuário autenticado e o estado de carregamento
+  const [isSticky, setIsSticky] = useState(false);
+  const { currentUser, loading } = useAuth();
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -29,14 +30,29 @@ export const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      await logout(); // Chama a função de logout
+      await logout();
       console.log("Logged out successfully");
     } catch (error) {
       console.error("Error logging out:", error);
     }
   };
 
-  if (loading) return <div className="loading-main">Loading...</div>; // Exibe um carregando enquanto espera a autenticação
+  useEffect(() => {
+    const handleScroll = () => {
+      const navList = document.getElementById("navList");
+      if (navList) {
+        const stickyStart = navList.offsetTop;
+        setIsSticky(window.pageYOffset > stickyStart);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  if (loading) return <div className="loading-main">Loading...</div>;
 
   return (
     <header className="nav-container">
@@ -55,10 +71,12 @@ export const Navbar = () => {
           <div className="menu-icon">
             <Menu className="nav-menu-icon" onClick={toggleSidebar} />
           </div>
-          <img className="nav-logo-img" src={Logo} alt="Logo" />
         </NavLink>
 
-        <ul className="nav-unorderd-list">
+        <ul
+          id="navList"
+          className={`nav-unorderd-list ${isSticky ? "sticky" : ""}`}
+        >
           <NavLink to="/" className="nav-link-item">
             Início
           </NavLink>
@@ -66,7 +84,6 @@ export const Navbar = () => {
           <NavLink className="nav-link-item">Locação</NavLink>
           <NavLink className="nav-link-item">O corretor</NavLink>
           <NavLink className="nav-link-item">Contato</NavLink>
-
           {!currentUser ? (
             <>
               <NavLink to="/login" className="nav-link-item">
@@ -78,8 +95,7 @@ export const Navbar = () => {
             </>
           ) : (
             <li className="nav-link-item">
-              Bem-vindo, {currentUser.userName || currentUser.email}{" "}
-              {/* Exibe o nome ou email */}
+              Bem-vindo, {currentUser.userName || currentUser.email}
               <button onClick={handleLogout} className="logout-button">
                 Sair
               </button>
