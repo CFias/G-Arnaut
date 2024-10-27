@@ -7,7 +7,7 @@ import { getAuth, fetchSignInMethodsForEmail } from "firebase/auth"; // Importa 
 import { getFirestore, doc, setDoc } from "firebase/firestore"; // Importa Firestore
 
 export default function Register() {
-  const [username, setUsername] = useState(""); // Novo estado para o nome de usuário
+  const [userName, setUserName] = useState(""); // Novo estado para o nome de usuário
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState(""); // Novo estado para confirmar a senha
@@ -40,7 +40,7 @@ export default function Register() {
 
       // Salvar o nome de usuário no Firestore
       await setDoc(doc(db, "users", user.uid), {
-        username, // Armazena o nome de usuário
+        userName, // Armazena o nome de usuário
         email, // Armazena o email
       });
 
@@ -57,8 +57,8 @@ export default function Register() {
       <form onSubmit={handleSubmit}>
         <input
           type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          value={userName}
+          onChange={(e) => setUserName(e.target.value)}
           placeholder="Nome de Usuário"
           required // Adiciona validação
         />
