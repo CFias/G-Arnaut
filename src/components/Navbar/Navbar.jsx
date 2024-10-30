@@ -8,6 +8,8 @@ import {
   LocationCityRounded,
   InfoRounded,
   ShareRounded,
+  Login,
+  Add,
 } from "@mui/icons-material";
 import { useAuth } from "../../contexts/AuthContext";
 import { logout } from "../../services/FirebaseConfig";
@@ -18,7 +20,7 @@ import "./styles.css";
 export const Navbar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
-  const { currentUser, loading } = useAuth();
+  const { user, loading } = useAuth();
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -77,30 +79,34 @@ export const Navbar = () => {
           id="navList"
           className={`nav-unorderd-list ${isSticky ? "sticky" : ""}`}
         >
-          <NavLink to="/" className="nav-link-item">
-            Início
-          </NavLink>
-          <NavLink className="nav-link-item">Venda</NavLink>
-          <NavLink className="nav-link-item">Locação</NavLink>
-          <NavLink className="nav-link-item">O corretor</NavLink>
-          <NavLink className="nav-link-item">Contato</NavLink>
-          {!currentUser ? (
-            <>
-              <NavLink to="/login" className="nav-link-item">
-                Login
-              </NavLink>
-              <NavLink to="/register" className="nav-link-item">
-                Criar conta
-              </NavLink>
-            </>
-          ) : (
-            <li className="nav-link-item">
-              Bem-vindo, {currentUser.userName || currentUser.email}
-              <button onClick={handleLogout} className="logout-button">
-                Sair
-              </button>
-            </li>
-          )}
+          <div className="nav-links">
+            <NavLink to="/" className="nav-link-item">
+              Início
+            </NavLink>
+            <NavLink className="nav-link-item">Venda</NavLink>
+            <NavLink className="nav-link-item">Locação</NavLink>
+            <NavLink className="nav-link-item">O corretor</NavLink>
+            <NavLink className="nav-link-item">Contato</NavLink>
+          </div>
+          <div className="nav-btn">
+            {!user ? (
+              <>
+                <NavLink to="/login" className="nav-link-login">
+                  Login
+                </NavLink>
+                <NavLink to="/register" className="nav-link-register">
+                  Criar conta
+                </NavLink>
+              </>
+            ) : (
+              <li className="nav-link-item">
+                Bem-vindo, {user.userName || user.email}
+                <button onClick={handleLogout} className="logout-button">
+                  Sair
+                </button>
+              </li>
+            )}
+          </div>
         </ul>
       </nav>
 
@@ -109,6 +115,14 @@ export const Navbar = () => {
       <aside className={`sidebar ${isSidebarOpen ? "open" : ""}`}>
         <div className="side-logo">
           <img className="nav-logo-img-side" src={Logo2} alt="Logo" />
+          <div className="side-links">
+            <NavLink className="side-link-item" onClick={closeSidebar}>
+              Entrar <Login fontSize="small" />
+            </NavLink>
+            <NavLink className="side-link-item" onClick={closeSidebar}>
+              Cadastre-se <Add fontSize="small" />
+            </NavLink>
+          </div>
         </div>
         <ul className="sidebar-list">
           <NavLink className="sidebar-link-item" onClick={closeSidebar}>

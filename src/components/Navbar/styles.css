@@ -64,8 +64,7 @@
     justify-content: center;
     position: relative;
     transition: all 0.4s ease;
-    /* Aumente a duração da transição */
-    gap: 3rem;
+    gap: 6rem;
     padding: 1.5rem 2rem;
     margin: 0;
     font-family: var(--main-font);
@@ -97,11 +96,34 @@
     /* Leve transparência */
 }
 
-
-
 .nav-link-item {
     text-decoration: none;
     color: var(--text-color-one);
+}
+
+.nav-link-login, .nav-link-register {
+    display: flex;
+    text-decoration: none;
+    color: var(--text-color-one);
+    font-weight: 500;
+    background: rgb(235, 235, 235);
+    padding: .5rem;
+    border-radius: 5px;
+    transition: 250ms;
+}
+
+.nav-link-login:hover, .nav-link-register:hover {
+    background: rgb(224, 224, 224);
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+}
+
+.nav-btn {
+    display: flex;
+    gap: 2rem;
 }
 
 @media (max-width: 768px) {
@@ -132,6 +154,20 @@
     .sidebar-list {
         list-style: none;
         padding: 0;
+        background-image: url("../../assets/image/garnaut-gray-logo-icon.png");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        height: 100%;
+        opacity: 2;
+    }
+
+    .side-links {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        background: var(--card-color);
+        width: 100%;
     }
 
     .sidebar-link-item {
@@ -207,8 +243,20 @@
     .side-logo {
         background: var(--btn-color-one);
         display: flex;
+        flex-direction: column;
+        align-items: center;
         justify-content: center;
         border-radius: 6px;
+    }
+
+    .side-link-item {
+        color: var(--btn-color-one);
+        display: flex;
+        font-family: var(--main-font);
+        gap: 5px;
+        text-decoration: none;
+        font-size: 14px;
+        padding: 5px;
     }
 
     .nav-logo-img-side {
