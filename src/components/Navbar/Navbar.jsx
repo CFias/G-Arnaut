@@ -10,6 +10,7 @@ import {
   ShareRounded,
   Login,
   Add,
+  LogoutRounded,
 } from "@mui/icons-material";
 import { useAuth } from "../../contexts/AuthContext";
 import { logout } from "../../services/FirebaseConfig";
@@ -20,7 +21,7 @@ import "./styles.css";
 export const Navbar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
-  const { user, loading } = useAuth();
+  const { currentUser, userName, loading } = useAuth(); // Ajusta para currentUser e userName
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -63,9 +64,29 @@ export const Navbar = () => {
           O seu corretor de imóveis em{" "}
           <span className="top-local">Salvador-BA</span>
         </h5>
-        <h5 className="top-item">
-          <Phone fontSize="10" className="top-icon" /> 71 9190-0974
-        </h5>
+        <div className="nav-btn">
+          <h5 className="top-item">
+            <Phone fontSize="10" className="top-icon" /> 71 9190-0974
+          </h5>
+          {!currentUser ? (
+            <>
+              <NavLink to="/login" className="nav-link-login">
+                Login
+              </NavLink>
+              <NavLink to="/register" className="nav-link-register">
+                Criar conta
+              </NavLink>
+            </>
+          ) : (
+            <>
+              <li className="nav-link-name">Bem-vindo, {userName}</li>
+              <button onClick={handleLogout} className="logout-button">
+                Sair
+                <LogoutRounded fontSize="10" />
+              </button>
+            </>
+          )}
+        </div>
       </div>
 
       <nav className="nav-content">
@@ -88,25 +109,6 @@ export const Navbar = () => {
             <NavLink className="nav-link-item">O corretor</NavLink>
             <NavLink className="nav-link-item">Contato</NavLink>
           </div>
-          <div className="nav-btn">
-            {!user ? (
-              <>
-                <NavLink to="/login" className="nav-link-login">
-                  Login
-                </NavLink>
-                <NavLink to="/register" className="nav-link-register">
-                  Criar conta
-                </NavLink>
-              </>
-            ) : (
-              <li className="nav-link-item">
-                Bem-vindo, {user.userName || user.email}
-                <button onClick={handleLogout} className="logout-button">
-                  Sair
-                </button>
-              </li>
-            )}
-          </div>
         </ul>
       </nav>
 
@@ -116,12 +118,24 @@ export const Navbar = () => {
         <div className="side-logo">
           <img className="nav-logo-img-side" src={Logo2} alt="Logo" />
           <div className="side-links">
-            <NavLink className="side-link-item" onClick={closeSidebar}>
-              Entrar <Login fontSize="small" />
-            </NavLink>
-            <NavLink className="side-link-item" onClick={closeSidebar}>
-              Cadastre-se <Add fontSize="small" />
-            </NavLink>
+            {!currentUser ? (
+              <>
+                <NavLink to="/login" className="side-link-item" onClick={closeSidebar}>
+                  Entrar <Login fontSize="small" />
+                </NavLink>
+                <NavLink to="/register" className="side-link-item" onClick={closeSidebar}>
+                  Cadastre-se <Add fontSize="small" />
+                </NavLink>
+              </>
+            ) : (
+              <>
+                <li className="nav-link-name">Bem-vindo, {userName}</li>
+                <button onClick={handleLogout} className="logout-button">
+                  Sair
+                  <LogoutRounded fontSize="10" />
+                </button>
+              </>
+            )}
           </div>
         </div>
         <ul className="sidebar-list">

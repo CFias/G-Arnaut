@@ -1,44 +1,41 @@
-// src/contexts/AuthContext.jsx
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth, db } from "../services/FirebaseConfig"; // Importando db corretamente
-import { doc, getDoc } from "firebase/firestore"; // Importando métodos do Firestore
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getFirestore, doc, getDoc } from "firebase/firestore";
 
 const AuthContext = createContext();
 
-export function useAuth() {
-  return useContext(AuthContext);
-}
-
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [userName, setUserName] = useState(null);
 
   useEffect(() => {
+    const auth = getAuth();
+    const db = getFirestore();
+
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      setCurrentUser(user);
+
+      // Se o usuário estiver autenticado, obtenha o nome de usuário do Firestore
       if (user) {
-        // Se o usuário estiver autenticado, busque o nome do usuário
-        const userDoc = await getDoc(doc(db, "users", user.uid)); // Ajuste o caminho da coleção conforme sua estrutura
+        const userDoc = await getDoc(doc(db, "users", user.uid));
         if (userDoc.exists()) {
-          // Verifica se o documento existe
-          setUser({ ...user, userName: userDoc.data().username }); // Supondo que o campo username exista no Firestore
-        } else {
-          setUser({ ...user, userName: "Usuário sem nome" }); // Lida com a ausência de nome
+          setUserName(userDoc.data().userName);
         }
       } else {
-        setUser(null);
+        setUserName(null);
       }
-      setLoading(false);
     });
 
     return unsubscribe;
   }, []);
 
-  const value = { user, loading }; // Adicione o estado de carregamento aqui
-
   return (
-    <AuthContext.Provider value={value}>
-      {!loading && children}
+    <AuthContext.Provider value={{ currentUser, userName }}>
+      {children}
     </AuthContext.Provider>
   );
+}
+
+export function useAuth() {
+  return useContext(AuthContext);
 }
