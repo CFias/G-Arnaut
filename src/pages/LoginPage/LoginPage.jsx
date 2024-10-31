@@ -13,7 +13,7 @@ export default function Login() {
     e.preventDefault();
     try {
       await login(email, password); // Tenta fazer login
-      navigate("/home"); // Redireciona para a página inicial após login bem-sucedido
+      navigate("/"); // Redireciona para a página inicial após login bem-sucedido
     } catch (error) {
       console.error("Erro ao fazer login:", error);
     }

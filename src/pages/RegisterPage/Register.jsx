@@ -18,33 +18,32 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Verifica se as senhas coincidem
     if (password !== confirmPassword) {
       console.error("As senhas não coincidem.");
-      return; // Evita o registro se as senhas não coincidirem
+      return;
     }
 
     const auth = getAuth();
 
     try {
-      // Verifica se o email já está em uso
       const signInMethods = await fetchSignInMethodsForEmail(auth, email);
       if (signInMethods.length > 0) {
         console.error("Este email já está em uso.");
-        return; // Evita o registro se o email já existir
+        return;
       }
 
-      // Registrar novo usuário
       const userCredential = await signup(email, password);
       const user = userCredential.user;
 
-      // Salvar o nome de usuário no Firestore
       await setDoc(doc(db, "users", user.uid), {
-        userName, // Armazena o nome de usuário
-        email, // Armazena o email
+        userName,
+        email,
       });
 
-      navigate("/"); // Redireciona para a página de login
+      // Atualiza o estado global de userName
+      setUserName(userName);
+
+      navigate("/");
     } catch (error) {
       console.error("Erro ao registrar usuário:", error);
     }
