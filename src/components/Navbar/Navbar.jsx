@@ -11,12 +11,27 @@ import {
   Login,
   Add,
   LogoutRounded,
+  FavoriteRounded,
+  PhoneAndroidRounded,
+  SettingsRounded,
+  HomeOutlined,
+  StoreOutlined,
+  LocationCityOutlined,
+  FavoriteOutlined,
+  FavoriteBorderOutlined,
+  LocationCity,
+  InfoOutlined,
+  PhoneAndroidOutlined,
+  SettingsOutlined,
+  KeyboardArrowRight,
+  LogoutOutlined,
 } from "@mui/icons-material";
 import { useAuth } from "../../contexts/AuthContext";
 import { logout } from "../../services/FirebaseConfig";
 import Logo from "../../assets/image/garnaut-gray-logo-two.png";
 import Logo2 from "../../assets/image/garnaut-gray-logo-icon.png";
 import "./styles.css";
+import { Avatar } from "@mui/material";
 
 export const Navbar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -60,7 +75,7 @@ export const Navbar = () => {
   return (
     <header className="nav-container">
       <div className="top-nav">
-        <h5 className="top-item">
+        <h5 className="top-item-text">
           O seu corretor de imóveis em{" "}
           <span className="top-local">Salvador-BA</span>
         </h5>
@@ -80,10 +95,10 @@ export const Navbar = () => {
           ) : (
             <>
               <li className="nav-link-name">Bem-vindo, {userName}</li>
-              <button onClick={handleLogout} className="logout-button">
+              <NavLink onClick={handleLogout} className="logout-button">
                 Sair
                 <LogoutRounded fontSize="10" />
-              </button>
+              </NavLink>
             </>
           )}
         </div>
@@ -115,45 +130,95 @@ export const Navbar = () => {
       {isSidebarOpen && <div className="overlay" onClick={closeSidebar}></div>}
 
       <aside className={`sidebar ${isSidebarOpen ? "open" : ""}`}>
-        <div className="side-logo">
-          <img className="nav-logo-img-side" src={Logo2} alt="Logo" />
-          <div className="side-links">
+        <ul className="sidebar-list">
+          <div className="side-items-one">
             {!currentUser ? (
               <>
-                <NavLink to="/login" className="side-link-item" onClick={closeSidebar}>
+                <NavLink
+                  to="/login"
+                  className="side-link-item"
+                  onClick={closeSidebar}
+                >
                   Entrar <Login fontSize="small" />
                 </NavLink>
-                <NavLink to="/register" className="side-link-item" onClick={closeSidebar}>
+                <NavLink
+                  to="/register"
+                  className="side-link-item"
+                  onClick={closeSidebar}
+                >
                   Cadastre-se <Add fontSize="small" />
                 </NavLink>
               </>
             ) : (
-              <>
-                <li className="nav-link-name">Bem-vindo, {userName}</li>
-                <button onClick={handleLogout} className="logout-button">
-                  Sair
-                  <LogoutRounded fontSize="10" />
-                </button>
-              </>
+              <div className="side-user">
+                <div className="user-infos">
+                  <Avatar />
+                  <div className="info-user">
+                    <li className="nav-link-name-side">{userName}</li>
+                    <p className="nav-link-email-side">{currentUser.email}</p>
+                  </div>
+                  <KeyboardArrowRight fontSize="10" />
+                </div>
+              </div>
             )}
           </div>
-        </div>
-        <ul className="sidebar-list">
-          <NavLink className="sidebar-link-item" onClick={closeSidebar}>
-            Início <HomeRounded fontSize="small" />
-          </NavLink>
-          <NavLink className="sidebar-link-item" onClick={closeSidebar}>
-            Venda <StoreRounded fontSize="small" />
-          </NavLink>
-          <NavLink className="sidebar-link-item" onClick={closeSidebar}>
-            Locação <LocationCityRounded fontSize="small" />
-          </NavLink>
-          <NavLink className="sidebar-link-item" onClick={closeSidebar}>
-            O corretor <InfoRounded fontSize="small" />
-          </NavLink>
-          <NavLink className="sidebar-link-item" onClick={closeSidebar}>
-            Contato <ShareRounded fontSize="small" />
-          </NavLink>
+          <div className="side-items-one">
+            <NavLink className="sidebar-link-item" onClick={closeSidebar}>
+              <div className="icon-name-side">
+                <HomeOutlined fontSize="small" /> Início
+              </div>
+              <KeyboardArrowRight fontSize="10" />
+            </NavLink>
+            <NavLink className="sidebar-link-item" onClick={closeSidebar}>
+              <div className="icon-name-side">
+                <StoreOutlined fontSize="small" /> Venda
+              </div>
+              <KeyboardArrowRight fontSize="10" />
+            </NavLink>
+            <NavLink className="sidebar-link-item" onClick={closeSidebar}>
+              <div className="icon-name-side">
+                <LocationCity fontSize="small" /> Locação
+              </div>
+              <KeyboardArrowRight fontSize="10" />
+            </NavLink>
+            <NavLink className="sidebar-link-item" onClick={closeSidebar}>
+              <div className="icon-name-side">
+                <FavoriteBorderOutlined fontSize="small" /> Favoritos
+              </div>
+              <KeyboardArrowRight fontSize="10" />
+            </NavLink>
+          </div>
+          <div className="side-items-one">
+            <NavLink className="sidebar-link-item" onClick={closeSidebar}>
+              <div className="icon-name-side">
+                <PhoneAndroidOutlined fontSize="small" /> Contato
+              </div>
+              <KeyboardArrowRight fontSize="10" />
+            </NavLink>
+            <NavLink className="sidebar-link-item" onClick={closeSidebar}>
+              <div className="icon-name-side">
+                <InfoOutlined fontSize="small" /> O corretor
+              </div>
+              <KeyboardArrowRight fontSize="10" />
+            </NavLink>
+          </div>
+          <div className="side-items-one">
+            <NavLink className="sidebar-link-item" onClick={closeSidebar}>
+              <div className="icon-name-side">
+                <SettingsOutlined fontSize="small" /> Configurações
+              </div>
+              <KeyboardArrowRight fontSize="10" />
+            </NavLink>
+          </div>
+          <div className="side-items-one">
+            <NavLink className="sidebar-link-item" onClick={closeSidebar}>
+              <div className="icon-name-side" onClick={handleLogout}>
+                <LogoutOutlined fontSize="small" />
+                Sair
+              </div>
+              <KeyboardArrowRight fontSize="10" />
+            </NavLink>
+          </div>
         </ul>
       </aside>
     </header>

@@ -1,3 +1,4 @@
+/* Geral */
 .nav-container {
     display: flex;
     flex-direction: column;
@@ -13,23 +14,33 @@
     background: var(--btn-color-one);
 }
 
-.top-item {
+.top-item-text {
     font-size: 16px;
     padding: .5rem;
-    font-weight: 300;
+    font-weight: 400;
     display: flex;
     align-items: center;
     gap: 4px;
     color: var(--text-color-two);
 }
 
-.top-local {
-    color: var(--text-color-two);
+.top-item {
+    font-size: 16px;
+    padding: .5rem;
     font-weight: 400;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--text-color-three);
+}
+
+.top-local {
+    color: var(--text-color-three);
+    font-weight: 500;
 }
 
 .top-icon {
-    color: var(--text-color-two);
+    color: var(--text-color-three);
 }
 
 .nav-content {
@@ -50,15 +61,11 @@
     width: 12rem;
 }
 
-.menu-icon {
+.menu-icon, .nav-menu-icon {
     display: none;
 }
 
-.nav-menu-icon {
-    display: none;
-}
-
-/* Posição padrão */
+/* Lista de navegação */
 .nav-unorderd-list {
     display: flex;
     align-items: center;
@@ -76,7 +83,7 @@
     background: var(--text-color-two);
 }
 
-/* Aplica a posição fixa enquanto a rolagem é ativada */
+/* Efeito sticky */
 .sticky {
     position: fixed;
     top: 0;
@@ -86,15 +93,11 @@
     background-color: #fff;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transform: translateY(0);
-    /* Para suavizar a transição de movimento */
     transition: all 0.4s ease;
-    /* Suavizar a transição */
 }
 
-/* Adicione uma leve transição de cor no background */
 .sticky:hover {
     background-color: rgba(255, 255, 255, 0.9);
-    /* Leve transparência */
 }
 
 .nav-link-item {
@@ -109,7 +112,7 @@
     color: var(--text-color-one);
     font-weight: 500;
     background: rgb(235, 235, 235);
-    padding: .3rem ;
+    padding: .3rem;
     border-radius: 5px;
     transition: 250ms;
 }
@@ -132,25 +135,68 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: var(--text-color-two);
     border-radius: 5px;
     padding: 5px;
     font-weight: 500;
+    color: var(--text-color-two);
 }
 
 .logout-button {
     display: flex;
     align-items: center;
     border-radius: 5px;
-    font-weight: 600;
-    border: none;
-    background: var(--text-color-two);
-    color: var(--text-color-one);
-    padding: 6px;
+    font-weight: 400;
     cursor: pointer;
+    text-decoration: none;
+    color: var(--text-color-two);
+    gap: 5px;
 }
 
+
+/* Sidebar e responsividade */
 @media (max-width: 768px) {
+    .side-user {
+        display: flex;
+        justify-content: space-between;
+        border-radius: 10px;
+        padding: 0.8rem;
+        background: var(--card-color-side);
+    }
+
+    .user-infos {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .info-user {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .nav-link-name-side {
+        display: flex;
+        justify-content: space-between;
+        color: var(--text-color-one);
+        font-family: var(--main-font);
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .nav-link-email-side {
+        color: var(--text-color-opa);
+        font-size: 12px;
+    }
+
+    .logout-button-side {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        gap: 5px;
+        color: var(--text-color-one);
+        font-family: var(--main-font);
+    }
+
     .menu-icon {
         display: block;
         padding: 1rem;
@@ -162,12 +208,10 @@
         left: -250px;
         width: 250px;
         height: 100%;
-        background-color: #333;
         color: white;
         display: flex;
         flex-direction: column;
         justify-content: center;
-        padding: 20px;
         transition: 0.3s ease;
     }
 
@@ -184,6 +228,8 @@
         background-size: cover;
         height: 100%;
         opacity: 2;
+        background: var(--bg-color-side);
+        padding: .5rem;
     }
 
     .side-links {
@@ -194,12 +240,7 @@
         width: 100%;
     }
 
-    .sidebar-link-item {
-        color: white;
-        text-decoration: none;
-        margin: 15px 0;
-        font-size: 18px;
-    }
+
 
     .sidebar-link-item:hover {
         color: #304275;
@@ -252,6 +293,14 @@
         display: flex;
         flex-direction: column;
         font-family: var(--main-font);
+        gap: 5px;
+    }
+
+    .icon-name-side {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
     }
 
     .sidebar-link-item {
@@ -261,16 +310,32 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        border-bottom: 1px solid rgba(128, 128, 128, 0.11);
+        gap: 1rem;
+        text-decoration: none;
+        padding: .8rem;
+        border-radius: 5px;
     }
 
-    .side-logo {
-        background: var(--btn-color-one);
+    .side-items-one {
         display: flex;
         flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        border-radius: 6px;
+        background: var(--card-color-side);
+        border-radius: 10px;
+        margin: .2rem 0;
+    }
+
+    .side-items-two {
+        display: flex;
+        flex-direction: column;
+        background: var(--card-color-side);
+        border-radius: 10px;
+    }
+
+    .side-items-three {
+        display: flex;
+        flex-direction: column;
+        background: var(--card-color-side);
+        border-radius: 10px;
     }
 
     .side-link-item {
