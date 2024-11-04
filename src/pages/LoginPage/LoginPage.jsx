@@ -1,45 +1,85 @@
 import React, { useState } from "react";
 import { login } from "../../services/FirebaseConfig";
 import { useAuth } from "../../contexts/AuthContext";
-import { useNavigate } from "react-router-dom"; // Importa o useNavigate
+import { NavLink, useNavigate } from "react-router-dom";
+import IconButton from "@mui/material/IconButton";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import Logo from "../../assets/image/garnaut-gray-logo.png";
+import { ArrowBack } from "@mui/icons-material";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const { currentUser } = useAuth();
-  const navigate = useNavigate(); // Inicializa o useNavigate
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await login(email, password); // Tenta fazer login
-      navigate("/"); // Redireciona para a página inicial após login bem-sucedido
+      await login(email, password);
+      navigate("/");
     } catch (error) {
       console.error("Erro ao fazer login:", error);
     }
   };
 
   return (
-    <div>
-      <h2>Login</h2>
-      {currentUser && <p>Bem-vindo, {currentUser.email}</p>}
-      <form onSubmit={handleSubmit}>
+    <div className="access-container">
+      <form className="access-form" onSubmit={handleSubmit}>
+        <NavLink to="/" className="access-back">
+          <ArrowBack fontSize="10" /> Início
+        </NavLink>
+        <div className="access-logo">
+          <img className="access-img" src={Logo} alt="" />
+        </div>
+        <h2 className="access-title">Acesse a sua conta</h2>
+        {currentUser && <p>Bem-vindo, {currentUser.email}</p>}
         <input
+          className="access-item"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Email"
-          required // Adiciona validação
+          required
         />
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Senha"
-          required // Adiciona validação
-        />
-        <button type="submit">Entrar</button>
+        <div className="password-container">
+          <input
+            className="access-item"
+            type={showPassword ? "text" : "password"}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Senha"
+            required
+          />
+          <div className="show-pass">
+            Mostrar senha
+            <IconButton
+              onClick={() => setShowPassword((prev) => !prev)}
+              edge="end"
+            >
+              {showPassword ? (
+                <VisibilityOff fontSize="10" />
+              ) : (
+                <Visibility fontSize="10" />
+              )}
+            </IconButton>
+          </div>
+        </div>
+        <button className="access-btn" type="submit">
+          Entrar
+        </button>
       </form>
+      <div className="access-alt">
+        <h3 className="access-sub">Novo por aqui?</h3>
+        <p className="access-p">
+          Faça já o seu cadastro e encontre <br /> aqui o que você procura
+        </p>
+        <NavLink className="access-nav" to="/register">
+          Criar conta
+        </NavLink>
+      </div>
     </div>
   );
 }
