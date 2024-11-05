@@ -25,6 +25,7 @@ import {
   SettingsOutlined,
   KeyboardArrowRight,
   LogoutOutlined,
+  AdminPanelSettingsOutlined,
 } from "@mui/icons-material";
 import { useAuth } from "../../contexts/AuthContext";
 import { logout } from "../../services/FirebaseConfig";
@@ -150,7 +151,7 @@ export const Navbar = () => {
                 </NavLink>
               </>
             ) : (
-              <div className="side-user">
+              <NavLink to="/profile" className="side-user">
                 <div className="user-infos">
                   <Avatar />
                   <div className="info-user">
@@ -159,8 +160,16 @@ export const Navbar = () => {
                   </div>
                   <KeyboardArrowRight fontSize="10" />
                 </div>
-              </div>
+              </NavLink>
             )}
+          </div>
+          <div className="side-items-one">
+            <NavLink to="/adm" className="sidebar-link-item-adm" onClick={closeSidebar}>
+              <div className="icon-name-side">
+                <AdminPanelSettingsOutlined fontSize="small" /> Adm
+              </div>
+              <KeyboardArrowRight fontSize="10" />
+            </NavLink>
           </div>
           <div className="side-items-one">
             <NavLink className="sidebar-link-item" onClick={closeSidebar}>
@@ -210,15 +219,23 @@ export const Navbar = () => {
               <KeyboardArrowRight fontSize="10" />
             </NavLink>
           </div>
-          <div className="side-items-one">
-            <NavLink className="sidebar-link-item" onClick={closeSidebar}>
-              <div className="icon-name-side" onClick={handleLogout}>
-                <LogoutOutlined fontSize="small" />
-                Sair
-              </div>
-              <KeyboardArrowRight fontSize="10" />
-            </NavLink>
-          </div>
+          {currentUser ? (
+            <div className="side-items-one">
+              <NavLink
+                className="sidebar-link-item-logout"
+                onClick={() => {
+                  closeSidebar();
+                  handleLogout();
+                }}
+              >
+                <div className="icon-name-side">
+                  <LogoutOutlined fontSize="small" />
+                  Sair
+                </div>
+                <KeyboardArrowRight fontSize="10" />
+              </NavLink>
+            </div>
+          ) : null}
         </ul>
       </aside>
     </header>
