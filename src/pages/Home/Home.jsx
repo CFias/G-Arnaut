@@ -5,6 +5,7 @@ import { Navbar } from "../../components/Navbar/Navbar";
 import { Footer } from "../../components/Footer/Footer";
 import { Banner } from "../../components/Banner/Banner";
 import "./styles.css"
+import { ProductsPost } from "../../components/ProductsPost/ProductsPost";
 
 export const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -50,7 +51,7 @@ export const Home = () => {
               <Skeleton height={200} style={{ marginTop: 10 }} />
             </SkeletonTheme>
           ) : (
-            <div>Cards Recent</div>
+            <div><ProductsPost /></div>
           )}
         </section>
       </main>

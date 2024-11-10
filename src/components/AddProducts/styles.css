@@ -1,0 +1,86 @@
+.container {
+    background: #000;
+  }
+  
+  /* Título do formulário */
+  .form-title {
+    font-family: var(--main-font);
+  }
+  
+  /* Estilo do formulário */
+  .form-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    font-family: var(--main-font);
+  }
+  
+  /* Grupo de campos */
+  .form-group {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Labels */
+  .form-label {
+    /* Adicione seu estilo aqui */
+  }
+  
+  /* Campos de entrada */
+  .form-input,
+  .form-textarea {
+    width: 400px;
+    border: none;
+    background: var(--bg-color);
+    padding: 10px;
+    border-radius: 10px;
+
+  }
+  
+  /* Textarea */
+  .form-textarea {
+    /* Adicione seu estilo aqui */
+  }
+  
+  /* Estilo do campo de imagem */
+  .form-input-file {
+    /* Adicione seu estilo aqui */
+  }
+  
+  /* Botão de envio */
+  .submit-btn {
+  }
+
+  .form-button {
+    padding: 10px;
+    border: none;
+    width: 400px;
+    font-family: var(--main-font);
+    font-size: 16px;
+    background: var(--btn-color-one);
+    color: var(--text-color-two);
+    border-radius: 10px;
+  }
+  
+  /* Estilo de loading no botão */
+  .submit-btn:disabled {
+    /* Adicione seu estilo aqui */
+  }
+  
+  /* Estilo de alerta ou erro */
+  .error-message {
+    /* Adicione seu estilo aqui */
+  }
+  
+  /* Estilos para o input de imagem */
+  .form-input-file {
+    /* Adicione seu estilo aqui */
+  }
+  
+  /* Estilos para campos de texto grandes como textarea */
+  .form-textarea {
+    /* Adicione seu estilo aqui */
+  }
+  

@@ -175,7 +175,7 @@ export const Navbar = () => {
           </div>
           <div className="side-items-one">
             <NavLink
-              to="/adm"
+              to="/admin"
               className="sidebar-link-item-adm"
               onClick={closeSidebar}
             >
