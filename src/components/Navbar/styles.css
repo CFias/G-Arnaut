@@ -160,7 +160,7 @@
         justify-content: space-between;
         border-radius: 10px;
         padding: 0.8rem;
-        background: var(--btn-color-two);
+        background: var(--btn-color-one);
         color: var(--text-color-two);
         text-decoration: none;
     }
@@ -261,6 +261,11 @@
         z-index: 1;
     }
 
+    .side-items-one-log {
+        color: var(--text-color-two);
+        border-radius: 10px;
+    }
+
     .top-nav {
         display: none;
     }
@@ -306,6 +311,14 @@
         justify-content: center;
         align-items: center;
         gap: 1rem;
+    }
+
+    .icon-name-side-log {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+        color: var(--text-color-one);
     }
 
     .sidebar-link-item {
@@ -368,7 +381,7 @@
         text-decoration: none;
         padding: .8rem;
         border-radius: 10px;
-        background: rgb(236, 67, 67);
+        background: var(--card-color-side-log);
     }
 
     .sidebar-link-item-adm {

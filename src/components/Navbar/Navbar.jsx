@@ -135,20 +135,30 @@ export const Navbar = () => {
           <div className="side-items-one">
             {!currentUser ? (
               <>
-                <NavLink
-                  to="/login"
-                  className="side-link-item"
-                  onClick={closeSidebar}
-                >
-                  Entrar <Login fontSize="small" />
-                </NavLink>
-                <NavLink
-                  to="/register"
-                  className="side-link-item"
-                  onClick={closeSidebar}
-                >
-                  Cadastre-se <Add fontSize="small" />
-                </NavLink>
+                <div className="side-items-one-log">
+                  <NavLink
+                    to="/login"
+                    className="sidebar-link-item"
+                    onClick={closeSidebar}
+                  >
+                    <div className="icon-name-side-log">
+                      <Login fontSize="small" />
+                      Entrar
+                    </div>
+                    <KeyboardArrowRight fontSize="10" />
+                  </NavLink>
+                  <NavLink
+                    to="/register"
+                    className="sidebar-link-item"
+                    onClick={closeSidebar}
+                  >
+                    <div className="icon-name-side-log">
+                      <Add fontSize="small" />
+                      Cadastre-se
+                    </div>
+                    <KeyboardArrowRight fontSize="10" />
+                  </NavLink>
+                </div>
               </>
             ) : (
               <NavLink to="/profile" className="side-user">
@@ -164,7 +174,11 @@ export const Navbar = () => {
             )}
           </div>
           <div className="side-items-one">
-            <NavLink to="/adm" className="sidebar-link-item-adm" onClick={closeSidebar}>
+            <NavLink
+              to="/adm"
+              className="sidebar-link-item-adm"
+              onClick={closeSidebar}
+            >
               <div className="icon-name-side">
                 <AdminPanelSettingsOutlined fontSize="small" /> Adm
               </div>
