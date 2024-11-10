@@ -157,3 +157,51 @@
 .pagination button:hover {
     background-color: #ddd;
 }
+
+@media (max-width: 768px) {
+ .product-list {
+    flex-direction: column;
+ }
+
+ .product-name {
+    font-size: 14px;
+ }
+
+ .product-desc {
+    font-size: 12px;
+ }
+
+ .product-dimension {
+    font-size: 12px;
+ }
+
+ .product-status {
+    font-size: 10px;
+ }
+
+ .product-type {
+    font-size: 8px;
+    padding: 10px;
+    border-radius: 25px;
+ }
+
+ .product-neighborhood {
+    font-size: 12px;
+ }
+
+ .product-category {
+    font-size: 14px;
+ }
+
+ .product-img {
+    width: 320px;
+ }
+
+ .product-price {
+    font-size: 18px;
+ }
+}
+
+@media (min-width: 769px) {
+    
+}

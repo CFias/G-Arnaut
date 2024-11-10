@@ -11,7 +11,6 @@ export const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulating a data fetch
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 2000);
@@ -33,7 +32,7 @@ export const Home = () => {
           )}
         </section>
         <section className="section-2">
-          <h3>{isLoading ? <Skeleton width={150} /> : "Em destaque"}</h3>
+          {/* <h3 className="home-h3">{isLoading ? <Skeleton width={150} /> : "Em destaque"}</h3> */}
           {isLoading ? (
             <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f0f0f0">
               <Skeleton height={200} />
@@ -44,7 +43,7 @@ export const Home = () => {
           )}
         </section>
         <section className="section-3">
-          <h3>{isLoading ? <Skeleton width={150} /> : "Recentes"}</h3>
+          <h3 className="home-h3">{isLoading ? <Skeleton width={150} /> : "Recentes"}</h3>
           {isLoading ? (
             <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f0f0f0">
               <Skeleton height={200} />
