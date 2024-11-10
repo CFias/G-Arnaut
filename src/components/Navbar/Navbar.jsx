@@ -3,21 +3,11 @@ import { NavLink } from "react-router-dom";
 import {
   Phone,
   Menu,
-  HomeRounded,
-  StoreRounded,
-  LocationCityRounded,
-  InfoRounded,
-  ShareRounded,
   Login,
   Add,
   LogoutRounded,
-  FavoriteRounded,
-  PhoneAndroidRounded,
-  SettingsRounded,
   HomeOutlined,
   StoreOutlined,
-  LocationCityOutlined,
-  FavoriteOutlined,
   FavoriteBorderOutlined,
   LocationCity,
   InfoOutlined,
@@ -29,8 +19,6 @@ import {
 } from "@mui/icons-material";
 import { useAuth } from "../../contexts/AuthContext";
 import { logout } from "../../services/FirebaseConfig";
-import Logo from "../../assets/image/garnaut-gray-logo-two.png";
-import Logo2 from "../../assets/image/garnaut-gray-logo-icon.png";
 import "./styles.css";
 import { Avatar } from "@mui/material";
 
@@ -96,6 +84,9 @@ export const Navbar = () => {
           ) : (
             <>
               <li className="nav-link-name">Bem-vindo, {userName}</li>
+              <NavLink to="/admin" className="nav-link-login">
+                ADM
+              </NavLink>
               <NavLink onClick={handleLogout} className="logout-button">
                 Sair
                 <LogoutRounded fontSize="10" />
