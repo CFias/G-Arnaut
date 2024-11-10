@@ -71,38 +71,38 @@ export const Admin = () => {
               className="card-admin"
             >
               <h4 className="admin-h4">Adicione novos imóveis</h4>
-              <AddCircle className="admin-icon" fontSize="large" />
+              <AddCircle className="admin-icon" fontSize="medium" />
             </div>
             <div onClick={() => openModal(<AddPosts />)} className="card-admin">
               <h4 className="admin-h4">Adicione um novo post para o blog</h4>
-              <AddCircle className="admin-icon" fontSize="large" />
+              <AddCircle className="admin-icon" fontSize="medium" />
             </div>
             <NavLink to="/table-posts" className="card-admin">
               <h4 className="admin-h4">Gerenciar produtos</h4>
               <AdminPanelSettings
                 className="admin-icon"
-                fontSize="large"
+                fontSize="medium"
               />
             </NavLink>
             <NavLink to="/table-posts" className="card-admin">
               <h4 className="admin-h4">Gerenciar publicações</h4>
               <AdminPanelSettings
                 className="admin-icon"
-                fontSize="large"
+                fontSize="medium"
               />
             </NavLink>
             <NavLink to="/table-posts" className="card-admin">
               <h4 className="admin-h4">Gerenciar usuários</h4>
               <ManageAccounts
                 className="admin-icon"
-                fontSize="large"
+                fontSize="medium"
               />
             </NavLink>
             <NavLink to="/table-posts" className="card-admin">
               <h4 className="admin-h4">Configurações</h4>
               <Settings
                 className="admin-icon"
-                fontSize="large"
+                fontSize="medium"
               />
             </NavLink>
           </div>

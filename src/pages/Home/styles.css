@@ -1,13 +1,28 @@
 .home-container {
     background: var(--bg-color);
     font-family: var(--main-font);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
 }
 
 .section-2 {
     display: flex;
     flex-direction: column;
+}
+
+.home-h3 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 38px;
+    color: var(--text-color-one);
+}
+
+@media (max-width: 768px) {
+    .home-h3 {
+        font-size: 22px;
+        padding: 10px;
+    }
+}
+
+@media (min-width: 769px) {
+    
 }

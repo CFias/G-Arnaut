@@ -178,6 +178,11 @@
         grid-template-columns: repeat(2, 1fr);
         
     }
+
+    .admin-content {
+        margin-top: 20rem;
+        background: var(--bg-color);
+    }
 }
 
 @media (max-width: 600px) {
