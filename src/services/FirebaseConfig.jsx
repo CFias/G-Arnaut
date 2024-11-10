@@ -1,4 +1,3 @@
-// src/firebaseConfig.js
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
@@ -6,8 +5,8 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import { getFirestore } from "firebase/firestore"; // Firestore
-import { getStorage } from "firebase/storage"; // Importando Firebase Storage
+import { getFirestore, collection, getDocs } from "firebase/firestore"; // Firestore
+import { getStorage } from "firebase/storage"; // Firebase Storage
 
 // Sua configuração do Firebase
 const firebaseConfig = {
@@ -38,4 +37,18 @@ export function login(email, password) {
 // Função para fazer logout
 export function logout() {
   return signOut(auth);
+}
+
+// Função para contar produtos no Firestore
+export async function getProductCount() {
+  const productsCollection = collection(db, "products");
+  const productSnapshot = await getDocs(productsCollection);
+  return productSnapshot.size;
+}
+
+// Função para contar posts no Firestore
+export async function getPostCount() {
+  const postsCollection = collection(db, "posts");
+  const postSnapshot = await getDocs(postsCollection);
+  return postSnapshot.size;
 }

@@ -1,3 +1,47 @@
+.nav-admin-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    font-family: var(--main-font);    
+}
+
+.nav-admin-img {
+    width: 100px;
+}
+
+.admin-icon {
+    display: none;
+}
+
+.nav-admin-icon {
+    display: none;
+}
+
+.nav-admin-in {
+    display: flex;
+    border: none;
+    background: var(--bg-color-side);
+    padding: 10px;
+    border-radius: 15px;
+    width: 300px;
+}
+
+.admin-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--card-color-two);
+    border-radius: 35px;
+    padding: 5px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.admin-name {
+    color: var(--text-color-one);
+    font-size: 14px;
+}
+
 .admin-container {
     background: var(--bg-color);
     display: flex;
@@ -7,27 +51,21 @@
     padding: 0;
     width: 100%;
     height: 100vh;
-    gap: 5px;
-}
-
-.admin-side {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: var(--card-color);
+    gap: 10px;
 }
 
 .admin-content {
     display: flex;
     justify-content: center;
     flex-direction: column;
-    gap: 5px;
-
+    gap: 10px;
 }
 
 .admin-cards {
-    display: flex;
-    gap: 5px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    width: 100%;
 }
 
 .card-admin {
@@ -36,17 +74,146 @@
     align-items: center;
     flex-direction: column;
     background: var(--card-color);
-    padding: 10px;
-    width: 300px;
-    height: 250px;
+    padding: 20px;
     border-radius: 10px;
+    font-family: var(--main-font);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+}
+
+.card-admin:hover {
+    transform: scale(1.05);
+    background: var(--bg-color-item);
+}
+
+.admin-h4 {
+    font-size: 18px;
+    color: var(--text-color-one);
+    padding: 10px;
+    text-align: center;
+}
+
+.admin-icon {
+    color: var(--text-color-one);
+}
+
+.admin-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    border-radius: 7px;
+    background: var(--btn-color-two);
+    color: var(--text-color-two);
+    padding: 15px;
+    width: 100%;
+    font-family: var(--main-font);
+    font-size: 18px;
+    cursor: pointer;
 }
 
 .admin-graphics {
     display: flex;
+    justify-content: space-around;
+    align-items: center;
+    position: relative;
+    height: 650px;
+    border-radius: 10px;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.admin-graphics::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background: var(--card-color);
+    background-image: url("../../assets/image/banner-garnaut-admin.png");
+    background-position: center;
+    background-size: cover;
+    filter: brightness(0.6);
+    z-index: -1;
+    border-radius: 10px;
+}
+
+.graphics-h4 {
+    color: var(--text-color-two);
+    font-size: 28px;
+    font-family: var(--main-font);
+    z-index: 1;
+}
+
+.graphics-p {
+    color: var(--text-color-two);
+    font-size: 22px;
+    font-family: var(--main-font);
+}
+
+.admin-quantity-products {
+    display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 250px;
-    border-radius: 10px;
+}
+
+.quantity-span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-color-two);
+    font-size: 150px;
+    font-weight: 900;
+    font-family: var(--main-font);
+}
+
+/* Responsividade para manter o layout adaptável */
+@media (max-width: 992px) {
+    .admin-cards {
+        grid-template-columns: repeat(2, 1fr);
+        
+    }
+}
+
+@media (max-width: 600px) {
+    .admin-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-graphics {
+        height: 250px;
+    }
+
+    .graphics-h4 {
+        font-size: 16px;
+       
+    }
+
+    .quantity-span {
+        font-size: 38px;
+        font-weight: 900;
+    }
+
+    .admin-logo {
+        display: none;
+    }
+
+    .admin-profile {
+        background: transparent;
+    }
+
+    .admin-name {
+        display: none;
+    }
+
+    .admin-icon {
+        display: flex;
+        color: var(--text-color-one);
+    }
+    
 }
