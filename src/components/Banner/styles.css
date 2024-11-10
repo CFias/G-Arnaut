@@ -9,9 +9,24 @@
     object-fit: cover;
 }
 
+.banner-mobile {
+    display: none;
+}
+
 @media (max-width: 768px) {
+    .banner-container {
+        display: none;
+    }
+
+    .banner-mobile {
+        display: flex;
+        justify-content: center;
+    }
+
     .banner-img {
         height: auto;
+        width: 98%;
+        border-radius: 10px;
     }
 }
 

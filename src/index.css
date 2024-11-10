@@ -10,7 +10,7 @@
     /* Fonts */
     --main-font: "Jost", sans-serif;
 
-    --btn-color-one: #194F8F;
+    --btn-color-one: #1A528F;
     --btn-color-two: #3175B6;
     --text-color-one: #3D3D3D;
     --text-color-opa: #999999;
@@ -21,7 +21,9 @@
     --bg-color-side: #e4e4e4;
     --bg-color-side-two: #141A28;
     --card-color: #F8F9FA;
+    --card-color-two: #4883B2;
     --card-color-side: #FFFFFF;
+    --card-color-side-log: #c52222;
 }
 
 /* Estrutura de Classes para Estilização do Login */
@@ -80,10 +82,9 @@
   }
   
   .access-btn {
-    padding: 10px;
-    margin: 1rem;
+    padding: 15px;
     border: none;
-    background: var(--btn-color-two);
+    background: var(--btn-color-one);
     color: var(--text-color-two);
     border-radius: 25px;
     width: 35%;
@@ -172,9 +173,10 @@
   .access-btn {
     padding: 15px;
     width: 100%;
+    font-size: 14px;
   }
 }
 
 @media (min-width: 769px) {
-
+  
 }

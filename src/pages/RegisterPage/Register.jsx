@@ -1,4 +1,3 @@
-// src/components/Register.jsx
 import React, { useState } from "react";
 import { signup } from "../../services/FirebaseConfig";
 import { useAuth } from "../../contexts/AuthContext";
@@ -7,13 +6,15 @@ import { getAuth, fetchSignInMethodsForEmail } from "firebase/auth";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
 import { ArrowBack } from "@mui/icons-material";
 import Logo from "../../assets/image/garnaut-gray-logo.png";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export default function Register() {
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [passwordStrength, setPasswordStrength] = useState(""); // Estado para força da senha
+  const [passwordStrength, setPasswordStrength] = useState("");
+  const [isLoading, setIsLoading] = useState(false); // Loading state
   const { currentUser } = useAuth();
   const navigate = useNavigate();
   const db = getFirestore();
@@ -21,7 +22,7 @@ export default function Register() {
   const handlePasswordChange = (e) => {
     const newPassword = e.target.value;
     setPassword(newPassword);
-    setPasswordStrength(checkPasswordStrength(newPassword)); // Atualiza a força da senha
+    setPasswordStrength(checkPasswordStrength(newPassword));
   };
 
   const checkPasswordStrength = (password) => {
@@ -56,12 +57,14 @@ export default function Register() {
       return;
     }
 
+    setIsLoading(true); // Set loading to true at the start
     const auth = getAuth();
 
     try {
       const signInMethods = await fetchSignInMethodsForEmail(auth, email);
       if (signInMethods.length > 0) {
         console.error("Este email já está em uso.");
+        setIsLoading(false);
         return;
       }
 
@@ -77,6 +80,8 @@ export default function Register() {
       navigate("/");
     } catch (error) {
       console.error("Erro ao registrar usuário:", error);
+    } finally {
+      setIsLoading(false); // Reset loading state after registration completes
     }
   };
 
@@ -126,8 +131,8 @@ export default function Register() {
         <p className={`password-strength ${passwordStrength.toLowerCase()}`}>
           Força da senha: {passwordStrength}
         </p>
-        <button className="access-btn" type="submit">
-          Registrar
+        <button className="access-btn" type="submit" disabled={isLoading}>
+          {isLoading ? <CircularProgress color="white" size={13} /> : "Registrar"}
         </button>
       </form>
       <div className="access-alt">

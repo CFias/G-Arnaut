@@ -7,21 +7,26 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Logo from "../../assets/image/garnaut-gray-logo.png";
 import { ArrowBack } from "@mui/icons-material";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { currentUser } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       await login(email, password);
       navigate("/");
     } catch (error) {
       console.error("Erro ao fazer login:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -67,8 +72,8 @@ export default function Login() {
             </IconButton>
           </div>
         </div>
-        <button className="access-btn" type="submit">
-          Entrar
+        <button className="access-btn" type="submit" disabled={isLoading}>
+          {isLoading ? <CircularProgress color="white" size={13} /> : "Entrar"}
         </button>
       </form>
       <div className="access-alt">
