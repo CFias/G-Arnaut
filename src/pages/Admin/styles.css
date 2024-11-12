@@ -68,7 +68,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
-    width: 100%;
+    width: 98%;
 }
 
 .card-admin {
@@ -124,6 +124,7 @@
     align-items: center;
     position: relative;
     height: 650px;
+    width: 98%;
     border-radius: 10px;
     overflow: hidden;
     z-index: 1;
