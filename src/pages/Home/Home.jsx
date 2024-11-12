@@ -50,7 +50,7 @@ export const Home = () => {
               <Skeleton height={200} style={{ marginTop: 10 }} />
             </SkeletonTheme>
           ) : (
-            <div><ProductsPost /></div>
+            <ProductsPost />
           )}
         </section>
       </main>
