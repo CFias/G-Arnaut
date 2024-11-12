@@ -1,55 +1,47 @@
 import React, { useEffect, useState } from "react";
-import { db, storage } from "../../services/FirebaseConfig"; // Certifique-se de importar storage
-import { collection, getDocs, query, where } from "firebase/firestore"; // Importando query e where para filtragem
+import { db, storage } from "../../services/FirebaseConfig";
+import { collection, getDocs } from "firebase/firestore";
 import { getDownloadURL, ref } from "firebase/storage";
 import { CropFree, DirectionsCar, Hotel } from "@mui/icons-material";
-import "./styles.css"; // Importando o arquivo de estilo
+import "./styles.css";
 
 export const ProductsPost = () => {
   const [products, setProducts] = useState([]);
-  const [featuredProducts, setFeaturedProducts] = useState([]); // Novo estado para produtos em destaque
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 12; // Maximum products per page
+  const productsPerRow = 4; // Products per row
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        // Consulta para buscar todos os produtos
         const querySnapshot = await getDocs(collection(db, "products"));
         const productList = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
 
-        // Para cada produto, obtenha as URLs das imagens
         const productsWithImages = await Promise.all(
           productList.map(async (product) => {
             if (product.images && product.images.length > 0) {
               const imageUrls = await Promise.all(
                 product.images.map(async (imagePath) => {
                   try {
-                    // Criando uma referência para cada imagem no Storage
                     const imageRef = ref(storage, imagePath);
-                    const downloadURL = await getDownloadURL(imageRef); // Obter URL pública
-                    console.log("URL da Imagem:", downloadURL); // Logar a URL para depuração
+                    const downloadURL = await getDownloadURL(imageRef);
                     return downloadURL;
                   } catch (error) {
                     console.error("Erro ao obter URL da imagem:", error);
-                    return null; // Retorna null caso a URL não possa ser carregada
+                    return null;
                   }
                 })
               );
-              return { ...product, images: imageUrls.filter(Boolean) }; // Filtra URLs inválidas (null)
+              return { ...product, images: imageUrls.filter(Boolean) };
             }
-            return product; // Se não houver imagens, retorna o produto sem alteração
+            return product;
           })
         );
 
-        // Definindo os produtos com e sem destaque
-        const featured = productsWithImages.filter(
-          (product) => product.isFeatured
-        );
-        setFeaturedProducts(featured); // Atualizando o estado dos produtos em destaque
-        setProducts(productsWithImages); // Atualizando todos os produtos
-        console.log("Produtos com imagens recuperadas: ", productsWithImages);
+        setProducts(productsWithImages);
       } catch (error) {
         console.error("Erro ao buscar produtos: ", error);
       }
@@ -58,18 +50,25 @@ export const ProductsPost = () => {
     fetchProducts();
   }, []);
 
+  // Pagination logic
+  const totalPages = Math.ceil(products.length / productsPerPage);
+  const paginatedProducts = products.slice(
+    (currentPage - 1) * productsPerPage,
+    currentPage * productsPerPage
+  );
+
   return (
     <>
-      <div className="product-list">
-        {products.length > 0 ? (
-          products.map((product) => (
+      <div className="product-container">
+        <div className="product-list">
+          {paginatedProducts.map((product) => (
             <div key={product.id} className="product-card">
               {product.images && product.images.length > 0 && (
                 <div className="product-images">
                   <p className="product-status">{product.status}</p>
                   <img
                     className="product-img"
-                    src={product.images[0]} // Acessando a URL pública da primeira imagem
+                    src={product.images[0]}
                     alt="Product image"
                   />
                 </div>
@@ -80,15 +79,15 @@ export const ProductsPost = () => {
                 <p className="product-neighborhood">{product.neighborhood}</p>
                 <p className="product-category">{product.category}</p>
                 <div className="product-dimension">
-                  <CropFree fontSize="small" />{" "}
+                  <CropFree className="product-icon" fontSize="small" />{" "}
                   <p className="product-size">{product.dimension} m²</p>
                 </div>
                 <div className="product-dimension">
-                  <Hotel fontSize="small" />{" "}
+                  <Hotel className="product-icon" fontSize="small" />{" "}
                   <p className="product-size">{product.bedrooms}</p>
                 </div>
                 <div className="product-dimension">
-                  <DirectionsCar fontSize="small" />{" "}
+                  <DirectionsCar className="product-icon" fontSize="small" />{" "}
                   <p className="product-size">{product.parkingSpaces}</p>
                 </div>
                 <div className="product-price-mod">
@@ -100,10 +99,19 @@ export const ProductsPost = () => {
                 </div>
               </div>
             </div>
-          ))
-        ) : (
-          null
-        )}
+          ))}
+        </div>
+
+        {/* Pagination Dots */}
+        <div className="pagination-dots">
+          {Array.from({ length: totalPages }, (_, index) => (
+            <span
+              key={index}
+              className={`dot ${currentPage === index + 1 ? "active" : ""}`}
+              onClick={() => setCurrentPage(index + 1)}
+            ></span>
+          ))}
+        </div>
       </div>
     </>
   );

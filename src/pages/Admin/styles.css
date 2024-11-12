@@ -57,8 +57,11 @@
 .admin-content {
     display: flex;
     justify-content: center;
+    align-items: center;
     flex-direction: column;
     gap: 10px;
+    height: auto;
+    width: 100%;
 }
 
 .admin-cards {
@@ -188,15 +191,21 @@
 @media (max-width: 600px) {
     .admin-cards {
         grid-template-columns: 1fr;
+        width: 98%;
+        margin: 1rem;
     }
 
     .admin-graphics {
-        height: 250px;
+        height: 200px;
+        width: 98%;
     }
 
     .graphics-h4 {
-        font-size: 16px;
-       
+        font-size: 14px;
+    }
+
+    .admin-h4 {
+        font-size: 14px;
     }
 
     .quantity-span {
