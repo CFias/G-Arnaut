@@ -6,7 +6,7 @@ import Logo from "../../assets/image/garnaut-gray-logo.png";
 import "./styles.css";
 
 export const AddProducts = () => {
-  const [productName, setProductName] = useState("");
+  const [address, setAddress] = useState(""); // Alterado de productName para address
   const [price, setPrice] = useState("");
   const [oldPrice, setOldPrice] = useState("");
   const [status, setStatus] = useState("");
@@ -63,7 +63,7 @@ export const AddProducts = () => {
       const userName = currentUser.displayName || "Usuário Anônimo";
 
       await addDoc(collection(db, "products"), {
-        name: productName,
+        address, // Substituição para o campo address
         price,
         oldPrice,
         status,
@@ -105,8 +105,8 @@ export const AddProducts = () => {
           <label className="form-label">Endereço</label>
           <input
             type="text"
-            value={productName}
-            onChange={(e) => setProductName(e.target.value)}
+            value={address} // Atualizado para address
+            onChange={(e) => setAddress(e.target.value)}
             className="form-input"
             required
           />

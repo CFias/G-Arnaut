@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { db, storage } from "../../services/FirebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
 import { getDownloadURL, ref } from "firebase/storage";
-import { CropFree, DirectionsCar, Hotel } from "@mui/icons-material";
+import { Category, CropFree, DirectionsCar, Hotel } from "@mui/icons-material";
 import "./styles.css";
 
 export const ProductsPost = () => {
@@ -66,6 +66,9 @@ export const ProductsPost = () => {
               {product.images && product.images.length > 0 && (
                 <div className="product-images">
                   <p className="product-status">{product.status}</p>
+                  <p className="product-ref">
+                    Referência: {product.refProduct}
+                  </p>
                   <img
                     className="product-img"
                     src={product.images[0]}
@@ -74,10 +77,9 @@ export const ProductsPost = () => {
                 </div>
               )}
               <div className="product-infos">
-                <h3 className="product-name">{product.name}</h3>
-                <p className="product-desc">Referência: {product.refProduct}</p>
+                <h3 className="product-address">{product.address}</h3>
                 <p className="product-neighborhood">{product.neighborhood}</p>
-                <p className="product-category">{product.category}</p>
+                <p className="product-category"><Category fontSize="small" /> {product.category}</p>
                 <div className="product-dimension">
                   <CropFree className="product-icon" fontSize="small" />{" "}
                   <p className="product-size">{product.dimension} m²</p>
@@ -101,7 +103,6 @@ export const ProductsPost = () => {
             </div>
           ))}
         </div>
-
         {/* Pagination Dots */}
         <div className="pagination-dots">
           {Array.from({ length: totalPages }, (_, index) => (
@@ -109,7 +110,9 @@ export const ProductsPost = () => {
               key={index}
               className={`dot ${currentPage === index + 1 ? "active" : ""}`}
               onClick={() => setCurrentPage(index + 1)}
-            ></span>
+            >
+              {index + 1}
+            </span>
           ))}
         </div>
       </div>
