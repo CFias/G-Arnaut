@@ -50,7 +50,6 @@ export const ProductsPost = () => {
     fetchProducts();
   }, []);
 
-  // Pagination logic
   const totalPages = Math.ceil(products.length / productsPerPage);
   const paginatedProducts = products.slice(
     (currentPage - 1) * productsPerPage,
@@ -103,7 +102,6 @@ export const ProductsPost = () => {
             </div>
           ))}
         </div>
-        {/* Pagination Dots */}
         <div className="pagination-dots">
           {Array.from({ length: totalPages }, (_, index) => (
             <span
