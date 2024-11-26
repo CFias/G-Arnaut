@@ -76,7 +76,8 @@ export const ProductsPost = () => {
                 </div>
               )}
               <div className="product-infos">
-                <h3 className="product-address">{product.address}</h3>
+                <h3 className="product-address">{product.city}</h3>
+                <p className="product-address">{product.address}</p>
                 <p className="product-neighborhood">{product.neighborhood}</p>
                 <p className="product-category"><Category fontSize="small" /> {product.category}</p>
                 <div className="product-dimension">

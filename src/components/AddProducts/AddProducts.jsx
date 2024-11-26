@@ -12,6 +12,7 @@ export const AddProducts = () => {
   const [status, setStatus] = useState("");
   const [dimension, setDimension] = useState("");
   const [state, setState] = useState("");
+  const [city, setCity] = useState("");
   const [neighborhood, setNeighborhood] = useState("");
   const [category, setCategory] = useState("");
   const [images, setImages] = useState([]);
@@ -69,6 +70,7 @@ export const AddProducts = () => {
         status,
         dimension,
         state,
+        city,
         neighborhood,
         category,
         description,
@@ -131,7 +133,7 @@ export const AddProducts = () => {
           />
         </div>
         <div className="form-group">
-          <label className="form-label">Status</label>
+          <label className="form-label">Status do imóvel</label>
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value)}
@@ -162,6 +164,16 @@ export const AddProducts = () => {
             type="text"
             value={state}
             onChange={(e) => setState(e.target.value)}
+            className="form-input"
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label className="form-label">Cidade</label>
+          <input
+            type="text"
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
             className="form-input"
             required
           />

@@ -1,0 +1,111 @@
+.filter-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: var(--card-color);
+    font-family: var(--main-font);
+}
+
+.filter-top {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin: 1rem;
+    color: var(--text-color);
+}
+
+.filter-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-content {
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.filter-in {
+    display: flex;
+    padding: 5px 10px;
+    border: 1px solid var(--text-color-opa);
+    background: var(--card-color);
+    border-radius: 5px;
+    margin-bottom: 1rem;
+    font-family: var(--main-font);
+}
+
+.filter-submit-button {
+    display: flex;
+    padding: 10px;
+    background: var(--btn-color-one);
+    color: var(--text-color-two);
+    border-radius: 5px;
+    margin-bottom: 1rem;
+    border: 1px solid var(--btn-color-one);
+    font-family: var(--main-font);
+    font-size: 14px;
+}
+
+.filter-h2 {
+    font-family: var(--main-font);
+    color: var(--text-color);
+}
+
+.filter-h3 {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+@media (max-width: 768px) {
+    .filter-content {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0;
+    }
+
+    .filter-item {
+        flex-direction: column;
+        width: 90%;
+        justify-content: center;
+    }
+
+    .filter-submit-button {
+        width: 90%;
+        justify-content: center;
+        margin-top: 1rem;
+        padding: 15px;
+    }
+
+    .filter-in {
+        width: 100%;
+        padding: 15px;
+        margin-bottom: .5rem;
+    }
+
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+
+}
+
+@media (max-width: 480px) {
+
+}
+
+@media (min-width: 1024px) and (max-width: 1240px) {
+ 
+}
+
+@media (min-width: 1240px) and (max-width: 1340px) {
+
+}
+
+@media (min-width: 1340px) {
+
+}
