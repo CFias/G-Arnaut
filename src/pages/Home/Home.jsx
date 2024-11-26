@@ -6,6 +6,7 @@ import { Footer } from "../../components/Footer/Footer";
 import { Banner } from "../../components/Banner/Banner";
 import "./styles.css"
 import { ProductsPost } from "../../components/ProductsPost/ProductsPost";
+import { CardFilter } from "../../components/CardFilter/CardFilter";
 
 export const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -29,6 +30,15 @@ export const Home = () => {
             </SkeletonTheme>
           ) : (
             <Banner />
+          )}
+        </section>
+        <section className="section-1">
+          {isLoading ? (
+            <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f0f0f0">
+              <Skeleton height={500} borderRadius={15}  />
+            </SkeletonTheme>
+          ) : (
+            <CardFilter />
           )}
         </section>
         <section className="section-2">

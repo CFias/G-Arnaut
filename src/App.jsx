@@ -11,6 +11,7 @@ import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import { AuthProvider } from "./contexts/AuthContext";
 import Register from "./pages/RegisterPage/Register";
 import { Admin } from "./pages/Admin/Admin";
+import { FilteredProducts } from "./components/FilteredProducts/FilteredProducts";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/filtered-products" element={<FilteredProducts />} />
         <Route path="/admin" element={<Admin />} />
         <Route
           path="/dashboard"
