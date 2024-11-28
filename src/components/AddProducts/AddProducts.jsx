@@ -6,7 +6,7 @@ import Logo from "../../assets/image/garnaut-gray-logo.png";
 import "./styles.css";
 
 export const AddProducts = () => {
-  const [address, setAddress] = useState(""); // Alterado de productName para address
+  const [address, setAddress] = useState(""); 
   const [price, setPrice] = useState("");
   const [oldPrice, setOldPrice] = useState("");
   const [status, setStatus] = useState("");

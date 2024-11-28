@@ -77,7 +77,7 @@ export const Admin = () => {
               <h4 className="admin-h4">Adicione um novo post para o blog</h4>
               <AddCircle className="admin-icon" fontSize="medium" />
             </div>
-            <NavLink to="/table-posts" className="card-admin">
+            <NavLink to="/manage-products" className="card-admin">
               <h4 className="admin-h4">Gerenciar produtos</h4>
               <AdminPanelSettings
                 className="admin-icon"
