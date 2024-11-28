@@ -5,10 +5,15 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import { getFirestore, collection, getDocs } from "firebase/firestore"; // Firestore
+import {
+  getFirestore,
+  collection,
+  doc,
+  getDocs,
+  deleteDoc,
+} from "firebase/firestore"; // Firestore
 import { getStorage } from "firebase/storage"; // Firebase Storage
 
-// Sua configuração do Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyAjrMdHv0FWvOeXLopn6WQqXwbS1L8tIiM",
   authDomain: "garnaut-7bc48.firebaseapp.com",
@@ -24,31 +29,36 @@ export const auth = getAuth(app);
 export const db = getFirestore(app); // Inicializa e exporta o Firestore
 export const storage = getStorage(app); // Inicializa e exporta o Firebase Storage
 
-// Função para registrar usuário
 export function signup(userName, email, password) {
   return createUserWithEmailAndPassword(auth, userName, email, password);
 }
 
-// Função para fazer login
 export function login(email, password) {
   return signInWithEmailAndPassword(auth, email, password);
 }
 
-// Função para fazer logout
 export function logout() {
   return signOut(auth);
 }
 
-// Função para contar produtos no Firestore
 export async function getProductCount() {
   const productsCollection = collection(db, "products");
   const productSnapshot = await getDocs(productsCollection);
   return productSnapshot.size;
 }
 
-// Função para contar posts no Firestore
 export async function getPostCount() {
   const postsCollection = collection(db, "posts");
   const postSnapshot = await getDocs(postsCollection);
   return postSnapshot.size;
+}
+
+export async function deleteProduct(productId) {
+  try {
+    const productDoc = doc(db, "products", productId); // Cria a referência ao documento
+    await deleteDoc(productDoc); // Exclui o documento
+    console.log("Produto deletado com sucesso!");
+  } catch (error) {
+    console.error("Erro ao deletar o produto:", error);
+  }
 }

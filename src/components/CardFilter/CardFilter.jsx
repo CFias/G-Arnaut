@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { collection, query, where, getDocs } from "firebase/firestore";
-import { db } from "../../services/FirebaseConfig"; // Importando o Firebase
+import { db } from "../../services/FirebaseConfig"; 
 import "./styles.css";
 
 export const CardFilter = () => {
-  const [minPrice, setMinPrice] = useState("");
-  const [maxPrice, setMaxPrice] = useState("");
   const [city, setCity] = useState("");
   const [price, setPrice] = useState("");
   const [reference, setReference] = useState("");
@@ -18,12 +16,9 @@ export const CardFilter = () => {
   const handleFilter = async (e) => {
     e.preventDefault();
 
-    // Criando a consulta com filtros
     const productsRef = collection(db, "products");
 
-    // Inicializando a consulta
     let q = query(productsRef);
-    // Filtros adicionais
     if (price) {
       q = query(q, where("price", "==", price));
     }
@@ -37,18 +32,16 @@ export const CardFilter = () => {
       q = query(q, where("neighborhood", "==", neighborhood));
     }
     if (reference) {
-      q = query(q, where("refProduct", "==", reference)); // Adicionando filtro para referência
+      q = query(q, where("refProduct", "==", reference));
     }
 
-    // Buscando os dados filtrados
     try {
       const querySnapshot = await getDocs(q);
       const filteredProducts = querySnapshot.docs.map((doc) => doc.data());
 
-      // Passando os produtos filtrados para a próxima página via navigate
       navigate("/filtered-products", {
         state: {
-          filteredProducts, // Passando os produtos filtrados
+          filteredProducts,
         },
       });
     } catch (error) {

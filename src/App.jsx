@@ -1,8 +1,4 @@
-// src/App.js
 import "./App.css";
-import { Navbar } from "./components/Navbar/Navbar";
-
-// Imports Libs
 import { Routes, Route } from "react-router-dom";
 import { Home } from "./pages/Home/Home";
 import Login from "./pages/LoginPage/LoginPage";
@@ -12,6 +8,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import Register from "./pages/RegisterPage/Register";
 import { Admin } from "./pages/Admin/Admin";
 import { FilteredProducts } from "./components/FilteredProducts/FilteredProducts";
+import { ManageProducts } from "./pages/ManageProducts/ManageProducts";
 
 function App() {
   return (
@@ -22,6 +19,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/filtered-products" element={<FilteredProducts />} />
         <Route path="/admin" element={<Admin />} />
+        <Route path="/manage-products" element={<ManageProducts />} />
         <Route
           path="/dashboard"
           element={
