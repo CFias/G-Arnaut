@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { db, storage } from "../../services/FirebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
 import { getDownloadURL, ref } from "firebase/storage";
@@ -8,8 +9,8 @@ import "./styles.css";
 export const ProductsPost = () => {
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const productsPerPage = 12; // Maximum products per page
-  const productsPerRow = 4; // Products per row
+  const productsPerPage = 12;
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -56,65 +57,70 @@ export const ProductsPost = () => {
     currentPage * productsPerPage
   );
 
+  const handleCardClick = (id) => {
+    navigate(`/product/${id}`);
+  };
+
   return (
-    <>
-      <div className="product-container">
-        <div className="product-list">
-          {paginatedProducts.map((product) => (
-            <div key={product.id} className="product-card">
-              {product.images && product.images.length > 0 && (
-                <div className="product-images">
-                  <p className="product-status">{product.status}</p>
-                  <p className="product-ref">
-                    Referência: {product.refProduct}
-                  </p>
-                  <img
-                    className="product-img"
-                    src={product.images[0]}
-                    alt="Product image"
-                  />
+    <div className="product-container">
+      <div className="product-list">
+        {paginatedProducts.map((product) => (
+          <div
+            key={product.id}
+            className="product-card"
+            onClick={() => handleCardClick(product.id)}
+          >
+            {product.images && product.images.length > 0 && (
+              <div className="product-images">
+                <p className="product-status">{product.status}</p>
+                <p className="product-ref">Referência: {product.refProduct}</p>
+                <img
+                  className="product-img"
+                  src={product.images[0]}
+                  alt="Product"
+                />
+              </div>
+            )}
+            <div className="product-infos">
+              <h3 className="product-address">{product.city}</h3>
+              <p className="product-neighborhood">{product.neighborhood}</p>
+              <p className="product-category">
+                <Category fontSize="small" /> {product.category}
+              </p>
+              <div className="product-dimension">
+                <CropFree className="product-icon" fontSize="small" />{" "}
+                <p className="product-size">{product.dimension} m²</p>
+              </div>
+              <div className="product-dimension">
+                <Hotel className="product-icon" fontSize="small" />{" "}
+                <p className="product-size">{product.bedrooms}</p>
+              </div>
+              <div className="product-dimension">
+                <DirectionsCar className="product-icon" fontSize="small" />{" "}
+                <p className="product-size">{product.parkingSpaces}</p>
+              </div>
+              <div className="product-price-mod">
+                <div className="product-oldPrice">
+                  <s>R$ {product.oldPrice}</s>
+                  <p className="product-price">R$ {product.price}</p>
                 </div>
-              )}
-              <div className="product-infos">
-                <h3 className="product-address">{product.city}</h3>
-                {/* <p className="product-address">{product.address}</p> */}
-                <p className="product-neighborhood">{product.neighborhood}</p>
-                <p className="product-category"><Category fontSize="small" /> {product.category}</p>
-                <div className="product-dimension">
-                  <CropFree className="product-icon" fontSize="small" />{" "}
-                  <p className="product-size">{product.dimension} m²</p>
-                </div>
-                <div className="product-dimension">
-                  <Hotel className="product-icon" fontSize="small" />{" "}
-                  <p className="product-size">{product.bedrooms}</p>
-                </div>
-                <div className="product-dimension">
-                  <DirectionsCar className="product-icon" fontSize="small" />{" "}
-                  <p className="product-size">{product.parkingSpaces}</p>
-                </div>
-                <div className="product-price-mod">
-                  <div className="product-oldPrice">
-                    <s>R$ {product.oldPrice}</s>
-                    <p className="product-price">R$ {product.price}</p>
-                  </div>
-                  <h3 className="product-type">{product.productType}</h3>
-                </div>
+                <h3 className="product-type">{product.productType}</h3>
               </div>
             </div>
-          ))}
-        </div>
-        <div className="pagination-dots">
-          {Array.from({ length: totalPages }, (_, index) => (
-            <span
-              key={index}
-              className={`dot ${currentPage === index + 1 ? "active" : ""}`}
-              onClick={() => setCurrentPage(index + 1)}
-            >
-              {index + 1}
-            </span>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
-    </>
+      <div className="pagination-dots">
+        {Array.from({ length: totalPages }, (_, index) => (
+          <span
+            key={index}
+            className={`dot ${currentPage === index + 1 ? "active" : ""}`}
+            onClick={() => setCurrentPage(index + 1)}
+          >
+            {index + 1}
+          </span>
+        ))}
+      </div>
+    </div>
   );
 };
