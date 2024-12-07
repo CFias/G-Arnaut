@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { collection, query, where, getDocs } from "firebase/firestore";
-import { db } from "../../services/FirebaseConfig"; 
+import { db } from "../../services/FirebaseConfig";
 import "./styles.css";
 
 export const CardFilter = () => {
@@ -18,31 +18,39 @@ export const CardFilter = () => {
 
     const productsRef = collection(db, "products");
 
-    let q = query(productsRef);
-    if (price) {
-      q = query(q, where("price", "==", price));
-    }
-    if (category) {
-      q = query(q, where("category", "==", category));
-    }
-    if (city) {
-      q = query(q, where("city", "==", city));
-    }
-    if (neighborhood) {
-      q = query(q, where("neighborhood", "==", neighborhood));
-    }
-    if (reference) {
-      q = query(q, where("refProduct", "==", reference));
-    }
-
     try {
+      const allProductsSnapshot = await getDocs(productsRef);
+      const allProducts = allProductsSnapshot.docs.map((doc) => doc.data());
+      console.log("Todos os produtos no Firestore:", allProducts);
+
+      // Construção da consulta com filtros
+      let q = query(productsRef);
+      if (category) {
+        q = query(q, where("category", "==", category));
+      }
+      if (city) {
+        q = query(q, where("city", "==", city));
+      }
+      if (neighborhood) {
+        q = query(q, where("neighborhood", "==", neighborhood));
+      }
+      if (reference) {
+        q = query(q, where("refProduct", "==", reference));
+      }
+
+      // Executa a consulta
       const querySnapshot = await getDocs(q);
       const filteredProducts = querySnapshot.docs.map((doc) => doc.data());
+      console.log("Produtos filtrados encontrados:", filteredProducts);
 
+      // Verifica se há produtos filtrados
+      if (filteredProducts.length === 0) {
+        alert("Nenhum produto encontrado com os filtros aplicados.");
+      }
+
+      // Navega para a página com produtos filtrados
       navigate("/filtered-products", {
-        state: {
-          filteredProducts,
-        },
+        state: { filteredProducts },
       });
     } catch (error) {
       console.error("Erro ao buscar produtos:", error);
@@ -56,16 +64,6 @@ export const CardFilter = () => {
         <h2 className="filter-h2">Encontre o imóvel ideal</h2>
       </div>
       <form className="filter-content" onSubmit={handleFilter}>
-        <div className="filter-item">
-          <h3 className="filter-h3">Faixa de preço</h3>
-          <input
-            className="filter-in"
-            placeholder="R$ 0.00"
-            type="text"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-          />
-        </div>
         <div className="filter-item">
           <h3 className="filter-h3">Cidade</h3>
           <input

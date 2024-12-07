@@ -7,28 +7,20 @@ import {
   updateDoc,
   deleteDoc,
 } from "firebase/firestore";
+import "./styles.css";
+import { NavLink } from "react-router-dom";
 
 export const ManageProducts = () => {
   const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
-  const [editProduct, setEditProduct] = useState({
-    id: "",
-    address: "",
+  const [editProduct, setEditProduct] = useState(null);
+  const [searchFilters, setSearchFilters] = useState({
     price: "",
-    oldPrice: "",
-    status: "",
-    dimension: "",
-    state: "",
-    city: "",
-    neighborhood: "",
-    category: "",
-    description: "",
     refProduct: "",
-    productType: "venda",
-    isFeatured: false,
-    bedrooms: "",
-    parkingSpaces: "",
+    description: "",
+    category: "",
   });
 
   useEffect(() => {
@@ -41,6 +33,7 @@ export const ManageProducts = () => {
           ...doc.data(),
         }));
         setProducts(productList);
+        setFilteredProducts(productList);
       } catch (error) {
         console.error("Error fetching products:", error);
       } finally {
@@ -51,75 +44,48 @@ export const ManageProducts = () => {
     fetchProducts();
   }, []);
 
-  // Handle edit form input change
-  const handleEditChange = (e) => {
+  useEffect(() => {
+    const filtered = products.filter((product) =>
+      Object.keys(searchFilters).every((key) => {
+        if (!searchFilters[key]) return true;
+        return String(product[key])
+          .toLowerCase()
+          .includes(searchFilters[key].toLowerCase());
+      })
+    );
+    setFilteredProducts(filtered);
+  }, [searchFilters, products]);
+
+  const handleSearchChange = (e) => {
     const { name, value } = e.target;
-    setEditProduct((prev) => ({
+    setSearchFilters((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
-  // Handle edit form submit
-  const handleEditSubmit = async (e) => {
-    e.preventDefault();
+  const handleDelete = async (id) => {
     try {
-      const productRef = doc(db, "products", editProduct.id);
-      await updateDoc(productRef, {
-        address: editProduct.address,
-        price: editProduct.price,
-        oldPrice: editProduct.oldPrice,
-        status: editProduct.status,
-        dimension: editProduct.dimension,
-        state: editProduct.state,
-        city: editProduct.city,
-        neighborhood: editProduct.neighborhood,
-        category: editProduct.category,
-        description: editProduct.description,
-        refProduct: editProduct.refProduct,
-        productType: editProduct.productType,
-        isFeatured: editProduct.isFeatured,
-        bedrooms: editProduct.bedrooms,
-        parkingSpaces: editProduct.parkingSpaces,
-      });
-      alert("Produto atualizado com sucesso!");
-      setIsEditing(false);
-      setEditProduct({
-        id: "",
-        address: "",
-        price: "",
-        oldPrice: "",
-        status: "",
-        dimension: "",
-        state: "",
-        city: "",
-        neighborhood: "",
-        category: "",
-        description: "",
-        refProduct: "",
-        productType: "venda",
-        isFeatured: false,
-        bedrooms: "",
-        parkingSpaces: "",
-      });
+      await deleteDoc(doc(db, "products", id));
+      setProducts((prev) => prev.filter((product) => product.id !== id));
     } catch (error) {
-      console.error("Erro ao atualizar produto:", error);
-      alert("Erro ao atualizar produto.");
+      console.error("Error deleting product:", error);
     }
   };
 
-  // Handle delete product
-  const handleDelete = async (id) => {
-    if (window.confirm("Tem certeza que deseja excluir este produto?")) {
-      try {
-        const productRef = doc(db, "products", id);
-        await deleteDoc(productRef);
-        alert("Produto excluído com sucesso!");
-        setProducts(products.filter((product) => product.id !== id));
-      } catch (error) {
-        console.error("Erro ao excluir produto:", error);
-        alert("Erro ao excluir produto.");
-      }
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    try {
+      const docRef = doc(db, "products", editProduct.id);
+      await updateDoc(docRef, { ...editProduct });
+      setProducts((prev) =>
+        prev.map((product) =>
+          product.id === editProduct.id ? editProduct : product
+        )
+      );
+      setIsEditing(false);
+    } catch (error) {
+      console.error("Error updating product:", error);
     }
   };
 
@@ -128,129 +94,125 @@ export const ManageProducts = () => {
   }
 
   return (
-    <div>
-      <h2>Manage Products</h2>
-
-      {isEditing ? (
-        <div>
-          <h3>Edit Product</h3>
-          <form onSubmit={handleEditSubmit}>
-            <div>
-              <label>Endereço:</label>
+    <div className="manage-products-container">
+      <NavLink to="/admin">Voltar</NavLink>
+      <h2 className="manage-products-heading">Gerenciar Produtos</h2>
+      <div className="search-filters">
+        <input
+          type="text"
+          placeholder="Buscar por preço"
+          name="price"
+          value={searchFilters.price}
+          onChange={handleSearchChange}
+        />
+        <input
+          type="text"
+          placeholder="Buscar por referência"
+          name="refProduct"
+          value={searchFilters.refProduct}
+          onChange={handleSearchChange}
+        />
+        <input
+          type="text"
+          placeholder="Buscar por descrição"
+          name="description"
+          value={searchFilters.description}
+          onChange={handleSearchChange}
+        />
+        <input
+          type="text"
+          placeholder="Buscar por categoria"
+          name="category"
+          value={searchFilters.category}
+          onChange={handleSearchChange}
+        />
+      </div>
+      <table className="products-table">
+        <thead>
+          <tr>
+            <th>Endereço</th>
+            <th>Preço</th>
+            <th>Categoria</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredProducts.map((product) => (
+            <tr key={product.id}>
+              <td>{product.address}</td>
+              <td>{product.price}</td>
+              <td>{product.category}</td>
+              <td>{product.status}</td>
+              <td>
+                <button
+                  className="edit-button"
+                  onClick={() => {
+                    setIsEditing(true);
+                    setEditProduct({ ...product });
+                  }}
+                >
+                  Editar
+                </button>
+                <button
+                  className="delete-button"
+                  onClick={() => handleDelete(product.id)}
+                >
+                  Excluir
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {isEditing && (
+        <div className="modal">
+          <div className="modal-content">
+            <h3>Editar Produto</h3>
+            <form onSubmit={handleUpdate}>
               <input
                 type="text"
-                name="address"
+                placeholder="Endereço"
                 value={editProduct.address}
-                onChange={handleEditChange}
-                required
+                onChange={(e) =>
+                  setEditProduct({ ...editProduct, address: e.target.value })
+                }
               />
-            </div>
-            <div>
-              <label>Preço:</label>
               <input
                 type="number"
-                name="price"
+                placeholder="Preço"
                 value={editProduct.price}
-                onChange={handleEditChange}
-                required
+                onChange={(e) =>
+                  setEditProduct({ ...editProduct, price: e.target.value })
+                }
               />
-            </div>
-            <div>
-              <label>Preço Antigo:</label>
-              <input
-                type="number"
-                name="oldPrice"
-                value={editProduct.oldPrice}
-                onChange={handleEditChange}
-              />
-            </div>
-            <div>
-              <label>Status:</label>
               <input
                 type="text"
-                name="status"
-                value={editProduct.status}
-                onChange={handleEditChange}
-                required
-              />
-            </div>
-            <div>
-              <label>Dimensão:</label>
-              <input
-                type="number"
-                name="dimension"
-                value={editProduct.dimension}
-                onChange={handleEditChange}
-                required
-              />
-            </div>
-            <div>
-              <label>Categoria:</label>
-              <input
-                type="text"
-                name="category"
+                placeholder="Categoria"
                 value={editProduct.category}
-                onChange={handleEditChange}
-                required
+                onChange={(e) =>
+                  setEditProduct({ ...editProduct, category: e.target.value })
+                }
               />
-            </div>
-            <div>
-              <label>Descrição:</label>
-              <textarea
-                name="description"
-                value={editProduct.description}
-                onChange={handleEditChange}
-                required
+              <input
+                type="text"
+                placeholder="Status"
+                value={editProduct.status}
+                onChange={(e) =>
+                  setEditProduct({ ...editProduct, status: e.target.value })
+                }
               />
-            </div>
-            <div>
-              <button type="submit">Salvar Alterações</button>
-              <button type="button" onClick={() => setIsEditing(false)}>
+              <button className="modal-save-button" type="submit">
+                Salvar
+              </button>
+              <button
+                className="modal-cancel-button"
+                onClick={() => setIsEditing(false)}
+              >
                 Cancelar
               </button>
-            </div>
-          </form>
-        </div>
-      ) : (
-        <div>
-          {products.length === 0 ? (
-            <p>No products available.</p>
-          ) : (
-            <table>
-              <thead>
-                <tr>
-                  <th>Endereço</th>
-                  <th>Preço</th>
-                  <th>Categoria</th>
-                  <th>Status</th>
-                  <th>Ações</th>
-                </tr>
-              </thead>
-              <tbody>
-                {products.map((product) => (
-                  <tr key={product.id}>
-                    <td>{product.address}</td>
-                    <td>{product.price}</td>
-                    <td>{product.category}</td>
-                    <td>{product.status}</td>
-                    <td>
-                      <button
-                        onClick={() => {
-                          setIsEditing(true);
-                          setEditProduct({ ...product });
-                        }}
-                      >
-                        Editar
-                      </button>
-                      <button onClick={() => handleDelete(product.id)}>
-                        Excluir
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+            </form>
+          </div>
         </div>
       )}
     </div>
