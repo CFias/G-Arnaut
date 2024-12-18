@@ -112,7 +112,7 @@ export const Navbar = () => {
               Início
             </NavLink>
             <NavLink className="nav-link-item">Venda</NavLink>
-            <NavLink className="nav-link-item">Locação</NavLink>
+            <NavLink to="/location" className="nav-link-item">Locação</NavLink>
             <NavLink className="nav-link-item">O corretor</NavLink>
             <NavLink className="nav-link-item">Contato</NavLink>
           </div>
@@ -189,7 +189,7 @@ export const Navbar = () => {
               </div>
               <KeyboardArrowRight fontSize="10" />
             </NavLink>
-            <NavLink className="sidebar-link-item" onClick={closeSidebar}>
+            <NavLink to="/location" className="sidebar-link-item" onClick={closeSidebar}>
               <div className="icon-name-side">
                 <LocationCity fontSize="small" /> Locação
               </div>

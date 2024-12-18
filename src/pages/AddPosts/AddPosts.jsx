@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { db, storage, auth } from "../../services/FirebaseConfig"; // Importando auth
 import { collection, addDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import "./styles.css"; // Importando o arquivo de estilos
+import "./styles.css"; 
 
 export const AddPosts = () => {
   const [title, setTitle] = useState("");
@@ -11,7 +11,6 @@ export const AddPosts = () => {
   const [images, setImages] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
 
-  // Função para capturar o usuário logado
   const getCurrentUser = () => {
     return auth.currentUser; // Retorna o usuário logado
   };
@@ -39,7 +38,6 @@ export const AddPosts = () => {
         return;
       }
 
-      // Adicionando a publicação com o autor (usuário logado)
       await addDoc(collection(db, "posts"), {
         title,
         content,
@@ -103,7 +101,7 @@ export const AddPosts = () => {
             type="text"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="form-input"
+            className="form-input" 
             required
           />
         </div>

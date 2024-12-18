@@ -1,0 +1,65 @@
+.recommended-products-container {
+    margin-top: 40px;
+    padding: 20px;
+    background-color: var(--bg-color);
+    /* Usando a variável de cor */
+    border-radius: 10px;
+}
+
+.recommended-products h2 {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: var(--text-color-one);
+    /* Usando a variável de cor */
+}
+
+.recommended-products {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.recommended-product-card {
+    width: 200px;
+    background-color: var(--card-color);
+    /* Usando a variável de cor */
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.recommended-product-card:hover {
+    transform: scale(1.05);
+}
+
+.recommended-product-image {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.recommended-product-name {
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-color-one);
+    /* Usando a variável de cor */
+}
+
+.recommended-product-price {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--btn-color-one);
+    /* Usando a variável de cor */
+    margin-top: 5px;
+}
+
+.recommended-product-price-decimal {
+    font-size: 12px;
+    vertical-align: super;
+}
