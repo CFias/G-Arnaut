@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { doc, getDoc } from "firebase/firestore";
+import { useParams, Link } from "react-router-dom";
+import { doc, getDoc, collection, getDocs } from "firebase/firestore";
 import { db } from "../../services/FirebaseConfig";
-import "./styles.css";
 import { CalendarToday } from "@mui/icons-material";
 import { Navbar } from "../../components/Navbar/Navbar";
+import "./styles.css";
 
 export const ProductDetails = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [recommendedProducts, setRecommendedProducts] = useState([]);
 
   useEffect(() => {
     const fetchProductDetails = async () => {
@@ -20,32 +21,45 @@ export const ProductDetails = () => {
         if (docSnap.exists()) {
           const productData = { id: docSnap.id, ...docSnap.data() };
           setProduct(productData);
+
           if (productData.images && productData.images.length > 0) {
-            setSelectedImage(productData.images[0]); // Define a primeira imagem como padrão
+            setSelectedImage(productData.images[0]);
           }
         } else {
-          console.error("Nenhum documento encontrado!");
+          console.error("Produto não encontrado!");
         }
       } catch (error) {
         console.error("Erro ao buscar os detalhes do produto:", error);
       }
     };
 
+    const fetchRecommendedProducts = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "products"));
+        const products = [];
+        querySnapshot.forEach((doc) => {
+          products.push({ id: doc.id, ...doc.data() });
+        });
+        setRecommendedProducts(products);
+      } catch (error) {
+        console.error("Erro ao buscar produtos recomendados:", error);
+      }
+    };
+
     fetchProductDetails();
+    fetchRecommendedProducts();
   }, [id]);
 
-  // Função para formatar o Timestamp para data legível
   const formatDate = (timestamp) => {
     if (timestamp) {
       const date = timestamp.toDate();
-      return date.toLocaleDateString(); // Você pode personalizar o formato da data se necessário
+      return date.toLocaleDateString();
     }
     return "Data não disponível";
   };
 
-  // Função para criar a URL do WhatsApp com as informações do imóvel
   const generateWhatsappMessage = () => {
-    return `Olá, estou interessado no imóvel: 
+    return `Olá, estou interessado no imóvel:
 
 Referência: ${product.refProduct}
 Cidade: ${product.city}
@@ -63,7 +77,7 @@ Gostaria de saber mais detalhes.`;
 
   const handleWhatsappClick = () => {
     const whatsappMessage = generateWhatsappMessage();
-    const whatsappNumber = "557191900974"; // Substitua com o número de telefone real (com código do país)
+    const whatsappNumber = "557191900974";
     const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
       whatsappMessage
     )}`;
@@ -111,7 +125,7 @@ Gostaria de saber mais detalhes.`;
           <div className="info-container">
             <p className="detail-data">
               <CalendarToday fontSize="10" /> {formatDate(product.createdAt)}
-            </p>{" "}
+            </p>
             <p className="detail-status">{product.status}</p>
             <p className="detail-category">{product.category}</p>
             <h1 className="detail-h1">
@@ -127,19 +141,49 @@ Gostaria de saber mais detalhes.`;
             <p className="detail-productType">
               Imóvel para: {product.productType}
             </p>
-            <p className="detail-oldPrice">
-              <s> R$ {product.oldPrice}</s>{" "}
-            </p>
+            {product.oldPrice && (
+              <p className="detail-oldPrice">
+                <s> R$ {product.oldPrice}</s>{" "}
+              </p>
+            )}
             <p className="detail-price">
               R$ {product.price.split(".")[0]}
               <span className="detail-price-decimal">
                 .{product.price.split(".")[1]}
               </span>
             </p>
-            {/* Botão WhatsApp */}
             <button className="whatsapp-button" onClick={handleWhatsappClick}>
               Falar no WhatsApp
             </button>
+          </div>
+        </div>
+        {/* Produtos recomendados */}
+        <div className="recommended-products-container">
+          <h2>Produtos Recomendados</h2>
+          <div className="recommended-products">
+            {recommendedProducts.map((recommendedProduct) => (
+              <div
+                className="recommended-product-card"
+                key={recommendedProduct.id}
+              >
+                <Link to={`/product-details/${recommendedProduct.id}`}>
+                  <img
+                    src={recommendedProduct.images[0]}
+                    alt={recommendedProduct.name}
+                    className="recommended-product-image"
+                  />
+                  <p className="recommended-product-name">
+                    {recommendedProduct.name}
+                  </p>
+                  <p className="recommended-product-price">
+                    R$ {recommendedProduct.price.split(".")[0]}
+                    <span className="recommended-product-price-decimal">
+                      .{recommendedProduct.price.split(".")[1]}
+                    </span>
+                  </p>
+                </Link>
+              </div>
+            ))}
           </div>
         </div>
       </div>

@@ -12,51 +12,57 @@ export const ProductsPost = () => {
   const productsPerPage = 12;
   const navigate = useNavigate();
 
+  // Função para buscar os produtos e suas imagens
+  const fetchProducts = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "products"));
+      const productList = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      // Busca as imagens dos produtos
+      const productsWithImages = await Promise.all(
+        productList.map(async (product) => {
+          if (product.images && product.images.length > 0) {
+            const imageUrls = await Promise.all(
+              product.images.map(async (imagePath) => {
+                try {
+                  const imageRef = ref(storage, imagePath);
+                  const downloadURL = await getDownloadURL(imageRef);
+                  return downloadURL;
+                } catch (error) {
+                  console.error("Erro ao obter URL da imagem:", error);
+                  return null;
+                }
+              })
+            );
+            return { ...product, images: imageUrls.filter(Boolean) };
+          }
+          return product;
+        })
+      );
+
+      setProducts(productsWithImages);
+    } catch (error) {
+      console.error("Erro ao buscar produtos:", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "products"));
-        const productList = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-
-        const productsWithImages = await Promise.all(
-          productList.map(async (product) => {
-            if (product.images && product.images.length > 0) {
-              const imageUrls = await Promise.all(
-                product.images.map(async (imagePath) => {
-                  try {
-                    const imageRef = ref(storage, imagePath);
-                    const downloadURL = await getDownloadURL(imageRef);
-                    return downloadURL;
-                  } catch (error) {
-                    console.error("Erro ao obter URL da imagem:", error);
-                    return null;
-                  }
-                })
-              );
-              return { ...product, images: imageUrls.filter(Boolean) };
-            }
-            return product;
-          })
-        );
-
-        setProducts(productsWithImages);
-      } catch (error) {
-        console.error("Erro ao buscar produtos: ", error);
-      }
-    };
-
     fetchProducts();
   }, []);
 
+  // Calcula o número total de páginas para a paginação
   const totalPages = Math.ceil(products.length / productsPerPage);
+
+  // Paginando os produtos
   const paginatedProducts = products.slice(
     (currentPage - 1) * productsPerPage,
     currentPage * productsPerPage
   );
 
+  // Redireciona para a página de detalhes do produto
   const handleCardClick = (id) => {
     navigate(`/product/${id}`);
   };
@@ -88,15 +94,15 @@ export const ProductsPost = () => {
                 <Category fontSize="small" /> {product.category}
               </p>
               <div className="product-dimension">
-                <CropFree className="product-icon" fontSize="small" />{" "}
+                <CropFree className="product-icon" fontSize="small" />
                 <p className="product-size">{product.dimension} m²</p>
               </div>
               <div className="product-dimension">
-                <Hotel className="product-icon" fontSize="small" />{" "}
+                <Hotel className="product-icon" fontSize="small" />
                 <p className="product-size">{product.bedrooms}</p>
               </div>
               <div className="product-dimension">
-                <DirectionsCar className="product-icon" fontSize="small" />{" "}
+                <DirectionsCar className="product-icon" fontSize="small" />
                 <p className="product-size">{product.parkingSpaces}</p>
               </div>
               <div className="product-price-mod">

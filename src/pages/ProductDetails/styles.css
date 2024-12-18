@@ -1,49 +1,59 @@
+/* Estrutura de Classes para Detalhes do Produto */
+
+:root {
+    --main-font: "Jost", sans-serif;
+    --primary-color: #1A528F;
+    --secondary-color: #3175B6;
+    --text-color-one: #333;
+    --text-color-two: #F2F2F2;
+    --bg-color: #F7F7F7;
+    --bg-color-card: #FFF;
+    --card-border-radius: 15px;
+    --image-border-radius: 10px;
+    --button-border-radius: 25px;
+    --highlight-color: #E4B475;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
 .product-details-container {
-    margin: 0 auto;
-    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    padding: 3rem;
+    background-color: var(--bg-color);
+    gap: 2rem;
+    font-family: var(--main-font);
+    flex-wrap: wrap;
+    /* Permite que os elementos quebrem linha */
 }
 
 .product-details {
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 20px;
+    flex-direction: column;
+    width: 60%;
+    background: var(--bg-color-card);
+    padding: 10px;
+    border-radius: var(--card-border-radius);
 }
 
 .image-container {
     display: flex;
-    align-items: start;
-    gap: 1rem;
-}
-
-.main-image-container {
-    margin-bottom: 20px;
-}
-
-.main-image {
-    object-fit: cover;
-    width: 35rem;
-    height: 30rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    flex-direction: column;
+    align-items: center;
 }
 
 .thumbnails-container {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 10px;
-    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
 }
 
 .thumbnail {
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
+    border-radius: 8px;
     object-fit: cover;
     cursor: pointer;
-    border: 2px solid transparent;
-    border-radius: 5px;
-    transition: transform 0.3s, border-color 0.3s;
+    transition: transform 0.3s ease;
 }
 
 .thumbnail:hover {
@@ -51,156 +61,247 @@
 }
 
 .active-thumbnail {
-    border-color: #007bff;
+    border: 2px solid var(--primary-color);
+}
+
+.main-image-container {
+    max-width: 500px;
+    max-height: 500px;
+    overflow: hidden;
+    border-radius: var(--image-border-radius);
+}
+
+.main-image {
+    width: 500px;
+    height: 500px;
+    object-fit: cover;
 }
 
 .info-container {
-    padding: 20px;
-    border: 1px solid var(--text-color-two);
-    border-radius: 10px;
+    margin-top: 2rem;
     font-family: var(--main-font);
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    color: var(--text-color-one);
 }
-
-.detail-status {
-    background: var(--btn-color-two);
-    color: var(--text-color-two);
-    padding: 5px;
-    border-radius: 5px;
-    font-size: 10px;
-    text-align: center;
-    width: 80px;
-}
-
-.detail-h1 {
-    font-size: 20px;
-    font-weight: 500;
-}
-
-.detail-address {
-    font-size: 14px;
-}
-
-.detail-neighborhood {
-    font-size: 14px;
-    margin-bottom: .4rem;
-
-}
-
-.detail-oldPrice {
-    margin-top: .5rem;
-    font-size: 12px;
-}
-
-.detail-price {
-    font-size: 24px;
-    font-weight: 400;
-}
-
-.detail-price-decimal {
-    font-size: 14px;
-    vertical-align: super;
-}
-
-
-.detail-category {
-    font-size: 14px;
-    margin: 0.5rem 0;
-    color: var(--btn-color-two);
-}
-
-.detail-dimension {
-    font-size: 14px;
-}
-
-.detail-bedrooms {
-    font-size: 14px;
-}
-
-.detail-parkingSpaces {
-    font-size: 14px;
-}
-
-.detail-productType {
-    font-size: 14px;
-}
-
-
 
 .detail-data {
+    font-size: 0.875rem;
+    color: var(--text-color-one);
     display: flex;
     align-items: center;
     gap: 5px;
+}
+
+.detail-status,
+.detail-category {
+    font-size: 1.1rem;
+    color: var(--secondary-color);
+    font-weight: bold;
+    margin-top: 0.5rem;
+}
+
+.detail-h1 {
+    font-size: 2rem;
     color: var(--text-color-one);
-    font-size: 12px;
+    margin-top: 1rem;
+}
+
+.detail-address,
+.detail-neighborhood,
+.detail-dimension,
+.detail-bedrooms,
+.detail-parkingSpaces,
+.detail-productType {
+    font-size: 1rem;
     color: var(--text-color-one);
     margin: 0.5rem 0;
-    border-bottom: 1px solid var(--text-color-two);
+}
+
+.detail-oldPrice {
+    font-size: 1rem;
+    color: #888;
+    text-decoration: line-through;
+}
+
+.detail-price {
+    font-size: 1.8rem;
+    color: var(--primary-color);
+    font-weight: bold;
 }
 
 .whatsapp-button {
-    background-color: var(--btn-color-two);
-    /* Cor do WhatsApp */
-    color: white;
-    font-size: 16px;
-    padding: 10px 20px;
-    border-radius: 5px;
+    background-color: var(--primary-color);
+    color: var(--text-color-two);
+    padding: 15px;
     border: none;
+    border-radius: var(--button-border-radius);
+    width: 100%;
+    font-size: 1.1rem;
     cursor: pointer;
-    display: inline-block;
-    text-align: center;
-    margin-top: 20px;
+    margin-top: 2rem;
     transition: background-color 0.3s ease;
 }
 
 .whatsapp-button:hover {
-    background-color: #128c7e;
-    /* Cor mais escura quando hover */
+    background-color: var(--secondary-color);
 }
 
-@media (max-width: 768px) {
+.recommended-products-container {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+}
+
+.recommended-products h2 {
+    font-size: 1.5rem;
+    color: var(--text-color-one);
+    margin-bottom: 1rem;
+}
+
+.recommended-products {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.recommended-product-card {
+    background-color: var(--bg-color-card);
+    border-radius: var(--card-border-radius);
+    box-shadow: 0 4px 8px var(--shadow-color);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.recommended-product-card:hover {
+    transform: translateY(-5px);
+}
+
+.recommended-product-image {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-bottom: 2px solid var(--highlight-color);
+}
+
+.recommended-product-name {
+    font-size: 1.1rem;
+    color: var(--text-color-one);
+    font-weight: bold;
+    padding: 10px;
+    text-align: center;
+}
+
+.recommended-product-price {
+    font-size: 1rem;
+    color: var(--primary-color);
+    font-weight: bold;
+    text-align: center;
+    padding-bottom: 10px;
+}
+
+.recommended-product-price-decimal {
+    font-size: 0.8rem;
+}
+
+/* MEDIA QUERIES PARA RESPONSIVIDADE */
+
+@media screen and (max-width: 1200px) {
     .product-details-container {
-        flex-direction: column;
+        padding: 2rem;
     }
 
     .product-details {
+        width: 70%;
+    }
+
+    .recommended-products-container {
+        width: 40%;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .product-details-container {
         flex-direction: column;
         align-items: center;
+        gap: 1.5rem;
     }
 
-    .image-container {
-        flex-direction: column;
-    }
-
-    .thumbnails-container {
-        flex-direction: row;
-    }
-
-    .thumbnail {
-        width: 3rem;
-        height: 3rem;
-    }
-
-    .main-image {
-        width: 20rem;
-        height: 22rem;
-    }
-
-    .info-container {
+    .product-details {
         width: 100%;
     }
 
+    .recommended-products-container {
+        width: 100%;
+    }
+
+    .main-image-container {
+        width: 90%;
+    }
+
+    .thumbnail {
+        width: 50px;
+        height: 50px;
+    }
+
+    .whatsapp-button {
+        width: 80%;
+    }
 }
 
-@media (min-width: 769px) and (max-width: 1024px) {}
+@media screen and (max-width: 768px) {
+    .product-details-container {
+        padding: 1rem;
+    }
 
-@media (max-width: 480px) {}
+    .product-details {
+        width: 100%;
+    }
 
-@media (min-width: 1024px) and (max-width: 1240px) {}
+    .recommended-products-container {
+        width: 100%;
+    }
 
-@media (min-width: 1240px) and (max-width: 1340px) {}
+    .main-image-container {
+        width: 100%;
+        max-width: 400px;
+    }
 
-@media (min-width: 1340px) {}
+    .main-image {
+        width: 100%;
+        height: auto;
+    }
+
+    .recommended-product-card {
+        margin-bottom: 1rem;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .product-details-container {
+        padding: 0.5rem;
+    }
+
+    .product-details {
+        width: 100%;
+    }
+
+    .recommended-products-container {
+        width: 100%;
+    }
+
+    .whatsapp-button {
+        font-size: 1rem;
+    }
+
+    .recommended-product-card {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .recommended-product-image {
+        height: 120px;
+    }
+
+    .recommended-product-name,
+    .recommended-product-price {
+        font-size: 0.9rem;
+    }
+}

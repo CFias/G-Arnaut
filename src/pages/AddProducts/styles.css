@@ -1,0 +1,189 @@
+/* Estilo do container principal */
+.add-product-container {
+  padding: 20px;
+  min-height: 100vh;
+  border-radius: 12px;
+  background-color: #fff;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  font-family: var(--main-font);
+}
+
+.add-product-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.product-logo {
+  width: 100px;
+  object-fit: contain;
+}
+
+.form-title {
+  font-size: 24px;
+  font-weight: bold;
+  font-family: var(--main-font);
+  color: var(--text-color-one);
+  margin: 0;
+}
+
+.form-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-label {
+  font-weight: 600;
+  color: var(--text-color-one);
+  font-size: 14px;
+}
+
+.form-input,
+.form-textarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: var(--text-color-two);
+  font-size: 14px;
+  font-family: var(--main-font);
+  transition: border-color 0.3s ease;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  border-color: var(--btn-color-one);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.form-textarea {
+  height: 120px;
+  grid-column: span 2;
+}
+
+.custom-file-input {
+  display: inline-block;
+  padding: 12px;
+  width: 100%;
+  background-color: var(--btn-color-one);
+  color: white;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.custom-file-input:hover {
+  background-color: darken(var(--btn-color-one), 10%);
+}
+
+.form-input-file {
+  display: none;
+}
+
+.form-button {
+  padding: 12px;
+  background-color: var(--btn-color-one);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-family: var(--main-font);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  grid-column: span 2;
+}
+
+.form-button:hover:not(:disabled) {
+  background-color: darken(var(--btn-color-one), 10%);
+}
+
+.form-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Container de pré-visualização */
+.image-preview {
+  display: flex;
+  flex-wrap: wrap;
+  /* Permite que as imagens fiquem em múltiplas linhas */
+  gap: 10px;
+  /* Espaçamento entre as imagens */
+  justify-content: start;
+  /* Alinha as imagens à esquerda */
+}
+
+/* Miniatura da imagem */
+.image-thumbnail {
+  width: 100px;
+  /* Tamanho fixo para uniformidade */
+  height: 100px;
+  object-fit: cover;
+  /* Garante que a imagem preencha o espaço sem distorcer */
+  border-radius: 8px;
+  /* Bordas arredondadas */
+  border: 2px solid var(--btn-color-one);
+  /* Destaque nas bordas */
+  position: relative;
+  /* Para posicionar o botão de exclusão */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  /* Sombra leve */
+  transition: transform 0.2s ease-in-out;
+}
+
+.image-thumbnail:hover {
+  transform: scale(1.05);
+  /* Efeito de zoom ao passar o mouse */
+}
+
+/* Botão para excluir imagem */
+.image-delete {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 20px;
+  height: 20px;
+  background-color: red;
+  color: white;
+  font-size: 12px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.2s ease-in-out;
+}
+
+.image-delete:hover {
+  background-color: darkred;
+}
+
+/* Personalização para melhor exibição no formulário */
+.custom-file-input {
+  display: block;
+  margin-bottom: 15px;
+  /* Espaço entre o botão e as pré-visualizações */
+}
+
+
+@media (max-width: 768px) {
+  .form-content {
+    grid-template-columns: 1fr;
+    /* Em telas menores, os campos ocupam uma coluna */
+  }
+}

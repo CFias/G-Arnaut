@@ -11,6 +11,7 @@ import {
   doc,
   getDocs,
   deleteDoc,
+  addDoc,
 } from "firebase/firestore"; // Firestore
 import { getStorage } from "firebase/storage"; // Firebase Storage
 
@@ -62,3 +63,16 @@ export async function deleteProduct(productId) {
     console.error("Erro ao deletar o produto:", error);
   }
 }
+
+export const addVideoToFirestore = async (videoUrl) => {
+  try {
+    const docRef = await addDoc(collection(db, "videos"), {
+      videoUrl: videoUrl,
+      createdAt: new Date(),
+    });
+    console.log("Vídeo adicionado com sucesso, ID:", docRef.id);
+  } catch (e) {
+    console.error("Erro ao adicionar vídeo: ", e);
+    throw new Error("Erro ao adicionar vídeo");
+  }
+};

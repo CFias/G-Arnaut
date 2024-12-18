@@ -4,9 +4,10 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { Navbar } from "../../components/Navbar/Navbar";
 import { Footer } from "../../components/Footer/Footer";
 import { Banner } from "../../components/Banner/Banner";
-import "./styles.css"
+import "./styles.css";
 import { ProductsPost } from "../../components/ProductsPost/ProductsPost";
 import { CardFilter } from "../../components/CardFilter/CardFilter";
+import  VideoList  from "../../components/VideoList/VideoList.jsx";
 
 export const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -26,7 +27,7 @@ export const Home = () => {
         <section className="section-1">
           {isLoading ? (
             <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f0f0f0">
-              <Skeleton height={500} borderRadius={15}  />
+              <Skeleton height={500} borderRadius={15} />
             </SkeletonTheme>
           ) : (
             <Banner />
@@ -35,7 +36,7 @@ export const Home = () => {
         <section className="section-1">
           {isLoading ? (
             <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f0f0f0">
-              <Skeleton height={500} borderRadius={15}  />
+              <Skeleton height={500} borderRadius={15} />
             </SkeletonTheme>
           ) : (
             <CardFilter />
@@ -53,7 +54,9 @@ export const Home = () => {
           )}
         </section>
         <section className="section-3">
-          <h3 className="home-h3">{isLoading ? <Skeleton width={150} /> : "Recentes"}</h3>
+          <h3 className="home-h3">
+            {isLoading ? <Skeleton width={150} /> : "Recentes"}
+          </h3>
           {isLoading ? (
             <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f0f0f0">
               <Skeleton height={200} />
@@ -61,6 +64,19 @@ export const Home = () => {
             </SkeletonTheme>
           ) : (
             <ProductsPost />
+          )}
+        </section>
+        <section className="section-3">
+          <h3 className="home-h3">
+            {isLoading ? <Skeleton width={150} /> : "Recentes"}
+          </h3>
+          {isLoading ? (
+            <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f0f0f0">
+              <Skeleton height={200} />
+              <Skeleton height={200} style={{ marginTop: 10 }} />
+            </SkeletonTheme>
+          ) : (
+            <VideoList />
           )}
         </section>
       </main>
