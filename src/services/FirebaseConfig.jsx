@@ -76,3 +76,4 @@ export const addVideoToFirestore = async (videoUrl) => {
     throw new Error("Erro ao adicionar vídeo");
   }
 };
+

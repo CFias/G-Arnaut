@@ -3,17 +3,19 @@
     font-family: var(--main-font);
 }
 
-.section-2 {
-    display: flex;
-    flex-direction: column;
-}
-
 .home-h3 {
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 38px;
     color: var(--text-color-one);
+}
+
+.featured-products {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 5rem;
 }
 
 @media (max-width: 768px) {
