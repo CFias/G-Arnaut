@@ -103,7 +103,7 @@ export const CardFilter = () => {
           />
         </div>
         <button type="submit" className="filter-submit-button">
-          Pesquisar
+          Filtrar
         </button>
       </form>
     </div>

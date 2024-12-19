@@ -3,7 +3,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: var(--card-color);
+    background: #FFFFFF;
     font-family: var(--main-font);
 }
 
@@ -33,7 +33,7 @@
     display: flex;
     padding: 5px 10px;
     border: 1px solid var(--text-color-opa);
-    background: var(--card-color);
+    background: #F1F1F1;
     border-radius: 5px;
     margin-bottom: 1rem;
     font-family: var(--main-font);
@@ -41,7 +41,7 @@
 
 .filter-submit-button {
     display: flex;
-    padding: 10px;
+    padding: 5px 10px;
     background: var(--btn-color-one);
     color: var(--text-color-two);
     border-radius: 5px;
@@ -90,22 +90,12 @@
 
 }
 
-@media (min-width: 769px) and (max-width: 1024px) {
+@media (min-width: 769px) and (max-width: 1024px) {}
 
-}
+@media (max-width: 480px) {}
 
-@media (max-width: 480px) {
+@media (min-width: 1024px) and (max-width: 1240px) {}
 
-}
+@media (min-width: 1240px) and (max-width: 1340px) {}
 
-@media (min-width: 1024px) and (max-width: 1240px) {
- 
-}
-
-@media (min-width: 1240px) and (max-width: 1340px) {
-
-}
-
-@media (min-width: 1340px) {
-
-}
+@media (min-width: 1340px) {}

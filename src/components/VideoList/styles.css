@@ -1,0 +1,115 @@
+/* Container principal */
+.video-list-container {
+    padding: 20px;
+    margin: 0 auto;
+    background-image: url("../../assets/image/banner-garnaut-youtube.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    font-family: var(--main-font);
+}
+
+/* Título */
+.video-list-heading {
+    text-align: center;
+    font-size: 34px;
+    font-weight: 600;
+    color: var(--text-color-two);
+    margin-bottom: 20px;
+}
+
+/* Contêiner dos vídeos */
+.video-list {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+
+}
+
+/* Card do vídeo */
+.video-card {
+    flex: 1 0 30%;
+    min-width: 300px;
+    max-width: 360px;
+    height: 200px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e021;
+}
+
+/* Iframe do vídeo */
+.video-iframe {
+    border: none;
+    border-radius: 8px;
+    width: 100%;
+    height: 100%;
+}
+
+/* Texto para quando não houver vídeos */
+.no-videos {
+    text-align: center;
+    color: var(--text-color-two);
+    font-size: 18px;
+}
+
+/* Responsividade: ajuste para telas menores */
+@media (max-width: 768px) {
+    .video-card {
+        flex: 1 0 45%;
+        /* 2 vídeos por linha */
+    }
+}
+
+@media (max-width: 480px) {
+    .video-card {
+        flex: 1 0 100%;
+        /* 1 vídeo por linha */
+    }
+}
+
+/* Estilo para a seção de call-to-action (CTA) */
+.cta-container {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.cta-text {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--text-color-two);
+    margin-bottom: 10px;
+}
+
+.cta-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: var(--text-color-two);
+    color: var(--text-color-one);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-family: var(--main-font);
+}
+
+.btn-cta {
+    display: flex;
+    text-decoration: none;
+    justify-content: center;
+}
+
+.cta-button:hover {
+    background-color: var(--text-color-opa);
+}
+
+.cta-button:focus {
+    outline: none;
+}
