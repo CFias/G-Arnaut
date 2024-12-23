@@ -14,6 +14,7 @@ import { AddPosts } from "./pages/AddPosts/AddPosts";
 import { AddProducts } from "./pages/AddProducts/AddProducts";
 import RentalsPage from "./pages/RentalsPage/RentalsPage";
 import ImportVideo from "./pages/ImportVideo/ImportVideo";
+import { EditProduct } from "./components/EditProduct/EditProduct";
 
 function App() {
   return (
@@ -28,7 +29,11 @@ function App() {
         <Route path="/admin" element={<Admin />} />
         <Route path="/add-posts" element={<AddPosts />} />
         <Route path="/add-products" element={<AddProducts />} />
-        <Route path="/manage-products" element={<ManageProducts />} />
+        <Route
+          path="/admin/manage-products"
+          element={<ManageProducts />}
+        />{" "}
+        <Route path="/manage-product/edit-product/:id" element={<EditProduct />} />{" "}
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route
           path="/dashboard"

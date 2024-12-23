@@ -4,13 +4,13 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { Navbar } from "../../components/Navbar/Navbar";
 import { Footer } from "../../components/Footer/Footer";
 import { Banner } from "../../components/Banner/Banner";
-import "./styles.css";
 import { ProductsPost } from "../../components/ProductsPost/ProductsPost";
 import { CardFilter } from "../../components/CardFilter/CardFilter";
 import VideoList from "../../components/VideoList/VideoList.jsx";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../services/FirebaseConfig";
 import { FeaturedProducts } from "../../components/FeaturedProducts/FeaturedProducts.jsx";
+import "./styles.css";
 
 export const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -32,11 +32,11 @@ export const Home = () => {
         );
         setFeaturedProducts(filteredFeatured);
 
-        // Filtra os produtos recentes, excluindo os produtos em destaque
+        // Filtra os produtos recentes
         const filteredRecent = productsArray.filter(
-          (product) => product.isFeatured == false
+          (product) => product.isFeatured !== "sim"
         );
-        setRecentProducts(filteredRecent.slice(0, 6)); // Exemplo: mostrar 6 produtos recentes
+        setRecentProducts(filteredRecent.slice(0, 6)); // Exibe até 6 produtos recentes
       } catch (error) {
         console.error("Erro ao buscar produtos:", error);
       }
@@ -56,6 +56,7 @@ export const Home = () => {
     <>
       <Navbar />
       <main className="home-container">
+        {/* Banner */}
         <section className="section-1">
           {isLoading ? (
             <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f0f0f0">
@@ -66,7 +67,7 @@ export const Home = () => {
           )}
         </section>
 
-        {/* Filter Section */}
+        {/* Filtro */}
         <section className="section-1">
           {isLoading ? (
             <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f0f0f0">
@@ -77,7 +78,7 @@ export const Home = () => {
           )}
         </section>
 
-        {/* Featured Products Section */}
+        {/* Produtos em Destaque */}
         <section className="section-2">
           <h3 className="home-h3">
             {isLoading ? <Skeleton width={150} /> : "Imóveis em Destaque"}
@@ -100,6 +101,7 @@ export const Home = () => {
           )}
         </section>
 
+        {/* Produtos Recentes */}
         <section className="section-3">
           <h3 className="home-h3">
             {isLoading ? <Skeleton width={150} /> : "Imóveis Recentes"}
@@ -116,13 +118,13 @@ export const Home = () => {
                   <FeaturedProducts key={index} product={product} />
                 ))
               ) : (
-                <p>Não há produtos em destaque no momento.</p>
+                <p>Não há produtos recentes no momento.</p>
               )}
             </div>
           )}
         </section>
 
-        {/* Video Section */}
+        {/* Lista de Vídeos */}
         <section className="section-3">
           {isLoading ? (
             <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f0f0f0">

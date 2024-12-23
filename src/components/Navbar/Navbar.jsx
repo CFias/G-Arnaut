@@ -18,7 +18,7 @@ import {
   AdminPanelSettingsOutlined,
 } from "@mui/icons-material";
 import { useAuth } from "../../contexts/AuthContext";
-import { logout } from "../../services/FirebaseConfig";
+import { logout } from "../../services/FirebaseConfig"; // Importa a função de logout
 import "./styles.css";
 import { Avatar } from "@mui/material";
 
@@ -26,6 +26,12 @@ export const Navbar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
   const { currentUser, userName, loading } = useAuth(); // Ajusta para currentUser e userName
+
+  // Lista de UIDs permitidos
+  const allowedUIDs = [
+    "SCQFrh1l7iVOKNbsInx0JGgT9ww1",
+    "KduymIJGpXciGs7UlcN3uylAXBZ2",
+  ];
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -37,7 +43,7 @@ export const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      await logout();
+      await logout(); // Chama a função de logout do Firebase
       console.log("Logged out successfully");
     } catch (error) {
       console.error("Error logging out:", error);
@@ -60,6 +66,9 @@ export const Navbar = () => {
   }, []);
 
   if (loading) return <div className="loading-main">Loading...</div>;
+
+  // Verifica se o usuário atual tem acesso ao ADM
+  const hasAdminAccess = allowedUIDs.includes(currentUser?.uid);
 
   return (
     <header className="nav-container">
@@ -84,9 +93,11 @@ export const Navbar = () => {
           ) : (
             <>
               <li className="nav-link-name">Bem-vindo, {userName}</li>
-              <NavLink to="/admin" className="nav-link-login">
-                ADM
-              </NavLink>
+              {hasAdminAccess && (
+                <NavLink to="/admin" className="nav-link-login">
+                  ADM
+                </NavLink>
+              )}
               <NavLink onClick={handleLogout} className="logout-button">
                 Sair
                 <LogoutRounded fontSize="10" />
@@ -112,7 +123,9 @@ export const Navbar = () => {
               Início
             </NavLink>
             <NavLink className="nav-link-item">Venda</NavLink>
-            <NavLink to="/location" className="nav-link-item">Locação</NavLink>
+            <NavLink to="/location" className="nav-link-item">
+              Locação
+            </NavLink>
             <NavLink className="nav-link-item">O corretor</NavLink>
             <NavLink className="nav-link-item">Contato</NavLink>
           </div>
@@ -165,16 +178,18 @@ export const Navbar = () => {
             )}
           </div>
           <div className="side-items-one">
-            <NavLink
-              to="/admin"
-              className="sidebar-link-item-adm"
-              onClick={closeSidebar}
-            >
-              <div className="icon-name-side">
-                <AdminPanelSettingsOutlined fontSize="small" /> Adm
-              </div>
-              <KeyboardArrowRight fontSize="10" />
-            </NavLink>
+            {hasAdminAccess && (
+              <NavLink
+                to="/admin"
+                className="sidebar-link-item-adm"
+                onClick={closeSidebar}
+              >
+                <div className="icon-name-side">
+                  <AdminPanelSettingsOutlined fontSize="small" /> Adm
+                </div>
+                <KeyboardArrowRight fontSize="10" />
+              </NavLink>
+            )}
           </div>
           <div className="side-items-one">
             <NavLink className="sidebar-link-item" onClick={closeSidebar}>
@@ -189,7 +204,11 @@ export const Navbar = () => {
               </div>
               <KeyboardArrowRight fontSize="10" />
             </NavLink>
-            <NavLink to="/location" className="sidebar-link-item" onClick={closeSidebar}>
+            <NavLink
+              to="/location"
+              className="sidebar-link-item"
+              onClick={closeSidebar}
+            >
               <div className="icon-name-side">
                 <LocationCity fontSize="small" /> Locação
               </div>
@@ -230,7 +249,7 @@ export const Navbar = () => {
                 className="sidebar-link-item-logout"
                 onClick={() => {
                   closeSidebar();
-                  handleLogout();
+                  handleLogout(); // Chama o handleLogout para realizar o logout
                 }}
               >
                 <div className="icon-name-side">
