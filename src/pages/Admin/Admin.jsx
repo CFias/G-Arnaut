@@ -223,7 +223,7 @@ export const Admin = () => {
           {
             title: "Gerenciar produtos",
             icon: <AdminPanelSettings color="secondary" />,
-            link: "/manage-products",
+            link: "/admin/manage-products",
           },
           {
             title: "Gerenciar publicações",

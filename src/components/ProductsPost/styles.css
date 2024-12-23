@@ -1,15 +1,6 @@
-.product-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
 .product-list {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 10px;
-    justify-items: center;
+    display: flex;
+    justify-content: center;
     align-items: center;
 }
 
@@ -118,6 +109,7 @@
 
 .product-icon {
     padding: 1px;
+    color: var(--btn-color-one);
 }
 
 .product-size {
@@ -150,7 +142,7 @@
 .product-price {
     color: var(--btn-color-one);
     font-family: var(--main-font);
-    font-size: 20px;
+    font-size: 24px;
     font-weight: 600;
     white-space: nowrap;
     overflow: hidden;
@@ -198,32 +190,29 @@
     background-color: #ddd;
 }
 
+.infos-details {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
 
-/* Responsive Styles */
+/* Estilos responsivos */
+
+/* Para telas menores que 768px */
 @media (max-width: 768px) {
     .product-list {
         grid-template-columns: repeat(2, 1fr);
+        /* 2 cards por linha */
+        gap: 10px;
     }
 
     .product-img {
-        width: 250px;
+        width: 280px;
         height: 250px;
     }
 
     .product-infos {
-        width: 250px;
-    }
-
-    .product-address {
-        font-size: 14px;
-    }
-
-    .product-desc,
-    .product-neighborhood,
-    .product-category,
-    .product-dimension,
-    .product-status {
-        font-size: 10px;
+        width: 280px;
     }
 
     .product-type {
@@ -233,29 +222,25 @@
     }
 
     .product-price {
-        font-size: 18px;
+        font-size: 24px;
     }
-}
 
-@media (min-width: 769px) and (max-width: 1024px) {
+    /* Limitando a 8 cards por página */
     .product-list {
-        grid-template-columns: repeat(3, 1fr);
+        max-height: 80vh;
+        overflow: hidden;
     }
 
-    .product-img {
-        width: 210px;
-        height: 210px;
-    }
-
-    .product-infos {
-        width: 210px;
+    .pagination-dots {
+        margin-top: 20px;
     }
 }
 
+/* Para telas menores que 480px */
 @media (max-width: 480px) {
     .product-list {
         grid-template-columns: repeat(2, 1fr);
-        gap: 0;
+        gap: 10px;
     }
 
     .product-card {
@@ -263,32 +248,98 @@
     }
 
     .product-img {
-        width: 150px;
-        height: 150px;
+        width: 140px;
+        height: 140px;
         border-radius: 8px;
     }
 
     .product-infos {
-        width: 145px;
+        width: 140px;
     }
 
     .product-address {
         font-size: 12px;
     }
 
+    .infos-details {
+        flex-direction: column;
+    }
+
+    .product-category,
     .product-dimension,
     .product-status,
     .product-type,
     .product-neighborhood,
-    .product-category,
+    .product-icon,
+    .product-list,
+    .product-size {
+        font-size: 12px;
+        font-weight: 400;
+    }
+
+    .product-oldPrice {
+        font-size: 6px;
+    }
+
     .product-price {
-        font-size: 10px;
+        font-size: 14px;
+    }
+
+    /* Limitando a 8 cards por página */
+    .product-list {
+        max-height: 80vh;
+        overflow: hidden;
     }
 }
 
+/* Para telas médias (769px a 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .product-list {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .product-img {
+        width: 230px;
+        height: 230px;
+    }
+
+    .product-infos {
+        width: 230px;
+        justify-content: center;
+    }
+
+    .infos-details {
+        width: 230px;
+        align-items: center;
+        gap: 2px;
+    }
+
+    .product-category,
+    .product-dimension,
+    .product-status,
+    .product-type,
+    .product-neighborhood,
+    .product-icon,
+    .product-list,
+    .product-size {
+        font-size: 12px;
+        font-weight: 400;
+    }
+
+    .product-oldPrice {
+        font-size: 6px;
+    }
+
+    .product-price {
+        font-size: 18px;
+    }
+}
+
+/* Para telas grandes (1024px a 1240px) */
 @media (min-width: 1024px) and (max-width: 1240px) {
     .product-list {
         grid-template-columns: repeat(3, 1fr);
+        /* 3 cards por linha */
     }
 
     .product-img {
@@ -301,24 +352,11 @@
     }
 }
 
-@media (min-width: 1240px) and (max-width: 1340px) {
-    .product-list {
-        grid-template-columns: repeat(3, 1fr);
-    }
-
-    .product-img {
-        width: 300px;
-        height: 300px;
-    }
-
-    .product-infos {
-        width: 300px;
-    }
-}
-
-@media (min-width: 1340px) {
+/* Para telas muito grandes (maiores que 1240px) */
+@media (min-width: 1240px) {
     .product-list {
         grid-template-columns: repeat(4, 1fr);
+        /* 4 cards por linha */
     }
 
     .product-img {

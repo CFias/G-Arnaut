@@ -21,7 +21,6 @@ export const ProductsPost = () => {
         ...doc.data(),
       }));
 
-      // Busca as imagens dos produtos
       const productsWithImages = await Promise.all(
         productList.map(async (product) => {
           if (product.images && product.images.length > 0) {
@@ -53,22 +52,18 @@ export const ProductsPost = () => {
     fetchProducts();
   }, []);
 
-  // Calcula o número total de páginas para a paginação
   const totalPages = Math.ceil(products.length / productsPerPage);
 
-  // Paginando os produtos
   const paginatedProducts = products.slice(
     (currentPage - 1) * productsPerPage,
     currentPage * productsPerPage
   );
 
-  // Redireciona para a página de detalhes do produto
   const handleCardClick = (id) => {
     navigate(`/product/${id}`);
   };
 
   return (
-    <div className="product-container">
       <div className="product-list">
         {paginatedProducts.map((product) => (
           <div
@@ -92,7 +87,8 @@ export const ProductsPost = () => {
               <p className="product-neighborhood">{product.neighborhood}</p>
               <div className="infos-details">
                 <p className="product-category">
-                  <Category className="product-icon" fontSize="small" /> {product.category}
+                  <Category className="product-icon" fontSize="small" />{" "}
+                  {product.category}
                 </p>
                 <div className="product-dimension">
                   <CropFree className="product-icon" fontSize="small" />
@@ -117,18 +113,20 @@ export const ProductsPost = () => {
             </div>
           </div>
         ))}
-      </div>
-      <div className="pagination-dots">
-        {Array.from({ length: totalPages }, (_, index) => (
-          <span
-            key={index}
-            className={`dot ${currentPage === index + 1 ? "active" : ""}`}
-            onClick={() => setCurrentPage(index + 1)}
-          >
-            {index + 1}
-          </span>
-        ))}
-      </div>
+
+      {totalPages > 1 && (
+        <div className="pagination-dots">
+          {Array.from({ length: totalPages }, (_, index) => (
+            <span
+              key={index}
+              className={`dot ${currentPage === index + 1 ? "active" : ""}`}
+              onClick={() => setCurrentPage(index + 1)}
+            >
+              {index + 1}
+            </span>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

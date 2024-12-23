@@ -1,62 +1,288 @@
-/* Botões de Ações */
+/* Estilo do container principal */
+.manage-products-container {
+    padding: 20px;
+    min-height: 100vh;
+    border-radius: 12px;
+    background-color: #f9f9f9;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-family: var(--main-font);
+}
+
+/* Tabela de produtos */
+.products-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    text-align: left;
+    background-color: #fff;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.products-table th,
+.products-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.products-table th {
+    background-color: var(--btn-color-one);
+    color: white;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.products-table tr:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+}
+
+/* Botões de ação */
 .edit-button,
 .delete-button {
-    padding: 10px 20px;
+    padding: 8px 12px;
     border: none;
-    border-radius: 5px;
-    color: white;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
     cursor: pointer;
-    font-size: 14px;
+    transition: background-color 0.3s ease;
 }
 
 .edit-button {
-    background-color: #4caf50;
-    /* Verde */
+    background-color: var(--btn-color-one);
+    color: white;
+}
+
+.edit-button:hover {
+    background-color: darken(var(--btn-color-one), 10%);
 }
 
 .delete-button {
-    background-color: #f44336;
-    /* Vermelho */
-    margin-left: 10px;
+    background-color: red;
+    color: white;
 }
 
-/* Modal */
+.delete-button:hover {
+    background-color: darkred;
+}
+
+/* Modal de edição */
 .modal {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
+    width: 100%;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
+    background: white;
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 1000;
+    overflow-y: scroll;
 }
 
 .modal-content {
+    width: 60%;
+    height: 100%;
     background: white;
-    padding: 20px;
-    border-radius: 10px;
-    width: 400px;
+    padding: 40px 0;
+    margin: 1rem;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    overflow-y: scroll;
+}
+
+.modal-content h3 {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--text-color-one);
+    margin: 0;
+}
+
+/* Formulário no modal */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: var(--text-color-one);
+    font-size: 16px;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background: var(--text-color-two);
+    font-size: 14px;
+    font-family: var(--main-font);
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: var(--btn-color-one);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.form-group textarea {
+    height: 120px;
+}
+
+.modal-save-button,
+.modal-cancel-button {
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-family: var(--main-font);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .modal-save-button {
-    background-color: #4caf50;
+    background-color: var(--btn-color-one);
     color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px;
-    cursor: pointer;
+}
+
+.modal-save-button:hover {
+    background-color: darken(var(--btn-color-one), 10%);
 }
 
 .modal-cancel-button {
-    background-color: #f44336;
+    background-color: #ccc;
+    color: #333;
+}
+
+.modal-cancel-button:hover {
+    background-color: #aaa;
+}
+
+.image-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: start;
+}
+
+.image-thumbnail {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid var(--btn-color-one);
+    position: relative;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+}
+
+.image-thumbnail:hover {
+    transform: scale(1.05);
+}
+
+.image-delete {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    color: white;
+    font-size: 12px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.image-delete:hover {
+    background-color: darkred;
+}
+
+.image-preview {
+    display: flex;
+    /* Organiza as imagens em linha */
+    gap: 10px;
+    /* Espaço entre as imagens */
+    overflow-x: scroll;
+    /* Permite rolar horizontalmente */
+    scroll-behavior: smooth;
+    /* Rolagem suave */
+    -ms-overflow-style: none;
+    /* Oculta a barra de rolagem no IE */
+    scrollbar-width: none;
+    /* Oculta a barra de rolagem em navegadores Firefox */
+    padding-bottom: 10px;
+    /* Espaço inferior para garantir que o conteúdo não fique cortado */
+    cursor: grab;
+    /* Indica que o conteúdo é arrastável */
+}
+
+.image-preview::-webkit-scrollbar {
+    display: none;
+    /* Oculta a barra de rolagem no Chrome/Safari */
+}
+
+.image-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 120px;
+    /* Define a largura mínima de cada imagem */
+    cursor: pointer;
+    /* Indica que cada imagem é interativa */
+}
+
+.product-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+button {
+    background-color: #007bff;
     color: white;
     border: none;
+    padding: 5px;
     border-radius: 5px;
-    padding: 10px;
     cursor: pointer;
+    font-size: 12px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.image-preview.dragging {
+    cursor: grabbing;
+}
+
+.image-item.main {
+    background: var(--btn-color-one);
+    border-radius: 15px;
+}
+
+.image-item.dragging {
+    opacity: 0.7;
+    transform: scale(1.05);
+    transition: all 1.8s ease;
+}
+
+.image-item.over {
+    border: 2px dashed #ccc;
 }
