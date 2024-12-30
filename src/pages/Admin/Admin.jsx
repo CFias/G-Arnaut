@@ -236,6 +236,11 @@ export const Admin = () => {
             link: "/manage-users",
           },
           {
+            title: "Adicionar destaque",
+            icon: <Settings color="action" />,
+            link: "/add-dest",
+          },
+          {
             title: "Configurações",
             icon: <Settings color="action" />,
             link: "/settings",

@@ -163,6 +163,7 @@
         background: var(--btn-color-one);
         color: var(--text-color-two);
         text-decoration: none;
+        z-index: 10;
     }
 
     .user-infos {
@@ -218,6 +219,7 @@
         flex-direction: column;
         justify-content: center;
         transition: 0.3s ease;
+        z-index: 10;
     }
 
     .sidebar.open {
@@ -295,7 +297,7 @@
 
     .sidebar {
         display: block;
-        z-index: 2;
+        z-index: 1;
         background: var(--card-color);
     }
 

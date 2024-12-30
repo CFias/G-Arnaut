@@ -12,7 +12,6 @@ export const ProductsPost = () => {
   const productsPerPage = 12;
   const navigate = useNavigate();
 
-  // Função para buscar os produtos e suas imagens
   const fetchProducts = async () => {
     try {
       const querySnapshot = await getDocs(collection(db, "products"));
@@ -64,56 +63,52 @@ export const ProductsPost = () => {
   };
 
   return (
-      <div className="product-list">
-        {paginatedProducts.map((product) => (
-          <div
-            key={product.id}
-            className="product-card"
-            onClick={() => handleCardClick(product.id)}
-          >
-            {product.images && product.images.length > 0 && (
-              <div className="product-images">
-                <p className="product-status">{product.status}</p>
-                <p className="product-ref">Referência: {product.refProduct}</p>
-                <img
-                  className="product-img"
-                  src={product.images[0]}
-                  alt="Product"
-                />
+    <div className="product-list">
+      {paginatedProducts.map((product) => (
+        <div
+          key={product.id}
+          className="product-card"
+          onClick={() => handleCardClick(product.id)}
+        >
+          {product.images && product.images.length > 0 && (
+            <div className="product-images">
+              <p className="product-status">{product.status}</p>
+              <p className="product-ref">Referência: {product.refProduct}</p>
+              <img
+                className="product-img"
+                src={product.images[0]}
+                alt="Product"
+              />
+            </div>
+          )}
+          <div className="product-infos">
+            <h3 className="product-address">{product.city}</h3>
+            <p className="product-neighborhood">{product.neighborhood}</p>
+            <p className="product-address">{product.address}</p>
+            <div className="infos-details">
+              <p className="product-category">
+                <Category className="product-icon" fontSize="small" />{" "}
+                {product.category}
+              </p>
+              <div className="product-dimension">
+                <CropFree className="product-icon" fontSize="small" />
+                <p className="product-size">{product.dimension} m²</p>
               </div>
-            )}
-            <div className="product-infos">
-              <h3 className="product-address">{product.city}</h3>
-              <p className="product-neighborhood">{product.neighborhood}</p>
-              <div className="infos-details">
-                <p className="product-category">
-                  <Category className="product-icon" fontSize="small" />{" "}
-                  {product.category}
-                </p>
-                <div className="product-dimension">
-                  <CropFree className="product-icon" fontSize="small" />
-                  <p className="product-size">{product.dimension} m²</p>
-                </div>
-                <div className="product-dimension">
-                  <Hotel className="product-icon" fontSize="small" />
-                  <p className="product-size">{product.bedrooms}</p>
-                </div>
-                <div className="product-dimension">
-                  <DirectionsCar className="product-icon" fontSize="small" />
-                  <p className="product-size">{product.parkingSpaces}</p>
-                </div>
+              <div className="product-dimension">
+                <Hotel className="product-icon" fontSize="small" />
+                <p className="product-size">{product.bedrooms}</p>
               </div>
-              <div className="product-price-mod">
-                <div className="product-oldPrice">
-                  <s>R$ {product.oldPrice}</s>
-                  <p className="product-price">R$ {product.price}</p>
-                </div>
-                <h3 className="product-type">{product.productType}</h3>
+              <div className="product-dimension">
+                <DirectionsCar className="product-icon" fontSize="small" />
+                <p className="product-size">{product.parkingSpaces}</p>
               </div>
             </div>
+            <div className="product-price-mod">
+              <h3 className="product-type">{product.productType}</h3>
+            </div>
           </div>
-        ))}
-
+        </div>
+      ))}
       {totalPages > 1 && (
         <div className="pagination-dots">
           {Array.from({ length: totalPages }, (_, index) => (

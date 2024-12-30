@@ -76,7 +76,6 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 100vh;
     background: white;
     display: flex;
     justify-content: center;
@@ -86,36 +85,43 @@
 }
 
 .modal-content {
-    width: 60%;
     height: 100%;
     background: white;
-    padding: 40px 0;
-    margin: 1rem;
     display: flex;
     flex-direction: column;
+    justify-content: start;
     overflow-y: scroll;
+    flex-wrap: nowrap;
 }
 
 .modal-content h3 {
     font-size: 20px;
     font-weight: bold;
     color: var(--text-color-one);
-    margin: 0;
+    margin-top: 40rem;
 }
 
-/* Formulário no modal */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+
 .form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
 }
 
 .form-group label {
     font-weight: 600;
     color: var(--text-color-one);
-    font-size: 16px;
+    font-size: 12px;
+    display: block;
 }
 
+/* Estilo dos campos de input e textarea */
 .form-group input,
 .form-group textarea {
     width: 100%;
@@ -124,11 +130,12 @@
     border-radius: 8px;
     border: 1px solid #ccc;
     background: var(--text-color-two);
-    font-size: 14px;
+    font-size: 10px;
     font-family: var(--main-font);
     transition: border-color 0.3s ease;
 }
 
+/* Estilo do input e textarea em foco */
 .form-group input:focus,
 .form-group textarea:focus {
     border-color: var(--btn-color-one);
@@ -169,6 +176,7 @@
     background-color: #aaa;
 }
 
+/* Estilo das imagens (sem alterações) */
 .image-preview {
     display: flex;
     flex-wrap: wrap;
@@ -177,8 +185,8 @@
 }
 
 .image-thumbnail {
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     object-fit: cover;
     border-radius: 8px;
     border: 2px solid var(--btn-color-one);
@@ -215,50 +223,40 @@
 
 .image-preview {
     display: flex;
-    /* Organiza as imagens em linha */
     gap: 10px;
-    /* Espaço entre as imagens */
     overflow-x: scroll;
-    /* Permite rolar horizontalmente */
     scroll-behavior: smooth;
-    /* Rolagem suave */
     -ms-overflow-style: none;
-    /* Oculta a barra de rolagem no IE */
     scrollbar-width: none;
-    /* Oculta a barra de rolagem em navegadores Firefox */
     padding-bottom: 10px;
-    /* Espaço inferior para garantir que o conteúdo não fique cortado */
     cursor: grab;
-    /* Indica que o conteúdo é arrastável */
 }
 
 .image-preview::-webkit-scrollbar {
     display: none;
-    /* Oculta a barra de rolagem no Chrome/Safari */
 }
 
 .image-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-width: 120px;
-    /* Define a largura mínima de cada imagem */
+    min-width: 80px;
     cursor: pointer;
-    /* Indica que cada imagem é interativa */
 }
 
 .product-image {
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     object-fit: cover;
     border-radius: 8px;
 }
 
 button {
-    background-color: #007bff;
+    background-color: var(--btn-color-one);
+    font-family: var(--main-font);
     color: white;
     border: none;
-    padding: 5px;
+    padding: 10px;
     border-radius: 5px;
     cursor: pointer;
     font-size: 12px;
@@ -285,4 +283,118 @@ button:hover {
 
 .image-item.over {
     border: 2px dashed #ccc;
+}
+
+/* Responsividade */
+@media (max-width: 1200px) {
+    .products-table th, .products-table td {
+        font-size: 12px;
+        padding: 10px;
+    }
+
+    .manage-products-container {
+        padding: 15px;
+    }
+
+    .modal-content {
+        padding: 30px;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        font-size: 12px;
+    }
+
+    .image-thumbnail {
+        width: 70px;
+        height: 70px;
+    }
+
+    .image-preview {
+        padding-bottom: 5px;
+    }
+}
+
+@media (max-width: 768px) {
+    .manage-products-container {
+        padding: 10px;
+    }
+
+    .products-table {
+        font-size: 10px;
+    }
+
+    .products-table th, .products-table td {
+        padding: 8px;
+    }
+
+    .modal-content h3 {
+        font-size: 16px;
+    }
+
+    .form-group label {
+        font-size: 10px;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        font-size: 12px;
+    }
+
+    .modal-save-button,
+    .modal-cancel-button {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .image-thumbnail {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+@media (max-width: 480px) {
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    .manage-products-container {
+        padding: 10px 5px;
+    }
+
+    .products-table th, .products-table td {
+        font-size: 10px;
+        padding: 6px;
+    }
+
+    .modal-content {
+        padding: 20px;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        font-size: 10px;
+    }
+
+    .image-thumbnail {
+        width: 50px;
+        height: 50px;
+    }
+
+    .modal-save-button,
+    .modal-cancel-button {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    .image-preview {
+        gap: 5px;
+    }
+
+    .modal-content h3 {
+        font-size: 16px;
+        margin-top: 80rem;
+    }
 }

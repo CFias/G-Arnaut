@@ -28,8 +28,9 @@ export const FeaturedProducts = ({ product }) => {
           </div>
         )}
         <div className="product-infos">
-          <h3 className="product-address">{product.city}</h3>
+          <h3 className="product-city">{product.city}</h3>
           <p className="product-neighborhood">{product.neighborhood}</p>
+          <p className="product-address">{product.address}</p>
           <div className="infos-details">
             <p className="product-category">
               <Category className="product-icon" fontSize="small" />{" "}
@@ -50,7 +51,6 @@ export const FeaturedProducts = ({ product }) => {
           </div>
           <div className="product-price-mod">
             <div className="product-oldPrice">
-              <s>R$ {product.oldPrice}</s>
               <p className="product-price">R$ {product.price}</p>
             </div>
             <h3 className="product-type">{product.productType}</h3>

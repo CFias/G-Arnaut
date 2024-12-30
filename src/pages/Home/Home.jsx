@@ -66,18 +66,6 @@ export const Home = () => {
             <Banner />
           )}
         </section>
-
-        {/* Filtro */}
-        <section className="section-1">
-          {isLoading ? (
-            <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f0f0f0">
-              <Skeleton height={500} borderRadius={15} />
-            </SkeletonTheme>
-          ) : (
-            <CardFilter />
-          )}
-        </section>
-
         {/* Produtos em Destaque */}
         <section className="section-2">
           <h3 className="home-h3">

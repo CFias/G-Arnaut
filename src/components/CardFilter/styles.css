@@ -1,101 +1,214 @@
+/* Container do Filtro */
 .filter-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: #FFFFFF;
     font-family: var(--main-font);
-}
-
-.filter-top {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    margin: 1rem;
-    color: var(--text-color);
-}
-
-.filter-item {
-    display: flex;
-    flex-direction: column;
+    height: 100vh;
+    padding: 2rem;
 }
 
 .filter-content {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.filter-card {
+    border-top: 20px solid var(--btn-color-one);
+    background-image: url("../../assets/image/mapa-arnaut.png");
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    background-position: center;
+    background-size: cover;
+    padding: 2rem;
+    border-radius: 20px;
     display: flex;
-    align-items: end;
-    justify-content: center;
-    gap: 0.5rem;
+    flex-direction: column;
+    width: 80%;
+    position: relative;
+}
+
+.filter-header {
+    text-align: start;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
     width: 100%;
 }
 
-.filter-in {
-    display: flex;
-    padding: 5px 10px;
-    border: 1px solid var(--text-color-opa);
-    background: #F1F1F1;
-    border-radius: 5px;
+.logo-filter {
+    width: 100px;
+    position: absolute;
+    top: 10%;
+    right: 5%;
+}
+
+.filter-title {
+    font-size: 32px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+}
+
+.filter-description {
+    font-size: 16px;
+    color: #555;
+}
+
+/* Estilo dos itens de filtro */
+.filter-item {
     margin-bottom: 1rem;
-    font-family: var(--main-font);
+    width: 100%;
+    max-width: 400px;
+}
+
+.filter-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.filter-in {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 12px;
+    color: #333;
+}
+
+.filter-in:focus {
+    border-color: #007bff;
+    outline: none;
 }
 
 .filter-submit-button {
+    padding: 12px;
+    background-color: var(--btn-color-one);
     display: flex;
-    padding: 5px 10px;
-    background: var(--btn-color-one);
-    color: var(--text-color-two);
-    border-radius: 5px;
-    margin-bottom: 1rem;
-    border: 1px solid var(--btn-color-one);
-    font-family: var(--main-font);
-    font-size: 14px;
+    align-items: center;
+    gap: 25px;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 300;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    position: absolute;
+    bottom: 30%;
+    right: 15%;
 }
 
-.filter-h2 {
-    font-family: var(--main-font);
-    color: var(--text-color);
+.filter-submit-button:hover {
+    background-color: #0056b3;
 }
 
-.filter-h3 {
-    font-size: 14px;
-    font-weight: 500;
-}
-
-@media (max-width: 768px) {
-    .filter-content {
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 0;
+/* Responsividade para telas menores */
+@media (max-width: 1024px) {
+    .filter-container {
+        padding: 1rem;
     }
 
-    .filter-item {
-        flex-direction: column;
-        width: 90%;
-        justify-content: center;
+    .filter-content {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
     }
 
     .filter-submit-button {
-        width: 90%;
-        justify-content: center;
-        margin-top: 1rem;
-        padding: 15px;
+        font-size: 12px;
+        right: 5%;
+    }
+
+    .filter-card {
+        max-width: 90%;
+        padding: 1rem;
+    }
+
+    .filter-header .filter-title {
+        font-size: 24px;
+    }
+
+    .filter-header .filter-description {
+        font-size: 14px;
+    }
+
+    .filter-item {
+        width: 100%;
     }
 
     .filter-in {
-        width: 100%;
-        padding: 15px;
-        margin-bottom: .5rem;
+        font-size: 14px;
     }
 
+    .filter-submit-button {
+        bottom: 20%;
+        right: 10%;
+    }
 }
 
-@media (min-width: 769px) and (max-width: 1024px) {}
+@media (max-width: 768px) {
+    .filter-container {
+        padding: 1rem;
+        height: auto;
+    }
 
-@media (max-width: 480px) {}
+    .filter-content {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+    }
 
-@media (min-width: 1024px) and (max-width: 1240px) {}
+    .filter-card {
+        max-width: 100%;
+        padding: 1rem;
+    }
 
-@media (min-width: 1240px) and (max-width: 1340px) {}
+    .filter-submit-button {
+        font-size: 14px;
+        bottom: -10px;
+        right: 10%;
+        justify-content: center;
+    }
 
-@media (min-width: 1340px) {}
+    .filter-title {
+        font-size: 18px;
+    }
+
+    .filter-description {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .filter-submit-button {
+        font-size: 12px;
+        padding: 10px;
+        gap: 5px;
+        font-weight: 600;
+        font-family: var(--main-font);
+        width: auto;
+    }
+
+    .filter-content {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .filter-card {
+        max-width: 100%;
+        padding: 1rem;
+    }
+
+    .filter-title {
+        font-size: 20px;
+    }
+
+    .filter-description {
+        font-size: 12px;
+    }
+}

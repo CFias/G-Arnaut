@@ -15,6 +15,7 @@ import { AddProducts } from "./pages/AddProducts/AddProducts";
 import RentalsPage from "./pages/RentalsPage/RentalsPage";
 import ImportVideo from "./pages/ImportVideo/ImportVideo";
 import { EditProduct } from "./components/EditProduct/EditProduct";
+import { AddFeaturedProducts } from "./pages/AddFeaturedProducts/AddFeaturedProducts ";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path="/import-video" element={<ImportVideo />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/add-posts" element={<AddPosts />} />
+        <Route path="/add-dest" element={<AddFeaturedProducts />} />
         <Route path="/add-products" element={<AddProducts />} />
         <Route
           path="/admin/manage-products"

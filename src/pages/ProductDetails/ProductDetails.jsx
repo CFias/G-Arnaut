@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { doc, getDoc, collection, getDocs } from "firebase/firestore";
 import { db } from "../../services/FirebaseConfig";
 import { CalendarToday, WhatsApp } from "@mui/icons-material";
-import { Favorite, FavoriteBorder } from "@mui/icons-material"; // Importando ícones
+import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import { Navbar } from "../../components/Navbar/Navbar";
 import "./styles.css";
 
@@ -11,11 +11,12 @@ export const ProductDetails = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedVideo, setSelectedVideo] = useState(null); // Novo estado para o vídeo selecionado
   const [recommendedProducts, setRecommendedProducts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalImages, setModalImages] = useState([]);
   const [modalImageIndex, setModalImageIndex] = useState(0);
-  const [isFavorite, setIsFavorite] = useState(false); // Estado de favorito
+  const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
     const fetchProductDetails = async () => {
@@ -25,6 +26,7 @@ export const ProductDetails = () => {
 
         if (docSnap.exists()) {
           const productData = { id: docSnap.id, ...docSnap.data() };
+          console.log("Product Data:", productData); // Verifique toda a estrutura do produto
           setProduct(productData);
 
           if (productData.images && productData.images.length > 0) {
@@ -64,9 +66,7 @@ export const ProductDetails = () => {
   };
 
   const generateWhatsappMessage = () => {
-    const productLink = `https://g-arnaut.vercel.app/product/${product.id}`; // Substitua pelo link real do produto
-    const imageLink = `${product.images}`; // URL da imagem do produto
-
+    const productLink = `https://g-arnaut.vercel.app/product/${product.id}`;
     return `Olá, estou interessado no imóvel:
 
 Referência: ${product.refProduct}
@@ -96,11 +96,17 @@ Veja o produto: ${productLink}`;
 
   const handleImageClick = (image) => {
     setSelectedImage(image);
+    setSelectedVideo(null); // Desmarcar o vídeo se uma imagem for selecionada
   };
 
-  const handleViewMoreClick = () => {
+  const handleVideoClick = (videoLink) => {
+    setSelectedVideo(videoLink);
+    setSelectedImage(null); // Desmarcar a imagem se o vídeo for selecionado
+  };
+
+  const handleImageViewMoreClick = () => {
     if (product.images) {
-      setModalImages(product.images.slice(8)); // Exibe as imagens após as 8 primeiras
+      setModalImages(product.images.slice(8));
       setIsModalOpen(true);
     }
   };
@@ -125,6 +131,13 @@ Veja o produto: ${productLink}`;
     setIsFavorite((prevState) => !prevState);
   };
 
+  const extractVideoId = (url) => {
+    const match = url.match(
+      /(?:https?:\/\/(?:www\.)?youtube\.com(?:\/(?:v|e(?:mbed)?)\/|\S*\?v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
+    );
+    return match ? match[1] : "";
+  };
+
   if (!product) {
     return <p>Carregando...</p>;
   }
@@ -139,7 +152,7 @@ Veja o produto: ${productLink}`;
               <div className="thumbnails-container">
                 {product.images &&
                   product.images
-                    .slice(0, 7) // Limita a 8 imagens
+                    .slice(0, 7)
                     .map((image, index) => (
                       <img
                         key={index}
@@ -151,18 +164,21 @@ Veja o produto: ${productLink}`;
                         onClick={() => handleImageClick(image)}
                       />
                     ))}
-              </div>
-              {product.images && product.images.length > 7 && (
-                <div className="view-more-card" onClick={handleViewMoreClick}>
+                {product.videoLink && !selectedVideo && (
                   <img
-                    src={product.images[7]}
-                    alt="Ver mais imagens"
-                    className="view-more-image"
+                    src={`https://img.youtube.com/vi/${extractVideoId(
+                      product.videoLink
+                    )}/0.jpg`}
+                    alt="Thumbnail do vídeo"
+                    className={`thumbnail ${
+                      selectedVideo ? "active-thumbnail" : ""
+                    }`}
+                    onClick={() => handleVideoClick(product.videoLink)}
                   />
-                  <p className="view-more-text">+ Ver mais</p>
-                </div>
-              )}
+                )}
+              </div>
 
+              {/* Exibição da imagem principal ou do vídeo selecionado */}
               {selectedImage && (
                 <div className="main-image-container">
                   <img
@@ -172,14 +188,29 @@ Veja o produto: ${productLink}`;
                   />
                 </div>
               )}
+              {selectedVideo && (
+                <div className="main-image-container">
+                  <iframe
+                    src={`https://www.youtube.com/embed/${extractVideoId(
+                      selectedVideo
+                    )}`}
+                    title="Vídeo do Produto"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="main-image"
+                  />
+                </div>
+              )}
             </div>
+
             <div className="info-container">
               <div className="info-content">
-                <p className="detail-data">
-                  <p>
-                    <CalendarToday fontSize="10" />{" "}
+                <div className="detail-data">
+                  <span>
+                    <CalendarToday fontSize="small" />{" "}
                     {formatDate(product.createdAt)}
-                  </p>
+                  </span>
                   <span onClick={toggleFavorite}>
                     {isFavorite ? (
                       <Favorite fontSize="small" style={{ color: "red" }} />
@@ -187,32 +218,34 @@ Veja o produto: ${productLink}`;
                       <FavoriteBorder fontSize="small" />
                     )}
                   </span>
-                </p>
-                <p className="detail-status">{product.status}</p>
-                <p className="detail-category">{product.category}</p>
+                </div>
+                <div className="detail-status">{product.status}</div>
+                <div className="detail-category">{product.category}</div>
                 <h1 className="detail-h1">
                   {product.city} {product.state}
                 </h1>
-                <p className="detail-address">{product.address}</p>
-                <p className="detail-neighborhood">{product.neighborhood}</p>
-                <p className="detail-dimension">
+                <div className="detail-address">{product.address}</div>
+                <div className="detail-neighborhood">
+                  {product.neighborhood}
+                </div>
+                <div className="detail-dimension">
                   Dimensão: {product.dimension}m²
-                </p>
-                <p className="detail-bedrooms">
+                </div>
+                <div className="detail-bedrooms">
                   Dormitórios: {product.bedrooms}
-                </p>
-                <p className="detail-parkingSpaces">
+                </div>
+                <div className="detail-parkingSpaces">
                   Vagas para carros: {product.parkingSpaces}
-                </p>
-                <p className="detail-productType">
+                </div>
+                <div className="detail-productType">
                   Imóvel para: {product.productType}
-                </p>
+                </div>
                 {product.oldPrice && (
-                  <p className="detail-oldPrice">
-                    <s> R$ {product.oldPrice}</s>{" "}
-                  </p>
+                  <div className="detail-oldPrice">
+                    <s> R$ {product.oldPrice}</s>
+                  </div>
                 )}
-                <p className="detail-price">R$ {product.price}</p>
+                <div className="detail-price">R$ {product.price}</div>
               </div>
               <button className="whatsapp-button" onClick={handleWhatsappClick}>
                 <WhatsApp /> Falar no WhatsApp
@@ -236,21 +269,21 @@ Veja o produto: ${productLink}`;
                       alt={recommendedProduct.name}
                       className="recommended-product-image"
                     />
-                    <p className="recommended-product-local">
+                    <div className="recommended-product-local">
                       {recommendedProduct.city}-{recommendedProduct.state}
-                    </p>
-                    <p className="recommended-product-address">
+                    </div>
+                    <div className="recommended-product-address">
                       {recommendedProduct.address}
-                    </p>
-                    <p className="recommended-product-status">
+                    </div>
+                    <div className="recommended-product-status">
                       {recommendedProduct.status}
-                    </p>
-                    <p className="recommended-product-type">
+                    </div>
+                    <div className="recommended-product-type">
                       {recommendedProduct.productType}
-                    </p>
-                    <p className="recommended-product-price">
+                    </div>
+                    <div className="recommended-product-price">
                       R$ {recommendedProduct.price}
-                    </p>
+                    </div>
                   </Link>
                 </div>
               ))}
