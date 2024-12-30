@@ -1,3 +1,154 @@
+/* Container geral para os produtos filtrados */
 .filtered-products-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
     font-family: var(--main-font);
+}
+
+.filtered-products-container h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+/* Grid para exibir os cards de produtos */
+.product-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    padding: 0;
+    margin: 0;
+}
+
+
+@media (max-width: 480px) {
+    .product-list {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .product-card {
+        border-radius: 15px;
+    }
+
+    .product-img {
+        width: 140px;
+        height: 140px;
+        border-radius: 8px;
+    }
+
+    .product-infos {
+        width: 140px;
+    }
+
+    .product-address {
+        font-size: 12px;
+    }
+
+    .infos-details {
+        flex-direction: column;
+    }
+
+    .product-category,
+    .product-dimension,
+    .product-status,
+    .product-type,
+    .product-neighborhood,
+    .product-icon,
+    .product-list,
+    .product-size {
+        font-size: 12px;
+        font-weight: 400;
+    }
+
+    .product-oldPrice {
+        font-size: 6px;
+    }
+
+    .product-price {
+        font-size: 14px;
+    }
+
+    /* Limitando a 8 cards por página */
+    .product-list {
+        max-height: 80vh;
+        overflow: hidden;
+    }
+}
+
+/* Para telas médias (769px a 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .product-list {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .product-img {
+        width: 230px;
+        height: 230px;
+    }
+
+    .product-infos {
+        width: 230px;
+        justify-content: center;
+    }
+
+    .infos-details {
+        width: 230px;
+        align-items: center;
+        gap: 2px;
+    }
+
+    .product-category,
+    .product-dimension,
+    .product-status,
+    .product-type,
+    .product-neighborhood,
+    .product-icon,
+    .product-list,
+    .product-size {
+        font-size: 12px;
+        font-weight: 400;
+    }
+
+    .product-oldPrice {
+        font-size: 6px;
+    }
+
+    .product-price {
+        font-size: 18px;
+    }
+}
+
+/* Para telas grandes (1024px a 1240px) */
+@media (min-width: 1024px) and (max-width: 1240px) {
+    .product-list {
+        grid-template-columns: repeat(3, 1fr);
+        /* 3 cards por linha */
+    }
+
+    .product-img {
+        width: 300px;
+        height: 300px;
+    }
+
+    .product-infos {
+        width: 300px;
+    }
+}
+
+/* Para telas muito grandes (maiores que 1240px) */
+@media (min-width: 1240px) {
+    .product-list {
+        grid-template-columns: repeat(4, 1fr);
+        /* 4 cards por linha */
+    }
+
+    .product-img {
+        width: 290px;
+        height: 290px;
+    }
+
+    .product-infos {
+        width: 290px;
+    }
 }

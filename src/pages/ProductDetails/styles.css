@@ -304,7 +304,6 @@
 .next-button {
     position: absolute;
     top: 50%;
-    /* Centraliza as setas no eixo Y */
     transform: translateY(-50%);
     background-color: rgba(0, 0, 0, 0.5);
     color: white;
@@ -312,17 +311,14 @@
     padding: 10px;
     cursor: pointer;
     z-index: 1;
-    /* Garante que as setas fiquem sobre a imagem */
 }
 
 .prev-button {
     left: 10px;
-    /* Coloca a seta à esquerda */
 }
 
 .next-button {
     right: 10px;
-    /* Coloca a seta à direita */
 }
 
 /* Ajustes no botão de fechar o modal */
@@ -334,4 +330,189 @@
     background: none;
     font-size: 20px;
     cursor: pointer;
+}
+
+/* Estilo para o vídeo no modal */
+.modal-video-product {
+    width: 850px;
+    height: 650px;
+    object-fit: cover;
+    display: flex;
+}
+
+/* Estilo para o conteúdo do modal de vídeo */
+.modal-content-video {
+    padding: 20px;
+    border-radius: 10px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Ajustes para as setas de navegação no vídeo */
+.prev-button-video,
+.next-button-video {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.prev-button-video {
+    left: 10px;
+}
+
+.next-button-video {
+    right: 10px;
+}
+
+/* Ajustes no botão de fechar o modal de vídeo */
+.close-modal-video {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border: none;
+    background: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Ajustes nas miniaturas de imagem e vídeo */
+.thumbnail-video-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.thumbnail-video {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    cursor: pointer;
+    border: 2px solid var(--btn-color-two);
+    transition: 0.3s;
+    border-radius: 10px;
+}
+
+.thumbnail-video.active-thumbnail {
+    border-color: #007bff;
+}
+
+/* Estilo para o vídeo */
+.main-video-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 550px;
+    height: 550px;
+    border-radius: 15px;
+}
+
+.main-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+/* Media Queries para Responsividade */
+@media (max-width: 768px) {
+    .product-details {
+        padding: 15px;
+    }
+
+    .main-image {
+        width: 100%;
+        height: auto;
+    }
+
+    .info-container {
+        flex-direction: column;
+    }
+
+    .recommended-products-container {
+        margin-top: 5rem;
+    }
+
+    .recommended-product-card {
+        width: 90%;
+    }
+
+    .modal-image-product {
+        width: 100%;
+        height: auto;
+    }
+
+    .modal-content {
+        padding: 10px;
+    }
+
+    .whatsapp-button {
+        font-size: 20px;
+        padding: 8px 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .product-details-container {
+        padding: 10px;
+    }
+
+    .product-ref-one {
+        flex-direction: column;
+    }
+
+    .thumbnail {
+        width: 50px;
+        height: 50px;
+    }
+
+    .main-image {
+        width: 100%;
+        height: 400px;
+    }
+
+    .detail-h1 {
+        font-size: 30px;
+    }
+
+    .detail-dimension,
+    .detail-bedrooms,
+    .detail-parkingSpaces,
+    .detail-address {
+        font-size: 16px;
+    }
+
+    .detail-price {
+        font-size: 30px;
+    }
+
+    .recommended-product-image {
+        width: 100%;
+        height: 200px;
+    }
+
+    .recommended-product-name {
+        font-size: 16px;
+    }
+
+    .recommended-product-price {
+        font-size: 18px;
+    }
+
+    .recommended-product-local {
+        font-size: 20px;
+    }
+
+    .whatsapp-button {
+        font-size: 18px;
+        padding: 8px 14px;
+    }
 }

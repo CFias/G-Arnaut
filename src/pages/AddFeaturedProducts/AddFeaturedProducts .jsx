@@ -5,7 +5,7 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import Logo from "../../assets/image/garnaut-gray-logo.png";
 import "./styles.css";
 
-export const AddProducts = () => {
+export const AddFeaturedProducts = () => {
   // Estados principais
   const [formData, setFormData] = useState({
     address: "",
@@ -22,8 +22,7 @@ export const AddProducts = () => {
     productType: "venda",
     bedrooms: "",
     parkingSpaces: "",
-    isFeatured: "não", // Inicializando com "não"
-    videoLink: "", // Campo para link do vídeo
+    isFeatured: "sim", // Sempre destacado
   });
   const [images, setImages] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
@@ -47,7 +46,10 @@ export const AddProducts = () => {
   };
 
   const uploadImage = async (imageFile) => {
-    const imageRef = ref(storage, `products/${Date.now()}_${imageFile.name}`);
+    const imageRef = ref(
+      storage,
+      `featured_products/${Date.now()}_${imageFile.name}`
+    );
     const snapshot = await uploadBytes(imageRef, imageFile);
     return getDownloadURL(snapshot.ref);
   };
@@ -75,7 +77,7 @@ export const AddProducts = () => {
       }
 
       // Adicionar ao Firestore
-      await addDoc(collection(db, "products"), {
+      await addDoc(collection(db, "featured_products"), {
         ...formData,
         images: imageUrls,
         author: {
@@ -85,28 +87,9 @@ export const AddProducts = () => {
         createdAt: new Date(),
       });
 
-      alert("Produto adicionado com sucesso!");
-      setFormData({
-        address: "",
-        price: "",
-        oldPrice: "",
-        status: "",
-        dimension: "",
-        state: "",
-        city: "",
-        neighborhood: "",
-        category: "",
-        description: "",
-        refProduct: "",
-        productType: "venda",
-        bedrooms: "",
-        parkingSpaces: "",
-        isFeatured: "não", // Inicializando com "não"
-        videoLink: "", // Limpa o campo do link de vídeo
-      });
-      setImages([]);
+      alert("Produto em destaque adicionado com sucesso!");
     } catch (error) {
-      console.error("Erro ao adicionar produto:", error);
+      console.error("Erro ao adicionar produto em destaque:", error);
       alert("Erro ao adicionar produto.");
     } finally {
       setIsUploading(false);
@@ -116,7 +99,7 @@ export const AddProducts = () => {
   return (
     <div className="add-product-container">
       <div className="add-product-top">
-        <h2 className="form-title">Adicionar Produto</h2>
+        <h2 className="form-title">Adicionar Produto em Destaque</h2>
         <img className="product-logo" src={Logo} alt="Logo" />
       </div>
       <form className="form-content" onSubmit={handleSubmit}>
@@ -181,18 +164,6 @@ export const AddProducts = () => {
           />
         </div>
 
-        {/* Link do Vídeo */}
-        <div className="form-group">
-          <label className="form-label">Link do Vídeo (YouTube)</label>
-          <input
-            type="url"
-            name="videoLink"
-            value={formData.videoLink}
-            onChange={handleInputChange}
-            className="form-input"
-          />
-        </div>
-
         {/* Select Status */}
         <div className="form-group">
           <label className="form-label">Status do Imóvel</label>
@@ -223,21 +194,6 @@ export const AddProducts = () => {
           >
             <option value="venda">Venda</option>
             <option value="aluguel">Aluguel</option>
-          </select>
-        </div>
-
-        {/* Select Destaque */}
-        <div className="form-group">
-          <label className="form-label">Destaque</label>
-          <select
-            name="isFeatured"
-            value={formData.isFeatured}
-            onChange={handleInputChange}
-            className="form-input"
-            required
-          >
-            <option value="não">Não</option>
-            <option value="sim">Sim</option>
           </select>
         </div>
 
@@ -272,7 +228,7 @@ export const AddProducts = () => {
 
         {/* Botão de envio */}
         <button type="submit" className="form-button" disabled={isUploading}>
-          {isUploading ? "Carregando..." : "Adicionar Produto"}
+          {isUploading ? "Carregando..." : "Adicionar Produto em Destaque"}
         </button>
       </form>
     </div>

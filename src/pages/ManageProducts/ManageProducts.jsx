@@ -27,8 +27,6 @@ export const ManageProducts = () => {
   });
 
   const [dragging, setDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState(0);
   const [draggedImageIndex, setDraggedImageIndex] = useState(null);
 
   const imagePreviewRef = useRef(null);
@@ -264,73 +262,83 @@ export const ManageProducts = () => {
           <div className="modal-content">
             <h3>Editar Produto</h3>
             <form onSubmit={handleUpdate}>
-              {Object.keys(editProduct)
-                .filter((key) => key !== "id" && key !== "images")
-                .map((key) => (
-                  <div className="form-group" key={key}>
-                    <label htmlFor={key}>
-                      {key === "address"
-                        ? "Endereço"
-                        : key === "price"
-                        ? "Preço"
-                        : key === "category"
-                        ? "Categoria"
-                        : key === "status"
-                        ? "Status"
-                        : key === "oldPrice"
-                        ? "Preço antigo"
-                        : key === "description"
-                        ? "Descrição"
-                        : key === "neighborhood"
-                        ? "Bairro"
-                        : key === "image"
-                        ? "Imagem"
-                        : key === "createdAt"
-                        ? "Data de Criação"
-                        : key === "updatedAt"
-                        ? "Data de Atualização"
-                        : key === "id"
-                        ? "ID"
-                        : key === "parkingSpaces"
-                        ? "Vagas de estacionamento"
-                        : key === "state"
-                        ? "Estado"
-                        : key === "isFeatured"
-                        ? "Destaque"
-                        : key === "size"
-                        ? "Tamanho"
-                        : key === "city"
-                        ? "Cidade"
-                        : key === "stock"
-                        ? "Estoque"
-                        : key === "mainImage"
-                        ? "Imagem principal"
-                        : key === "productType"
-                        ? "Imóvel para"
-                        : key === "author"
-                        ? "Criador"
-                        : key === "bedrooms"
-                        ? "Quartos"
-                        : key === "refProduct"
-                        ? "Referência do produto"
-                        : key === "dimension"
-                        ? "Dimensão"
-                        : key}
-                    </label>
+              <div className="form-grid">
+                {Object.keys(editProduct)
+                  .filter((key) => key !== "id" && key !== "images")
+                  .map((key) => (
+                    <div className="form-group" key={key}>
+                      <label htmlFor={key}>
+                        {key === "address"
+                          ? "Endereço"
+                          : key === "price"
+                          ? "Preço"
+                          : key === "category"
+                          ? "Categoria"
+                          : key === "status"
+                          ? "Status"
+                          : key === "oldPrice"
+                          ? "Preço antigo"
+                          : key === "description"
+                          ? "Descrição"
+                          : key === "neighborhood"
+                          ? "Bairro"
+                          : key === "image"
+                          ? "Imagem"
+                          : key === "id"
+                          ? "ID"
+                          : key === "parkingSpaces"
+                          ? "Vagas de estacionamento"
+                          : key === "state"
+                          ? "Estado"
+                          : key === "isFeatured"
+                          ? "Destaque"
+                          : key === "size"
+                          ? "Tamanho"
+                          : key === "city"
+                          ? "Cidade"
+                          : key === "stock"
+                          ? "Estoque"
+                          : key === "mainImage"
+                          ? "Imagem principal"
+                          : key === "productType"
+                          ? "Imóvel para"
+                          : key === "bedrooms"
+                          ? "Quartos"
+                          : key === "refProduct"
+                          ? "Referência do produto"
+                          : key === "dimension"
+                          ? "Dimensão"
+                          : key}
+                      </label>
 
-                    <input
-                      type="text"
-                      value={editProduct[key]}
-                      onChange={(e) =>
-                        setEditProduct({
-                          ...editProduct,
-                          [key]: e.target.value,
-                        })
-                      }
-                      id={key}
-                    />
-                  </div>
-                ))}
+                      <input
+                        type="text"
+                        value={editProduct[key]}
+                        onChange={(e) =>
+                          setEditProduct({
+                            ...editProduct,
+                            [key]: e.target.value,
+                          })
+                        }
+                        id={key}
+                      />
+                    </div>
+                  ))}
+                <div className="form-group">
+                  <label>Link do Vídeo</label>
+                  <input
+                    type="text"
+                    value={editProduct.videoLink || ""}
+                    onChange={(e) =>
+                      setEditProduct({
+                        ...editProduct,
+                        videoLink: e.target.value,
+                      })
+                    }
+                    placeholder="Adicionar link do vídeo"
+                  />
+                </div>
+              </div>
               {/* Exibir imagens do produto no modal */}
               <div className="form-group">
                 <label>Imagens</label>
