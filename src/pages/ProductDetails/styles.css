@@ -25,13 +25,14 @@
 
 .image-container {
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
 }
 
 .thumbnails-container {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
+    margin: 1rem;
 }
 
 .thumbnail {
@@ -70,14 +71,13 @@
 
 .main-image-container {
     margin-top: 20px;
-
     display: flex;
     justify-content: center;
 }
 
 .main-image {
-    width: 550px;
-    height: 550px;
+    width: 650px;
+    height: 650px;
     border-radius: 15px;
     object-fit: cover;
 }
@@ -85,14 +85,15 @@
 .info-container {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     flex-direction: column;
-    padding: 20px;
+    padding: 10px;
     border: 1px solid rgba(128, 128, 128, 0.315);
     border-radius: 10px;
 }
 
 .info-content {
-    width: 400px;
+    width: 250px;
 }
 
 .detail-data {
@@ -106,29 +107,30 @@
 }
 
 .detail-status {
-    font-size: 20px;
+    font-size: 16px;
     color: var(--btn-color-two);
     font-weight: 600;
     margin-top: 1rem;
 }
 
 .detail-h1 {
-    font-size: 46px;
+    font-size: 30px;
     font-weight: 500;
+    width: 100%;
     color: var(--text-color-one);
     margin: .5rem 0;
 }
 
 .detail-dimension, .detail-bedrooms, .detail-parkingSpaces {
     display: flex;
-    font-size: 18px;
+    font-size: 16px;
     color: var(--text-color-one);
     margin: .5rem 0;
 }
 
 .detail-address {
     display: flex;
-    font-size: 24px;
+    font-size: 20px;
     color: var(--text-color-one);
     font-weight: 400;
     margin: .5rem 0;
@@ -136,12 +138,12 @@
 
 .detail-neighborhood {
     display: flex;
-    font-size: 20px;
+    font-size: 18px;
     color: var(--text-color-one);
 }
 
 .detail-category {
-    font-size: 20px;
+    font-size: 16px;
     color: var(--btn-color-two);
     font-weight: 600;
 }
@@ -149,7 +151,7 @@
 .detail-productType {
     display: flex;
     color: var(--btn-color-two);
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 400;
 }
 
@@ -161,9 +163,9 @@
 
 .detail-price {
     display: flex;
-    font-size: 38px;
+    font-size: 34px;
     color: var(--btn-color-two);
-    font-weight: 500;
+    font-weight: 400;
     margin-top: 2rem;
 }
 
@@ -203,13 +205,14 @@
     font-size: 28px;
     font-weight: 500;
     color: var(--text-color-one);
+    width: 100%;
 }
 
 .recommended-products {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     gap: 20px;
     flex-wrap: wrap;
-    justify-content: center;
 }
 
 .recommended-product-card {
@@ -218,13 +221,18 @@
     padding: 10px;
     border-radius: 8px;
     margin: 0;
+    cursor: pointer;
 }
 
 .recommended-product-image {
-    width: 300px;
-    height: 300px;
+    width: 250px;
+    height: 250px;
     object-fit: cover;
     border-radius: 8px;
+}
+
+.recommended-infos {
+    width: 250px;
 }
 
 .recommended-product-name {
@@ -514,5 +522,70 @@
     .whatsapp-button {
         font-size: 18px;
         padding: 8px 14px;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .info-content {
+        width: 150px;
+    }
+
+    .main-image {
+        width: 450px;
+        height: 450px;
+    }
+
+    .thumbnail {
+        width: 50px;
+        height: 50px;
+    }
+
+    .whatsapp-button {
+        font-size: 14px;
+    }
+
+    .detail-price {
+        font-size: 22px;
+    }
+
+    .detail-address, .detail-neighborhood {
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .detail-bedrooms, .detail-status, .detail-category, .detail-dimension, .detail-parkingSpaces {
+        font-size: 12px;
+    }
+
+    .detail-productType {
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .recommended-products {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .recommended-product-image {
+        width: 200px;
+        height: 200px;
+    }
+
+    .recommended-infos {
+        width: 200px;
+        justify-content: space-between;
+    }
+
+    .recommended-product-address, .recommended-product-status, .recommended-product-type {
+        font-size: 12px;
+        text-align: start;
+    }
+
+    .recommended-product-local {
+        font-size: 14px;
+    }
+
+    .recommended-product-price {
+        font-size: 14px;
     }
 }

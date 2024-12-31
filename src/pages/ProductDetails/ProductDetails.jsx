@@ -240,11 +240,6 @@ Veja o produto: ${productLink}`;
                 <div className="detail-productType">
                   Imóvel para: {product.productType}
                 </div>
-                {product.oldPrice && (
-                  <div className="detail-oldPrice">
-                    <s> R$ {product.oldPrice}</s>
-                  </div>
-                )}
                 <div className="detail-price">R$ {product.price}</div>
               </div>
               <button className="whatsapp-button" onClick={handleWhatsappClick}>
@@ -253,7 +248,7 @@ Veja o produto: ${productLink}`;
             </div>
           </div>
           <div className="recommended-products-container">
-            <h2 className="recommended-h2">Imóveis recomendados</h2>
+            <h2 className="recommended-h2">Outros imóveis</h2>
             <div className="recommended-products">
               {recommendedProducts.map((recommendedProduct) => (
                 <div
@@ -269,20 +264,22 @@ Veja o produto: ${productLink}`;
                       alt={recommendedProduct.name}
                       className="recommended-product-image"
                     />
-                    <div className="recommended-product-local">
-                      {recommendedProduct.city}-{recommendedProduct.state}
-                    </div>
-                    <div className="recommended-product-address">
-                      {recommendedProduct.address}
-                    </div>
-                    <div className="recommended-product-status">
-                      {recommendedProduct.status}
-                    </div>
-                    <div className="recommended-product-type">
-                      {recommendedProduct.productType}
-                    </div>
-                    <div className="recommended-product-price">
-                      R$ {recommendedProduct.price}
+                    <div className="recommended-infos">
+                      <div className="recommended-product-local">
+                        {recommendedProduct.city}-{recommendedProduct.state}
+                      </div>
+                      <div className="recommended-product-address">
+                        {recommendedProduct.address}
+                      </div>
+                      <div className="recommended-product-status">
+                        {recommendedProduct.status}
+                      </div>
+                      <div className="recommended-product-type">
+                        {recommendedProduct.productType}
+                      </div>
+                      <div className="recommended-product-price">
+                        R$ {recommendedProduct.price}
+                      </div>
                     </div>
                   </Link>
                 </div>

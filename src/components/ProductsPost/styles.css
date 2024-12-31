@@ -9,10 +9,11 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: var(--card-color);
+    border: 1px solid rgb(209, 206, 206);
     padding: 10px;
-    border-radius: 25px;
+    border-radius: 5px;
     margin: 5px;
+    cursor: pointer;
 }
 
 .product-images {
@@ -53,9 +54,9 @@
 }
 
 .product-img {
-    width: 300px;
-    height: 300px;
-    border-radius: 15px;
+    width: 280px;
+    height: 280px;
+    border-radius: 5px;
     filter: brightness(0.7);
     transition: filter 0.3s ease-in-out;
     object-fit: cover;
@@ -265,7 +266,7 @@
     }
 
     .product-card {
-        border-radius: 15px;
+        border-radius: 10px;
     }
 
     .product-img {

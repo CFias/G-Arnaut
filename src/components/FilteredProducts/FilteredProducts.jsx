@@ -22,7 +22,7 @@ export const FilteredProducts = () => {
     <>
       <Navbar />
       <div className="filtered-products-container">
-        <h2>Produtos Filtrados</h2>
+        <h2>Imóveis filtrados</h2>
         <div className="product-list">
           {filteredProducts.length > 0 ? (
             filteredProducts.map((product) => (
@@ -75,7 +75,7 @@ export const FilteredProducts = () => {
               </div>
             ))
           ) : (
-            <p>Nenhum produto encontrado.</p>
+            <p>Nenhum imóvel encontrado.</p>
           )}
         </div>
       </div>

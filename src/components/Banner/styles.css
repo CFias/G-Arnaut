@@ -1,14 +1,58 @@
 /* Container do Banner */
 .banner-container {
-    position: relative;
-    width: 100%;
-    height: 100vh;
+    width: 80%;
     display: flex;
     align-items: center;
-    justify-content: start;
+    justify-content: space-between;
     overflow: hidden;
-    flex-direction: column;
+    margin-bottom: 10rem;
+    background-image: url("../../assets/image/g-arnaut-banner.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 15px;
+    padding: 4rem;
 }
+
+.banner-logo {
+    width: 150px;
+}
+
+.banner-ap {
+    width: 30vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+}
+
+.banner-ap h3 {
+    color: var(--text-color-two);
+    font-size: 24px;
+}
+
+.banner-ap h3 span {
+    color: var(--text-color-three);
+}
+
+.banner-ap p {
+    font-size: 14px;
+    color: var(--text-color-two);
+    font-family: var(--main-font);
+    margin-top: 1rem;
+    font-weight: 300;
+}
+
+.icons-banner {
+    display: flex;
+    gap: 10px;
+}
+
+.banner-icon {
+    color: var(--text-color-two);
+    margin-top: 1rem;
+}
+
+
 
 .txt-infos {
     display: flex;
@@ -20,11 +64,9 @@
     font-weight: 300;
 }
 
-/* Informações do Banner */
 .banner-infos {
     display: flex;
     flex-direction: column;
-    width: 40%;
     padding-right: 20px;
     z-index: 4;
 }
@@ -33,17 +75,14 @@
     margin-bottom: 20px;
 }
 
-/* Banner Item */
 .banner-item {
-    position: absolute;
-    width: 90%;
-    height: 75%;
-    border-radius: 30px;
     background-position: center;
     background-size: cover;
+    width: 350px;
+    height: 450px;
     opacity: 0;
     transition: opacity 1s ease;
-    margin-top: 50px;
+    border-radius: 10px;
 }
 
 .banner-item.active {
@@ -52,13 +91,6 @@
 
 .banner-item.hidden {
     opacity: 0;
-}
-
-.banner-overlay {
-    position: absolute;
-    top: 5%;
-    left: 5%;
-    color: white;
 }
 
 .txt-banner {
@@ -77,91 +109,11 @@
 /* Sobreposição do Banner */
 .banner-item::before {
     content: "";
-    position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
     background-color: rgba(0, 0, 0, 0.6);
-    border-radius: 30px;
 }
 
-/* Dots Container */
-.dots-container {
-    position: absolute;
-    bottom: 10px;
-    right: 0px;
-    width: 100%;
-    text-align: center;
-}
-
-.filter {
-    position: absolute;
-    bottom: -30%;
-
-    width: 100vw;
-}
-
-.dot {
-    display: inline-block;
-    width: 10px;
-    height: 10px;
-    margin: 0 5px;
-    background: rgb(245, 245, 245);
-    border-radius: 50%;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-.dot.active,
-.dot:hover {
-    background: rgba(255, 255, 255, 0.658);
-}
-
-/* Arrows Container */
-.arrows-container {
-    position: absolute;
-    top: 50%;
-    left: 5%;
-    display: flex;
-    gap: 15px;
-}
-
-.arrow-button {
-    color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    transition: 60ms;
-}
-
-.left {
-    background: transparent;
-    border: .1px solid #fff;
-    border-radius: 50%;
-    display: flex;
-}
-
-.right {
-    background: #fff;
-    border: 1px solid #fff;
-    border-radius: 50%;
-    color: #363636;
-    display: flex;
-    justify-content: center;
-}
-
-.left:hover {
-    background: #fff;
-    color: #363636;
-}
-
-.right:hover {
-    background: transparent;
-    color: #fff;
-}
-
-/* Link do Banner */
 .banner-link {
     position: absolute;
     bottom: 5%;
@@ -182,10 +134,8 @@
     background: #ddd;
 }
 
-/* Responsividade para telas menores */
 @media (max-width: 1024px) {
     .banner-container {
-        height: 150vh;
         padding: 1rem;
     }
 
@@ -203,8 +153,8 @@
 
     .banner-item {
         margin-top: 20px;
-        width: 95vw;
-        height: 60%;
+        width: 40vw;
+        height: 50vh;
     }
 
     .filter {
@@ -215,9 +165,27 @@
 
 @media (max-width: 768px) {
     .banner-container {
-        flex-direction: column;
-        justify-content: start;
         height: 100vh;
+        width: 100%;
+        border-radius: 10px;
+        background-position: center;
+        gap: 10px;
+    }
+
+    .banner-ap {
+        width: 100vw;
+    }
+
+    .banner-ap p {
+        font-size: 8px;
+    }
+
+    .banner-ap h3 {
+        font-size: 12px;
+    }
+
+    .banner-logo {
+        width: 50px;
     }
 
     .banner-infos {
@@ -255,6 +223,14 @@
 }
 
 @media (max-width: 480px) {
+    .banner-container {
+        background: #000;
+        height: 60vh;
+        width: 98%;
+        border-radius: 10px;
+        margin: 16px 0;
+    }
+
     .txt-banner {
         font-size: 40px;
     }
@@ -264,8 +240,8 @@
     }
 
     .banner-item {
-        height: 40%;
-        width: 95vw;
+        width: 100vw;
+        height: 40vh;
     }
 
     .filter {
