@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../../services/FirebaseConfig";
 import { collection, query, where, getDocs } from "firebase/firestore";
-import { East, KeyboardArrowRight, West } from "@mui/icons-material";
 import "./styles.css";
-import { CardFilter } from "../CardFilter/CardFilter";
+import Logo from "../../assets/image/garnaut-white-logo.png";
+import { Instagram, WhatsApp, YouTube } from "@mui/icons-material";
 
 export const Banner = () => {
   const [featuredItems, setFeaturedItems] = useState([]);
@@ -49,17 +49,17 @@ export const Banner = () => {
     );
   }
 
-  const handlePrevClick = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? featuredItems.length - 1 : prevIndex - 1
-    );
-  };
+  // const handlePrevClick = () => {
+  //   setCurrentIndex((prevIndex) =>
+  //     prevIndex === 0 ? featuredItems.length - 1 : prevIndex - 1
+  //   );
+  // };
 
-  const handleNextClick = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === featuredItems.length - 1 ? 0 : prevIndex + 1
-    );
-  };
+  // const handleNextClick = () => {
+  //   setCurrentIndex((prevIndex) =>
+  //     prevIndex === featuredItems.length - 1 ? 0 : prevIndex + 1
+  //   );
+  // };
 
   const handleDotClick = (index) => {
     setCurrentIndex(index);
@@ -67,6 +67,27 @@ export const Banner = () => {
 
   return (
     <section className="banner-container">
+      <div className="banner-ap">
+        <img src={Logo} alt="G-Arnaut" className="banner-logo" />
+        <h3>
+          Olá, sou G-Arnaut, corretor de imóveis credenciado pelo{" "}
+          <span>CRECI-BA 19.425</span>, e estou aqui para ajudá-lo a realizar o
+          sonho do imóvel ideal.
+        </h3>
+        <p>
+          Com um atendimento personalizado, foco em suas necessidades e um
+          profundo conhecimento do mercado imobiliário da Bahia, meu compromisso
+          é oferecer as melhores oportunidades, seja para compra, venda ou
+          locação de imóveis. Conte comigo para tornar o processo simples,
+          seguro e transparente, com toda a credibilidade que só um corretor
+          registrado pode garantir.
+        </p>
+        <div className="icons-banner">
+          <WhatsApp fontSize="small" className="banner-icon" />
+          <Instagram fontSize="small" className="banner-icon" />
+          <YouTube fontSize="small" className="banner-icon" />
+        </div>
+      </div>
       {featuredItems.map((item, index) => (
         <div
           key={item.id}
@@ -79,42 +100,10 @@ export const Banner = () => {
           }}
         >
           <div className="banner-overlay">
-            <h1 className="txt-banner">{item.category || "Categoria"}</h1>
-            <div className="txt-infos">
-              <p>
-                {item.parkingSpaces
-                  ? `${item.parkingSpaces} Vagas de estacionamento`
-                  : "Sem vagas disponíveis"}
-              </p>
-              <p>
-                {item.bedrooms
-                  ? `${item.bedrooms} Quartos`
-                  : "Sem quartos disponíveis"}
-              </p>
-            </div>
-          </div>
-          <div className="arrows-container">
-            <button className="arrow-button left" onClick={handlePrevClick}>
-              <West fontSize="10" />
-            </button>
-            <button className="arrow-button right" onClick={handleNextClick}>
-              <East fontSize="10" />
-            </button>
-          </div>
-          <div className="dots-container">
-            {featuredItems.map((_, index) => (
-              <span
-                key={index}
-                className={`dot ${index === currentIndex ? "active" : ""}`}
-                onClick={() => handleDotClick(index)}
-              />
-            ))}
+            <div className="txt-infos"></div>
           </div>
         </div>
       ))}
-      <div className="filter">
-        <CardFilter />
-      </div>
     </section>
   );
 };

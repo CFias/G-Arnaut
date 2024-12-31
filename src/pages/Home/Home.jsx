@@ -32,7 +32,6 @@ export const Home = () => {
         );
         setFeaturedProducts(filteredFeatured);
 
-        // Filtra os produtos recentes
         const filteredRecent = productsArray.filter(
           (product) => product.isFeatured !== "sim"
         );
@@ -44,7 +43,6 @@ export const Home = () => {
 
     fetchProducts();
 
-    // Simulação de carregamento
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 2000);
@@ -56,7 +54,6 @@ export const Home = () => {
     <>
       <Navbar />
       <main className="home-container">
-        {/* Banner */}
         <section className="section-1">
           {isLoading ? (
             <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f0f0f0">
@@ -64,6 +61,15 @@ export const Home = () => {
             </SkeletonTheme>
           ) : (
             <Banner />
+          )}
+        </section>
+        <section className="section-card">
+          {isLoading ? (
+            <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f0f0f0">
+              <Skeleton height={500} borderRadius={15} />
+            </SkeletonTheme>
+          ) : (
+            <CardFilter />
           )}
         </section>
         {/* Produtos em Destaque */}

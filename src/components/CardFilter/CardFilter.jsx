@@ -106,7 +106,7 @@ export const CardFilter = () => {
             <select
               name="category"
               value={category}
-              onChange={(e) => setNeighborhood(e.target.value)}
+              onChange={(e) => setCategory(e.target.value)}
               className="filter-in"
               required
             >

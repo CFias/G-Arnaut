@@ -1,6 +1,6 @@
 /* Container principal */
 .video-list-container {
-    padding: 20px;
+    padding: 4rem;
     margin: 0 auto;
     background-image: url("../../assets/image/banner-garnaut-youtube.png");
     background-repeat: no-repeat;
@@ -10,7 +10,8 @@
     display: flex;
     flex-direction: column;
     font-family: var(--main-font);
-    width: 100vw;
+    width: 80%;
+    border-radius: 15px;
 }
 
 /* Título */
@@ -67,13 +68,16 @@
 }
 
 @media (max-width: 480px) {
+    .video-list-container {
+        width: 98%;
+        border-radius: 10px;
+    }
+
     .video-card {
         flex: 1 0 100%;
-        /* 1 vídeo por linha */
     }
 }
 
-/* Estilo para a seção de call-to-action (CTA) */
 .cta-container {
     text-align: center;
     margin-top: 40px;
