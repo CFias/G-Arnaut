@@ -1,7 +1,7 @@
 /* Container principal */
 .video-list-container {
-    padding: 4rem;
-    margin: 0 auto;
+    padding: 2rem;
+    margin-top: 2rem;
     background-image: url("../../assets/image/banner-garnaut-youtube.png");
     background-repeat: no-repeat;
     background-position: center;
@@ -35,8 +35,7 @@
 /* Card do vídeo */
 .video-card {
     flex: 1 0 30%;
-    min-width: 300px;
-    max-width: 360px;
+    width: 100px;
     height: 200px;
     border-radius: 8px;
     overflow: hidden;
@@ -63,7 +62,6 @@
 @media (max-width: 768px) {
     .video-card {
         flex: 1 0 45%;
-        /* 2 vídeos por linha */
     }
 }
 
@@ -117,4 +115,14 @@
 
 .cta-button:focus {
     outline: none;
+}
+
+@media (max-width: 1024px) {
+    .video-list-container {
+        width: 95%;
+    }
+
+    .video-card {
+        width: 160px;
+    }
 }

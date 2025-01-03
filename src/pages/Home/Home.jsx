@@ -26,9 +26,8 @@ export const Home = () => {
           ...doc.data(),
         }));
 
-        // Filtra os produtos em destaque
         const filteredFeatured = productsArray.filter(
-          (product) => product.isFeatured === "sim"
+          (product) => product.isFeatured === "sim" || "Sim"
         );
         setFeaturedProducts(filteredFeatured);
 
@@ -72,7 +71,6 @@ export const Home = () => {
             <CardFilter />
           )}
         </section>
-        {/* Produtos em Destaque */}
         <section className="section-2">
           <h3 className="home-h3">
             {isLoading ? <Skeleton width={150} /> : "Imóveis em Destaque"}

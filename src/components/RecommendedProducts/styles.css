@@ -2,7 +2,6 @@
     margin-top: 40px;
     padding: 20px;
     background-color: var(--bg-color);
-    /* Usando a variável de cor */
     border-radius: 10px;
 }
 
@@ -11,7 +10,6 @@
     font-size: 24px;
     margin-bottom: 20px;
     color: var(--text-color-one);
-    /* Usando a variável de cor */
 }
 
 .recommended-products {
@@ -24,7 +22,6 @@
 .recommended-product-card {
     width: 200px;
     background-color: var(--card-color);
-    /* Usando a variável de cor */
     padding: 15px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
