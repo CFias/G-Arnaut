@@ -11,8 +11,7 @@
     align-items: center;
     border: 1px solid rgb(209, 206, 206);
     padding: 10px;
-    border-radius: 5px;
-    margin: 5px;
+    border-radius: 15px;
     cursor: pointer;
 }
 

@@ -5,7 +5,7 @@
     align-items: center;
     justify-content: space-between;
     overflow: hidden;
-    margin-bottom: 10rem;
+    margin-top: 2rem;
     background-image: url("../../assets/image/g-arnaut-banner.png");
     background-repeat: no-repeat;
     background-size: cover;
@@ -137,10 +137,11 @@
 @media (max-width: 1024px) {
     .banner-container {
         padding: 1rem;
+        width: 95%;
     }
 
     .banner-infos {
-        width: 50%;
+        width: 70%;
     }
 
     .txt-banner {
@@ -153,13 +154,29 @@
 
     .banner-item {
         margin-top: 20px;
-        width: 40vw;
-        height: 50vh;
+        width: 20vw;
+        height: 30vh;
     }
 
     .filter {
         width: 100vw;
         top: 35%;
+    }
+
+    .banner-ap {
+        width: 45vw;
+    }
+
+    .banner-ap p {
+        font-size: 12px;
+    }
+
+    .banner-ap h3 {
+        font-size: 16px;
+    }
+
+    .banner-logo {
+        width: 100px;
     }
 }
 

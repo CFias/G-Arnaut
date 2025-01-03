@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { db, storage } from "../../services/FirebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
 import { getDownloadURL, ref } from "firebase/storage";
-import { Category, CropFree, DirectionsCar, Hotel } from "@mui/icons-material";
+import { Category, CropFree, DirectionsCar, FavoriteBorder, Hotel } from "@mui/icons-material";
 import "./styles.css";
 
 export const ProductsPost = () => {
@@ -82,7 +82,7 @@ export const ProductsPost = () => {
             </div>
           )}
           <div className="product-infos">
-            <h3 className="product-address">{product.city}</h3>
+            <h3 className="product-address">{product.city} <FavoriteBorder /> </h3>
             <p className="product-neighborhood">{product.neighborhood}</p>
             <p className="product-address">{product.address}</p>
             <div className="infos-details">
