@@ -103,7 +103,23 @@
 .nav-link-item {
     text-decoration: none;
     color: var(--text-color-one);
+    position: relative;
+    display: inline-block;
+    padding-bottom: 5px;
+    transition: color 0.3s ease, border-bottom 0.3s ease;
 }
+
+.nav-link-item.active {
+    color: var(--btn-color-one);
+    border-bottom: 2px solid var(--btn-color-one);
+}
+
+.nav-link-item:not(.active) {
+    color: var(--text-color-one);
+    border-bottom: 2px solid transparent;
+}
+
+
 
 .nav-link-login, .nav-link-register {
     display: flex;

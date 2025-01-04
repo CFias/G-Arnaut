@@ -5,6 +5,9 @@ import { db } from "../../services/FirebaseConfig";
 import { CalendarToday, WhatsApp } from "@mui/icons-material";
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import { Navbar } from "../../components/Navbar/Navbar";
+import Logo from "../../assets/image/garnaut-white-logo.png";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import "./styles.css";
 
 export const ProductDetails = () => {
@@ -138,8 +141,22 @@ Veja o produto: ${productLink}`;
     return match ? match[1] : "";
   };
 
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth", // Suaviza a rolagem até o topo
+    });
+  };
+
   if (!product) {
-    return <p>Carregando...</p>;
+    return (
+      <div className="loading">
+        <img className="loading-logo" src={Logo} alt="Arnaut" />
+        <Skeleton height={300} />
+        <Skeleton width="60%" />
+        <Skeleton width="80%" />
+      </div>
+    );
   }
 
   return (
@@ -258,6 +275,9 @@ Veja o produto: ${productLink}`;
                   <Link
                     className="recommended-link"
                     to={`/product/${recommendedProduct.id}`}
+                    onClick={() => {
+                      scrollToTop(); // Efeito suave ao clicar no produto recomendado
+                    }}
                   >
                     <img
                       src={recommendedProduct.images[0]}

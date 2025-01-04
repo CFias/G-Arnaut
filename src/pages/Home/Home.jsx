@@ -4,7 +4,6 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { Navbar } from "../../components/Navbar/Navbar";
 import { Footer } from "../../components/Footer/Footer";
 import { Banner } from "../../components/Banner/Banner";
-import { ProductsPost } from "../../components/ProductsPost/ProductsPost";
 import { CardFilter } from "../../components/CardFilter/CardFilter";
 import VideoList from "../../components/VideoList/VideoList.jsx";
 import { collection, getDocs } from "firebase/firestore";
@@ -16,6 +15,9 @@ export const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [recentProducts, setRecentProducts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const itemsPerPage = 12;
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -27,14 +29,14 @@ export const Home = () => {
         }));
 
         const filteredFeatured = productsArray.filter(
-          (product) => product.isFeatured === "sim" || "Sim"
+          (product) => product.isFeatured?.toLowerCase() === "sim"
         );
-        setFeaturedProducts(filteredFeatured);
+        setFeaturedProducts(filteredFeatured.slice(0, 4));
 
         const filteredRecent = productsArray.filter(
-          (product) => product.isFeatured !== "sim"
+          (product) => product.isFeatured?.toLowerCase() === "não"
         );
-        setRecentProducts(filteredRecent.slice(0, 6)); // Exibe até 6 produtos recentes
+        setRecentProducts(filteredRecent);
       } catch (error) {
         console.error("Erro ao buscar produtos:", error);
       }
@@ -48,6 +50,22 @@ export const Home = () => {
 
     return () => clearTimeout(timer);
   }, []);
+
+  // Calcular a quantidade total de páginas com base no número de produtos
+  const totalPages = Math.ceil(recentProducts.length / itemsPerPage);
+
+  // Função para calcular os produtos a serem exibidos na página atual
+  const paginatedProducts = recentProducts.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  // Função para alternar a página
+  const handlePageChange = (pageNumber) => {
+    if (pageNumber > 0 && pageNumber <= totalPages) {
+      setCurrentPage(pageNumber);
+    }
+  };
 
   return (
     <>
@@ -76,10 +94,10 @@ export const Home = () => {
             {isLoading ? <Skeleton width={150} /> : "Imóveis em Destaque"}
           </h3>
           {isLoading ? (
-            <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f0f0f0">
+            <div className="skeleton-card">
               <Skeleton height={200} />
               <Skeleton height={200} style={{ marginTop: 10 }} />
-            </SkeletonTheme>
+            </div>
           ) : (
             <div className="featured-products">
               {featuredProducts.length > 0 ? (
@@ -92,31 +110,61 @@ export const Home = () => {
             </div>
           )}
         </section>
-
-        {/* Produtos Recentes */}
         <section className="section-3">
           <h3 className="home-h3">
             {isLoading ? <Skeleton width={150} /> : "Imóveis Recentes"}
           </h3>
           {isLoading ? (
-            <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f0f0f0">
+            <div className="skeleton-card">
               <Skeleton height={200} />
               <Skeleton height={200} style={{ marginTop: 10 }} />
-            </SkeletonTheme>
-          ) : (
-            <div className="featured-products">
-              {recentProducts.length > 0 ? (
-                recentProducts.map((product, index) => (
-                  <FeaturedProducts key={index} product={product} />
-                ))
-              ) : (
-                <p>Não há produtos recentes no momento.</p>
-              )}
             </div>
+          ) : (
+            <>
+              <div className="featured-products">
+                {paginatedProducts.length > 0 ? (
+                  paginatedProducts.map((product, index) => (
+                    <FeaturedProducts key={index} product={product} />
+                  ))
+                ) : (
+                  <p>Não há produtos recentes no momento.</p>
+                )}
+              </div>
+
+              {/* Renderizar os botões de paginação apenas quando houver múltiplas páginas */}
+              {recentProducts.length > itemsPerPage && (
+                <div className="pagination">
+                  {/* Botão de página anterior */}
+                  <button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                  >
+                    &lt;
+                  </button>
+
+                  {/* Botões de página */}
+                  {Array.from({ length: totalPages }, (_, index) => (
+                    <button
+                      key={index + 1}
+                      className={currentPage === index + 1 ? "active" : ""}
+                      onClick={() => handlePageChange(index + 1)}
+                    >
+                      {index + 1}
+                    </button>
+                  ))}
+
+                  {/* Botão de página seguinte */}
+                  <button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                  >
+                    &gt;
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </section>
-
-        {/* Lista de Vídeos */}
         <section className="section-3">
           {isLoading ? (
             <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f0f0f0">

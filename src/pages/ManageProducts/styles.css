@@ -12,6 +12,7 @@
 }
 
 /* Tabela de produtos */
+/* Tabela de produtos */
 .products-table {
     width: 100%;
     border-collapse: collapse;
@@ -36,9 +37,20 @@
     font-weight: 600;
 }
 
+.products-table tr:nth-child(odd) {
+    background-color: #f1f1f1;
+    /* Cor para linhas ímpares */
+}
+
+.products-table tr:nth-child(even) {
+    background-color: #ffffff;
+    /* Cor para linhas pares */
+}
+
 .products-table tr:hover {
     background-color: rgba(0, 123, 255, 0.1);
 }
+
 
 /* Botões de ação */
 .edit-button,
@@ -92,6 +104,7 @@
     justify-content: start;
     overflow-y: scroll;
     flex-wrap: nowrap;
+    width: 80%;
 }
 
 .modal-content h3 {
@@ -103,14 +116,16 @@
 
 .form-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
+    width: 100%;
 }
 
 
 .form-group {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(4, 1fr);
+    width: 100%;
     gap: 20px;
 }
 
@@ -260,6 +275,7 @@ button {
     border-radius: 5px;
     cursor: pointer;
     font-size: 12px;
+    margin: 2px;
 }
 
 button:hover {
@@ -284,6 +300,44 @@ button:hover {
 .image-item.over {
     border: 2px dashed #ccc;
 }
+
+.delete-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.delete-modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+}
+
+.delete-modal-actions {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.delete-modal-actions button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.delete-modal-actions button:hover {
+    opacity: 0.8;
+}
+
 
 /* Responsividade */
 @media (max-width: 1200px) {

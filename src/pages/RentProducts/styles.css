@@ -1,0 +1,15 @@
+.product-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    justify-items: center;
+    width: auto;
+    margin: 2rem;
+}
+
+.filter-product-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--main-font);
+}

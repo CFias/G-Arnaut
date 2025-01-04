@@ -16,6 +16,9 @@ import RentalsPage from "./pages/RentalsPage/RentalsPage";
 import ImportVideo from "./pages/ImportVideo/ImportVideo";
 import { EditProduct } from "./components/EditProduct/EditProduct";
 import { AddFeaturedProducts } from "./pages/AddFeaturedProducts/AddFeaturedProducts ";
+import { RentProducts } from "./pages/RentProducts/RentProducts";
+import { SaleProducts } from "./pages/SaleProducts/SaleProducts";
+import { AboutAgent } from "./pages/AboutAgent/AboutAgent";
 
 function App() {
   return (
@@ -24,6 +27,9 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/Rent-Products" element={<RentProducts />} />
+        <Route path="/Sale-Products" element={<SaleProducts />} />
+        <Route path="/about" element={<AboutAgent />} />
         <Route path="/filtered-products" element={<FilteredProducts />} />
         <Route path="/location" element={<RentalsPage />} />
         <Route path="/import-video" element={<ImportVideo />} />
@@ -35,7 +41,10 @@ function App() {
           path="/admin/manage-products"
           element={<ManageProducts />}
         />{" "}
-        <Route path="/manage-product/edit-product/:id" element={<EditProduct />} />{" "}
+        <Route
+          path="/manage-product/edit-product/:id"
+          element={<EditProduct />}
+        />{" "}
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route
           path="/dashboard"

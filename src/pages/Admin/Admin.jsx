@@ -104,21 +104,13 @@ export const Admin = () => {
 
   return (
     <>
-      {/* Navigation */}
       <AppBar position="static" color="primary" elevation={2}>
         <Toolbar>
-          <NavLink to="/" style={{ display: "flex", alignItems: "center" }}>
-            <img
-              src={Logo}
-              alt="Logo"
-              style={{ height: 40, marginRight: 16 }}
-            />
-          </NavLink>
           <IconButton
             edge="start"
             color="inherit"
             component={NavLink}
-            to="/admin"
+            to="/"
           >
             <KeyboardBackspace />
           </IconButton>
