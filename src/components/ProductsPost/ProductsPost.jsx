@@ -3,15 +3,26 @@ import { useNavigate } from "react-router-dom";
 import { db, storage } from "../../services/FirebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
 import { getDownloadURL, ref } from "firebase/storage";
-import { Category, CropFree, DirectionsCar, FavoriteBorder, Hotel } from "@mui/icons-material";
+import {
+  Category,
+  CropFree,
+  DirectionsCar,
+  FavoriteBorder,
+  Hotel,
+} from "@mui/icons-material";
 import "./styles.css";
 
 export const ProductsPost = () => {
   const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [categoryFilter, setCategoryFilter] = useState("");
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
   const productsPerPage = 12;
   const navigate = useNavigate();
 
+  // Função para buscar os produtos do Firestore
   const fetchProducts = async () => {
     try {
       const querySnapshot = await getDocs(collection(db, "products"));
@@ -20,6 +31,7 @@ export const ProductsPost = () => {
         ...doc.data(),
       }));
 
+      // Função para obter URLs das imagens do produto
       const productsWithImages = await Promise.all(
         productList.map(async (product) => {
           if (product.images && product.images.length > 0) {
@@ -41,29 +53,90 @@ export const ProductsPost = () => {
         })
       );
 
+      // Atualiza o estado com os produtos carregados
       setProducts(productsWithImages);
+      setFilteredProducts(productsWithImages); // Inicialmente, todos os produtos são filtrados
     } catch (error) {
       console.error("Erro ao buscar produtos:", error);
     }
   };
 
+  // Chama a função para buscar os produtos quando o componente for montado
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, []); // O array vazio faz com que o efeito só seja executado uma vez, no mount
 
-  const totalPages = Math.ceil(products.length / productsPerPage);
+  // Função para aplicar os filtros
+  const applyFilters = () => {
+    let filtered = [...products];
 
-  const paginatedProducts = products.slice(
+    if (categoryFilter) {
+      filtered = filtered.filter(
+        (product) => product.category === categoryFilter
+      );
+    }
+
+    if (minPrice) {
+      filtered = filtered.filter(
+        (product) => product.price >= parseFloat(minPrice)
+      );
+    }
+
+    if (maxPrice) {
+      filtered = filtered.filter(
+        (product) => product.price <= parseFloat(maxPrice)
+      );
+    }
+
+    setFilteredProducts(filtered);
+    setCurrentPage(1); // Resetar para a primeira página após aplicar o filtro
+  };
+
+  // Cálculo da quantidade de páginas para a paginação
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+
+  // Paginação dos produtos
+  const paginatedProducts = filteredProducts.slice(
     (currentPage - 1) * productsPerPage,
     currentPage * productsPerPage
   );
 
+  // Função para lidar com o clique no card do produto (navegar para a página de detalhes)
   const handleCardClick = (id) => {
     navigate(`/product/${id}`);
   };
 
   return (
     <div className="product-list">
+      <div className="filters">
+        <select
+          value={categoryFilter}
+          onChange={(e) => setCategoryFilter(e.target.value)}
+        >
+          <option value="">Selecione a Categoria</option>
+          <option value="Apartamento">Apartamento</option>
+          <option value="Casa">Casa</option>
+          <option value="Comercial">Comercial</option>
+          {/* Adicione outras categorias conforme necessário */}
+        </select>
+
+        <input
+          type="number"
+          placeholder="Preço Mínimo"
+          value={minPrice}
+          onChange={(e) => setMinPrice(e.target.value)}
+        />
+        <input
+          type="number"
+          placeholder="Preço Máximo"
+          value={maxPrice}
+          onChange={(e) => setMaxPrice(e.target.value)}
+        />
+
+        <button onClick={applyFilters}>Aplicar Filtros</button>
+      </div>
+
+      {/* Mapeia os produtos da página atual para exibição */}
       {paginatedProducts.map((product) => (
         <div
           key={product.id}
@@ -82,7 +155,9 @@ export const ProductsPost = () => {
             </div>
           )}
           <div className="product-infos">
-            <h3 className="product-address">{product.city} <FavoriteBorder /> </h3>
+            <h3 className="product-address">
+              {product.city} <FavoriteBorder />{" "}
+            </h3>
             <p className="product-neighborhood">{product.neighborhood}</p>
             <p className="product-address">{product.address}</p>
             <div className="infos-details">
@@ -109,6 +184,8 @@ export const ProductsPost = () => {
           </div>
         </div>
       ))}
+
+      {/* Paginação */}
       {totalPages > 1 && (
         <div className="pagination-dots">
           {Array.from({ length: totalPages }, (_, index) => (

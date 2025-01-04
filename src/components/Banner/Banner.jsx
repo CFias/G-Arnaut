@@ -49,22 +49,6 @@ export const Banner = () => {
     );
   }
 
-  // const handlePrevClick = () => {
-  //   setCurrentIndex((prevIndex) =>
-  //     prevIndex === 0 ? featuredItems.length - 1 : prevIndex - 1
-  //   );
-  // };
-
-  // const handleNextClick = () => {
-  //   setCurrentIndex((prevIndex) =>
-  //     prevIndex === featuredItems.length - 1 ? 0 : prevIndex + 1
-  //   );
-  // };
-
-  const handleDotClick = (index) => {
-    setCurrentIndex(index);
-  };
-
   return (
     <section className="banner-container">
       <div className="banner-ap">

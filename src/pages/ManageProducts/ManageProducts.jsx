@@ -10,6 +10,8 @@ import {
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { NavLink } from "react-router-dom";
 import "./styles.css";
+import { KeyboardBackspace } from "@mui/icons-material";
+import { IconButton } from "@mui/material";
 
 export const ManageProducts = () => {
   const [products, setProducts] = useState([]);
@@ -190,7 +192,9 @@ export const ManageProducts = () => {
 
   return (
     <div className="manage-products-container">
-      <NavLink to="/admin">Voltar</NavLink>
+      <NavLink className="access-back" to="/admin">
+        Voltar
+      </NavLink>
       <h2 className="manage-products-heading">Gerenciar Produtos</h2>
       <div className="search-filters">
         <input
@@ -226,6 +230,8 @@ export const ManageProducts = () => {
         <thead>
           <tr>
             <th>Endereço</th>
+            <th>Destaque</th>
+            <th>Referência</th>
             <th>Preço</th>
             <th>Categoria</th>
             <th>Status</th>
@@ -236,6 +242,8 @@ export const ManageProducts = () => {
           {filteredProducts.map((product) => (
             <tr key={product.id}>
               <td>{product.address}</td>
+              <td>{product.isFeatured}</td>
+              <td>{product.refProduct}</td>
               <td>{product.price}</td>
               <td>{product.category}</td>
               <td>{product.status}</td>
@@ -260,6 +268,9 @@ export const ManageProducts = () => {
       {isEditing && (
         <div className="modal">
           <div className="modal-content">
+            <IconButton className="access-back" edge="start" color="inherit" component={NavLink} to="/">
+              <KeyboardBackspace />
+            </IconButton>
             <h3>Editar Produto</h3>
             <form onSubmit={handleUpdate}>
               <div className="form-grid">

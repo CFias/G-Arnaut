@@ -122,12 +122,12 @@ export const Navbar = () => {
             <NavLink to="/" className="nav-link-item">
               Início
             </NavLink>
-            <NavLink className="nav-link-item">Venda</NavLink>
-            <NavLink to="/location" className="nav-link-item">
+            <NavLink to="/Sale-Products" className="nav-link-item">Venda</NavLink>
+            <NavLink to="/Rent-Products" className="nav-link-item">
               Locação
             </NavLink>
-            <NavLink className="nav-link-item">O corretor</NavLink>
-            <NavLink className="nav-link-item">Contato</NavLink>
+            <NavLink to="/about" className="nav-link-item">O corretor</NavLink>
+            <NavLink to="/contact" className="nav-link-item">Contato</NavLink>
           </div>
         </ul>
       </nav>
