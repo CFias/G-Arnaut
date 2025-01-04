@@ -81,7 +81,7 @@ export const RentProducts = () => {
       <Navbar />
       <div className="filter-product-container">
         <h1>Imóveis disponíveis para Aluguel </h1>
-        <div className="product-list">
+        <div className="product-list-filter">
           {paginatedProducts.map((product) => (
             <div key={product.id} className="product-card">
               {product.images && product.images.length > 0 && (

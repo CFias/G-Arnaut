@@ -117,7 +117,6 @@ export const ProductsPost = () => {
           <option value="Apartamento">Apartamento</option>
           <option value="Casa">Casa</option>
           <option value="Comercial">Comercial</option>
-          {/* Adicione outras categorias conforme necessário */}
         </select>
 
         <input
@@ -135,8 +134,6 @@ export const ProductsPost = () => {
 
         <button onClick={applyFilters}>Aplicar Filtros</button>
       </div>
-
-      {/* Mapeia os produtos da página atual para exibição */}
       {paginatedProducts.map((product) => (
         <div
           key={product.id}
