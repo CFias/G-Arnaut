@@ -14,7 +14,7 @@ export const ProductDetails = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
-  const [selectedVideo, setSelectedVideo] = useState(null); // Novo estado para o vídeo selecionado
+  const [selectedVideo, setSelectedVideo] = useState(null);
   const [recommendedProducts, setRecommendedProducts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalImages, setModalImages] = useState([]);
@@ -100,6 +100,9 @@ Veja o produto: ${productLink}`;
   const handleImageClick = (image) => {
     setSelectedImage(image);
     setSelectedVideo(null); // Desmarcar o vídeo se uma imagem for selecionada
+    setModalImages([image]); // Adicionar a imagem clicada como conteúdo inicial do modal
+    setModalImageIndex(0);
+    setIsModalOpen(true); // Abrir o modal
   };
 
   const handleVideoClick = (videoLink) => {
@@ -128,6 +131,10 @@ Veja o produto: ${productLink}`;
     if (modalImageIndex > 0) {
       setModalImageIndex(modalImageIndex - 1);
     }
+  };
+
+  const handleDotClick = (index) => {
+    setModalImageIndex(index);
   };
 
   const toggleFavorite = () => {
@@ -168,19 +175,17 @@ Veja o produto: ${productLink}`;
             <div className="image-container">
               <div className="thumbnails-container">
                 {product.images &&
-                  product.images
-                    .slice(0, 7)
-                    .map((image, index) => (
-                      <img
-                        key={index}
-                        src={image}
-                        alt={`Miniatura ${index}`}
-                        className={`thumbnail ${
-                          image === selectedImage ? "active-thumbnail" : ""
-                        }`}
-                        onClick={() => handleImageClick(image)}
-                      />
-                    ))}
+                  product.images.slice(0, 7).map((image, index) => (
+                    <img
+                      key={index}
+                      src={image}
+                      alt={`Miniatura ${index}`}
+                      className={`thumbnail ${
+                        image === selectedImage ? "active-thumbnail" : ""
+                      }`}
+                      onClick={() => setSelectedImage(image)} // Altere para atualizar a imagem selecionada sem abrir o modal
+                    />
+                  ))}
                 {product.videoLink && !selectedVideo && (
                   <img
                     src={`https://img.youtube.com/vi/${extractVideoId(
@@ -197,7 +202,10 @@ Veja o produto: ${productLink}`;
 
               {/* Exibição da imagem principal ou do vídeo selecionado */}
               {selectedImage && (
-                <div className="main-image-container">
+                <div
+                  className="main-image-container"
+                  onClick={() => handleImageClick(selectedImage)} // Agora o modal abrirá somente ao clicar na imagem principal
+                >
                   <img
                     src={selectedImage}
                     alt="Imagem principal do produto"
@@ -327,6 +335,19 @@ Veja o produto: ${productLink}`;
                 <button className="next-button" onClick={handleNextImage}>
                   {">"}
                 </button>
+              </div>
+
+              {/* Dots para navegação */}
+              <div className="modal-dots-container">
+                {modalImages.map((image, index) => (
+                  <div
+                    key={index}
+                    className={`dot ${
+                      index === modalImageIndex ? "active-dot" : ""
+                    }`}
+                    onClick={() => handleDotClick(index)}
+                  ></div>
+                ))}
               </div>
             </div>
           </div>
