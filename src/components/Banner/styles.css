@@ -11,6 +11,7 @@
     background-size: cover;
     border-radius: 15px;
     padding: 4rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .banner-logo {

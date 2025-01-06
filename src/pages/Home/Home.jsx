@@ -73,8 +73,8 @@ export const Home = () => {
       <main className="home-container">
         <section className="section-1">
           {isLoading ? (
-            <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f0f0f0">
-              <Skeleton height={500} borderRadius={15} />
+            <SkeletonTheme baseColor="#e0e0e0" highlightColor="##EDEDED">
+              <Skeleton height={550} width={1550} borderRadius={15} />
             </SkeletonTheme>
           ) : (
             <Banner />
@@ -83,7 +83,7 @@ export const Home = () => {
         <section className="section-card">
           {isLoading ? (
             <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f0f0f0">
-              <Skeleton height={500} borderRadius={15} />
+              <Skeleton height={350} width={1550} borderRadius={15} style={{ marginTop: 40 }} />
             </SkeletonTheme>
           ) : (
             <CardFilter />

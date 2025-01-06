@@ -20,6 +20,14 @@
     margin: 0;
 }
 
+.no-products-message {
+    text-align: center;
+    color: #555;
+    font-size: 18px;
+    margin-top: 20px;
+}
+
+
 
 @media (max-width: 480px) {
     .product-list {

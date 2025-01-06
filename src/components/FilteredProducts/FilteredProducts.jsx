@@ -10,10 +10,6 @@ export const FilteredProducts = () => {
 
   useEffect(() => {
     if (location.state && location.state.filteredProducts) {
-      console.log(
-        "Produtos recebidos no componente:",
-        location.state.filteredProducts
-      );
       setFilteredProducts(location.state.filteredProducts);
     }
   }, [location.state]);
@@ -75,7 +71,12 @@ export const FilteredProducts = () => {
               </div>
             ))
           ) : (
-            <p>Nenhum imóvel encontrado.</p>
+            <div className="no-products-message">
+              <p>
+                Nenhum imóvel encontrado com os filtros selecionados. Por favor,
+                ajuste os critérios e tente novamente.
+              </p>
+            </div>
           )}
         </div>
       </div>

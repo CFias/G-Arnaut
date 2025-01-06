@@ -5,6 +5,7 @@
     align-items: center;
     font-family: var(--main-font);
     margin-top: 2rem;
+    width: 100%;
 }
 
 .filter-content {
