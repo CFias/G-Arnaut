@@ -120,6 +120,7 @@ export const SaleProducts = () => {
                   </div>
                 </div>
                 <div className="product-price-mod">
+                  <h3 className="product-type">R$ {product.price}</h3>
                   <h3 className="product-type">{product.productType}</h3>
                 </div>
               </div>

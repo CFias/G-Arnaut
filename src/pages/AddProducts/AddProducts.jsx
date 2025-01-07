@@ -37,7 +37,6 @@ export const AddProducts = () => {
     }));
   };
 
-  // Gerenciamento de imagens
   const handleImageChange = (e) => {
     const files = e.target.files;
     const previewImages = Array.from(files).map((file) =>
@@ -52,7 +51,6 @@ export const AddProducts = () => {
     return getDownloadURL(snapshot.ref);
   };
 
-  // Envio do formulário
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -116,15 +114,14 @@ export const AddProducts = () => {
   return (
     <div className="add-product-container">
       <div className="add-product-top">
-        <h2 className="form-title">Adicionar Produto</h2>
+        <h2 className="form-title">Adicionar imóvel</h2>
         <img className="product-logo" src={Logo} alt="Logo" />
       </div>
       <form className="form-content" onSubmit={handleSubmit}>
-        {/* Inputs de texto */}
         {[
           { label: "Endereço", name: "address", type: "text" },
-          { label: "Preço", name: "price", type: "number" },
-          { label: "Preço Antigo", name: "oldPrice", type: "number" },
+          { label: "Preço", name: "price", type: "text" },
+          { label: "Preço Antigo", name: "oldPrice", type: "text" },
           { label: "Dimensão (m²)", name: "dimension", type: "number" },
           { label: "Estado", name: "state", type: "text" },
           { label: "Cidade", name: "city", type: "text" },
@@ -150,7 +147,6 @@ export const AddProducts = () => {
           </div>
         ))}
 
-        {/* Select Categoria */}
         <div className="form-group">
           <label className="form-label">Categoria</label>
           <select
@@ -166,10 +162,10 @@ export const AddProducts = () => {
             <option value="Fazenda">Fazenda</option>
             <option value="Sítio">Sítio</option>
             <option value="Terreno">Terreno</option>
+            <option value="Galpão">Galpão</option>
           </select>
         </div>
 
-        {/* Textarea Descrição */}
         <div className="form-group">
           <label className="form-label">Descrição</label>
           <textarea
@@ -181,7 +177,6 @@ export const AddProducts = () => {
           />
         </div>
 
-        {/* Link do Vídeo */}
         <div className="form-group">
           <label className="form-label">Link do Vídeo (YouTube)</label>
           <input
@@ -193,7 +188,6 @@ export const AddProducts = () => {
           />
         </div>
 
-        {/* Select Status */}
         <div className="form-group">
           <label className="form-label">Status do Imóvel</label>
           <select
@@ -211,7 +205,6 @@ export const AddProducts = () => {
           </select>
         </div>
 
-        {/* Select Imóvel para */}
         <div className="form-group">
           <label className="form-label">Imóvel para:</label>
           <select
@@ -226,7 +219,6 @@ export const AddProducts = () => {
           </select>
         </div>
 
-        {/* Select Destaque */}
         <div className="form-group">
           <label className="form-label">Destaque</label>
           <select
@@ -241,7 +233,6 @@ export const AddProducts = () => {
           </select>
         </div>
 
-        {/* Upload de imagens */}
         <div className="form-group">
           <label className="form-label">Imagens do Imóvel</label>
           <div className="image-upload-container">

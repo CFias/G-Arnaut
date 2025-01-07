@@ -10,6 +10,7 @@
 
 .filter-content {
     display: grid;
+    justify-items: center;
     grid-template-columns: repeat(3, 1fr);
     gap: 5px;
     flex-wrap: wrap;
@@ -89,7 +90,11 @@
     padding: 12px;
     background-color: var(--btn-color-one);
     display: flex;
+    position: absolute;
+    bottom: -10%;
+    right: 5%;
     align-items: center;
+    justify-content: space-between;
     gap: 25px;
     color: white;
     border: none;
@@ -101,7 +106,7 @@
 }
 
 .filter-submit-button:hover {
-    background-color: #0056b3;
+    background-color: #012244;
 }
 
 /* Responsividade para telas menores */

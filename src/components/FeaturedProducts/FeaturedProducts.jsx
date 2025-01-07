@@ -1,12 +1,18 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Category, CropFree, DirectionsCar, Hotel } from "@mui/icons-material";
+import {
+  Category,
+  CropFree,
+  DirectionsCar,
+  Hotel,
+  Verified,
+} from "@mui/icons-material";
 import "./styles.css";
+import Profile from "../../assets/image/arnaut-profile.jpg";
 
 export const FeaturedProducts = ({ product }) => {
   const navigate = useNavigate();
 
-  // Redireciona para a página de detalhes do produto
   const handleCardClick = (id) => {
     navigate(`/product/${id}`);
   };
@@ -28,6 +34,13 @@ export const FeaturedProducts = ({ product }) => {
           </div>
         )}
         <div className="product-infos">
+          <div className="first-item">
+            <img className="product-profile" src={Profile} alt="Perfil" />
+            <div className="infos-profile">
+              <p>Gildavi Arnaut</p>
+              <Verified className="icon-profile" fontSize="10" />
+            </div>
+          </div>
           <h3 className="product-city">{product.city}</h3>
           <p className="product-neighborhood">{product.neighborhood}</p>
           <p className="product-address">{product.address}</p>
@@ -50,9 +63,7 @@ export const FeaturedProducts = ({ product }) => {
             </div>
           </div>
           <div className="product-price-mod">
-            <div className="product-oldPrice">
-              <p className="product-price">R$ {product.price}</p>
-            </div>
+            <p className="product-price">R$ {product.price}</p>
             <h3 className="product-type">{product.productType}</h3>
           </div>
         </div>

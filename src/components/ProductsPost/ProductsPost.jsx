@@ -66,7 +66,6 @@ export const ProductsPost = () => {
     fetchProducts();
   }, []); // O array vazio faz com que o efeito só seja executado uma vez, no mount
 
-  // Função para aplicar os filtros
   const applyFilters = () => {
     let filtered = [...products];
 
@@ -92,7 +91,6 @@ export const ProductsPost = () => {
     setCurrentPage(1); // Resetar para a primeira página após aplicar o filtro
   };
 
-  // Cálculo da quantidade de páginas para a paginação
   const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
 
   // Paginação dos produtos
@@ -101,7 +99,6 @@ export const ProductsPost = () => {
     currentPage * productsPerPage
   );
 
-  // Função para lidar com o clique no card do produto (navegar para a página de detalhes)
   const handleCardClick = (id) => {
     navigate(`/product/${id}`);
   };

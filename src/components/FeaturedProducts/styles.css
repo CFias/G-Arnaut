@@ -1,4 +1,4 @@
-.product-list {
+.product-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -9,10 +9,12 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background: var(--card-color);
     border: 1px solid rgb(209, 206, 206);
     padding: 10px;
     border-radius: 15px;
     cursor: pointer;
+    margin: 1.5rem;
 }
 
 .product-images {
@@ -131,8 +133,8 @@
     text-overflow: ellipsis;
     display: flex;
     flex-direction: column;
-    align-items: start;
-    justify-content: end;
+    align-items: center;
+    justify-content: center;
 }
 
 .product-oldPrice s {
@@ -143,7 +145,39 @@
 
 .product-price-mod {
     display: flex;
+    align-items: center;
     justify-content: space-between;
+}
+
+.first-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 5px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.infos-profile {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.infos-profile p {
+    font-size: 12px;
+
+}
+
+.product-profile {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: 1px solid var(--btn-color-one);
+}
+
+.icon-profile {
+    color: var(--btn-color-one);
 }
 
 .product-price {
@@ -164,7 +198,9 @@
     text-transform: capitalize;
     font-weight: 600;
     font-size: 14px;
-    color: var(--btn-color-one);
+    color: var(--text-color-one);
+    padding: 10px;
+    text-align: center;
 }
 
 .pagination-dots {

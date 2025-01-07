@@ -1,4 +1,3 @@
-/* Container do Banner */
 .banner-container {
     width: 80%;
     display: flex;
@@ -19,7 +18,7 @@
 }
 
 .banner-ap {
-    width: 30vw;
+    width: 25vw;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -53,8 +52,6 @@
     margin-top: 1rem;
 }
 
-
-
 .txt-infos {
     display: flex;
     gap: 5px;
@@ -79,19 +76,23 @@
 .banner-item {
     background-position: center;
     background-size: cover;
-    width: 350px;
-    height: 450px;
+    width: 550px;
+    height: 500px;
     opacity: 0;
-    transition: opacity 1s ease;
+    transition: 5s ease;
     border-radius: 10px;
+    position: absolute;
+    right: 13%;
 }
 
 .banner-item.active {
     opacity: 1;
+    z-index: 1;
 }
 
 .banner-item.hidden {
     opacity: 0;
+    z-index: 0;
 }
 
 .txt-banner {
@@ -105,14 +106,6 @@
     font-size: 40px;
     font-weight: 300;
     color: var(--text-color-two);
-}
-
-/* Sobreposição do Banner */
-.banner-item::before {
-    content: "";
-    top: 0;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.6);
 }
 
 .banner-link {
@@ -129,6 +122,7 @@
     border-radius: 30px;
     transition: 100ms;
     font-size: 12px;
+    z-index: 1;
 }
 
 .banner-link:hover {

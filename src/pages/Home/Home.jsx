@@ -10,6 +10,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../services/FirebaseConfig";
 import { FeaturedProducts } from "../../components/FeaturedProducts/FeaturedProducts.jsx";
 import "./styles.css";
+import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
 
 export const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -83,7 +84,12 @@ export const Home = () => {
         <section className="section-card">
           {isLoading ? (
             <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f0f0f0">
-              <Skeleton height={350} width={1550} borderRadius={15} style={{ marginTop: 40 }} />
+              <Skeleton
+                height={350}
+                width={1550}
+                borderRadius={15}
+                style={{ marginTop: 40 }}
+              />
             </SkeletonTheme>
           ) : (
             <CardFilter />
@@ -92,6 +98,7 @@ export const Home = () => {
         <section className="section-2">
           <h3 className="home-h3">
             {isLoading ? <Skeleton width={150} /> : "Imóveis em Destaque"}
+            <p className="home-p">Imóveis que podem te interessar</p>
           </h3>
           {isLoading ? (
             <div className="skeleton-card">
@@ -113,6 +120,7 @@ export const Home = () => {
         <section className="section-3">
           <h3 className="home-h3">
             {isLoading ? <Skeleton width={150} /> : "Imóveis Recentes"}
+            <p className="home-p">Imóveis adicionados recentemente</p>
           </h3>
           {isLoading ? (
             <div className="skeleton-card">
@@ -133,34 +141,34 @@ export const Home = () => {
 
               {/* Renderizar os botões de paginação apenas quando houver múltiplas páginas */}
               {recentProducts.length > itemsPerPage && (
-                <div className="pagination">
-                  {/* Botão de página anterior */}
-                  <button
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
-                  >
-                    &lt;
-                  </button>
-
-                  {/* Botões de página */}
-                  {Array.from({ length: totalPages }, (_, index) => (
+                <>
+                  <div className="pagination">
                     <button
-                      key={index + 1}
-                      className={currentPage === index + 1 ? "active" : ""}
-                      onClick={() => handlePageChange(index + 1)}
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      disabled={currentPage === 1}
                     >
-                      {index + 1}
+                      <KeyboardArrowLeft fontSize="small" />
                     </button>
-                  ))}
 
-                  {/* Botão de página seguinte */}
-                  <button
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                  >
-                    &gt;
-                  </button>
-                </div>
+                    {Array.from({ length: totalPages }, (_, index) => (
+                      <button
+                        key={index + 1}
+                        className={currentPage === index + 1 ? "active" : ""}
+                        onClick={() => handlePageChange(index + 1)}
+                      >
+                        {index + 1}
+                      </button>
+                    ))}
+
+                    <button
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                    >
+                      <KeyboardArrowRight fontSize="small" />
+                    </button>
+                  </div>
+                  <p className="home-p-2">12 itens por página</p>
+                </>
               )}
             </>
           )}
