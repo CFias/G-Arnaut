@@ -27,8 +27,6 @@
     margin-top: 20px;
 }
 
-
-
 @media (max-width: 480px) {
     .product-list {
         grid-template-columns: repeat(2, 1fr);

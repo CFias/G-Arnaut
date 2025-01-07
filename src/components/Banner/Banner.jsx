@@ -54,17 +54,17 @@ export const Banner = () => {
       <div className="banner-ap">
         <img src={Logo} alt="G-Arnaut" className="banner-logo" />
         <h3>
-          Olá, sou G-Arnaut, corretor de imóveis credenciado pelo{" "}
-          <span>CRECI-BA 19.425</span>, e estou aqui para ajudá-lo a realizar o
-          sonho do imóvel ideal.
+          Olá, Sou Gildavi Arnaut, Gestor Imobiliário,{" "}
+          <span>CRECI-Ba 19.425</span>, minha missão é auxiliar na concretização
+          do sonho do imóvel ideal
         </h3>
         <p>
-          Com um atendimento personalizado, foco em suas necessidades e um
-          profundo conhecimento do mercado imobiliário da Bahia, meu compromisso
-          é oferecer as melhores oportunidades, seja para compra, venda ou
-          locação de imóveis. Conte comigo para tornar o processo simples,
-          seguro e transparente, com toda a credibilidade que só um corretor
-          registrado pode garantir.
+          Realizando sonhos desde 2013, entusiasta e estudioso do mercado
+          imobiliário, com vasta experiência, meu compromisso é assessorar-lhe,
+          da melhor forma possível, com atendimento personalizado, focado em
+          suas necessidades, oferecendo sempre as melhores oportunidades para
+          venda, compra e locação, através de um processo seguro e transparente
+          que somente um profissional qualificado pode lhe oferecer.
         </p>
         <div className="icons-banner">
           <WhatsApp fontSize="small" className="banner-icon" />

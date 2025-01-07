@@ -157,15 +157,15 @@ export const CardFilter = () => {
               onChange={(e) => setBedrooms(e.target.value)}
             />
           </div>
+          <button
+            type="button"
+            className="filter-submit-button"
+            onClick={handleFilter} // Chama handleFilter ao clicar no botão
+          >
+            Buscar Imóveis <East fontSize="small" />
+          </button>
         </form>
       </div>
-      <button
-        type="button"
-        className="filter-submit-button"
-        onClick={handleFilter} // Chama handleFilter ao clicar no botão
-      >
-        Buscar Imóveis <East fontSize="small" />
-      </button>
     </div>
   );
 };

@@ -28,11 +28,28 @@ const VideoList = () => {
   };
 
   // Pega os três últimos vídeos
-  const latestVideos = videos.slice(-3);
+  const latestVideos = videos.slice(-1);
 
   return (
     <div className="video-list-container">
-      <h3 className="video-list-heading">Últimos Vídeos</h3>
+      <div className="cta-container">
+        <div className="cta-infos">
+          <h3 className="video-list-heading">
+            Increva-se em nosso canal no YouTube!
+          </h3>
+          <p className="cta-text">Confira imóveis nos mínimos detalhes.</p>
+        </div>
+        <a
+          href="https://www.youtube.com/channel/SEU_CANAL_AQUI"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="btn-cta"
+        >
+          <button className="cta-button">
+            Visite nosso Canal <ChevronRight />
+          </button>
+        </a>
+      </div>
       {latestVideos.length > 0 ? (
         <div className="video-list">
           {latestVideos.map((video, index) => (
@@ -57,21 +74,6 @@ const VideoList = () => {
       ) : (
         <p className="no-videos">Não há vídeos disponíveis.</p>
       )}
-
-      {/* Frase criativa e botão */}
-      <div className="cta-container">
-        <p className="cta-text">
-          Gostou do conteúdo? Assista mais vídeos no nosso canal do YouTube!
-        </p>
-        <a
-          href="https://www.youtube.com/channel/SEU_CANAL_AQUI"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="btn-cta"
-        >
-          <button className="cta-button">Visite nosso Canal <ChevronRight /></button>
-        </a>
-      </div>
     </div>
   );
 };
