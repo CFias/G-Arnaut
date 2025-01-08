@@ -79,7 +79,7 @@
     width: 550px;
     height: 500px;
     opacity: 0;
-    transition: 5s ease;
+    transition: 3s ease;
     border-radius: 10px;
     position: absolute;
     right: 13%;
@@ -236,11 +236,12 @@
 
 @media (max-width: 480px) {
     .banner-container {
-        background: #000;
-        height: 60vh;
         width: 98%;
+        height: 60vh;
         border-radius: 10px;
-        margin: 16px 0;
+        flex-direction: column-reverse;
+        align-items: center;
+        justify-content: space-between;
     }
 
     .txt-banner {
@@ -251,9 +252,18 @@
         font-size: 20px;
     }
 
+    .banner-ap {
+        flex-direction: column;
+        justify-content: start;
+        width: 95%;
+    }
+
     .banner-item {
-        width: 100vw;
-        height: 40vh;
+        width: 350px;
+        height: 200px;
+        left: 5%;
+        display: flex;
+        justify-content: center;
     }
 
     .filter {

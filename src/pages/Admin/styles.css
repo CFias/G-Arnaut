@@ -2,8 +2,68 @@
     display: flex;
     align-items: center;
     justify-content: space-around;
-    font-family: var(--main-font);    
+    font-family: var(--main-font);
 }
+
+/* Global Styles */
+body {
+    background-color: #f4f6f8;
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Header Section */
+.MuiAppBar-root {
+    background-color: #1976d2;
+    /* MUI primary color */
+}
+
+.MuiToolbar-root {
+    padding: 8px 24px;
+}
+
+.MuiInputBase-root {
+    border-radius: 8px;
+    padding: 4px 12px;
+}
+
+.MuiAvatar-root {
+    width: 32px;
+    height: 32px;
+}
+
+/* Admin Content */
+.card-admin {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+}
+
+.card-admin:hover {
+    transform: scale(1.05);
+}
+
+.card-action {
+    background-color: #f0f0f0;
+}
+
+.card-action:hover {
+    transform: scale(1.05);
+}
+
+@media (max-width: 992px) {
+    .admin-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .admin-cards {
+        grid-template-columns: 1fr;
+    }
+}
+
 
 .nav-admin-img {
     width: 100px;
@@ -180,7 +240,7 @@
 @media (max-width: 992px) {
     .admin-cards {
         grid-template-columns: repeat(2, 1fr);
-        
+
     }
 
     .admin-content {
@@ -230,5 +290,5 @@
         display: flex;
         color: var(--text-color-one);
     }
-    
+
 }

@@ -22,7 +22,6 @@ export const ProductsPost = () => {
   const productsPerPage = 12;
   const navigate = useNavigate();
 
-  // Função para buscar os produtos do Firestore
   const fetchProducts = async () => {
     try {
       const querySnapshot = await getDocs(collection(db, "products"));
@@ -53,7 +52,6 @@ export const ProductsPost = () => {
         })
       );
 
-      // Atualiza o estado com os produtos carregados
       setProducts(productsWithImages);
       setFilteredProducts(productsWithImages); // Inicialmente, todos os produtos são filtrados
     } catch (error) {
@@ -61,7 +59,6 @@ export const ProductsPost = () => {
     }
   };
 
-  // Chama a função para buscar os produtos quando o componente for montado
   useEffect(() => {
     fetchProducts();
   }, []); // O array vazio faz com que o efeito só seja executado uma vez, no mount
@@ -93,7 +90,6 @@ export const ProductsPost = () => {
 
   const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
 
-  // Paginação dos produtos
   const paginatedProducts = filteredProducts.slice(
     (currentPage - 1) * productsPerPage,
     currentPage * productsPerPage
@@ -179,7 +175,6 @@ export const ProductsPost = () => {
         </div>
       ))}
 
-      {/* Paginação */}
       {totalPages > 1 && (
         <div className="pagination-dots">
           {Array.from({ length: totalPages }, (_, index) => (

@@ -14,7 +14,7 @@
     padding: 10px;
     border-radius: 15px;
     cursor: pointer;
-    margin: 1.5rem;
+    margin: 1rem;
 }
 
 .product-images {
@@ -100,6 +100,9 @@
 .product-neighborhood {
     font-size: 16px;
     font-weight: 500;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .product-category {
@@ -152,10 +155,10 @@
 .first-item {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: start;
     gap: 5px;
     width: 100%;
-    margin-top: 10px;
+    margin: 10px 0;
 }
 
 .infos-profile {
@@ -165,7 +168,8 @@
 }
 
 .infos-profile p {
-    font-size: 12px;
+    font-size: 14px;
+    font-weight: 600;
 
 }
 
@@ -252,14 +256,9 @@
     border: 1px solid #ccc;
 }
 
-
-/* Estilos responsivos */
-
-/* Para telas menores que 768px */
 @media (max-width: 768px) {
     .product-list {
         grid-template-columns: repeat(2, 1fr);
-        /* 2 cards por linha */
         gap: 10px;
     }
 
@@ -282,7 +281,6 @@
         font-size: 24px;
     }
 
-    /* Limitando a 8 cards por página */
     .product-list {
         max-height: 80vh;
         overflow: hidden;
@@ -293,25 +291,26 @@
     }
 }
 
-/* Para telas menores que 480px */
 @media (max-width: 480px) {
-    .product-list {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
+    .product-container {
+        display: flex;
+        justify-content: center;
+        gap: 0;
     }
 
     .product-card {
-        border-radius: 10px;
+        border-radius: 5px;
+        margin: 0;
     }
 
     .product-img {
-        width: 140px;
+        width: 160px;
         height: 140px;
-        border-radius: 8px;
+        border-radius: 5px;
     }
 
     .product-infos {
-        width: 140px;
+        width: 160px;
         justify-content: start;
     }
 
@@ -337,21 +336,20 @@
         font-weight: 400;
     }
 
-    .product-oldPrice {
-        font-size: 6px;
-    }
-
     .product-price {
-        font-size: 14px;
+        font-size: 18px;
     }
 
     .product-list {
-        max-height: 80vh;
+        height: 80vh;
         overflow: hidden;
+    }
+
+    .infos-profile p {
+        font-size: 10px;
     }
 }
 
-/* Para telas médias (769px a 1024px) */
 @media (min-width: 769px) and (max-width: 1024px) {
     .product-list {
         grid-template-columns: repeat(3, 1fr);
@@ -394,11 +392,9 @@
     }
 }
 
-/* Para telas grandes (1024px a 1240px) */
 @media (min-width: 1024px) and (max-width: 1240px) {
     .product-list {
         grid-template-columns: repeat(3, 1fr);
-        /* 3 cards por linha */
     }
 
     .product-img {
@@ -415,7 +411,6 @@
 @media (min-width: 1240px) {
     .product-list {
         grid-template-columns: repeat(4, 1fr);
-        /* 4 cards por linha */
     }
 
     .product-img {

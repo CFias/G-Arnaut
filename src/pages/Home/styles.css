@@ -153,9 +153,32 @@
 @media (max-width: 480px) {
     .featured-products {
         grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
         overflow: hidden;
-        width: 100%;
+        width: 98%;
+        justify-items: center;
+    }
+
+    .home-h3 {
+        width: 98%;
+        font-size: 18px;
+        margin-top: 1rem;
+    }
+
+    .section-2, .section-1, .section-3 {
+        gap: 0;
+        margin-top: 1rem;
+    }
+
+    .home-p {
+        font-size: 12px;
+    }
+
+    .pagination {
+        margin-top: 1rem;
+    }
+
+    .pagination button {
+        font-size: 10px;
     }
 }
 
