@@ -27,7 +27,6 @@ const VideoList = () => {
     return match ? match[1] : "";
   };
 
-  // Pega os três últimos vídeos
   const latestVideos = videos.slice(-1);
 
   return (

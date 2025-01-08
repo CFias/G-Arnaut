@@ -29,7 +29,6 @@ export const ProductDetails = () => {
 
         if (docSnap.exists()) {
           const productData = { id: docSnap.id, ...docSnap.data() };
-          console.log("Product Data:", productData); // Verifique toda a estrutura do produto
           setProduct(productData);
 
           if (productData.images && productData.images.length > 0) {
@@ -99,22 +98,20 @@ Veja o produto: ${productLink}`;
 
   const handleImageClick = (image) => {
     setSelectedImage(image);
-    setSelectedVideo(null); // Desmarcar o vídeo se uma imagem for selecionada
-    setModalImages([image]); // Adicionar a imagem clicada como conteúdo inicial do modal
+    setSelectedVideo(null);
+    setModalImages(product.images); // Mostrar todas as imagens no modal
     setModalImageIndex(0);
-    setIsModalOpen(true); // Abrir o modal
+    setIsModalOpen(true);
   };
 
   const handleVideoClick = (videoLink) => {
     setSelectedVideo(videoLink);
-    setSelectedImage(null); // Desmarcar a imagem se o vídeo for selecionado
+    setSelectedImage(null);
   };
 
   const handleImageViewMoreClick = () => {
-    if (product.images) {
-      setModalImages(product.images.slice(8));
-      setIsModalOpen(true);
-    }
+    setModalImages(product.images);
+    setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
@@ -151,8 +148,15 @@ Veja o produto: ${productLink}`;
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: "smooth", // Suaviza a rolagem até o topo
+      behavior: "smooth",
     });
+  };
+
+  const handleModalClick = (e) => {
+    // Fechar o modal ao clicar fora da imagem e miniaturas
+    if (e.target === e.currentTarget) {
+      handleCloseModal();
+    }
   };
 
   if (!product) {
@@ -175,17 +179,27 @@ Veja o produto: ${productLink}`;
             <div className="image-container">
               <div className="thumbnails-container">
                 {product.images &&
-                  product.images.slice(0, 7).map((image, index) => (
-                    <img
-                      key={index}
-                      src={image}
-                      alt={`Miniatura ${index}`}
-                      className={`thumbnail ${
-                        image === selectedImage ? "active-thumbnail" : ""
-                      }`}
-                      onClick={() => setSelectedImage(image)} // Altere para atualizar a imagem selecionada sem abrir o modal
-                    />
-                  ))}
+                  product.images
+                    .slice(0, 7)
+                    .map((image, index) => (
+                      <img
+                        key={index}
+                        src={image}
+                        alt={`Miniatura ${index}`}
+                        className={`thumbnail ${
+                          image === selectedImage ? "active-thumbnail" : ""
+                        }`}
+                        onClick={() => setSelectedImage(image)}
+                      />
+                    ))}
+                {product.images.length > 7 && (
+                  <button
+                    className="view-more-button"
+                    onClick={handleImageViewMoreClick}
+                  >
+                    Ver mais
+                  </button>
+                )}
                 {product.videoLink && !selectedVideo && (
                   <img
                     src={`https://img.youtube.com/vi/${extractVideoId(
@@ -199,20 +213,6 @@ Veja o produto: ${productLink}`;
                   />
                 )}
               </div>
-
-              {/* Exibição da imagem principal ou do vídeo selecionado */}
-              {selectedImage && (
-                <div
-                  className="main-image-container"
-                  onClick={() => handleImageClick(selectedImage)} // Agora o modal abrirá somente ao clicar na imagem principal
-                >
-                  <img
-                    src={selectedImage}
-                    alt="Imagem principal do produto"
-                    className="main-image"
-                  />
-                </div>
-              )}
               {selectedVideo && (
                 <div className="main-image-container">
                   <iframe
@@ -227,8 +227,19 @@ Veja o produto: ${productLink}`;
                   />
                 </div>
               )}
+              {selectedImage && (
+                <div
+                  className="main-image-container"
+                  onClick={() => handleImageClick(selectedImage)}
+                >
+                  <img
+                    src={selectedImage}
+                    alt="Imagem principal do produto"
+                    className="main-image"
+                  />
+                </div>
+              )}
             </div>
-
             <div className="info-container">
               <div className="info-content">
                 <div className="detail-data">
@@ -315,37 +326,40 @@ Veja o produto: ${productLink}`;
             </div>
           </div>
         </div>
-
-        {/* Modal para exibir mais imagens */}
         {isModalOpen && (
-          <div className="modal">
-            <div className="modal-content-img">
-              <button className="close-modal" onClick={handleCloseModal}>
-                X
-              </button>
-              <div className="modal-images-container">
-                <button className="prev-button" onClick={handlePreviousImage}>
-                  {"<"}
-                </button>
-                <img
-                  src={modalImages[modalImageIndex]}
-                  alt="Imagem modal"
-                  className="modal-image-product"
-                />
-                <button className="next-button" onClick={handleNextImage}>
-                  {">"}
-                </button>
+          <div className="modal" onClick={handleModalClick}>
+            <div
+              className="modal-content-img"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="close-modal" onClick={handleCloseModal}></div>
+              <img
+                src={modalImages[modalImageIndex]}
+                alt="Imagem principal do modal"
+                className="modal-image-product"
+              />
+              <div className="thumbnails-container">
+                {modalImages.map((image, index) => (
+                  <img
+                    key={index}
+                    src={image}
+                    alt={`Miniatura ${index}`}
+                    className={`thumbnail ${
+                      index === modalImageIndex ? "active-thumbnail" : ""
+                    }`}
+                    onClick={() => setModalImageIndex(index)} // Atualiza a imagem principal ao clicar na miniatura
+                  />
+                ))}
               </div>
-
-              {/* Dots para navegação */}
               <div className="modal-dots-container">
+                {/* Indicadores de navegação das imagens */}
                 {modalImages.map((image, index) => (
                   <div
                     key={index}
                     className={`dot ${
                       index === modalImageIndex ? "active-dot" : ""
                     }`}
-                    onClick={() => handleDotClick(index)}
+                    onClick={() => handleDotClick(index)} // Altera a imagem ao clicar nos pontos
                   ></div>
                 ))}
               </div>

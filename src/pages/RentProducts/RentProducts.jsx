@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; // Importa o hook useNavigate para navegação
 import { db, storage } from "../../services/FirebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
 import { getDownloadURL, ref } from "firebase/storage";
@@ -13,9 +14,10 @@ import "./styles.css";
 import { Navbar } from "../../components/Navbar/Navbar";
 
 export const RentProducts = () => {
-  const [products, setProducts] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const productsPerPage = 12;
+  const [products, setProducts] = useState([]); // Estado para armazenar os produtos
+  const [currentPage, setCurrentPage] = useState(1); // Estado para controlar a página atual
+  const productsPerPage = 12; // Número de produtos por página
+  const navigate = useNavigate(); // Hook para navegação
 
   // Função para buscar os produtos do Firestore
   const fetchProducts = async () => {
@@ -65,25 +67,34 @@ export const RentProducts = () => {
     }
   };
 
+  // Função executada ao montar o componente para buscar os produtos
   useEffect(() => {
     fetchProducts();
-  }, []); // O array vazio faz com que o efeito só seja executado uma vez, no mount
+  }, []);
 
-  // Paginação dos produtos
-  const totalPages = Math.ceil(products.length / productsPerPage);
+  const totalPages = Math.ceil(products.length / productsPerPage); // Calcula o total de páginas
   const paginatedProducts = products.slice(
     (currentPage - 1) * productsPerPage,
     currentPage * productsPerPage
-  );
+  ); // Produtos a serem exibidos na página atual
+
+  // Função para redirecionar ao clicar no card do produto
+  const handleCardClick = (id) => {
+    navigate(`/product/${id}`); // Redireciona para a rota específica do produto
+  };
 
   return (
     <>
       <Navbar />
       <div className="filter-product-container">
-        <h1>Imóveis disponíveis para Aluguel </h1>
+        <h1>Imóveis disponíveis para Aluguel</h1>
         <div className="product-list-filter">
           {paginatedProducts.map((product) => (
-            <div key={product.id} className="product-card">
+            <div
+              key={product.id}
+              className="product-card"
+              onClick={() => handleCardClick(product.id)} // Evento de clique no card
+            >
               {product.images && product.images.length > 0 && (
                 <div className="product-images">
                   <img
@@ -95,7 +106,7 @@ export const RentProducts = () => {
               )}
               <div className="product-infos">
                 <h3 className="product-address">
-                  {product.city} <FavoriteBorder />{" "}
+                  {product.city} <FavoriteBorder />
                 </h3>
                 <p className="product-neighborhood">{product.neighborhood}</p>
                 <p className="product-address">{product.address}</p>

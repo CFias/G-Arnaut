@@ -9,8 +9,8 @@ import {
   AppBar,
   Toolbar,
   InputBase,
-  TextField,
   Button,
+  Box,
 } from "@mui/material";
 import {
   AddCircle,
@@ -22,7 +22,6 @@ import {
 } from "@mui/icons-material";
 import { NavLink } from "react-router-dom";
 import { getProductCount, getPostCount } from "../../services/FirebaseConfig";
-import Logo from "../../assets/image/garnaut-gray-logo.png";
 import { useAuth } from "../../contexts/AuthContext";
 import { Bar } from "react-chartjs-2";
 import {
@@ -48,32 +47,30 @@ ChartJS.register(
 export const Admin = () => {
   const [productCount, setProductCount] = useState(0);
   const [postCount, setPostCount] = useState(0);
-  const [videoUrl, setVideoUrl] = useState("");
-  const [videoId, setVideoId] = useState("");
   const { userName } = useAuth();
 
-  // Função para extrair o ID do vídeo do YouTube a partir da URL
-  const extractVideoId = (url) => {
-    const match = url.match(
-      /(?:https?:\/\/(?:www\.)?youtube\.com(?:\/(?:v|e(?:mbed)?)\/|\S*\?v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
-    );
-    return match ? match[1] : "";
-  };
+  useEffect(() => {
+    const fetchCounts = async () => {
+      const totalProducts = await getProductCount();
+      const totalPosts = await getPostCount();
+      setProductCount(totalProducts);
+      setPostCount(totalPosts);
+    };
+    fetchCounts();
+  }, []);
 
-  // Gráfico de barras - Dados
   const chartData = {
-    labels: ["Produtos", "Posts"], // Labels no eixo X
+    labels: ["Produtos", "Posts"],
     datasets: [
       {
-        label: "Contagem", // Título da barra
-        data: [productCount, postCount], // Dados para as barras
-        backgroundColor: ["#1A528F", "#3175B6"], // Cores para as barras
-        borderRadius: 10, // Arredondar as bordas das barras
+        label: "Contagem",
+        data: [productCount, postCount],
+        backgroundColor: ["#1A528F", "#3175B6"],
+        borderRadius: 10,
       },
     ],
   };
 
-  // Opções do gráfico
   const chartOptions = {
     responsive: true,
     plugins: {
@@ -92,32 +89,18 @@ export const Admin = () => {
     },
   };
 
-  useEffect(() => {
-    const fetchCounts = async () => {
-      const totalProducts = await getProductCount();
-      const totalPosts = await getPostCount();
-      setProductCount(totalProducts);
-      setPostCount(totalPosts);
-    };
-    fetchCounts();
-  }, []);
-
   return (
     <>
-      <AppBar position="static" color="primary" elevation={2}>
+      {/* AppBar - Header Section */}
+      <AppBar position="static" color="primary" elevation={3}>
         <Toolbar>
-          <IconButton
-            edge="start"
-            color="inherit"
-            component={NavLink}
-            to="/"
-          >
+          <IconButton edge="start" color="inherit" component={NavLink} to="/">
             <KeyboardBackspace />
           </IconButton>
           <InputBase
             placeholder="Pesquisar..."
-            startAdornment={<Search style={{ marginRight: 8 }} />}
-            style={{
+            startAdornment={<Search />}
+            sx={{
               backgroundColor: "white",
               borderRadius: 8,
               padding: "4px 12px",
@@ -130,7 +113,7 @@ export const Admin = () => {
             to="/profile"
             style={{ display: "flex", alignItems: "center", marginLeft: 16 }}
           >
-            <Typography variant="body1" style={{ marginRight: 8 }}>
+            <Typography variant="body1" sx={{ marginRight: 1 }}>
               {userName}
             </Typography>
             <Avatar />
@@ -138,132 +121,143 @@ export const Admin = () => {
         </Toolbar>
       </AppBar>
 
-      {/* Main Content */}
-      <Grid container spacing={4} style={{ padding: 24 }}>
-        {/* Metrics Section */}
-        <Grid item xs={12} md={6}>
-          <Card elevation={2}>
-            <CardContent>
-              <Typography variant="h6">Total de Produtos</Typography>
+      <Box sx={{ padding: 4 }}>
+        <Grid container spacing={4}>
+          {/* Metrics Section */}
+          <Grid item xs={12} md={6}>
+            <Card
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                padding: 3,
+              }}
+            >
+              <Typography variant="h6" color="textSecondary">
+                Total de Produtos
+              </Typography>
               <Typography variant="h4" color="primary">
                 {productCount}
               </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Card elevation={2}>
-            <CardContent>
-              <Typography variant="h6">Total de Posts</Typography>
+            </Card>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Card
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                padding: 3,
+              }}
+            >
+              <Typography variant="h6" color="textSecondary">
+                Total de Posts
+              </Typography>
               <Typography variant="h4" color="secondary">
                 {postCount}
               </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        {/* Gráfico de Estatísticas */}
-        <Grid item xs={12}>
-          <Card elevation={2}>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-                Estatísticas de Produtos e Posts
-              </Typography>
-              <Bar data={chartData} options={chartOptions} />
-            </CardContent>
-          </Card>
-        </Grid>
-
-        {/* Nova opção para importar vídeo */}
-        <Grid item xs={12} sm={6} md={4}>
-          <Card
-            elevation={3}
-            component={NavLink}
-            to="/import-video"
-            style={{
-              textDecoration: "none",
-              textAlign: "center",
-              padding: 16,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              cursor: "pointer",
-            }}
-          >
-            <AddCircle color="primary" />
-            <Typography
-              variant="body1"
-              style={{ marginTop: 8, color: "inherit" }}
-            >
-              Importar vídeo do YouTube
-            </Typography>
-          </Card>
-        </Grid>
-
-        {/* Outras opções de administração */}
-        {[
-          {
-            title: "Adicione novos imóveis",
-            icon: <AddCircle color="primary" />,
-            link: "/add-products",
-          },
-          {
-            title: "Adicione um novo post para o blog",
-            icon: <AddCircle color="primary" />,
-            link: "/add-posts",
-          },
-          {
-            title: "Gerenciar produtos",
-            icon: <AdminPanelSettings color="secondary" />,
-            link: "/admin/manage-products",
-          },
-          {
-            title: "Gerenciar publicações",
-            icon: <AdminPanelSettings color="secondary" />,
-            link: "/manage-posts",
-          },
-          {
-            title: "Gerenciar usuários",
-            icon: <ManageAccounts color="success" />,
-            link: "/manage-users",
-          },
-          {
-            title: "Adicionar destaque",
-            icon: <Settings color="action" />,
-            link: "/add-dest",
-          },
-          {
-            title: "Configurações",
-            icon: <Settings color="action" />,
-            link: "/settings",
-          },
-        ].map((item, index) => (
-          <Grid item xs={12} sm={6} md={4} key={index}>
+            </Card>
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
             <Card
               elevation={3}
               component={NavLink}
-              to={item.link}
-              style={{
+              to="/import-video"
+              sx={{
                 textDecoration: "none",
                 textAlign: "center",
-                padding: 16,
+                padding: 3,
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
                 cursor: "pointer",
+                backgroundColor: "rgba(25, 118, 210, 0.1)",
+                borderRadius: 2,
+                transition: "transform 0.2s ease",
+                "&:hover": { transform: "scale(1.05)" },
               }}
             >
-              {item.icon}
+              <AddCircle color="primary" />
               <Typography
                 variant="body1"
-                style={{ marginTop: 8, color: "inherit" }}
+                sx={{ marginTop: 2, color: "inherit" }}
               >
-                {item.title}
+                Importar vídeo do YouTube
               </Typography>
             </Card>
           </Grid>
-        ))}
-      </Grid>
+
+          {/* Admin Action Cards */}
+          <Grid item xs={12} sm={6} md={4}>
+            <CardAction
+              title="Adicionar Produtos"
+              icon={<AddCircle />}
+              link="/add-products"
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <CardAction
+              title="Adicionar Post"
+              icon={<AddCircle />}
+              link="/add-posts"
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <CardAction
+              title="Gerenciar Produtos"
+              icon={<AdminPanelSettings />}
+              link="/admin/manage-products"
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <CardAction
+              title="Gerenciar Publicações"
+              icon={<AdminPanelSettings />}
+              link="/manage-posts"
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <CardAction
+              title="Gerenciar Usuários"
+              icon={<ManageAccounts />}
+              link="/manage-users"
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <CardAction
+              title="Configurações"
+              icon={<Settings />}
+              link="/settings"
+            />
+          </Grid>
+        </Grid>
+      </Box>
     </>
   );
 };
+
+// Admin Card Action Component
+const CardAction = ({ title, icon, link }) => (
+  <Card
+    component={NavLink}
+    to={link}
+    sx={{
+      textDecoration: "none",
+      textAlign: "center",
+      padding: 3,
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      cursor: "pointer",
+      backgroundColor: "#f5f5f5",
+      borderRadius: 2,
+      transition: "transform 0.2s ease",
+      "&:hover": { transform: "scale(1.05)" },
+    }}
+  >
+    {icon}
+    <Typography variant="body1" sx={{ marginTop: 2, color: "inherit" }}>
+      {title}
+    </Typography>
+  </Card>
+);

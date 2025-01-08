@@ -25,9 +25,8 @@
 .video-list {
     display: flex;
     justify-content: center;
-    gap: 20px;
+    align-items: center;
     flex-wrap: wrap;
-
 }
 
 .video-card {
@@ -35,8 +34,6 @@
     display: flex;
     justify-content: center;
     overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border: 1px solid #e0e0e021;
 }
 
 .video-iframe {
@@ -57,40 +54,6 @@
     flex-direction: column;
     justify-content: center;
     align-items: start;
-}
-
-.cta-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
-    align-items: start;
-}
-
-@media (max-width: 768px) {
-    .video-card {
-        flex: 1 0 45%;
-    }
-}
-
-@media (max-width: 480px) {
-    .video-list-container {
-        width: 98%;
-        border-radius: 10px;
-    }
-
-    .video-card {
-        flex: 1 0 100%;
-    }
-}
-
-.cta-container {
-    text-align: center;
-}
-
-.video-list-heading {
-    font-size: 24px;
-    font-weight: 500;
-    margin: 0;
 }
 
 .cta-text {
@@ -130,6 +93,67 @@
 .cta-button:focus {
     outline: none;
 }
+
+.cta-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+}
+
+.video-list-heading {
+    font-size: 28px;
+    text-align: start;
+}
+
+@media (max-width: 768px) {
+    .video-card {
+        flex: 1 0 45%;
+    }
+
+    .cta-text {
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .video-list-container {
+        width: 98%;
+        border-radius: 10px;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .cta-container {
+        justify-content: start;
+        align-items: start;
+    }
+
+    .video-card {
+        flex: 1 0 100%;
+    }
+
+    .cta-button {
+        margin: 0;
+        padding: 5px;
+        font-size: 12px;
+    }
+
+    .cta-infos {
+        margin: 0;
+        justify-content: center;
+    }
+
+    .cta-text {
+        font-size: 10px;
+        margin: 0;
+    }
+
+    .video-list-heading {
+        font-size: 14px;
+    }
+}
+
 
 @media (max-width: 1024px) {
     .video-list-container {

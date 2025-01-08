@@ -139,7 +139,6 @@ export const Home = () => {
                 )}
               </div>
 
-              {/* Renderizar os botões de paginação apenas quando houver múltiplas páginas */}
               {recentProducts.length > itemsPerPage && (
                 <>
                   <div className="pagination">
@@ -167,7 +166,7 @@ export const Home = () => {
                       <KeyboardArrowRight fontSize="small" />
                     </button>
                   </div>
-                  <p className="home-p-2">12 itens por página</p>
+                  <p className="home-p-2">12 imóveis por página</p>
                 </>
               )}
             </>

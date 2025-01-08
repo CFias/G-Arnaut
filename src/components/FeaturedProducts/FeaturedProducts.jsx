@@ -25,7 +25,7 @@ export const FeaturedProducts = ({ product }) => {
         {product.images && product.images.length > 0 && (
           <div className="product-images">
             <p className="product-status">{product.status}</p>
-            <p className="product-ref">Referência: {product.refProduct}</p>
+            <p className="product-ref">Ref: {product.refProduct}</p>
             <img
               className="product-img"
               src={product.images[0]}

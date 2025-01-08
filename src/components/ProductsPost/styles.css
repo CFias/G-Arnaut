@@ -1,3 +1,4 @@
+/*
 .product-list {
     display: flex;
     justify-content: center;
@@ -265,7 +266,7 @@
     }
 
     .product-card {
-        border-radius: 10px;
+        border-radius: 1px;
     }
 
     .product-img {
@@ -391,3 +392,5 @@
         width: 290px;
     }
 }
+
+*/

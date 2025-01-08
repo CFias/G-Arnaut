@@ -186,7 +186,7 @@
         font-weight: 600;
         font-family: var(--main-font);
         width: auto;
-        bottom: -56%;
+        bottom: -5%;
     }
 
     .filter-content {
@@ -200,19 +200,23 @@
         border-radius: 10px;
     }
 
+    .filter-label {
+        font-size: 14px;
+    }
+
     .logo-filter {
         width: 60px;
     }
 
     .filter-title {
-        font-size: 16px;
+        font-size: 14px;
     }
 
     .filter-in {
-        font: 12px;
+        font-size: 10px;
     }
 
     .filter-description {
-        font-size: 12px;
+        font-size: 10px;
     }
 }
