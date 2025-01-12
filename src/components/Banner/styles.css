@@ -1,24 +1,18 @@
 .banner-container {
-    width: 80%;
+    width: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     overflow: hidden;
-    margin-top: 2rem;
-    background-image: url("../../assets/image/g-arnaut-banner.png");
-    background-repeat: no-repeat;
-    background-size: cover;
-    border-radius: 15px;
-    padding: 4rem;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.banner-logo {
-    width: 150px;
 }
 
 .banner-ap {
-    width: 25vw;
+    position: absolute;
+    z-index: 2;
+    color: white;
+    padding: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    width: 45vw;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -44,118 +38,63 @@
 
 .icons-banner {
     display: flex;
+    justify-content: center;
     gap: 10px;
+    margin-top: 10px;
 }
 
 .banner-icon {
     color: var(--text-color-two);
-    margin-top: 1rem;
 }
 
-.txt-infos {
-    display: flex;
-    gap: 5px;
+.carousel {
+    position: relative;
+    width: 100%;
+    height: 500px;
 }
 
-.txt-infos p {
-    font-size: 15px;
-    font-weight: 300;
-}
-
-.banner-infos {
-    display: flex;
-    flex-direction: column;
-    padding-right: 20px;
-    z-index: 4;
-}
-
-.info-card {
-    margin-bottom: 20px;
-}
 
 .banner-item {
-    background-position: center;
+    width: 100%;
+    height: 100%;
     background-size: cover;
-    width: 550px;
-    height: 500px;
-    opacity: 0;
-    transition: 3s ease;
-    border-radius: 10px;
+    background-position: center;
     position: absolute;
-    right: 13%;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
 }
 
 .banner-item.active {
     opacity: 1;
-    z-index: 1;
 }
 
 .banner-item.hidden {
     opacity: 0;
-    z-index: 0;
 }
 
-.txt-banner {
-    font-size: 100px;
-    font-weight: 400;
-    color: var(--text-color-two);
-    margin: 0;
-}
-
-.cap-banner {
-    font-size: 40px;
-    font-weight: 300;
-    color: var(--text-color-two);
-}
-
-.banner-link {
+.banner-item::after {
+    content: '';
     position: absolute;
-    bottom: 5%;
-    right: 5%;
-    background: #fff;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    font-weight: 800;
-    color: #363636;
-    border-radius: 30px;
-    transition: 100ms;
-    font-size: 12px;
-    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #051426;
+    opacity: 0.9;
+    pointer-events: none;
 }
 
-.banner-link:hover {
-    background: #ddd;
+.banner-placeholder {
+    text-align: center;
+    padding: 50px;
+    font-size: 20px;
+    color: gray;
 }
 
 @media (max-width: 1024px) {
     .banner-container {
         padding: 1rem;
         width: 95%;
-    }
-
-    .banner-infos {
-        width: 70%;
-    }
-
-    .txt-banner {
-        font-size: 60px;
-    }
-
-    .cap-banner {
-        font-size: 35px;
-    }
-
-    .banner-item {
-        margin-top: 20px;
-        width: 20vw;
-        height: 30vh;
-    }
-
-    .filter {
-        width: 100vw;
-        top: 35%;
     }
 
     .banner-ap {
@@ -172,6 +111,12 @@
 
     .banner-logo {
         width: 100px;
+    }
+
+    .banner-item {
+        margin-top: 20px;
+        width: 20vw;
+        height: 30vh;
     }
 }
 

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { db } from "../../services/FirebaseConfig";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import "./styles.css";
-import Logo from "../../assets/image/garnaut-white-logo.png";
 import { Instagram, WhatsApp, YouTube } from "@mui/icons-material";
 
 export const Banner = () => {
@@ -52,7 +51,6 @@ export const Banner = () => {
   return (
     <section className="banner-container">
       <div className="banner-ap">
-        <img src={Logo} alt="G-Arnaut" className="banner-logo" />
         <h3>
           Olá, Sou Gildavi Arnaut, Gestor Imobiliário,{" "}
           <span>CRECI-Ba 19.425</span>, minha missão é auxiliar na concretização
@@ -72,22 +70,22 @@ export const Banner = () => {
           <YouTube fontSize="small" className="banner-icon" />
         </div>
       </div>
-      {featuredItems.map((item, index) => (
-        <div
-          key={item.id}
-          className={`banner-item ${
-            index === currentIndex ? "active" : "hidden"
-          }`}
-          style={{
-            backgroundImage:
-              item.images && item.images[0] ? `url(${item.images[0]})` : "none",
-          }}
-        >
-          <div className="banner-overlay">
-            <div className="txt-infos"></div>
-          </div>
-        </div>
-      ))}
+      <div className="carousel">
+        {featuredItems.map((item, index) => (
+          <div
+            key={item.id}
+            className={`banner-item ${
+              index === currentIndex ? "active" : "hidden"
+            }`}
+            style={{
+              backgroundImage:
+                item.images && item.images[0]
+                  ? `url(${item.images[0]})`
+                  : "none",
+            }}
+          ></div>
+        ))}
+      </div>
     </section>
   );
 };
