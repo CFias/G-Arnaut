@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import {
   Phone,
-  Menu,
+  Menu as MenuIcon,
   Login,
   Add,
   LogoutRounded,
@@ -14,20 +14,20 @@ import {
   PhoneAndroidOutlined,
   SettingsOutlined,
   KeyboardArrowRight,
-  LogoutOutlined,
   AdminPanelSettingsOutlined,
 } from "@mui/icons-material";
 import { useAuth } from "../../contexts/AuthContext";
 import { logout } from "../../services/FirebaseConfig"; // Importa a função de logout
 import "./styles.css";
-import { Avatar } from "@mui/material";
+import { Avatar, Menu, MenuItem } from "@mui/material";
+import Logo from "../../assets/image/garnaut-white-logo.png";
 
 export const Navbar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
-  const { currentUser, userName, loading } = useAuth(); // Ajusta para currentUser e userName
+  const [anchorEl, setAnchorEl] = useState(null); // Estado para o menu do avatar
+  const { currentUser, userName, loading } = useAuth();
 
-  // Lista de UIDs permitidos
   const allowedUIDs = [
     "SCQFrh1l7iVOKNbsInx0JGgT9ww1",
     "KduymIJGpXciGs7UlcN3uylAXBZ2",
@@ -50,6 +50,14 @@ export const Navbar = () => {
     }
   };
 
+  const handleOpenMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
+
   useEffect(() => {
     const handleScroll = () => {
       const navList = document.getElementById("navList");
@@ -67,7 +75,6 @@ export const Navbar = () => {
 
   if (loading) return <div className="loading-main">Loading...</div>;
 
-  // Verifica se o usuário atual tem acesso ao ADM
   const hasAdminAccess = allowedUIDs.includes(currentUser?.uid);
 
   return (
@@ -77,40 +84,15 @@ export const Navbar = () => {
           O seu corretor de imóveis em{" "}
           <span className="top-local">Salvador-BA</span>
         </h5>
-        <div className="nav-btn">
-          <h5 className="top-item">
-            <Phone fontSize="10" className="top-icon" /> 71 9190-0974
-          </h5>
-          {!currentUser ? (
-            <>
-              <NavLink to="/login" className="nav-link-login">
-                Login
-              </NavLink>
-              <NavLink to="/register" className="nav-link-register">
-                Criar conta
-              </NavLink>
-            </>
-          ) : (
-            <>
-              <li className="nav-link-name">Bem-vindo, {userName}</li>
-              {hasAdminAccess && (
-                <NavLink to="/admin" className="nav-link-login">
-                  ADM
-                </NavLink>
-              )}
-              <NavLink onClick={handleLogout} className="logout-button">
-                Sair
-                <LogoutRounded fontSize="10" />
-              </NavLink>
-            </>
-          )}
-        </div>
+        <h5 className="top-item">
+          <Phone fontSize="10" className="top-icon" /> 71 9190-0974
+        </h5>
       </div>
 
       <nav className="nav-content">
         <NavLink to="/" className="nav-logo-item">
           <div className="menu-icon">
-            <Menu className="nav-menu-icon" onClick={toggleSidebar} />
+            <MenuIcon className="nav-menu-icon" onClick={toggleSidebar} />
           </div>
         </NavLink>
 
@@ -118,16 +100,74 @@ export const Navbar = () => {
           id="navList"
           className={`nav-unorderd-list ${isSticky ? "sticky" : ""}`}
         >
+          <img src={Logo} alt="G Arnaut" className="nav-logo" />
           <div className="nav-links">
             <NavLink to="/" className="nav-link-item">
               Início
             </NavLink>
-            <NavLink to="/Sale-Products" className="nav-link-item">Venda</NavLink>
+            <NavLink to="/Sale-Products" className="nav-link-item">
+              Venda
+            </NavLink>
             <NavLink to="/Rent-Products" className="nav-link-item">
               Locação
             </NavLink>
-            <NavLink to="/about" className="nav-link-item">O corretor</NavLink>
-            <NavLink to="/contact" className="nav-link-item">Contato</NavLink>
+            <NavLink to="/about" className="nav-link-item">
+              O corretor
+            </NavLink>
+            <NavLink to="/contact" className="nav-link-item">
+              Contato
+            </NavLink>
+          </div>
+          <div className="nav-btn">
+            {!currentUser ? (
+              <>
+                <NavLink to="/login" className="nav-link-login">
+                  Login
+                </NavLink>
+                <NavLink to="/register" className="nav-link-register">
+                  Criar conta
+                </NavLink>
+              </>
+            ) : (
+              <div className="nav-profile">
+                <Avatar
+                  onClick={handleOpenMenu}
+                  sx={{ cursor: "pointer", backgroundColor: "#1976d2" }}
+                >
+                  {userName ? userName.charAt(0).toUpperCase() : "U"}
+                </Avatar>
+                <Menu
+                  anchorEl={anchorEl}
+                  open={Boolean(anchorEl)}
+                  onClose={handleCloseMenu}
+                  PaperProps={{ style: { width: "250px" } }}
+                >
+                  <MenuItem className="nav-welcome" disabled>
+                    Bem-vindo, {userName}
+                  </MenuItem>
+                  {hasAdminAccess && (
+                    <MenuItem>
+                      <NavLink to="/admin" className="nav-link-login">
+                        Administrar
+                      </NavLink>
+                    </MenuItem>
+                  )}
+                  <MenuItem
+                    onClick={() => {
+                      handleCloseMenu();
+                      handleLogout();
+                    }}
+                    className="logout-button"
+                  >
+                    Sair
+                    <LogoutRounded
+                      fontSize="10"
+                      style={{ marginLeft: "8px" }}
+                    />
+                  </MenuItem>
+                </Menu>
+              </div>
+            )}
           </div>
         </ul>
       </nav>
@@ -192,13 +232,21 @@ export const Navbar = () => {
             )}
           </div>
           <div className="side-items-one">
-            <NavLink className="sidebar-link-item" onClick={closeSidebar}>
+            <NavLink
+              to="/"
+              className="sidebar-link-item"
+              onClick={closeSidebar}
+            >
               <div className="icon-name-side">
                 <HomeOutlined fontSize="small" /> Início
               </div>
               <KeyboardArrowRight fontSize="10" />
             </NavLink>
-            <NavLink className="sidebar-link-item" onClick={closeSidebar}>
+            <NavLink
+              to="/Sale-Products"
+              className="sidebar-link-item"
+              onClick={closeSidebar}
+            >
               <div className="icon-name-side">
                 <StoreOutlined fontSize="small" /> Venda
               </div>
@@ -214,7 +262,11 @@ export const Navbar = () => {
               </div>
               <KeyboardArrowRight fontSize="10" />
             </NavLink>
-            <NavLink className="sidebar-link-item" onClick={closeSidebar}>
+            <NavLink
+              to="/favorites"
+              className="sidebar-link-item"
+              onClick={closeSidebar}
+            >
               <div className="icon-name-side">
                 <FavoriteBorderOutlined fontSize="small" /> Favoritos
               </div>
@@ -222,13 +274,21 @@ export const Navbar = () => {
             </NavLink>
           </div>
           <div className="side-items-one">
-            <NavLink className="sidebar-link-item" onClick={closeSidebar}>
+            <NavLink
+              to="/contact"
+              className="sidebar-link-item"
+              onClick={closeSidebar}
+            >
               <div className="icon-name-side">
                 <PhoneAndroidOutlined fontSize="small" /> Contato
               </div>
               <KeyboardArrowRight fontSize="10" />
             </NavLink>
-            <NavLink className="sidebar-link-item" onClick={closeSidebar}>
+            <NavLink
+              to="/about"
+              className="sidebar-link-item"
+              onClick={closeSidebar}
+            >
               <div className="icon-name-side">
                 <InfoOutlined fontSize="small" /> O corretor
               </div>
@@ -236,30 +296,17 @@ export const Navbar = () => {
             </NavLink>
           </div>
           <div className="side-items-one">
-            <NavLink className="sidebar-link-item" onClick={closeSidebar}>
+            <NavLink
+              to="/settings"
+              className="sidebar-link-item"
+              onClick={closeSidebar}
+            >
               <div className="icon-name-side">
                 <SettingsOutlined fontSize="small" /> Configurações
               </div>
               <KeyboardArrowRight fontSize="10" />
             </NavLink>
           </div>
-          {currentUser ? (
-            <div className="side-items-one">
-              <NavLink
-                className="sidebar-link-item-logout"
-                onClick={() => {
-                  closeSidebar();
-                  handleLogout(); // Chama o handleLogout para realizar o logout
-                }}
-              >
-                <div className="icon-name-side">
-                  <LogoutOutlined fontSize="small" />
-                  Sair
-                </div>
-                <KeyboardArrowRight fontSize="10" />
-              </NavLink>
-            </div>
-          ) : null}
         </ul>
       </aside>
     </header>
