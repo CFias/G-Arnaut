@@ -4,7 +4,7 @@
     align-items: center;
     justify-content: center;
     font-family: var(--main-font);
-    background: #EDEDED;
+    background: var(--bg-color);
 }
 
 .breadcrumb-container {
@@ -50,7 +50,7 @@
 }
 
 .category-item {
-    background: var(--card-color);
+    background: rgba(128, 128, 128, 0.13);
     color: var(--text-color-one);
     border-radius: 3px;
     margin: 1px;
@@ -62,7 +62,10 @@
     display: flex;
     flex-direction: column;
     height: 100vh;
-    width: 10vw;
+    width: 13vw;
+    border: 1px solid rgba(128, 128, 128, 0.219);
+    padding: 10px;
+    border-radius: 10px;
 }
 
 .filters-sale {
@@ -151,6 +154,8 @@
     border-top: 1px solid #EDEDED;
     width: 100%;
     cursor: pointer;
+    border: 1px solid rgba(128, 128, 128, 0.274);
+    border-radius: 10px;
 }
 
 .product-img-sale {
