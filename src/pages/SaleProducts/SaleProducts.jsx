@@ -157,7 +157,6 @@ export const SaleProducts = () => {
           <div className="filter-side-sale">
             <p className="filter-title-sale">Venda</p>
             <p className="total-properties">{totalProperties} Resultados</p>
-
             {showCategories && (
               <div className="categories-section">
                 <ul className="category-list">

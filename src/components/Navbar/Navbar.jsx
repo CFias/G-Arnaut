@@ -130,9 +130,10 @@ export const Navbar = () => {
               </>
             ) : (
               <div className="nav-profile">
+                <p>Olá, {userName}</p>
                 <Avatar
                   onClick={handleOpenMenu}
-                  sx={{ cursor: "pointer", backgroundColor: "#1976d2" }}
+                  sx={{ cursor: "pointer", backgroundColor: "#051426" }}
                 >
                   {userName ? userName.charAt(0).toUpperCase() : "U"}
                 </Avatar>

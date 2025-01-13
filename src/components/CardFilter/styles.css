@@ -11,7 +11,8 @@
 .filter-content {
     display: grid;
     justify-items: center;
-    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+    grid-template-columns: repeat(4, 1fr);
     gap: 5px;
     flex-wrap: wrap;
 }
@@ -87,12 +88,9 @@
 }
 
 .filter-submit-button {
-    padding: 12px;
+    padding: 10px;
     background-color: var(--btn-color-one);
     display: flex;
-    position: absolute;
-    bottom: -10%;
-    right: 5%;
     align-items: center;
     justify-content: space-between;
     gap: 25px;

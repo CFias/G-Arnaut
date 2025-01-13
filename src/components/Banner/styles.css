@@ -22,6 +22,7 @@
 .banner-ap h3 {
     color: var(--text-color-two);
     font-size: 24px;
+    text-align: center;
 }
 
 .banner-ap h3 span {
@@ -29,11 +30,12 @@
 }
 
 .banner-ap p {
-    font-size: 14px;
+    font-size: 16px;
     color: var(--text-color-two);
     font-family: var(--main-font);
     margin-top: 1rem;
     font-weight: 300;
+    text-align: center;
 }
 
 .icons-banner {

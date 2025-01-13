@@ -23,9 +23,9 @@
     align-items: start;
     font-size: 38px;
     color: var(--text-color-one);
-    padding: 2rem;
+    padding: 1rem;
     margin-top: 4rem;
-    width: 80%;
+    width: 70%;
     background: var(--bg-color);
 }
 
@@ -59,9 +59,9 @@
 .featured-products {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    width: 80%;
     justify-items: center;
     gap: 1rem;
+    overflow: hidden;
 }
 
 .pagination {
