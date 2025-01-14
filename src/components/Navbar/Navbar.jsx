@@ -208,7 +208,12 @@ export const Navbar = () => {
             ) : (
               <NavLink to="/profile" className="side-user">
                 <div className="user-infos">
-                  <Avatar />
+                  <Avatar
+                    onClick={handleOpenMenu}
+                    sx={{ cursor: "pointer", backgroundColor: "#FFFFFF", color: "#051426" }}
+                  >
+                    {userName ? userName.charAt(0).toUpperCase() : "U"}
+                  </Avatar>
                   <div className="info-user">
                     <li className="nav-link-name-side">{userName}</li>
                     <p className="nav-link-email-side">{currentUser.email}</p>
