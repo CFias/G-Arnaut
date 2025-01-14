@@ -9,7 +9,7 @@
     display: flex;
     justify-content: space-around;
     font-family: var(--main-font);
-    width: 80%;
+    width: 65%;
     border-radius: 15px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }

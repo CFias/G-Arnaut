@@ -23,9 +23,8 @@
     align-items: start;
     font-size: 38px;
     color: var(--text-color-one);
-    padding: 1rem;
-    margin-top: 4rem;
-    width: 70%;
+    margin: 4rem 0;
+    width: 65%;
     background: var(--bg-color);
 }
 
@@ -46,7 +45,6 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: var(--bg-color);
     width: 100%;
 }
 
@@ -60,7 +58,8 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     justify-items: center;
-    gap: 1rem;
+    gap: 2rem;
+    padding: 5px 0;
     overflow: hidden;
 }
 
@@ -69,14 +68,13 @@
     justify-content: center;
     align-items: center;
     gap: 10px;
-    margin-top: 20px;
     background: var(--btn-color-one);
     border-radius: 20px;
     margin-top: 4rem;
 }
 
 .pagination button {
-    color: var(--text-color-two);
+    color: var(--text-color-three);
     border: none;
     padding: 8px 10px;
     display: flex;
@@ -90,11 +88,11 @@
 
 .pagination button:hover {
     background: transparent;
-    color: #bad7f7;
+    color: var(--text-color-three);
 }
 
 .pagination button.active {
-    color: #c6e0fd;
+    color: #f5f37e;
     font-weight: bold;
     background: transparent;
 }
@@ -154,19 +152,18 @@
     .featured-products {
         grid-template-columns: repeat(2, 1fr);
         overflow: hidden;
-        width: 98%;
         justify-items: center;
     }
 
     .home-h3 {
-        width: 98%;
+        width: 95%;
         font-size: 18px;
-        margin-top: 1rem;
+        margin: 0.5rem;
+        margin-top: 2rem;
     }
 
     .section-2, .section-1, .section-3 {
         gap: 0;
-        margin-top: 1rem;
     }
 
     .home-p {

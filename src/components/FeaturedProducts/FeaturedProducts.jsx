@@ -20,7 +20,6 @@ export const FeaturedProducts = ({ product }) => {
   if (!product) return null; // Evita erro se o produto não estiver disponível
 
   return (
-    <div className="product-container">
       <div className="product-card" onClick={() => handleCardClick(product.id)}>
         {product.images && product.images.length > 0 && (
           <div className="product-images">
@@ -68,6 +67,5 @@ export const FeaturedProducts = ({ product }) => {
           </div>
         </div>
       </div>
-    </div>
   );
 };
