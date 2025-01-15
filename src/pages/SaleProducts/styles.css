@@ -218,6 +218,57 @@
     font-weight: 300;
 }
 
+.filter-side-sale-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.card-sale {
+    background-image: url("../../assets/image/g-arnaut-banner.png");
+    background-position: center;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    width: 13vw;
+}
+
+.sale-infos-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-sale h2 {
+    color: var(--text-color-two);
+    font-weight: 500;
+    padding: 10px;
+    margin: 0;
+}
+
+.card-sale p {
+    color: var(--text-color-two);
+    font-size: 12px;
+    padding: 10px;
+    margin: 0;
+}
+
+.card-sale button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--card-color);
+    color: var(--btn-color-one);
+    border-radius: 8px;
+    font-size: 14px;
+    transition: 250ms;
+}
+
+.card-sale button:hover {
+    background-color: #eeeeee;
+}
+
 @media (max-width: 480px) {
   .filter-product-content-sale {
     padding: 0;

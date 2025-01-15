@@ -1,4 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap');
+@import "slick-carousel/slick/slick.css";
+@import "slick-carousel/slick/slick-theme.css";
+
 
 * {
   margin: 0;
@@ -32,7 +35,8 @@
   left: 0;
   width: 100%;
   height: 100vh;
-  background-color: rgba(255, 255, 255, 0.8); /* Um fundo levemente transparente */
+  background-color: rgba(255, 255, 255, 0.8);
+  /* Um fundo levemente transparente */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -49,8 +53,10 @@
 
 /* Logo dentro do loading */
 .loading-logo {
-  width: 150px; /* Tamanho do logo */
-  animation: spin 1s linear infinite; /* Animação de rotação */
+  width: 150px;
+  /* Tamanho do logo */
+  animation: spin 1s linear infinite;
+  /* Animação de rotação */
 }
 
 /* Definir a animação de rotação */
@@ -58,6 +64,7 @@
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }

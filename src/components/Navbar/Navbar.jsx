@@ -95,7 +95,6 @@ export const Navbar = () => {
             <MenuIcon className="nav-menu-icon" onClick={toggleSidebar} />
           </div>
         </NavLink>
-
         <ul
           id="navList"
           className={`nav-unorderd-list ${isSticky ? "sticky" : ""}`}
@@ -210,7 +209,11 @@ export const Navbar = () => {
                 <div className="user-infos">
                   <Avatar
                     onClick={handleOpenMenu}
-                    sx={{ cursor: "pointer", backgroundColor: "#FFFFFF", color: "#051426" }}
+                    sx={{
+                      cursor: "pointer",
+                      backgroundColor: "#FFFFFF",
+                      color: "#051426",
+                    }}
                   >
                     {userName ? userName.charAt(0).toUpperCase() : "U"}
                   </Avatar>
