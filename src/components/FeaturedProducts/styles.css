@@ -53,8 +53,8 @@
 }
 
 .product-img {
-    width: 250px;
-    height: 250px;
+    width: 280px !important; 
+    height: 280px !important;
     border-radius: 10px;
     filter: brightness(0.7);
     transition: filter 0.3s ease-in-out;
@@ -71,6 +71,7 @@
     font-family: var(--main-font);
     color: var(--text-color-one);
     padding: 5px;
+    width: 280px !important;
 }
 
 .infos-details {

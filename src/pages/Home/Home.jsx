@@ -74,8 +74,8 @@ export const Home = () => {
       <main className="home-container">
         <section className="section-1">
           {isLoading ? (
-            <SkeletonTheme baseColor="#e0e0e0" highlightColor="##EDEDED">
-              <Skeleton height={550} width={1550} borderRadius={15} />
+            <SkeletonTheme baseColor="#eeeeee" highlightColor="#ffffff">
+              <Skeleton height={500} width={2550} />
             </SkeletonTheme>
           ) : (
             <Banner />
@@ -83,10 +83,10 @@ export const Home = () => {
         </section>
         <section className="section-card">
           {isLoading ? (
-            <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f0f0f0">
+            <SkeletonTheme baseColor="#eeeeee" highlightColor="#fffff">
               <Skeleton
-                height={350}
-                width={1550}
+                height={300}
+                width={1250}
                 borderRadius={15}
                 style={{ marginTop: 40 }}
               />
@@ -97,12 +97,16 @@ export const Home = () => {
         </section>
         <section className="section-2">
           <h3 className="home-h3">
-            {isLoading ? <Skeleton width={150} /> : "Imóveis em Destaque"}
-            <p className="home-p">Imóveis que podem te interessar</p>
+            {isLoading ? <Skeleton width={370} /> : "Imóveis em Destaque"}
+            {isLoading ? (
+              <Skeleton width={250} height={30} />
+            ) : (
+              <p className="home-p">Imóveis que podem te interessar</p>
+            )}
           </h3>
           {isLoading ? (
             <div className="skeleton-card">
-              <Skeleton height={200} />
+              <Skeleton height={200} width={150} />
               <Skeleton height={200} style={{ marginTop: 10 }} />
             </div>
           ) : (

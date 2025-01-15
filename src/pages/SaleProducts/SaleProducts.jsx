@@ -154,66 +154,81 @@ export const SaleProducts = () => {
           </div>
         </div>
         <div className="filter-product-content-sale">
-          <div className="filter-side-sale">
-            <p className="filter-title-sale">Venda</p>
-            <p className="total-properties">{totalProperties} Resultados</p>
-            {showCategories && (
-              <div className="categories-section">
-                <ul className="category-list">
-                  {categories.map((category) => (
-                    <li key={category} className="category-item">
-                      {category}{" "}
-                      <span className="category-count">
-                        ({categoryCounts[category]})
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-                <div className="filters-sale">
-                  <h4>Status</h4>
-                  <ul>
-                    {Object.entries(statusCounts).map(([status, count]) => (
-                      <li key={status}>
-                        {status} ({count})
+          <div className="filter-side-sale-container">
+            <div className="filter-side-sale">
+              <p className="filter-title-sale">Venda</p>
+              <p className="total-properties">{totalProperties} Resultados</p>
+              {showCategories && (
+                <div className="categories-section">
+                  <ul className="category-list">
+                    {categories.map((category) => (
+                      <li key={category} className="category-item">
+                        {category}{" "}
+                        <span className="category-count">
+                          ({categoryCounts[category]})
+                        </span>
                       </li>
                     ))}
                   </ul>
+                  <div className="filters-sale">
+                    <h4>Status</h4>
+                    <ul>
+                      {Object.entries(statusCounts).map(([status, count]) => (
+                        <li key={status}>
+                          {status} ({count})
+                        </li>
+                      ))}
+                    </ul>
 
-                  <h4>Cidades</h4>
-                  <ul>
-                    {Object.entries(cityCounts).map(([city, count]) => (
-                      <li key={city}>
-                        {city} ({count})
-                      </li>
-                    ))}
-                  </ul>
+                    <h4>Cidades</h4>
+                    <ul>
+                      {Object.entries(cityCounts).map(([city, count]) => (
+                        <li key={city}>
+                          {city} ({count})
+                        </li>
+                      ))}
+                    </ul>
 
-                  <h4>Dimensão (m²)</h4>
-                  <ul>
-                    {Object.entries(dimensionCounts).map(([range, count]) => (
-                      <li key={range}>
-                        {range}m² ({count})
-                      </li>
-                    ))}
-                  </ul>
+                    <h4>Dimensão (m²)</h4>
+                    <ul>
+                      {Object.entries(dimensionCounts).map(([range, count]) => (
+                        <li key={range}>
+                          {range}m² ({count})
+                        </li>
+                      ))}
+                    </ul>
 
-                  <h4>Vagas de Estacionamento</h4>
-                  <ul>
-                    {Object.entries(parkingCounts).map(([spaces, count]) => (
-                      <li key={spaces}>
-                        {spaces} vagas ({count})
-                      </li>
-                    ))}
-                  </ul>
+                    <h4>Vagas de Estacionamento</h4>
+                    <ul>
+                      {Object.entries(parkingCounts).map(([spaces, count]) => (
+                        <li key={spaces}>
+                          {spaces} vagas ({count})
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {!showCategories && (
-              <div className="show-categories-button">
-                <button onClick={toggleCategories}>Mostrar Categorias</button>
+              {!showCategories && (
+                <div className="show-categories-button">
+                  <button onClick={toggleCategories}>Mostrar Categorias</button>
+                </div>
+              )}
+            </div>
+            <div className="card-sale">
+              <div className="sale-infos-card">
+                <h2>Inscreva-se no canal</h2>
+                <p>Acompanhe os detalhes de cada imóvel</p>
               </div>
-            )}
+              <button>Acessar canal</button>
+            </div>
+            <div className="card-sale">
+              <div className="sale-infos-card">
+                <h2>Deseja um atendimento personalizado ?</h2>
+              </div>
+              <button>Atendimento personalizado</button>
+            </div>
           </div>
 
           <div className="product-list-filter">
