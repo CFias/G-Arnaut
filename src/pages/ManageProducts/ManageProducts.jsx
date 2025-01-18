@@ -146,7 +146,6 @@ export const ManageProducts = () => {
     e.preventDefault();
     if (draggedImageIndex === index) return;
 
-    // Adiciona a classe "over" quando uma imagem está sendo arrastada sobre outra
     const imageElements =
       imagePreviewRef.current.querySelectorAll(".image-item");
     imageElements.forEach((image, i) => {
@@ -167,14 +166,12 @@ export const ManageProducts = () => {
     updatedImages[draggedImageIndex] = updatedImages[index];
     updatedImages[index] = draggedImage;
 
-    // Define a nova imagem principal (primeira da lista)
     setEditProduct((prev) => ({
       ...prev,
       images: updatedImages,
       mainImage: updatedImages[0], // A primeira imagem agora é a principal
     }));
 
-    // Remove a classe "over" ao soltar
     const imageElements =
       imagePreviewRef.current.querySelectorAll(".image-item");
     imageElements.forEach((image) => image.classList.remove("over"));
@@ -268,7 +265,13 @@ export const ManageProducts = () => {
       {isEditing && (
         <div className="modal">
           <div className="modal-content">
-            <IconButton className="access-back" edge="start" color="inherit" component={NavLink} to="/">
+            <IconButton
+              className="access-back"
+              edge="start"
+              color="inherit"
+              component={NavLink}
+              to="/"
+            >
               <KeyboardBackspace />
             </IconButton>
             <h3>Editar Produto</h3>
@@ -287,8 +290,6 @@ export const ManageProducts = () => {
                           ? "Categoria"
                           : key === "status"
                           ? "Status"
-                          : key === "oldPrice"
-                          ? "Preço antigo"
                           : key === "description"
                           ? "Descrição"
                           : key === "neighborhood"
@@ -350,7 +351,6 @@ export const ManageProducts = () => {
                   />
                 </div>
               </div>
-              {/* Exibir imagens do produto no modal */}
               <div className="form-group">
                 <label>Imagens</label>
                 <div
