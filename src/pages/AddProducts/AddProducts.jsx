@@ -6,11 +6,9 @@ import Logo from "../../assets/image/garnaut-gray-logo.png";
 import "./styles.css";
 
 export const AddProducts = () => {
-  // Estados principais
   const [formData, setFormData] = useState({
     address: "",
     price: "",
-    oldPrice: "",
     status: "",
     dimension: "",
     state: "",
@@ -28,7 +26,6 @@ export const AddProducts = () => {
   const [images, setImages] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
 
-  // Atualização de campos
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prevData) => ({
@@ -65,14 +62,11 @@ export const AddProducts = () => {
       const imageFiles = Array.from(e.target.images.files);
       const imageUrls = await Promise.all(imageFiles.map(uploadImage));
 
-      // Verificar usuário atual
       const currentUser = auth.currentUser;
       if (!currentUser) {
         alert("Você precisa estar logado para adicionar produtos.");
         return;
       }
-
-      // Adicionar ao Firestore
       await addDoc(collection(db, "products"), {
         ...formData,
         images: imageUrls,
@@ -87,7 +81,6 @@ export const AddProducts = () => {
       setFormData({
         address: "",
         price: "",
-        oldPrice: "",
         status: "",
         dimension: "",
         state: "",
@@ -121,7 +114,6 @@ export const AddProducts = () => {
         {[
           { label: "Endereço", name: "address", type: "text" },
           { label: "Preço", name: "price", type: "text" },
-          { label: "Preço Antigo", name: "oldPrice", type: "text" },
           { label: "Dimensão (m²)", name: "dimension", type: "number" },
           { label: "Estado", name: "state", type: "text" },
           { label: "Cidade", name: "city", type: "text" },
@@ -260,8 +252,6 @@ export const AddProducts = () => {
             </div>
           </div>
         </div>
-
-        {/* Botão de envio */}
         <button type="submit" className="form-button" disabled={isUploading}>
           {isUploading ? "Carregando..." : "Adicionar Produto"}
         </button>

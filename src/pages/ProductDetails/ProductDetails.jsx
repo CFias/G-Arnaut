@@ -22,42 +22,25 @@ export const ProductDetails = () => {
   const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
-    const fetchProductDetails = async () => {
-      try {
-        const docRef = doc(db, "products", id);
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-          const productData = { id: docSnap.id, ...docSnap.data() };
-          setProduct(productData);
-
-          if (productData.images && productData.images.length > 0) {
-            setSelectedImage(productData.images[0]);
-          }
-        } else {
-          console.error("Produto não encontrado!");
-        }
-      } catch (error) {
-        console.error("Erro ao buscar os detalhes do produto:", error);
-      }
-    };
-
     const fetchRecommendedProducts = async () => {
       try {
-        const querySnapshot = await getDocs(collection(db, "products"));
-        const products = [];
+        const productsRef = collection(db, "products");
+        const q = getDocs(productsRef); // Aqui você pode adicionar filtros, como buscar produtos da mesma categoria ou cidade
+        const querySnapshot = await q;
+        const recommendedProductsData = [];
+
         querySnapshot.forEach((doc) => {
-          products.push({ id: doc.id, ...doc.data() });
+          recommendedProductsData.push({ id: doc.id, ...doc.data() });
         });
-        setRecommendedProducts(products);
+
+        setRecommendedProducts(recommendedProductsData);
       } catch (error) {
         console.error("Erro ao buscar produtos recomendados:", error);
       }
     };
 
-    fetchProductDetails();
     fetchRecommendedProducts();
-  }, [id]);
+  }, []);
 
   const formatDate = (timestamp) => {
     if (timestamp) {
@@ -139,6 +122,7 @@ Veja o produto: ${productLink}`;
   };
 
   const extractVideoId = (url) => {
+    if (!url) return "";
     const match = url.match(
       /(?:https?:\/\/(?:www\.)?youtube\.com(?:\/(?:v|e(?:mbed)?)\/|\S*\?v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
     );
@@ -153,7 +137,6 @@ Veja o produto: ${productLink}`;
   };
 
   const handleModalClick = (e) => {
-    // Fechar o modal ao clicar fora da imagem e miniaturas
     if (e.target === e.currentTarget) {
       handleCloseModal();
     }
@@ -174,47 +157,42 @@ Veja o produto: ${productLink}`;
     <>
       <Navbar />
       <div className="product-details-container">
-        <div className="product-details">
-          <div className="product-ref-one">
-            <div className="image-container">
-              <div className="thumbnails-container">
-                {product.images &&
-                  product.images
-                    .slice(0, 7)
-                    .map((image, index) => (
-                      <img
-                        key={index}
-                        src={image}
-                        alt={`Miniatura ${index}`}
-                        className={`thumbnail ${
-                          image === selectedImage ? "active-thumbnail" : ""
-                        }`}
-                        onClick={() => setSelectedImage(image)}
-                      />
-                    ))}
-                {product.images.length > 7 && (
-                  <button
-                    className="view-more-button"
-                    onClick={handleImageViewMoreClick}
-                  >
-                    Ver mais
-                  </button>
-                )}
-                {product.videoLink && !selectedVideo && (
-                  <img
-                    src={`https://img.youtube.com/vi/${extractVideoId(
-                      product.videoLink
-                    )}/0.jpg`}
-                    alt="Thumbnail do vídeo"
-                    className={`thumbnail ${
-                      selectedVideo ? "active-thumbnail" : ""
-                    }`}
-                    onClick={() => handleVideoClick(product.videoLink)}
-                  />
-                )}
+        <div className="product-details-content">
+          <div className="image-container">
+            <div className="thumbnails-container">
+              {product.images &&
+                product.images
+                  .slice(0, 6)
+                  .map((image, index) => (
+                    <img
+                      key={index}
+                      src={image}
+                      alt={`Miniatura ${index}`}
+                      className={`thumbnail ${
+                        image === selectedImage ? "active-thumbnail" : ""
+                      }`}
+                      onClick={() => setSelectedImage(image)}
+                    />
+                  ))}
+            </div>
+            {selectedImage && (
+              <div
+                className="main-image-container"
+                onClick={() => handleImageClick(selectedImage)}
+              >
+                <img
+                  src={selectedImage}
+                  alt="Imagem principal do produto"
+                  className="main-image"
+                />
               </div>
-              {selectedVideo && (
-                <div className="main-image-container">
+            )}
+          </div>
+          <div className="videos-list-container">
+            <div className="videos-list-content">
+              <h3>Vídeo do imóvel</h3>
+              {selectedVideo ? (
+                <div className="video-imovel">
                   <iframe
                     src={`https://www.youtube.com/embed/${extractVideoId(
                       selectedVideo
@@ -223,64 +201,12 @@ Veja o produto: ${productLink}`;
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
-                    className="main-image"
+                    className="main-video"
                   />
                 </div>
+              ) : (
+                <p>Vídeo não disponível para este imóvel.</p>
               )}
-              {selectedImage && (
-                <div
-                  className="main-image-container"
-                  onClick={() => handleImageClick(selectedImage)}
-                >
-                  <img
-                    src={selectedImage}
-                    alt="Imagem principal do produto"
-                    className="main-image"
-                  />
-                </div>
-              )}
-            </div>
-            <div className="info-container">
-              <div className="info-content">
-                <div className="detail-data">
-                  <span>
-                    <CalendarToday fontSize="small" />{" "}
-                    {formatDate(product.createdAt)}
-                  </span>
-                  <span onClick={toggleFavorite}>
-                    {isFavorite ? (
-                      <Favorite fontSize="small" style={{ color: "red" }} />
-                    ) : (
-                      <FavoriteBorder fontSize="small" />
-                    )}
-                  </span>
-                </div>
-                <div className="detail-status">{product.status}</div>
-                <div className="detail-category">{product.category}</div>
-                <h1 className="detail-h1">
-                  {product.city} {product.state}
-                </h1>
-                <div className="detail-address">{product.address}</div>
-                <div className="detail-neighborhood">
-                  {product.neighborhood}
-                </div>
-                <div className="detail-dimension">
-                  Dimensão: {product.dimension}m²
-                </div>
-                <div className="detail-bedrooms">
-                  Dormitórios: {product.bedrooms}
-                </div>
-                <div className="detail-parkingSpaces">
-                  Vagas para carros: {product.parkingSpaces}
-                </div>
-                <div className="detail-productType">
-                  Imóvel para: {product.productType}
-                </div>
-                <div className="detail-price">R$ {product.price}</div>
-              </div>
-              <button className="whatsapp-button" onClick={handleWhatsappClick}>
-                <WhatsApp /> Falar no WhatsApp
-              </button>
             </div>
           </div>
           <div className="recommended-products-container">
@@ -295,7 +221,7 @@ Veja o produto: ${productLink}`;
                     className="recommended-link"
                     to={`/product/${recommendedProduct.id}`}
                     onClick={() => {
-                      scrollToTop(); // Efeito suave ao clicar no produto recomendado
+                      scrollToTop();
                     }}
                   >
                     <img
@@ -326,6 +252,38 @@ Veja o produto: ${productLink}`;
             </div>
           </div>
         </div>
+        <div className="product-details">
+          <div className="product-ref-one">
+            <div className="info-container">
+              <div className="info-content">
+                <div className="detail-data">
+                  <span>
+                    <CalendarToday fontSize="small" />{" "}
+                    {formatDate(product.createdAt)}
+                  </span>
+                  <span onClick={toggleFavorite}>
+                    {isFavorite ? (
+                      <Favorite fontSize="small" style={{ color: "red" }} />
+                    ) : (
+                      <FavoriteBorder fontSize="small" />
+                    )}
+                  </span>
+                </div>
+                <div className="detail-status">{product.status}</div>
+                <div className="detail-category">{product.category}</div>
+                <h1 className="detail-h1">
+                  {product.city} {product.state}
+                </h1>
+                <div className="detail-address">{product.address}</div>
+                <div className="detail-price">R$ {product.price}</div>
+                <div className="detail-dimension">{product.dimension} m²</div>
+                <div className="detail-description">
+                  <p>{product.description}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         {isModalOpen && (
           <div className="modal" onClick={handleModalClick}>
             <div
@@ -333,35 +291,21 @@ Veja o produto: ${productLink}`;
               onClick={(e) => e.stopPropagation()}
             >
               <div className="close-modal" onClick={handleCloseModal}></div>
-              <img
-                src={modalImages[modalImageIndex]}
-                alt="Imagem principal do modal"
-                className="modal-image-product"
-              />
-              <div className="thumbnails-container">
-                {modalImages.map((image, index) => (
-                  <img
-                    key={index}
-                    src={image}
-                    alt={`Miniatura ${index}`}
-                    className={`thumbnail ${
-                      index === modalImageIndex ? "active-thumbnail" : ""
-                    }`}
-                    onClick={() => setModalImageIndex(index)} // Atualiza a imagem principal ao clicar na miniatura
-                  />
-                ))}
+              <div className="modal-navigation">
+                <button className="prev-button" onClick={handlePreviousImage}>
+                  &#60;
+                </button>
+                <img
+                  src={modalImages[modalImageIndex]}
+                  alt="Imagem principal do modal"
+                  className="modal-image-product"
+                />
+                <button className="next-button" onClick={handleNextImage}>
+                  &#62;
+                </button>
               </div>
-              <div className="modal-dots-container">
-                {/* Indicadores de navegação das imagens */}
-                {modalImages.map((image, index) => (
-                  <div
-                    key={index}
-                    className={`dot ${
-                      index === modalImageIndex ? "active-dot" : ""
-                    }`}
-                    onClick={() => handleDotClick(index)} // Altera a imagem ao clicar nos pontos
-                  ></div>
-                ))}
+              <div className="image-counter">
+                {modalImageIndex + 1}/{modalImages.length}
               </div>
             </div>
           </div>

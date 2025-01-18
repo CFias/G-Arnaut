@@ -186,8 +186,6 @@ export const Admin = () => {
               </Typography>
             </Card>
           </Grid>
-
-          {/* Admin Action Cards */}
           <Grid item xs={12} sm={6} md={4}>
             <CardAction
               title="Adicionar Produtos"
