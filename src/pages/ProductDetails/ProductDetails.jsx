@@ -21,6 +21,29 @@ export const ProductDetails = () => {
   const [modalImageIndex, setModalImageIndex] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
 
+  // Busca o produto específico baseado no id
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const productRef = doc(db, "products", id); // Usando o id para buscar o produto
+        const productDoc = await getDoc(productRef);
+
+        if (productDoc.exists()) {
+          const productData = { id: productDoc.id, ...productDoc.data() };
+          setProduct(productData);
+          setSelectedImage(productData.images[0]); // Define a primeira imagem como a imagem principal
+        } else {
+          console.log("Produto não encontrado");
+        }
+      } catch (error) {
+        console.error("Erro ao buscar produto:", error);
+      }
+    };
+
+    fetchProduct();
+  }, [id]);
+
+  // Busca produtos recomendados
   useEffect(() => {
     const fetchRecommendedProducts = async () => {
       try {
@@ -87,16 +110,6 @@ Veja o produto: ${productLink}`;
     setIsModalOpen(true);
   };
 
-  const handleVideoClick = (videoLink) => {
-    setSelectedVideo(videoLink);
-    setSelectedImage(null);
-  };
-
-  const handleImageViewMoreClick = () => {
-    setModalImages(product.images);
-    setIsModalOpen(true);
-  };
-
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
@@ -111,10 +124,6 @@ Veja o produto: ${productLink}`;
     if (modalImageIndex > 0) {
       setModalImageIndex(modalImageIndex - 1);
     }
-  };
-
-  const handleDotClick = (index) => {
-    setModalImageIndex(index);
   };
 
   const toggleFavorite = () => {
