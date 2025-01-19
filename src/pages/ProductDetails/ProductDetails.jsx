@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { doc, getDoc, collection, getDocs } from "firebase/firestore";
 import { db } from "../../services/FirebaseConfig";
-import { CalendarToday, WhatsApp } from "@mui/icons-material";
+import { CalendarToday, East, West, WhatsApp } from "@mui/icons-material";
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import { Navbar } from "../../components/Navbar/Navbar";
 import Logo from "../../assets/image/garnaut-white-logo.png";
@@ -240,7 +240,9 @@ Veja o produto: ${productLink}`;
                     />
                     <div className="recommended-infos">
                       <div className="recommended-product-local">
-                        {recommendedProduct.city}-{recommendedProduct.state}
+                        <p>
+                          {recommendedProduct.city}-{recommendedProduct.state}
+                        </p>
                       </div>
                       <div className="recommended-product-address">
                         {recommendedProduct.address}
@@ -302,7 +304,7 @@ Veja o produto: ${productLink}`;
               <div className="close-modal" onClick={handleCloseModal}></div>
               <div className="modal-navigation">
                 <button className="prev-button" onClick={handlePreviousImage}>
-                  &#60;
+                  <West />
                 </button>
                 <img
                   src={modalImages[modalImageIndex]}
@@ -310,7 +312,7 @@ Veja o produto: ${productLink}`;
                   className="modal-image-product"
                 />
                 <button className="next-button" onClick={handleNextImage}>
-                  &#62;
+                  <East />
                 </button>
               </div>
               <div className="image-counter">

@@ -1,0 +1,136 @@
+.footer-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    background: #F7F7F7;
+    font-family: var(--main-font);
+    margin-top: 2rem;
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 80%;
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.144);
+}
+
+.footer-content h3 {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text-color-one);
+}
+
+.footer-infos {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+    /* Permite quebra de linha em telas menores */
+    gap: 1rem;
+    /* Espaçamento entre os elementos */
+}
+
+.info-footer {
+    display: flex;
+    justify-content: start;
+    flex-direction: column;
+    flex: 1 1 200px;
+    /* Ajusta o tamanho mínimo e permite a flexibilidade */
+    max-width: 300px;
+    /* Define um tamanho máximo */
+}
+
+.info-footer h4 {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-color-one);
+}
+
+.link-footer {
+    text-decoration: none;
+    font-size: 12px;
+    color: gray;
+}
+
+.footer-content-two {
+    display: flex;
+    width: 80%;
+    justify-content: space-between;
+    padding: 20px 0;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.footer-power-by {
+    text-align: center;
+    padding: 10px;
+    background-color: #f1f1f1;
+    font-size: 12px;
+    color: #555;
+    width: 100%;
+}
+
+.footer-power-by a {
+    text-decoration: none;
+    color: #007bff;
+    font-size: 12px;
+    transition: 250ms;
+}
+
+.footer-power-by a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .footer-content {
+        width: 90%;
+        padding: 10px 0;
+    }
+
+    .footer-content h3 {
+        font-size: 20px;
+    }
+
+    .footer-infos {
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .info-footer {
+        width: 100%;
+        max-width: none;
+        max-height: 80px;
+        text-align: start;
+        margin: 0;
+    }
+
+    .footer-content-two {
+        width: 90%;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footer-power-by {
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-content h3 {
+        font-size: 18px;
+    }
+
+    .footer-infos {
+        gap: 0.5rem;
+    }
+
+    .footer-power-by {
+        font-size: 10px;
+        width: 100%;
+        background: transparent;
+    }
+}

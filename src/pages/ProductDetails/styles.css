@@ -306,9 +306,11 @@
     justify-content: start;
     gap: 10px;
     color: var(--text-color-one);
-    margin-top: 1rem;
     font-size: 18px;
     font-weight: 400;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .recommended-product-address {
@@ -364,11 +366,14 @@
 .prev-button,
 .next-button {
     position: absolute;
+    display: flex;
+    align-items: center;
     top: 50%;
     transform: translateY(-50%);
     background-color: rgba(0, 0, 0, 0.5);
     color: white;
     border: none;
+    border-radius: 50%;
     padding: 10px;
     cursor: pointer;
     z-index: 1;
