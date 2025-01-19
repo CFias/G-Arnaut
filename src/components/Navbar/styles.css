@@ -84,7 +84,7 @@
     align-items: center;
     gap: 10px;
     background: var(--card-color);
-    padding: 5px;
+    padding: 1px;
     border-radius: 25px;
 }
 

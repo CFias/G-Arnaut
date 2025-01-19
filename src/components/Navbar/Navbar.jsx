@@ -15,6 +15,8 @@ import {
   SettingsOutlined,
   KeyboardArrowRight,
   AdminPanelSettingsOutlined,
+  DragHandle,
+  MenuTwoTone,
 } from "@mui/icons-material";
 import { useAuth } from "../../contexts/AuthContext";
 import { logout } from "../../services/FirebaseConfig"; // Importa a função de logout
@@ -129,10 +131,9 @@ export const Navbar = () => {
               </>
             ) : (
               <div className="nav-profile">
-                <p>Olá, {userName}</p>
                 <Avatar
                   onClick={handleOpenMenu}
-                  sx={{ cursor: "pointer", backgroundColor: "#051426" }}
+                  sx={{ cursor: "pointer", backgroundColor: "#051426", fontSize: "14px" }}
                 >
                   {userName ? userName.charAt(0).toUpperCase() : "U"}
                 </Avatar>

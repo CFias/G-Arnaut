@@ -18,7 +18,7 @@ export const Home = () => {
   const [recentProducts, setRecentProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const itemsPerPage = 12;
+  const itemsPerPage = 15;
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -32,7 +32,7 @@ export const Home = () => {
         const filteredFeatured = productsArray.filter(
           (product) => product.isFeatured?.toLowerCase() === "sim"
         );
-        setFeaturedProducts(filteredFeatured.slice(0, 4));
+        setFeaturedProducts(filteredFeatured.slice(0, 5));
 
         const filteredRecent = productsArray.filter(
           (product) => product.isFeatured?.toLowerCase() === "não"
@@ -52,10 +52,8 @@ export const Home = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  // Calcular a quantidade total de páginas com base no número de produtos
   const totalPages = Math.ceil(recentProducts.length / itemsPerPage);
 
-  // Função para calcular os produtos a serem exibidos na página atual
   const paginatedProducts = recentProducts.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
@@ -73,27 +71,10 @@ export const Home = () => {
       <Navbar />
       <main className="home-container">
         <section className="section-1">
-          {isLoading ? (
-            <SkeletonTheme baseColor="#eeeeee" highlightColor="#ffffff">
-              <Skeleton height={500} width={2550} />
-            </SkeletonTheme>
-          ) : (
-            <Banner />
-          )}
+          <Banner />
         </section>
         <section className="section-card">
-          {isLoading ? (
-            <SkeletonTheme baseColor="#eeeeee" highlightColor="#fffff">
-              <Skeleton
-                height={300}
-                width={1250}
-                borderRadius={15}
-                style={{ marginTop: 40 }}
-              />
-            </SkeletonTheme>
-          ) : (
-            <CardFilter />
-          )}
+          <CardFilter />
         </section>
         <section className="section-2">
           <h3 className="home-h3">
@@ -104,22 +85,15 @@ export const Home = () => {
               <p className="home-p">Imóveis que podem te interessar</p>
             )}
           </h3>
-          {isLoading ? (
-            <div className="skeleton-card">
-              <Skeleton height={200} width={150} />
-              <Skeleton height={200} style={{ marginTop: 10 }} />
-            </div>
-          ) : (
-            <div className="featured-products">
-              {featuredProducts.length > 0 ? (
-                featuredProducts.map((product, index) => (
-                  <FeaturedProducts key={index} product={product} />
-                ))
-              ) : (
-                <p>Não há produtos em destaque no momento.</p>
-              )}
-            </div>
-          )}
+          <div className="featured-products">
+            {featuredProducts.length > 0 ? (
+              featuredProducts.map((product, index) => (
+                <FeaturedProducts key={index} product={product} />
+              ))
+            ) : (
+              <p>Não há produtos em destaque no momento.</p>
+            )}
+          </div>
         </section>
         <section className="section-3">
           <h3 className="home-h3">
@@ -170,7 +144,7 @@ export const Home = () => {
                       <KeyboardArrowRight fontSize="small" />
                     </button>
                   </div>
-                  <p className="home-p-2">12 imóveis por página</p>
+                  <p className="home-p-2">15 imóveis por página</p>
                 </>
               )}
             </>
