@@ -12,7 +12,6 @@
     background: var(--card-color);
     border-radius: 15px;
     cursor: pointer;
-    border: 1px solid rgb(209, 206, 206);
 }
 
 .product-images {
@@ -20,16 +19,16 @@
 }
 
 .product-status {
-    font-size: 10px;
+    font-size: 14px;
     position: absolute;
-    background: #00000077;
+    background: var(--card-color);
     border-radius: 15px;
     z-index: 1;
     top: 1;
     padding: 5px;
     font-family: var(--main-font);
     font-weight: 500;
-    color: var(--text-color-two);
+    color: var(--text-color-one);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -53,11 +52,11 @@
 }
 
 .product-img {
-    width: 280px !important; 
-    height: 280px !important;
-    border-radius: 10px;
-    filter: brightness(0.7);
+    width: 270px !important; 
+    height: 270px !important;
+    border-radius: 20px;
     transition: filter 0.3s ease-in-out;
+    filter: brightness(0.6);
     object-fit: cover;
 }
 
@@ -71,7 +70,7 @@
     font-family: var(--main-font);
     color: var(--text-color-one);
     padding: 5px;
-    width: 280px !important;
+    width: 270px !important;
 }
 
 .infos-details {
@@ -110,8 +109,8 @@
 .product-category {
     font-size: 14px;
     display: flex;
-    gap: 5px;
     font-weight: 400;
+    ;
 }
 
 .product-dimension {
@@ -122,8 +121,8 @@
 }
 
 .product-icon {
-    padding: 1px;
-    color: var(--btn-color-one);
+    padding: 2px;
+    color: var(--text-color-one);
 }
 
 .product-size {
@@ -160,7 +159,7 @@
     justify-content: start;
     gap: 5px;
     width: 100%;
-    margin: 10px 0;
+    margin: 3px 0;
 }
 
 .infos-profile {
@@ -179,6 +178,7 @@
     width: 25px;
     height: 25px;
     border-radius: 50%;
+    object-fit: cover;
     border: 1px solid var(--btn-color-one);
 }
 
@@ -187,9 +187,9 @@
 }
 
 .product-price {
-    color: var(--btn-color-one);
+    color: var(--text-color-one);
     font-family: var(--main-font);
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 500;
     white-space: nowrap;
     overflow: hidden;
@@ -198,15 +198,12 @@
 
 .product-type {
     display: flex;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
-    border-radius: 15px;
-    text-transform: capitalize;
-    font-weight: 600;
     font-size: 14px;
     color: var(--text-color-one);
-    padding: 10px;
     text-align: center;
+    gap: 2px;
 }
 
 .pagination-dots {

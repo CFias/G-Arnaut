@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../../services/FirebaseConfig";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import "./styles.css";
 import { East } from "@mui/icons-material";
 import Logo from "../../assets/image/garnaut-gray-logo.png";
@@ -13,8 +15,15 @@ export const CardFilter = () => {
   const [category, setCategory] = useState("");
   const [neighborhood, setNeighborhood] = useState("");
   const [bedrooms, setBedrooms] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
+
+  // Simula um carregamento inicial
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 2000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleFilter = async (e) => {
     e.preventDefault();
@@ -38,22 +47,16 @@ export const CardFilter = () => {
         q = query(q, where("refProduct", "==", reference));
       }
       if (price) {
-        q = query(q, where("price", "<=", price)); // Exemplo de filtro de preço (menor ou igual)
+        q = query(q, where("price", "<=", price));
       }
       if (bedrooms) {
         q = query(q, where("bedrooms", "==", bedrooms));
       }
 
-      // Executa a consulta
       const querySnapshot = await getDocs(q);
       const filteredProducts = querySnapshot.docs.map((doc) => doc.data());
       console.log("Produtos filtrados encontrados:", filteredProducts);
 
-      // Verifica se há produtos filtrados
-      if (filteredProducts.length === 0) {
-      }
-
-      // Navega para a página com produtos filtrados
       navigate("/filtered-products", {
         state: { filteredProducts },
       });
@@ -62,6 +65,18 @@ export const CardFilter = () => {
       alert("Erro ao buscar produtos.");
     }
   };
+
+  if (isLoading) {
+    return (
+      <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f5f5f5">
+        <div className="filter-card">
+          <Skeleton height={50} width="60%" style={{ marginBottom: 20 }} />
+          <Skeleton height={30} width="90%" />
+          <Skeleton height={150} width="100%" style={{ marginTop: 20 }} />
+        </div>
+      </SkeletonTheme>
+    );
+  }
 
   return (
     <div className="filter-container">
@@ -160,7 +175,7 @@ export const CardFilter = () => {
           <button
             type="button"
             className="filter-submit-button"
-            onClick={handleFilter} // Chama handleFilter ao clicar no botão
+            onClick={handleFilter}
           >
             Buscar Imóveis <East fontSize="small" />
           </button>

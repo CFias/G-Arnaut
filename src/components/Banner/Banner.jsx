@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../../services/FirebaseConfig";
 import { collection, query, where, getDocs } from "firebase/firestore";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import "./styles.css";
 import { Instagram, WhatsApp, YouTube } from "@mui/icons-material";
 
 export const Banner = () => {
   const [featuredItems, setFeaturedItems] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isLoading, setIsLoading] = useState(true); // Estado para o carregamento
 
   useEffect(() => {
     const fetchFeaturedItems = async () => {
@@ -21,6 +24,7 @@ export const Banner = () => {
           ...doc.data(),
         }));
         setFeaturedItems(items);
+        setIsLoading(false); // Define carregamento como concluído
       } catch (error) {
         console.error("Erro ao buscar produtos destacados:", error);
       }
@@ -39,14 +43,6 @@ export const Banner = () => {
       return () => clearInterval(interval);
     }
   }, [featuredItems]);
-
-  if (featuredItems.length === 0) {
-    return (
-      <div className="banner-placeholder">
-        <p>Carregando produtos destacados...</p>
-      </div>
-    );
-  }
 
   return (
     <section className="banner-container">
@@ -71,20 +67,30 @@ export const Banner = () => {
         </div>
       </div>
       <div className="carousel">
-        {featuredItems.map((item, index) => (
-          <div
-            key={item.id}
-            className={`banner-item ${
-              index === currentIndex ? "active" : "hidden"
-            }`}
-            style={{
-              backgroundImage:
-                item.images && item.images[0]
-                  ? `url(${item.images[0]})`
-                  : "none",
-            }}
-          ></div>
-        ))}
+        {isLoading
+          ? // Skeleton Loader para o carrossel
+            Array.from({ length: 1 }).map((_, index) => (
+              <Skeleton
+                key={index}
+                height={300}
+                width="100%"
+                style={{ borderRadius: "8px" }}
+              />
+            ))
+          : featuredItems.map((item, index) => (
+              <div
+                key={item.id}
+                className={`banner-item ${
+                  index === currentIndex ? "active" : "hidden"
+                }`}
+                style={{
+                  backgroundImage:
+                    item.images && item.images[0]
+                      ? `url(${item.images[0]})`
+                      : "none",
+                }}
+              ></div>
+            ))}
       </div>
     </section>
   );
