@@ -66,29 +66,17 @@ export const CardFilter = () => {
     }
   };
 
-  if (isLoading) {
-    return (
-      <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f5f5f5">
-        <div className="filter-card">
-          <Skeleton height={50} width="60%" style={{ marginBottom: 20 }} />
-          <Skeleton height={30} width="90%" />
-          <Skeleton height={150} width="100%" style={{ marginTop: 20 }} />
-        </div>
-      </SkeletonTheme>
-    );
-  }
-
   return (
     <div className="filter-container">
+      <div className="filter-header">
+        <h3 className="filter-title">Encontre o Imóvel Ideal</h3>
+        <p className="filter-description">
+          Use os filtros abaixo para encontrar imóveis que atendam às suas
+          necessidades
+        </p>
+        <img src={Logo} alt="G-Arnaut" className="logo-filter" />
+      </div>
       <div className="filter-card">
-        <div className="filter-header">
-          <h2 className="filter-title">Encontre o Imóvel Ideal</h2>
-          <p className="filter-description">
-            Use os filtros abaixo para encontrar imóveis que atendam às suas
-            necessidades.
-          </p>
-          <img src={Logo} alt="G-Arnaut" className="logo-filter" />
-        </div>
         <form className="filter-content" onSubmit={handleFilter}>
           <div className="filter-item">
             <label htmlFor="city" className="filter-label">
@@ -172,14 +160,14 @@ export const CardFilter = () => {
               onChange={(e) => setBedrooms(e.target.value)}
             />
           </div>
-          <button
-            type="button"
-            className="filter-submit-button"
-            onClick={handleFilter}
-          >
-            Buscar Imóveis <East fontSize="small" />
-          </button>
         </form>
+        <button
+          type="button"
+          className="filter-submit-button"
+          onClick={handleFilter}
+        >
+          Buscar Imóveis <East fontSize="small" />
+        </button>
       </div>
     </div>
   );

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  Category,
   CropFree,
   DirectionsCar,
   East,
+  Favorite,
+  FavoriteBorder,
   Hotel,
   Verified,
 } from "@mui/icons-material";
@@ -14,7 +15,8 @@ import "./styles.css";
 import Profile from "../../assets/image/arnaut-profile.jpg";
 
 export const FeaturedProducts = ({ product }) => {
-  const [isLoading, setIsLoading] = useState(true); // Estado para simular carregamento
+  const [isLoading, setIsLoading] = useState(true);
+  const [isFavorite, setIsFavorite] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,6 +26,10 @@ export const FeaturedProducts = ({ product }) => {
 
   const handleCardClick = (id) => {
     navigate(`/product/${id}`);
+  };
+
+  const toggleFavorite = () => {
+    setIsFavorite((prevState) => !prevState);
   };
 
   if (isLoading) {
@@ -48,9 +54,11 @@ export const FeaturedProducts = ({ product }) => {
               <Skeleton height={10} width="30%" />
               <Skeleton height={10} width="30%" />
               <Skeleton height={10} width="30%" />
+              <Skeleton height={10} width="30%" />
+              <Skeleton height={10} width="30%" />
             </div>
             <div className="product-price-mod">
-              <Skeleton height={20} width="40%" />
+              <Skeleton height={100} width="100%" />
             </div>
           </div>
         </div>
@@ -58,7 +66,7 @@ export const FeaturedProducts = ({ product }) => {
     );
   }
 
-  if (!product) return null; // Evita erro se o produto não estiver disponível
+  if (!product) return null;
 
   return (
     <div className="product-card" onClick={() => handleCardClick(product.id)}>
@@ -71,11 +79,18 @@ export const FeaturedProducts = ({ product }) => {
       )}
       <div className="product-infos">
         <div className="first-item">
-          <img className="product-profile" src={Profile} alt="Perfil" />
           <div className="infos-profile">
+            <img className="product-profile" src={Profile} alt="Perfil" />
             <p>Gildavi Arnaut</p>
             <Verified className="icon-profile" fontSize="10" />
           </div>
+          <span onClick={toggleFavorite}>
+            {isFavorite ? (
+              <Favorite fontSize="small" style={{ color: "#3D3D3D" }} />
+            ) : (
+              <FavoriteBorder fontSize="small" />
+            )}
+          </span>
         </div>
         <div className="product-type">
           {" "}

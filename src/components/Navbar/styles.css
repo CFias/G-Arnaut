@@ -8,9 +8,15 @@
 
 .top-nav {
     display: flex;
+    align-items: center;
     justify-content: space-between;
     width: 65%;
     font-family: var(--main-font);
+}
+
+.bander-icon {
+    width: 20px;
+    display: flex;
 }
 
 .top-item-text {
@@ -19,7 +25,7 @@
     font-weight: 400;
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 8px;
     color: var(--text-color-two);
 }
 
@@ -204,13 +210,14 @@
     .user-infos {
         display: flex;
         align-items: center;
-        gap: 1rem;
+        gap: .2rem;
         color: var(--text-color-two);
     }
 
     .info-user {
         display: flex;
         flex-direction: column;
+        justify-content: center;
         color: var(--text-color-two);
     }
 
@@ -221,12 +228,14 @@
         font-family: var(--main-font);
         font-size: 14px;
         font-weight: 600;
+        margin: 0;
     }
 
     .nav-link-email-side {
         color: var(--text-color-two);
         opacity: 0.5;
         font-size: 12px;
+        margin: 0;
     }
 
     .logout-button-side {

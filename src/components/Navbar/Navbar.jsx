@@ -15,14 +15,14 @@ import {
   SettingsOutlined,
   KeyboardArrowRight,
   AdminPanelSettingsOutlined,
-  DragHandle,
-  MenuTwoTone,
 } from "@mui/icons-material";
 import { useAuth } from "../../contexts/AuthContext";
 import { logout } from "../../services/FirebaseConfig"; // Importa a função de logout
 import "./styles.css";
 import { Avatar, Menu, MenuItem } from "@mui/material";
 import Logo from "../../assets/image/garnaut-white-logo.png";
+import BanderOne from "../../assets/image/brazil-bander.png";
+
 
 export const Navbar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -85,6 +85,7 @@ export const Navbar = () => {
         <h5 className="top-item-text">
           O seu corretor de imóveis em{" "}
           <span className="top-local">Salvador-BA</span>
+          <img className="bander-icon" src={BanderOne} alt="Brasil" />
         </h5>
         <h5 className="top-item">
           <Phone fontSize="10" className="top-icon" /> 71 9190-0974
@@ -222,7 +223,6 @@ export const Navbar = () => {
                     <li className="nav-link-name-side">{userName}</li>
                     <p className="nav-link-email-side">{currentUser.email}</p>
                   </div>
-                  <KeyboardArrowRight fontSize="10" />
                 </div>
               </NavLink>
             )}
