@@ -313,6 +313,12 @@
     text-overflow: ellipsis;
 }
 
+.detail-description {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    margin-top: 10px;
+}
+
 .recommended-product-address {
     font-size: 14px;
     color: var(--text-color-one);
