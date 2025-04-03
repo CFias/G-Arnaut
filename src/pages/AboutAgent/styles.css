@@ -1,0 +1,146 @@
+.about-agent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    background: var(--bg-color);
+    font-family: var(--main-font);
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(116, 116, 116, 0.1);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.agent-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.agent-header h2 {
+    font-size: clamp(1.5rem, 2vw, 2rem);
+    font-weight: 600;
+    color: rgb(65, 65, 65);
+    margin-top: 10px;
+}
+
+.agent-info {
+    width: 100%;
+    padding: 20px;
+    text-align: left;
+    color: rgb(65, 65, 65);
+}
+
+.agent-info p {
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+    color: rgb(65, 65, 65);
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.agent-info h3 {
+    font-size: clamp(1.2rem, 1.8vw, 1.4rem);
+    color: rgb(65, 65, 65);
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.agent-info ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 15px;
+    color: rgb(65, 65, 65);
+}
+
+.agent-info ul li {
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+    padding: 5px 0;
+    color: var(--text-color-two);
+    position: relative;
+    padding-left: 20px;
+    color: rgb(65, 65, 65);
+}
+
+.agent-info ul li::before {
+    content: "✔";
+    position: absolute;
+    left: 0;
+    color: var(--btn-color-two);
+    font-size: 1rem;
+    color: rgb(65, 65, 65);
+}
+
+.agent-info a {
+    color: var(--btn-color-two);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.agent-info a:hover {
+    text-decoration: underline;
+}
+
+.agent-footer {
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+    color: var(--text-color-one);
+    font-weight: 500;
+    border-top: 1px solid rgba(128, 128, 128, 0.3);
+    margin-top: 20px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .about-agent {
+        padding: 15px;
+    }
+
+    .agent-info {
+        padding: 15px;
+    }
+
+    .agent-header h2 {
+        font-size: clamp(1.3rem, 1.8vw, 1.6rem);
+    }
+
+    .agent-info h3 {
+        font-size: clamp(1.1rem, 1.5vw, 1.3rem);
+    }
+
+    .agent-info ul li {
+        font-size: clamp(0.9rem, 1.3vw, 1.1rem);
+    }
+
+    .agent-footer {
+        font-size: clamp(0.9rem, 1.3vw, 1.1rem);
+    }
+}
+
+@media (max-width: 480px) {
+    .about-agent {
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    .agent-info {
+        padding: 10px;
+    }
+
+    .agent-info p {
+        font-size: 1rem;
+    }
+
+    .agent-info ul li {
+        font-size: 1rem;
+    }
+
+    .agent-footer {
+        font-size: 1rem;
+        padding: 10px;
+    }
+}

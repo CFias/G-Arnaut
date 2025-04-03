@@ -295,6 +295,50 @@ Veja o produto: ${productLink}`;
             </div>
           </div>
         </div>
+        <div className="recommended-products-container-mobile">
+            <h2 className="recommended-h2">Outros imóveis</h2>
+            <div className="recommended-products">
+              {recommendedProducts.map((recommendedProduct) => (
+                <div
+                  className="recommended-product-card"
+                  key={recommendedProduct.id}
+                >
+                  <Link
+                    className="recommended-link"
+                    to={`/product/${recommendedProduct.id}`}
+                    onClick={() => {
+                      scrollToTop();
+                    }}
+                  >
+                    <img
+                      src={recommendedProduct.images[0]}
+                      alt={recommendedProduct.name}
+                      className="recommended-product-image"
+                    />
+                    <div className="recommended-infos">
+                      <div className="recommended-product-local">
+                        <p>
+                          {recommendedProduct.city}-{recommendedProduct.state}
+                        </p>
+                      </div>
+                      <div className="recommended-product-address">
+                        {recommendedProduct.address}
+                      </div>
+                      <div className="recommended-product-status">
+                        {recommendedProduct.status}
+                      </div>
+                      <div className="recommended-product-type">
+                        {recommendedProduct.productType}
+                      </div>
+                      <div className="recommended-product-price">
+                        R$ {recommendedProduct.price}
+                      </div>
+                    </div>
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </div>
         {isModalOpen && (
           <div className="modal" onClick={handleModalClick}>
             <div
