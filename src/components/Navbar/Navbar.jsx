@@ -116,9 +116,6 @@ export const Navbar = () => {
             <NavLink to="/about" className="nav-link-item">
               O corretor
             </NavLink>
-            <NavLink to="/contact" className="nav-link-item">
-              Contato
-            </NavLink>
           </div>
           <div className="nav-btn">
             {!currentUser ? (

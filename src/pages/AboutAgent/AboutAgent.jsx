@@ -1,9 +1,12 @@
 import React from "react";
 import { Avatar } from "@mui/material";
+import { Navbar } from "../../components/Navbar/Navbar";
 import "./styles.css";
 
 export const AboutAgent = () => {
   return (
+    <>
+    <Navbar />
     <div className="about-agent">
       <div className="agent-header">
         <Avatar
@@ -36,7 +39,7 @@ export const AboutAgent = () => {
           Email: <a href="mailto:garnaut@exemplo.com">garnaut@exemplo.com</a>
         </p>
         <p>
-          Telefone: <a href="tel:+1234567890">+12 345 678 90</a>
+          Telefone: <a href="tel:+1234567890">+55 71 9190-0974</a>
         </p>
       </div>
 
@@ -47,5 +50,6 @@ export const AboutAgent = () => {
         </p>
       </div>
     </div>
+    </>
   );
 };
