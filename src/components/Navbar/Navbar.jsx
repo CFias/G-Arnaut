@@ -88,7 +88,7 @@ export const Navbar = () => {
           <img className="bander-icon" src={BanderOne} alt="Brasil" />
         </h5>
         <h5 className="top-item">
-          <Phone fontSize="10" className="top-icon" /> 71 9190-0974
+          <Phone fontSize="10" className="top-icon" /> 71 99190-0974
         </h5>
       </div>
 
