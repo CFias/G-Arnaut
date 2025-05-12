@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../services/FirebaseConfig";
-import "./styles.css"; // Importando o arquivo CSS
-import { ChevronRight } from "@mui/icons-material";
+import "./styles.css";
+import {
+  ChevronRight,
+  YouTube,
+  Instagram,
+  Facebook,
+  WhatsApp,
+} from "@mui/icons-material";
 
 const VideoList = () => {
   const [videos, setVideos] = useState([]);
@@ -27,52 +33,77 @@ const VideoList = () => {
     return match ? match[1] : "";
   };
 
-  const latestVideos = videos.slice(-1);
+  const latestVideo = videos[videos.length - 1];
 
   return (
     <div className="video-list-container">
-      <div className="cta-container">
-        <div className="cta-infos">
-          <h3 className="video-list-heading">
-            Increva-se em nosso canal no YouTube!
-          </h3>
-          <p className="cta-text">Confira imóveis nos mínimos detalhes.</p>
-        </div>
-        <a
-          href="https://www.youtube.com/channel/SEU_CANAL_AQUI"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="btn-cta"
-        >
-          <button className="cta-button">
-            Visite nosso Canal <ChevronRight />
-          </button>
-        </a>
-      </div>
-      {latestVideos.length > 0 ? (
-        <div className="video-list">
-          {latestVideos.map((video, index) => (
-            <div key={index} className="video-card">
-              {video.videoUrl && (
-                <iframe
-                  width="100%"
-                  height="100%"
-                  src={`https://www.youtube.com/embed/${extractVideoId(
-                    video.videoUrl
-                  )}`}
-                  title={`Vídeo ${index}`}
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="video-iframe"
-                ></iframe>
-              )}
-            </div>
-          ))}
+      {latestVideo && latestVideo.videoUrl ? (
+        <div className="video-card">
+          <iframe
+            width="100%"
+            height="100%"
+            src={`https://www.youtube.com/embed/${extractVideoId(
+              latestVideo.videoUrl
+            )}`}
+            title="Último Vídeo"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="video-iframe"
+          ></iframe>
         </div>
       ) : (
         <p className="no-videos">Não há vídeos disponíveis.</p>
       )}
+
+      <div className="cta-container">
+        <div className="cta-infos">
+          <h3 className="video-list-heading">
+            Inscreva-se em nosso canal no YouTube!
+          </h3>
+          <p className="cta-text">
+            Veja os melhores imóveis com todos os detalhes em vídeo.
+          </p>
+
+          <a
+            href="https://www.youtube.com/channel/SEU_CANAL_AQUI"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-cta"
+          >
+            <button className="cta-button">
+              Visite nosso Canal <ChevronRight />
+            </button>
+          </a>
+
+          <div className="social-icons">
+            <a
+              href="https://www.instagram.com/arnaut_corretor_de_imoveis?igsh=OHVjdjloOXhvdDV4"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="social-link instagram"
+            >
+              <Instagram /> Instagram
+            </a>
+            <a
+              href="https://www.facebook.com/share/1DdWamTSJw/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="social-link facebook"
+            >
+              <Facebook /> Facebook
+            </a>
+            <a
+              href="https://wa.me/7191900974"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="social-link whatsapp"
+            >
+              <WhatsApp /> WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

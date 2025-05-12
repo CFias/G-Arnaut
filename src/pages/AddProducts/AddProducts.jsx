@@ -191,7 +191,7 @@ export const AddProducts = () => {
           >
             <option value="">Selecione o Status</option>
             <option value="Obra finalizada">Pronto para morar</option>
-            <option value="Em obra">Em obra</option>
+            <option value="Lancamento">Lançamento</option>
             <option value="Reformando">Reformando</option>
             <option value="Recém reformado">Recém reformado</option>
           </select>

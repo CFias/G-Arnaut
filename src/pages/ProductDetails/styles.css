@@ -8,10 +8,6 @@
     gap: 10px;
 }
 
-.product-details-content {
-    width: 40vw;
-}
-
 .product-details {
     display: flex;
     flex-direction: column;

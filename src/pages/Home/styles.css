@@ -57,11 +57,16 @@
 
 .featured-products {
     display: grid;
-    grid-template-columns: repeat(5, 1fr); /* 5 colunas com largura igual */
-    column-gap: 20px; /* Espaçamento horizontal entre colunas */
-    row-gap: 20px; /* Espaçamento vertical entre linhas */
-    width: 80vw; /* Certifique-se de que o grid ocupa todo o espaço desejado */
-    margin-top: 1rem; /* Centraliza o grid */
+    grid-template-columns: repeat(5, 1fr);
+    /* 5 colunas com largura igual */
+    column-gap: 20px;
+    /* Espaçamento horizontal entre colunas */
+    row-gap: 20px;
+    /* Espaçamento vertical entre linhas */
+    width: 80vw;
+    /* Certifique-se de que o grid ocupa todo o espaço desejado */
+    margin-top: 1rem;
+    /* Centraliza o grid */
 }
 
 

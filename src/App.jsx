@@ -19,10 +19,12 @@ import { AddFeaturedProducts } from "./pages/AddFeaturedProducts/AddFeaturedProd
 import { RentProducts } from "./pages/RentProducts/RentProducts";
 import { SaleProducts } from "./pages/SaleProducts/SaleProducts";
 import { AboutAgent } from "./pages/AboutAgent/AboutAgent";
+import DynamicTitle from "./components/DynamicTitle/DynamicTitle";
 
 function App() {
   return (
     <AuthProvider>
+      <DynamicTitle />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
