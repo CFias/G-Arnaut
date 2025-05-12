@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { Navbar } from "../../components/Navbar/Navbar";
@@ -16,9 +16,12 @@ export const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [recentProducts, setRecentProducts] = useState([]);
+  const [launchProducts, setLaunchProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isProductsLoaded, setIsProductsLoaded] = useState(false); // Flag for products loading state
 
   const itemsPerPage = 15;
+  const recentSectionRef = useRef(null); // Referência para a seção "Imóveis Recentes"
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -38,6 +41,15 @@ export const Home = () => {
           (product) => product.isFeatured?.toLowerCase() === "não"
         );
         setRecentProducts(filteredRecent);
+
+        const filteredLaunch = productsArray.filter(
+          (product) =>
+            product.status?.toLowerCase() === "lançamento" ||
+            product.status?.toLowerCase() === "lancamento"
+        );
+        setLaunchProducts(filteredLaunch);
+
+        setIsProductsLoaded(true); // Set flag to true when products are loaded
       } catch (error) {
         console.error("Erro ao buscar produtos:", error);
       }
@@ -47,7 +59,7 @@ export const Home = () => {
 
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 2000);
+    }, 1500); // Shortened the loading time
 
     return () => clearTimeout(timer);
   }, []);
@@ -59,10 +71,10 @@ export const Home = () => {
     currentPage * itemsPerPage
   );
 
-  // Função para alternar a página
   const handlePageChange = (pageNumber) => {
     if (pageNumber > 0 && pageNumber <= totalPages) {
       setCurrentPage(pageNumber);
+      recentSectionRef.current?.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -73,9 +85,11 @@ export const Home = () => {
         <section className="section-1">
           <Banner />
         </section>
+
         <section className="section-card">
           <CardFilter />
         </section>
+
         <section className="section-2">
           <h3 className="home-h3">
             {isLoading ? <Skeleton width={370} /> : "Imóveis em Destaque"}
@@ -86,16 +100,51 @@ export const Home = () => {
             )}
           </h3>
           <div className="featured-products">
-            {featuredProducts.length > 0 ? (
-              featuredProducts.map((product, index) => (
-                <FeaturedProducts key={index} product={product} />
-              ))
+            {isProductsLoaded ? (
+              featuredProducts.length > 0 ? (
+                featuredProducts.map((product, index) => (
+                  <FeaturedProducts key={index} product={product} />
+                ))
+              ) : (
+                <p>Não há produtos em destaque no momento.</p>
+              )
             ) : (
-              <p>Não há produtos em destaque no momento.</p>
+              <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f0f0f0">
+                <Skeleton height={200} />
+                <Skeleton height={200} style={{ marginTop: 10 }} />
+              </SkeletonTheme>
             )}
           </div>
         </section>
-        <section className="section-3">
+
+        <section className="section-2">
+          <h3 className="home-h3">
+            {isLoading ? <Skeleton width={250} /> : "Lançamentos"}
+            {isLoading ? (
+              <Skeleton width={200} height={30} />
+            ) : (
+              <p className="home-p">Confira os imóveis recém-lançados</p>
+            )}
+          </h3>
+          <div className="featured-products">
+            {isProductsLoaded ? (
+              launchProducts.length > 0 ? (
+                launchProducts.map((product, index) => (
+                  <FeaturedProducts key={index} product={product} />
+                ))
+              ) : (
+                <p>Não há imóveis com status Lançamento.</p>
+              )
+            ) : (
+              <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f0f0f0">
+                <Skeleton height={200} />
+                <Skeleton height={200} style={{ marginTop: 10 }} />
+              </SkeletonTheme>
+            )}
+          </div>
+        </section>
+
+        <section className="section-3" ref={recentSectionRef}>
           <h3 className="home-h3">
             {isLoading ? <Skeleton width={150} /> : "Imóveis Recentes"}
             <p className="home-p">Imóveis adicionados recentemente</p>
@@ -150,6 +199,7 @@ export const Home = () => {
             </>
           )}
         </section>
+
         <section className="section-3">
           {isLoading ? (
             <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f0f0f0">

@@ -11,6 +11,8 @@ import {
   InputBase,
   Button,
   Box,
+  CardActions,
+  Divider,
 } from "@mui/material";
 import {
   AddCircle,
@@ -124,7 +126,7 @@ export const Admin = () => {
       <Box sx={{ padding: 4 }}>
         <Grid container spacing={4}>
           {/* Metrics Section */}
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={6} lg={3}>
             <Card
               sx={{
                 display: "flex",
@@ -141,7 +143,7 @@ export const Admin = () => {
               </Typography>
             </Card>
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={6} lg={3}>
             <Card
               sx={{
                 display: "flex",
@@ -158,33 +160,28 @@ export const Admin = () => {
               </Typography>
             </Card>
           </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <Card
-              elevation={3}
-              component={NavLink}
-              to="/import-video"
-              sx={{
-                textDecoration: "none",
-                textAlign: "center",
-                padding: 3,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                cursor: "pointer",
-                backgroundColor: "rgba(25, 118, 210, 0.1)",
-                borderRadius: 2,
-                transition: "transform 0.2s ease",
-                "&:hover": { transform: "scale(1.05)" },
-              }}
-            >
-              <AddCircle color="primary" />
+
+          {/* Statistics Chart */}
+          <Grid item xs={12} md={12} lg={6}>
+            <Card sx={{ padding: 3 }}>
               <Typography
-                variant="body1"
-                sx={{ marginTop: 2, color: "inherit" }}
+                variant="h6"
+                color="textSecondary"
+                sx={{ marginBottom: 2 }}
               >
-                Importar vídeo do YouTube
+                Estatísticas Visuais
               </Typography>
+              <Bar data={chartData} options={chartOptions} />
             </Card>
+          </Grid>
+
+          {/* Card Actions */}
+          <Grid item xs={12} sm={6} md={4}>
+            <CardAction
+              title="Importar Vídeo do YouTube"
+              icon={<AddCircle />}
+              link="/import-video"
+            />
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
             <CardAction

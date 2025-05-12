@@ -5,162 +5,141 @@
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    display: flex;
-    justify-content: space-around;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     font-family: var(--main-font);
     width: 80%;
     border-radius: 15px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.video-list-heading {
-    text-align: center;
-    font-size: 34px;
-    font-weight: 600;
-    color: var(--text-color-two);
-    margin-bottom: 20px;
-}
-
-.video-list {
     display: flex;
-    justify-content: center;
+    gap: 2rem;
     align-items: center;
+    justify-content: space-between;
     flex-wrap: wrap;
 }
 
 .video-card {
-    border-radius: 8px;
+    flex: 1;
+    min-width: 300px;
+    max-width: 600px;
     display: flex;
     justify-content: center;
     overflow: hidden;
+    border-radius: 10px;
 }
 
 .video-iframe {
+    width: 100%;
+    height: 300px;
     border: none;
-    border-radius: 8px;
-    width: 450px;
-    height: 200px;
+    border-radius: 10px;
 }
 
-.no-videos {
-    text-align: center;
-    color: var(--text-color-two);
-    font-size: 18px;
+.cta-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    min-width: 300px;
+    gap: 1.5rem;
 }
 
 .cta-infos {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: start;
+    gap: 1rem;
+}
+
+.video-list-heading {
+    font-size: 28px;
+    color: var(--text-color-two);
+    font-weight: bold;
 }
 
 .cta-text {
-    font-size: 14px;
-    font-weight: 300;
+    font-size: 16px;
     color: var(--text-color-two);
-    margin-bottom: 20px;
+}
+
+.btn-cta {
+    text-decoration: none;
 }
 
 .cta-button {
     display: flex;
-    justify-content: center;
     align-items: center;
+    gap: 0.5rem;
     padding: 10px 20px;
-    font-size: 18px;
-    font-weight: 500;
+    font-size: 16px;
+    font-weight: 600;
     background-color: var(--text-color-three);
     color: var(--text-color-one);
     border: none;
-    border-radius: 5px;
+    border-radius: 6px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    font-family: var(--main-font);
-}
-
-.btn-cta {
-    display: flex;
-    text-decoration: none;
-    justify-content: center;
-    margin-top: 4rem;
 }
 
 .cta-button:hover {
     background-color: var(--text-color-opa);
 }
 
-.cta-button:focus {
-    outline: none;
-}
-
-.cta-container {
+.social-icons {
     display: flex;
-    flex-direction: column;
-    justify-content: start;
-    align-items: start;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
 }
 
-.video-list-heading {
-    font-size: 28px;
-    text-align: start;
+.social-link {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 8px 14px;
+    border-radius: 5px;
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    transition: filter 0.3s ease;
+}
+
+.social-link:hover {
+    filter: brightness(1.1);
+}
+
+.social-link.instagram {
+    background-color: #3a1e28;
+}
+
+.social-link.facebook {
+    background-color: #121825;
+}
+
+.social-link.whatsapp {
+    background-color: #648671;
+}
+
+.no-videos {
+    color: var(--text-color-two);
+    text-align: center;
+    font-size: 18px;
 }
 
 @media (max-width: 768px) {
-    .video-card {
-        flex: 1 0 45%;
-    }
-
-    .cta-text {
-        font-size: 10px;
-    }
-}
-
-@media (max-width: 480px) {
     .video-list-container {
-        width: 98%;
-        border-radius: 10px;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .cta-container {
-        justify-content: start;
-        align-items: start;
-    }
-
-    .video-card {
-        flex: 1 0 100%;
-    }
-
-    .cta-button {
-        margin: 0;
-        padding: 5px;
-        font-size: 12px;
-    }
-
-    .cta-infos {
-        margin: 0;
-        justify-content: center;
-    }
-
-    .cta-text {
-        font-size: 10px;
-        margin: 0;
-    }
-
-    .video-list-heading {
-        font-size: 14px;
-    }
-}
-
-
-@media (max-width: 1024px) {
-    .video-list-container {
+        flex-direction: column;
         width: 95%;
     }
 
-    .video-card {
-        width: 160px;
+    .video-iframe {
+        height: 200px;
+    }
+
+    .cta-button {
+        font-size: 14px;
+    }
+
+    .social-link {
+        font-size: 12px;
+        padding: 6px 10px;
     }
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { db, storage } from "../../services/FirebaseConfig";
+import { db } from "../../services/FirebaseConfig";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { MenuItem, Select, Breadcrumbs, Typography } from "@mui/material";
 import { Category, CropFree, DirectionsCar, Hotel } from "@mui/icons-material";
@@ -15,12 +15,18 @@ export const SaleProducts = () => {
   const [cityCounts, setCityCounts] = useState({});
   const [dimensionCounts, setDimensionCounts] = useState({});
   const [parkingCounts, setParkingCounts] = useState({});
-  const [currentPage, setCurrentPage] = useState(1);
+  const [visibleProducts, setVisibleProducts] = useState(12);
   const [sortOrder, setSortOrder] = useState("");
   const [totalProperties, setTotalProperties] = useState(0);
   const [showCategories, setShowCategories] = useState(true);
-  const productsPerPage = 12;
   const navigate = useNavigate();
+  const [propertyType, setPropertyType] = useState("");
+
+  const createWhatsAppLink = () => {
+    const baseMessage = `Olá, Gildavi!\nVi alguns imóveis no seu site e gostaria de ter um atendimento personalizado.\nEstou procurando por: ${propertyType}`;
+    const encodedMessage = encodeURIComponent(baseMessage);
+    return `https://wa.me/5571991900974?text=${encodedMessage}`;
+  };
 
   const fetchProducts = async () => {
     try {
@@ -36,12 +42,10 @@ export const SaleProducts = () => {
         (product) => product.productType === "venda"
       );
 
-      // Captura as categorias distintas dos produtos
       const distinctCategories = [
         ...new Set(saleProducts.map((product) => product.category)),
       ];
 
-      // Conta a quantidade de produtos por categoria
       const counts = distinctCategories.reduce((acc, category) => {
         acc[category] = saleProducts.filter(
           (product) => product.category === category
@@ -49,19 +53,16 @@ export const SaleProducts = () => {
         return acc;
       }, {});
 
-      // Contagem de status
       const statusData = saleProducts.reduce((acc, product) => {
         acc[product.status] = (acc[product.status] || 0) + 1;
         return acc;
       }, {});
 
-      // Contagem de cidades
       const cityData = saleProducts.reduce((acc, product) => {
         acc[product.city] = (acc[product.city] || 0) + 1;
         return acc;
       }, {});
 
-      // Contagem de dimensões
       const dimensionData = saleProducts.reduce((acc, product) => {
         const dimension = product.dimension;
         if (dimension >= 20 && dimension <= 500) {
@@ -71,7 +72,6 @@ export const SaleProducts = () => {
         return acc;
       }, {});
 
-      // Contagem de vagas de estacionamento
       const parkingData = saleProducts.reduce((acc, product) => {
         acc[product.parkingSpaces] = (acc[product.parkingSpaces] || 0) + 1;
         return acc;
@@ -106,17 +106,16 @@ export const SaleProducts = () => {
     setProducts(sortedProducts);
   };
 
-  const paginatedProducts = products.slice(
-    (currentPage - 1) * productsPerPage,
-    currentPage * productsPerPage
-  );
-
   const handleCardClick = (id) => {
     navigate(`/product/${id}`);
   };
 
   const toggleCategories = () => {
     setShowCategories(!showCategories);
+  };
+
+  const loadMore = () => {
+    setVisibleProducts((prev) => prev + 12);
   };
 
   return (
@@ -221,18 +220,43 @@ export const SaleProducts = () => {
                 <h2>Inscreva-se no canal</h2>
                 <p>Acompanhe os detalhes de cada imóvel</p>
               </div>
-              <button>Acessar canal</button>
+              <a
+                className="whatsapp-link"
+                href="https://youtube.com/@daviarnaut9716?si=bmPSV-84PBMfkUVh" // ⬅️ Substitua pelo link real do seu canal
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <button>Acessar canal</button>
+              </a>
             </div>
+
             <div className="card-sale">
               <div className="sale-infos-card">
-                <h2>Deseja um atendimento personalizado ?</h2>
+                <h2>Deseja um atendimento personalizado?</h2>
+                <p>Informe o tipo de imóvel que você procura:</p>
+                <input
+                  type="text"
+                  placeholder="Ex: Casa com 3 quartos, apartamento no centro..."
+                  value={propertyType}
+                  onChange={(e) => setPropertyType(e.target.value)}
+                  className="whatsapp-input"
+                />
               </div>
-              <button>Atendimento personalizado</button>
+              <a
+                href={createWhatsAppLink()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="whatsapp-link"
+              >
+                <button disabled={!propertyType}>
+                  Atendimento personalizado
+                </button>
+              </a>
             </div>
           </div>
 
           <div className="product-list-filter">
-            {paginatedProducts.map((product) => (
+            {products.slice(0, visibleProducts).map((product) => (
               <div
                 key={product.id}
                 className="product-card-sale"
@@ -291,6 +315,14 @@ export const SaleProducts = () => {
                 </div>
               </div>
             ))}
+
+            {visibleProducts < products.length && (
+              <div className="load-more-container">
+                <button onClick={loadMore} className="load-more-button">
+                  Ver mais
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
