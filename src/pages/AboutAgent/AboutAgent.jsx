@@ -1,15 +1,24 @@
 import React from "react";
 import { Navbar } from "../../components/Navbar/Navbar";
 import "./styles.css";
-import agentImage from "../../assets/image/arnaut-profile.jpg"; // Import the image of the agent
+import agentImage from "../../assets/image/arnaut-profile.jpg"; // fallback
+import { useAuth } from "../../contexts/AuthContext"; // ajuste o caminho se necessário
+import Profile from "../../assets/image/arnaut-profile.png"; // imagem padrão
 
 export const AboutAgent = () => {
+  const { currentUser } = useAuth();
+  const profilePhoto = currentUser?.photoURL || Profile;
+
   return (
     <>
       <Navbar />
       <div className="about-agent">
         <div className="agent-header">
-          <img className="agent-profile" src={agentImage} alt="" />
+          <img
+            className="agent-profile"
+            src={profilePhoto}
+            alt="Foto do agente"
+          />
           <h2>G-Arnaut - Corretor de Imóveis</h2>
         </div>
 
@@ -32,10 +41,11 @@ export const AboutAgent = () => {
 
           <h3>Contato:</h3>
           <p>
-            Email: <a href="davimarnaut@gmail.com">davimarnaut@gmail.com</a>
+            Email:{" "}
+            <a href="mailto:davimarnaut@gmail.com">davimarnaut@gmail.com</a>
           </p>
           <p>
-            Telefone: <a href="+55 71 99190-0974">+55 71 99190-0974</a>
+            Telefone: <a href="tel:+5571991900974">+55 71 99190-0974</a>
           </p>
         </div>
 

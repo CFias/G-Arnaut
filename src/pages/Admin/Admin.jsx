@@ -21,6 +21,7 @@ import {
   ManageAccounts,
   Settings,
   Search,
+  ManageAccountsRounded,
 } from "@mui/icons-material";
 import { NavLink } from "react-router-dom";
 import { getProductCount, getPostCount } from "../../services/FirebaseConfig";
@@ -223,6 +224,13 @@ export const Admin = () => {
               title="Configurações"
               icon={<Settings />}
               link="/settings"
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <CardAction
+              title="Editar Perfil"
+              icon={<ManageAccountsRounded />}
+              link="/edit-profile"
             />
           </Grid>
         </Grid>

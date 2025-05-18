@@ -1,67 +1,78 @@
 /* Estilo do container principal */
 .manage-products-container {
-    padding: 20px;
+    padding: 24px;
+    /* Leve aumento para mais espaço */
     min-height: 100vh;
     border-radius: 12px;
-    background-color: #f9f9f9;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fafafa;
+    /* Fundo um pouco mais claro para melhor contraste */
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.12);
+    /* Sombra um pouco mais suave porém visível */
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 24px;
+    /* Espaçamento maior para separar seções */
     font-family: var(--main-font);
 }
 
 /* Tabela de produtos */
-/* Tabela de produtos */
 .products-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 14px;
+    font-size: 15px;
+    /* Fonte maior para melhor leitura */
     text-align: left;
-    background-color: #fff;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);
+    background-color: #ffffff;
+    box-shadow: 0px 5px 12px rgba(0, 0, 0, 0.07);
     border-radius: 12px;
     overflow: hidden;
 }
 
 .products-table th,
 .products-table td {
-    padding: 12px 16px;
-    border-bottom: 1px solid #eaeaea;
+    padding: 14px 18px;
+    /* Padding maior para área clicável maior */
+    border-bottom: 1.5px solid #ddd;
+    /* Linha um pouco mais forte para separação clara */
 }
 
 .products-table th {
     background-color: var(--btn-color-one);
-    color: white;
+    color: #fff;
     text-transform: uppercase;
-    font-weight: 600;
+    font-weight: 700;
+    /* Negrito mais forte */
+    letter-spacing: 1px;
+    /* Espaçamento entre letras */
 }
 
 .products-table tr:nth-child(odd) {
-    background-color: #f1f1f1;
-    /* Cor para linhas ímpares */
+    background-color: #f9f9f9;
+    /* Cor de linha ímpar mais clara para contraste */
 }
 
 .products-table tr:nth-child(even) {
-    background-color: #ffffff;
-    /* Cor para linhas pares */
+    background-color: #fff;
 }
 
 .products-table tr:hover {
-    background-color: rgba(0, 123, 255, 0.1);
+    background-color: rgba(0, 123, 255, 0.15);
+    /* Hover mais visível */
 }
-
 
 /* Botões de ação */
 .edit-button,
 .delete-button {
-    padding: 8px 12px;
+    padding: 10px 14px;
+    /* Botões maiores e com padding mais confortável */
     border: none;
-    border-radius: 6px;
-    font-size: 12px;
-    font-weight: bold;
+    border-radius: 8px;
+    font-size: 14px;
+    /* Fonte maior */
+    font-weight: 700;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
 }
 
 .edit-button {
@@ -70,16 +81,18 @@
 }
 
 .edit-button:hover {
-    background-color: darken(var(--btn-color-one), 10%);
+    background-color: #004a9f;
+    /* Ajustado para um azul escuro mais visível */
 }
 
 .delete-button {
-    background-color: red;
+    background-color: #d32f2f;
+    /* Vermelho um pouco mais escuro */
     color: white;
 }
 
 .delete-button:hover {
-    background-color: darkred;
+    background-color: #b71c1c;
 }
 
 /* Modal de edição */
@@ -88,89 +101,91 @@
     top: 0;
     left: 0;
     width: 100%;
-    background: white;
+    background: rgba(255, 255, 255, 0.98);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .modal-content {
-    height: 100%;
-    background: white;
+    background: rgb(240, 240, 240);
     display: flex;
     flex-direction: column;
     justify-content: start;
-    overflow-y: scroll;
     flex-wrap: nowrap;
-    width: 80%;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
 .modal-content h3 {
-    font-size: 20px;
-    font-weight: bold;
+    font-size: 14px;
+    font-weight: 700;
     color: var(--text-color-one);
-    margin-top: 40rem;
+    margin-bottom: 24px;
+    /* Margem menor e mais adequada */
 }
 
 .form-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-    width: 100%;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    padding: 50px;
 }
 
-
 .form-group {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 100%;
-    gap: 20px;
+    gap: 8px;
 }
 
 .form-group label {
-    font-weight: 600;
+    font-weight: 700;
     color: var(--text-color-one);
     font-size: 12px;
-    display: block;
+    display: flex;
 }
 
-/* Estilo dos campos de input e textarea */
 .form-group input,
 .form-group textarea {
-    width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    background: var(--text-color-two);
-    font-size: 10px;
+    width: 60%;
+    padding: 10px;
+    margin: 0;
+    border-radius: 10px;
+    border: 1.5px solid #bbb;
+    font-size: 12px;
     font-family: var(--main-font);
     transition: border-color 0.3s ease;
+    box-shadow: inset 0 1px 3px rgb(0 0 0 / 0.05);
 }
 
-/* Estilo do input e textarea em foco */
 .form-group input:focus,
 .form-group textarea:focus {
     border-color: var(--btn-color-one);
     outline: none;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+    box-shadow: 0 0 8px 2px rgba(0, 123, 255, 0.3);
 }
 
 .form-group textarea {
-    height: 120px;
+    height: 140px;
+    resize: vertical;
 }
 
 .modal-save-button,
 .modal-cancel-button {
-    padding: 12px;
+    padding: 14px 20px;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     font-size: 16px;
     font-family: var(--main-font);
     cursor: pointer;
     transition: background-color 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    margin-top: 16px;
 }
 
 .modal-save-button {
@@ -179,72 +194,30 @@
 }
 
 .modal-save-button:hover {
-    background-color: darken(var(--btn-color-one), 10%);
+    background-color: #004a9f;
 }
 
 .modal-cancel-button {
-    background-color: #ccc;
+    background-color: #dcdcdc;
     color: #333;
 }
 
 .modal-cancel-button:hover {
-    background-color: #aaa;
+    background-color: #bfbfbf;
 }
 
-/* Estilo das imagens (sem alterações) */
 .image-preview {
     display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: start;
-}
-
-.image-thumbnail {
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-    border-radius: 8px;
-    border: 2px solid var(--btn-color-one);
-    position: relative;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease-in-out;
-}
-
-.image-thumbnail:hover {
-    transform: scale(1.05);
-}
-
-.image-delete {
-    position: absolute;
-    top: -8px;
-    right: -8px;
-    width: 20px;
-    height: 20px;
-    background-color: red;
-    color: white;
-    font-size: 12px;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
+    flex-wrap: nowrap;
+    gap: 5px;
     justify-content: center;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.image-delete:hover {
-    background-color: darkred;
-}
-
-.image-preview {
-    display: flex;
-    gap: 10px;
-    overflow-x: scroll;
+    overflow-x: auto;
     scroll-behavior: smooth;
     -ms-overflow-style: none;
     scrollbar-width: none;
-    padding-bottom: 10px;
     cursor: grab;
+    width: 45px;
+    height: 45px;
 }
 
 .image-preview::-webkit-scrollbar {
@@ -255,15 +228,35 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-width: 80px;
+    min-width: 30px;
     cursor: pointer;
+    border-radius: 12px;
+    padding: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.image-item.main {
+    background: var(--btn-color-one);
+    border-radius: 15px;
+    box-shadow: 0 0 8px var(--btn-color-one);
+}
+
+.image-item.dragging {
+    opacity: 0.8;
+    transform: scale(1.05);
+    transition: all 0.3s ease;
+}
+
+.image-item.over {
+    border: 3px dashed #aaa;
 }
 
 .product-image {
-    width: 80px;
-    height: 80px;
+    width: 30px;
+    height: 30px;
     object-fit: cover;
-    border-radius: 8px;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 button {
@@ -271,184 +264,175 @@ button {
     font-family: var(--main-font);
     color: white;
     border: none;
-    padding: 10px;
-    border-radius: 5px;
+    padding: 12px 18px;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 12px;
-    margin: 2px;
+    font-size: 14px;
+    margin: 4px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    transition: background-color 0.3s ease;
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: #004a9f;
 }
 
+/* Dragging cursor */
 .image-preview.dragging {
     cursor: grabbing;
 }
 
-.image-item.main {
-    background: var(--btn-color-one);
-    border-radius: 15px;
-}
-
-.image-item.dragging {
-    opacity: 0.7;
-    transform: scale(1.05);
-    transition: all 1.8s ease;
-}
-
-.image-item.over {
-    border: 2px dashed #ccc;
-}
-
+/* Modal de exclusão */
 .delete-modal {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.6);
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 1100;
 }
 
 .delete-modal-content {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    max-width: 400px;
+    background-color: #fff;
+    padding: 28px 32px;
+    border-radius: 12px;
+    max-width: 420px;
     width: 100%;
     text-align: center;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
 }
 
 .delete-modal-actions {
     display: flex;
     justify-content: space-around;
-    margin-top: 20px;
+    margin-top: 24px;
 }
 
 .delete-modal-actions button {
-    padding: 10px 20px;
+    padding: 12px 28px;
     font-size: 16px;
     cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
 }
 
 .delete-modal-actions button:hover {
-    opacity: 0.8;
+    opacity: 0.85;
 }
-
 
 /* Responsividade */
 @media (max-width: 1200px) {
     .products-table th, .products-table td {
-        font-size: 12px;
-        padding: 10px;
+        font-size: 13px;
+        padding: 12px 14px;
     }
 
     .manage-products-container {
-        padding: 15px;
+        padding: 20px;
     }
 
     .modal-content {
-        padding: 30px;
+        padding: 25px 30px;
     }
 
     .form-group input,
     .form-group textarea {
-        font-size: 12px;
+        font-size: 13px;
     }
 
     .image-thumbnail {
-        width: 70px;
-        height: 70px;
+        width: 72px;
+        height: 72px;
     }
 
     .image-preview {
-        padding-bottom: 5px;
+        padding-bottom: 8px;
     }
 }
 
 @media (max-width: 768px) {
     .manage-products-container {
-        padding: 10px;
+        padding: 16px;
     }
 
     .products-table {
-        font-size: 10px;
+        font-size: 12px;
     }
 
     .products-table th, .products-table td {
-        padding: 8px;
+        padding: 10px;
     }
 
     .modal-content h3 {
-        font-size: 16px;
+        font-size: 20px;
     }
 
     .form-group label {
-        font-size: 10px;
+        font-size: 12px;
     }
 
     .form-group input,
     .form-group textarea {
-        font-size: 12px;
+        font-size: 13px;
     }
 
     .modal-save-button,
     .modal-cancel-button {
-        font-size: 14px;
-        padding: 10px;
+        font-size: 15px;
+        padding: 12px 18px;
     }
 
     .image-thumbnail {
-        width: 60px;
-        height: 60px;
+        width: 64px;
+        height: 64px;
     }
 }
 
 @media (max-width: 480px) {
     .form-grid {
-        display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 1rem;
+        gap: 16px;
     }
 
     .manage-products-container {
-        padding: 10px 5px;
+        padding: 14px 10px;
     }
 
     .products-table th, .products-table td {
-        font-size: 10px;
-        padding: 6px;
+        font-size: 11px;
+        padding: 8px;
     }
 
     .modal-content {
-        padding: 20px;
+        padding: 20px 18px;
     }
 
     .form-group input,
     .form-group textarea {
-        font-size: 10px;
+        font-size: 12px;
     }
 
     .image-thumbnail {
-        width: 50px;
-        height: 50px;
+        width: 56px;
+        height: 56px;
     }
 
     .modal-save-button,
     .modal-cancel-button {
-        font-size: 12px;
-        padding: 8px;
+        font-size: 13px;
+        padding: 10px 14px;
     }
 
     .image-preview {
-        gap: 5px;
+        gap: 6px;
     }
 
     .modal-content h3 {
-        font-size: 16px;
-        margin-top: 80rem;
+        font-size: 18px;
+        margin-top: 2rem;
     }
 }

@@ -12,7 +12,7 @@ import {
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import "./styles.css";
-import Profile from "../../assets/image/arnaut-profile.jpg";
+import Profile from "../../assets/image/arnaut-profile.png";
 
 export const FeaturedProducts = ({ product }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -80,8 +80,12 @@ export const FeaturedProducts = ({ product }) => {
       <div className="product-infos">
         <div className="first-item">
           <div className="infos-profile">
-            <img className="product-profile" src={Profile} alt="Perfil" />
-            <p>Gildavi Arnaut</p>
+            <img
+              src={product.author?.photoURL || Profile}
+              className="author-avatar"
+            />
+            <span>{product.author?.userName || "Autor desconhecido"}</span>
+
             <Verified className="icon-profile" fontSize="10" />
           </div>
           <span onClick={toggleFavorite}>
