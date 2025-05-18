@@ -22,13 +22,13 @@ import "./styles.css";
 import { Avatar, Menu, MenuItem } from "@mui/material";
 import Logo from "../../assets/image/garnaut-white-logo.png";
 import BanderOne from "../../assets/image/brazil-bander.png";
-
+import Profile from "../../assets/image/arnaut-profile.png";
 
 export const Navbar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null); // Estado para o menu do avatar
-  const { currentUser, userName, loading } = useAuth();
+  const { currentUser, userName, loading, photoURL } = useAuth();
 
   const allowedUIDs = [
     "SCQFrh1l7iVOKNbsInx0JGgT9ww1",
@@ -131,7 +131,11 @@ export const Navbar = () => {
               <div className="nav-profile">
                 <Avatar
                   onClick={handleOpenMenu}
-                  sx={{ cursor: "pointer", backgroundColor: "#051426", fontSize: "14px" }}
+                  sx={{
+                    cursor: "pointer",
+                    backgroundColor: "#051426",
+                    fontSize: "14px",
+                  }}
                 >
                   {userName ? userName.charAt(0).toUpperCase() : "U"}
                 </Avatar>
@@ -206,16 +210,20 @@ export const Navbar = () => {
             ) : (
               <NavLink to="/profile" className="side-user">
                 <div className="user-infos">
-                  <Avatar
+                  <img
                     onClick={handleOpenMenu}
-                    sx={{
+                    style={{
                       cursor: "pointer",
-                      backgroundColor: "#FFFFFF",
-                      color: "#051426",
+                      backgroundColor: "#051426",
+                      fontSize: "14px",
+                      borderRadius: "50%", // para ficar redonda, tipo avatar
+                      width: "40px", // ajuste o tamanho que quiser
+                      height: "40px",
+                      objectFit: "cover",
                     }}
-                  >
-                    {userName ? userName.charAt(0).toUpperCase() : "U"}
-                  </Avatar>
+                    src={photoURL || Profile}
+                    alt="Profile"
+                  />
                   <div className="info-user">
                     <li className="nav-link-name-side">{userName}</li>
                     <p className="nav-link-email-side">{currentUser.email}</p>

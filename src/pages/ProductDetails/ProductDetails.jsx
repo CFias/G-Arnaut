@@ -130,13 +130,15 @@ Veja o produto: ${productLink}`;
     setIsFavorite((prevState) => !prevState);
   };
 
-  const extractVideoId = (url) => {
-    if (!url) return "";
-    const match = url.match(
-      /(?:https?:\/\/(?:www\.)?youtube\.com(?:\/(?:v|e(?:mbed)?)\/|\S*\?v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
-    );
-    return match ? match[1] : "";
-  };
+  function extractVideoId(url) {
+    if (!url) return null;
+
+    const regex =
+      /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+
+    const match = url.match(regex);
+    return match ? match[1] : null;
+  }
 
   const scrollToTop = () => {
     window.scrollTo({
@@ -200,11 +202,11 @@ Veja o produto: ${productLink}`;
           <div className="videos-list-container">
             <div className="videos-list-content">
               <h3>Vídeo do imóvel</h3>
-              {selectedVideo ? (
+              {product.videoLink && extractVideoId(product.videoLink) ? (
                 <div className="video-imovel">
                   <iframe
                     src={`https://www.youtube.com/embed/${extractVideoId(
-                      selectedVideo
+                      product.videoLink
                     )}`}
                     title="Vídeo do Produto"
                     frameBorder="0"
@@ -296,49 +298,49 @@ Veja o produto: ${productLink}`;
           </div>
         </div>
         <div className="recommended-products-container-mobile">
-            <h2 className="recommended-h2">Outros imóveis</h2>
-            <div className="recommended-products">
-              {recommendedProducts.map((recommendedProduct) => (
-                <div
-                  className="recommended-product-card"
-                  key={recommendedProduct.id}
+          <h2 className="recommended-h2">Outros imóveis</h2>
+          <div className="recommended-products">
+            {recommendedProducts.map((recommendedProduct) => (
+              <div
+                className="recommended-product-card"
+                key={recommendedProduct.id}
+              >
+                <Link
+                  className="recommended-link"
+                  to={`/product/${recommendedProduct.id}`}
+                  onClick={() => {
+                    scrollToTop();
+                  }}
                 >
-                  <Link
-                    className="recommended-link"
-                    to={`/product/${recommendedProduct.id}`}
-                    onClick={() => {
-                      scrollToTop();
-                    }}
-                  >
-                    <img
-                      src={recommendedProduct.images[0]}
-                      alt={recommendedProduct.name}
-                      className="recommended-product-image"
-                    />
-                    <div className="recommended-infos">
-                      <div className="recommended-product-local">
-                        <p>
-                          {recommendedProduct.city}-{recommendedProduct.state}
-                        </p>
-                      </div>
-                      <div className="recommended-product-address">
-                        {recommendedProduct.address}
-                      </div>
-                      <div className="recommended-product-status">
-                        {recommendedProduct.status}
-                      </div>
-                      <div className="recommended-product-type">
-                        {recommendedProduct.productType}
-                      </div>
-                      <div className="recommended-product-price">
-                        R$ {recommendedProduct.price}
-                      </div>
+                  <img
+                    src={recommendedProduct.images[0]}
+                    alt={recommendedProduct.name}
+                    className="recommended-product-image"
+                  />
+                  <div className="recommended-infos">
+                    <div className="recommended-product-local">
+                      <p>
+                        {recommendedProduct.city}-{recommendedProduct.state}
+                      </p>
                     </div>
-                  </Link>
-                </div>
-              ))}
-            </div>
+                    <div className="recommended-product-address">
+                      {recommendedProduct.address}
+                    </div>
+                    <div className="recommended-product-status">
+                      {recommendedProduct.status}
+                    </div>
+                    <div className="recommended-product-type">
+                      {recommendedProduct.productType}
+                    </div>
+                    <div className="recommended-product-price">
+                      R$ {recommendedProduct.price}
+                    </div>
+                  </div>
+                </Link>
+              </div>
+            ))}
           </div>
+        </div>
         {isModalOpen && (
           <div className="modal" onClick={handleModalClick}>
             <div

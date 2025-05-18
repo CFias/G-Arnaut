@@ -33,6 +33,28 @@ export const ManageProducts = () => {
 
   const imagePreviewRef = useRef(null);
 
+  // Mapeamento das chaves para labels amigáveis
+  const labelMap = {
+    address: "Endereço",
+    price: "Preço",
+    category: "Categoria",
+    status: "Status",
+    description: "Descrição",
+    neighborhood: "Bairro",
+    image: "Imagem",
+    parkingSpaces: "Vagas de estacionamento",
+    state: "Estado",
+    isFeatured: "Destaque",
+    size: "Tamanho",
+    city: "Cidade",
+    stock: "Estoque",
+    mainImage: "Imagem principal",
+    productType: "Imóvel para",
+    bedrooms: "Quartos",
+    refProduct: "Referência do produto",
+    dimension: "Dimensão",
+  };
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -239,7 +261,7 @@ export const ManageProducts = () => {
           {filteredProducts.map((product) => (
             <tr key={product.id}>
               <td>{product.address}</td>
-              <td>{product.isFeatured}</td>
+              <td>{product.isFeatured ? "Sim" : "Não"}</td>
               <td>{product.refProduct}</td>
               <td>{product.price}</td>
               <td>{product.category}</td>
@@ -262,7 +284,7 @@ export const ManageProducts = () => {
           ))}
         </tbody>
       </table>
-      {isEditing && (
+      {isEditing && editProduct && (
         <div className="modal">
           <div className="modal-content">
             <IconButton
@@ -281,48 +303,7 @@ export const ManageProducts = () => {
                   .filter((key) => key !== "id" && key !== "images")
                   .map((key) => (
                     <div className="form-group" key={key}>
-                      <label htmlFor={key}>
-                        {key === "address"
-                          ? "Endereço"
-                          : key === "price"
-                          ? "Preço"
-                          : key === "category"
-                          ? "Categoria"
-                          : key === "status"
-                          ? "Status"
-                          : key === "description"
-                          ? "Descrição"
-                          : key === "neighborhood"
-                          ? "Bairro"
-                          : key === "image"
-                          ? "Imagem"
-                          : key === "id"
-                          ? "ID"
-                          : key === "parkingSpaces"
-                          ? "Vagas de estacionamento"
-                          : key === "state"
-                          ? "Estado"
-                          : key === "isFeatured"
-                          ? "Destaque"
-                          : key === "size"
-                          ? "Tamanho"
-                          : key === "city"
-                          ? "Cidade"
-                          : key === "stock"
-                          ? "Estoque"
-                          : key === "mainImage"
-                          ? "Imagem principal"
-                          : key === "productType"
-                          ? "Imóvel para"
-                          : key === "bedrooms"
-                          ? "Quartos"
-                          : key === "refProduct"
-                          ? "Referência do produto"
-                          : key === "dimension"
-                          ? "Dimensão"
-                          : key}
-                      </label>
-
+                      <label htmlFor={key}>{labelMap[key] || key}</label>
                       <input
                         type="text"
                         value={editProduct[key]}
@@ -355,42 +336,54 @@ export const ManageProducts = () => {
                 <label>Imagens</label>
                 <div
                   ref={imagePreviewRef}
-                  className={`image-preview ${dragging ? "dragging" : ""}`}
-                  onMouseDown={handleDragStart}
-                  onMouseMove={handleDragOver}
-                  onMouseUp={handleDragEnd}
-                  onMouseLeave={handleDragEnd}
+                  className="image-preview-container"
+                  style={{ display: "flex", gap: "10px" }}
                 >
                   {editProduct.images &&
                     editProduct.images.map((imageUrl, index) => (
                       <div
                         key={index}
-                        className={`image-item ${index === 0 ? "main" : ""}`} // Adiciona a classe "main" à primeira imagem
+                        className="image-item"
                         draggable
                         onDragStart={(e) => handleDragStart(e, index)}
                         onDragOver={(e) => handleDragOver(e, index)}
                         onDrop={(e) => handleDrop(e, index)}
+                        onDragEnd={handleDragEnd}
+                        style={{
+                          border:
+                            imageUrl === editProduct.mainImage
+                              ? "3px solid green"
+                              : "1px solid gray",
+                          padding: "3px",
+                          cursor: "move",
+                        }}
+                        onClick={() => handleSetMainImage(imageUrl)}
                       >
                         <img
-                          className="product-image"
                           src={imageUrl}
-                          alt={`Product Image ${index + 1}`}
+                          alt={`Imagem ${index + 1}`}
+                          width={100}
+                          height={100}
+                          style={{ objectFit: "cover" }}
+                          className="image-preview"
                         />
                       </div>
                     ))}
                 </div>
-              </div>
-              <div className="form-group">
-                <label>Adicionar novas imagens</label>
                 <input
                   type="file"
-                  accept="image/*"
                   multiple
+                  accept="image/*"
                   onChange={handleImageChange}
+                  disabled={isUploading}
                 />
               </div>
-              <button type="submit" disabled={isUploading}>
-                {isUploading ? "Carregando..." : "Atualizar Produto"}
+              <button
+                type="submit"
+                disabled={isUploading}
+                className="update-button"
+              >
+                {isUploading ? "Atualizando..." : "Atualizar Produto"}
               </button>
             </form>
           </div>
@@ -399,5 +392,3 @@ export const ManageProducts = () => {
     </div>
   );
 };
-
-export default ManageProducts;

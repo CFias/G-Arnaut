@@ -20,6 +20,7 @@ import { RentProducts } from "./pages/RentProducts/RentProducts";
 import { SaleProducts } from "./pages/SaleProducts/SaleProducts";
 import { AboutAgent } from "./pages/AboutAgent/AboutAgent";
 import DynamicTitle from "./components/DynamicTitle/DynamicTitle";
+import EditProfile from "./pages/EditProfile/EditProfile";
 
 function App() {
   return (
@@ -30,6 +31,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/Rent-Products" element={<RentProducts />} />
+        <Route path="/edit-profile" element={<EditProfile />} />
+        <Route path="/edit-produto/:id" element={<EditProduct />} />
         <Route path="/Sale-Products" element={<SaleProducts />} />
         <Route path="/about" element={<AboutAgent />} />
         <Route path="/filtered-products" element={<FilteredProducts />} />

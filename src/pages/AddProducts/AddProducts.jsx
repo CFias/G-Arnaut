@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { db, storage, auth } from "../../services/FirebaseConfig";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, doc, getDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import Logo from "../../assets/image/garnaut-gray-logo.png";
 import "./styles.css";
@@ -20,8 +20,8 @@ export const AddProducts = () => {
     productType: "venda",
     bedrooms: "",
     parkingSpaces: "",
-    isFeatured: "não", // Inicializando com "não"
-    videoLink: "", // Campo para link do vídeo
+    isFeatured: "não",
+    videoLink: "",
   });
   const [images, setImages] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
@@ -58,7 +58,6 @@ export const AddProducts = () => {
 
     setIsUploading(true);
     try {
-      // Upload de imagens
       const imageFiles = Array.from(e.target.images.files);
       const imageUrls = await Promise.all(imageFiles.map(uploadImage));
 
@@ -67,12 +66,25 @@ export const AddProducts = () => {
         alert("Você precisa estar logado para adicionar produtos.");
         return;
       }
+
+      const userDocRef = doc(db, "users", currentUser.uid);
+      const userDocSnap = await getDoc(userDocRef);
+      let userName = currentUser.displayName || "Usuário Anônimo";
+      let photoURL = currentUser.photoURL || "";
+
+      if (userDocSnap.exists()) {
+        const userData = userDocSnap.data();
+        userName = userData.userName || userName;
+        photoURL = userData.photoURL || photoURL;
+      }
+
       await addDoc(collection(db, "products"), {
         ...formData,
         images: imageUrls,
         author: {
           uid: currentUser.uid,
-          userName: currentUser.displayName || "Usuário Anônimo",
+          userName,
+          photoURL,
         },
         createdAt: new Date(),
       });
@@ -92,8 +104,8 @@ export const AddProducts = () => {
         productType: "venda",
         bedrooms: "",
         parkingSpaces: "",
-        isFeatured: "não", // Inicializando com "não"
-        videoLink: "", // Limpa o campo do link de vídeo
+        isFeatured: "não",
+        videoLink: "",
       });
       setImages([]);
     } catch (error) {
@@ -112,26 +124,22 @@ export const AddProducts = () => {
       </div>
       <form className="form-content" onSubmit={handleSubmit}>
         {[
-          { label: "Endereço", name: "address", type: "text" },
-          { label: "Preço", name: "price", type: "text" },
-          { label: "Dimensão (m²)", name: "dimension", type: "number" },
-          { label: "Estado", name: "state", type: "text" },
-          { label: "Cidade", name: "city", type: "text" },
-          { label: "Bairro", name: "neighborhood", type: "text" },
-          { label: "Referência", name: "refProduct", type: "text" },
-          { label: "Dormitórios", name: "bedrooms", type: "number" },
-          {
-            label: "Vagas de Estacionamento",
-            name: "parkingSpaces",
-            type: "number",
-          },
-        ].map(({ label, name, type }) => (
-          <div className="form-group" key={name}>
-            <label className="form-label">{label}</label>
+          "address",
+          "price",
+          "dimension",
+          "state",
+          "city",
+          "neighborhood",
+          "refProduct",
+          "bedrooms",
+          "parkingSpaces",
+        ].map((field) => (
+          <div className="form-group" key={field}>
+            <label className="form-label">{field}</label>
             <input
-              type={type}
-              name={name}
-              value={formData[name]}
+              type="text"
+              name={field}
+              value={formData[field]}
               onChange={handleInputChange}
               className="form-input"
               required
@@ -252,6 +260,7 @@ export const AddProducts = () => {
             </div>
           </div>
         </div>
+
         <button type="submit" className="form-button" disabled={isUploading}>
           {isUploading ? "Carregando..." : "Adicionar Produto"}
         </button>

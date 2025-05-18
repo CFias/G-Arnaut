@@ -75,7 +75,6 @@
     justify-content: center;
     align-items: center;
     gap: 10px;
-    background: var(--text-color-opa);
     border-radius: 20px;
     margin-top: 2rem;
 }
@@ -83,11 +82,10 @@
 .pagination button {
     color: var(--text-color-one);
     border: none;
-    padding: 8px 10px;
+    padding: 6px 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%;
     font-size: 12px;
     cursor: pointer;
     background: transparent;

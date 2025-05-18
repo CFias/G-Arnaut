@@ -18,6 +18,14 @@
     position: relative;
 }
 
+.author-avatar {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid var(--btn-color-one);
+}
+
 .product-status {
     font-size: 14px;
     position: absolute;
@@ -52,8 +60,8 @@
 }
 
 .product-img {
-    width: 270px !important; 
-    height: 270px !important;
+    width: 250px !important; 
+    height: 250px !important;
     border-radius: 20px;
     transition: filter 0.3s ease-in-out;
     filter: brightness(0.6);
@@ -70,13 +78,15 @@
     font-family: var(--main-font);
     color: var(--text-color-one);
     padding: 5px;
-    width: 270px !important;
+    width: 250px !important;
 }
 
 .infos-details {
     display: flex;
     gap: 10px;
 }
+
+
 
 .product-city {
     font-family: var(--main-font);
@@ -246,12 +256,12 @@
     }
 
     .product-img {
-        width: 280px;
-        height: 250px;
+        width: 120px;
+        height: 120px;
     }
 
     .product-infos {
-        width: 280px;
+        width: 120px;
     }
 
     .product-type {
@@ -281,13 +291,13 @@
     }
 
     .product-img {
-        width: 180px !important;
-        height: 200px !important;
+        width: 170px !important;
+        height: 170px !important;
         border-radius: 5px;
     }
 
     .product-infos {
-        width: 180px !important;
+        width: 170px !important;
         justify-content: start;
     }
 
@@ -333,17 +343,17 @@
     }
 
     .product-img {
-        width: 230px;
-        height: 230px;
+        width: 140px;
+        height: 140px;
     }
 
     .product-infos {
-        width: 230px;
+        width: 140px;
         justify-content: center;
     }
 
     .infos-details {
-        width: 230px;
+        width: 140px;
         align-items: center;
         gap: 2px;
     }
@@ -375,12 +385,12 @@
     }
 
     .product-img {
-        width: 300px;
-        height: 300px;
+        width: 180px;
+        height: 180px;
     }
 
     .product-infos {
-        width: 300px;
+        width: 180px;
     }
 }
 
@@ -391,11 +401,11 @@
     }
 
     .product-img {
-        width: 290px;
-        height: 290px;
+        width: 200px;
+        height: 200px;
     }
 
     .product-infos {
-        width: 290px;
+        width: 200px;
     }
 }
