@@ -84,7 +84,7 @@ export const FeaturedProducts = ({ product }) => {
               src={product.author?.photoURL || Profile}
               className="author-avatar"
             />
-            <span>{product.author?.userName || "Autor desconhecido"}</span>
+            <span className="author-name" >{product.author?.userName || "Gildavi Arnaut"}</span>
 
             <Verified className="icon-profile" fontSize="10" />
           </div>

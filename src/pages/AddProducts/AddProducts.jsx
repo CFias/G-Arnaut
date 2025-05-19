@@ -123,114 +123,141 @@ export const AddProducts = () => {
         <img className="product-logo" src={Logo} alt="Logo" />
       </div>
       <form className="form-content" onSubmit={handleSubmit}>
-        {[
-          "address",
-          "price",
-          "dimension",
-          "state",
-          "city",
-          "neighborhood",
-          "refProduct",
-          "bedrooms",
-          "parkingSpaces",
-        ].map((field) => (
-          <div className="form-group" key={field}>
-            <label className="form-label">{field}</label>
+        <div className="form-grid">
+          {[
+            "address",
+            "price",
+            "dimension",
+            "state",
+            "city",
+            "neighborhood",
+            "refProduct",
+            "bedrooms",
+            "parkingSpaces",
+          ].map((field) => (
+            <div className="form-group" key={field}>
+              <label className="form-label">{field}</label>
+              <input
+                type="text"
+                name={field}
+                value={formData[field]}
+                onChange={handleInputChange}
+                className="form-input"
+                required
+              />
+            </div>
+          ))}
+        </div>
+
+        <div className="form-grid">
+          <div className="form-group">
+            <label className="form-label">Estado</label>
             <input
               type="text"
-              name={field}
-              value={formData[field]}
+              name="state"
+              value={formData.state}
               onChange={handleInputChange}
               className="form-input"
               required
             />
           </div>
-        ))}
+          <div className="form-group">
+            <label className="form-label">Cidade</label>
+            <input
+              type="text"
+              name="city"
+              value={formData.city}
+              onChange={handleInputChange}
+              className="form-input"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label className="form-label">Categoria</label>
+            <select
+              name="category"
+              value={formData.category}
+              onChange={handleInputChange}
+              className="form-input"
+              required
+            >
+              <option value="">Selecione uma Categoria</option>
+              <option value="Apartamento">Apartamento</option>
+              <option value="Casa">Casa</option>
+              <option value="Fazenda">Fazenda</option>
+              <option value="Sítio">Sítio</option>
+              <option value="Terreno">Terreno</option>
+              <option value="Galpão">Galpão</option>
+              <option value="Sala Comercial">Sala Comercial</option>
+            </select>
+          </div>
 
-        <div className="form-group">
-          <label className="form-label">Categoria</label>
-          <select
-            name="category"
-            value={formData.category}
-            onChange={handleInputChange}
-            className="form-input"
-            required
-          >
-            <option value="">Selecione uma Categoria</option>
-            <option value="Apartamento">Apartamento</option>
-            <option value="Casa">Casa</option>
-            <option value="Fazenda">Fazenda</option>
-            <option value="Sítio">Sítio</option>
-            <option value="Terreno">Terreno</option>
-            <option value="Galpão">Galpão</option>
-          </select>
-        </div>
+          <div className="form-group">
+            <label className="form-label">Descrição</label>
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleInputChange}
+              className="form-textarea"
+              required
+            />
+          </div>
 
-        <div className="form-group">
-          <label className="form-label">Descrição</label>
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleInputChange}
-            className="form-textarea"
-            required
-          />
-        </div>
+          <div className="form-group">
+            <label className="form-label">Link do Vídeo (YouTube)</label>
+            <input
+              type="url"
+              name="videoLink"
+              value={formData.videoLink}
+              onChange={handleInputChange}
+              className="form-input"
+            />
+          </div>
 
-        <div className="form-group">
-          <label className="form-label">Link do Vídeo (YouTube)</label>
-          <input
-            type="url"
-            name="videoLink"
-            value={formData.videoLink}
-            onChange={handleInputChange}
-            className="form-input"
-          />
-        </div>
+          <div className="form-group">
+            <label className="form-label">Status do Imóvel</label>
+            <select
+              name="status"
+              value={formData.status}
+              onChange={handleInputChange}
+              className="form-input"
+              required
+            >
+              <option value="">Selecione o Status</option>
+              <option value="Obra finalizada">Pronto para morar</option>
+              <option value="Lançamento">Lançamento</option>
+              <option value="Reformando">Reformando</option>
+              <option value="Recém reformado">Recém reformado</option>
+            </select>
+          </div>
 
-        <div className="form-group">
-          <label className="form-label">Status do Imóvel</label>
-          <select
-            name="status"
-            value={formData.status}
-            onChange={handleInputChange}
-            className="form-input"
-            required
-          >
-            <option value="">Selecione o Status</option>
-            <option value="Obra finalizada">Pronto para morar</option>
-            <option value="Lancamento">Lançamento</option>
-            <option value="Reformando">Reformando</option>
-            <option value="Recém reformado">Recém reformado</option>
-          </select>
-        </div>
+          <div className="form-group">
+            <label className="form-label">Imóvel para:</label>
+            <select
+              name="productType"
+              value={formData.productType}
+              onChange={handleInputChange}
+              className="form-input"
+              required
+            >
+              <option value="venda">Venda</option>
+              <option value="aluguel">Aluguel</option>
+            </select>
+          </div>
 
-        <div className="form-group">
-          <label className="form-label">Imóvel para:</label>
-          <select
-            name="productType"
-            value={formData.productType}
-            onChange={handleInputChange}
-            className="form-input"
-            required
-          >
-            <option value="venda">Venda</option>
-            <option value="aluguel">Aluguel</option>
-          </select>
-        </div>
-
-        <div className="form-group">
-          <label className="form-label">Destaque</label>
-          <select
-            name="isFeatured"
-            value={formData.isFeatured}
-            onChange={handleInputChange}
-            className="form-input"
-            required
-          >
-            <option value="não">Não</option>
-            <option value="sim">Sim</option>
-          </select>
+          <div className="form-group">
+            <label className="form-label">Destaque</label>
+            <select
+              name="isFeatured"
+              value={formData.isFeatured}
+              onChange={handleInputChange}
+              className="form-input"
+              required
+            >
+              <option value="não">Não</option>
+              <option value="sim">Sim</option>
+            </select>
+          </div>
         </div>
 
         <div className="form-group">
@@ -260,7 +287,6 @@ export const AddProducts = () => {
             </div>
           </div>
         </div>
-
         <button type="submit" className="form-button" disabled={isUploading}>
           {isUploading ? "Carregando..." : "Adicionar Produto"}
         </button>

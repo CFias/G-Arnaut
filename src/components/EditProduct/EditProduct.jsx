@@ -112,7 +112,6 @@ export const EditProduct = ({ match }) => {
         <img className="product-logo" src={Logo} alt="Logo" />
       </div>
       <form className="form-content" onSubmit={handleSubmit}>
-        {/* Renderizando os campos do formulário com base nos dados do produto */}
         {Object.keys(formData).map(
           (key) =>
             key !== "images" && (
