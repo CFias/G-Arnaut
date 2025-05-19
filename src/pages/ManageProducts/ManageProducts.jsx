@@ -10,8 +10,6 @@ import {
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { NavLink } from "react-router-dom";
 import "./styles.css";
-import { KeyboardBackspace } from "@mui/icons-material";
-import { IconButton } from "@mui/material";
 
 export const ManageProducts = () => {
   const [products, setProducts] = useState([]);
@@ -30,6 +28,10 @@ export const ManageProducts = () => {
 
   const [dragging, setDragging] = useState(false);
   const [draggedImageIndex, setDraggedImageIndex] = useState(null);
+
+  // Modal delete confirmation state
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [productToDelete, setProductToDelete] = useState(null);
 
   const imagePreviewRef = useRef(null);
 
@@ -96,12 +98,26 @@ export const ManageProducts = () => {
     }));
   };
 
-  const handleDelete = async (id) => {
+  // Abre modal e define qual produto será excluído
+  const confirmDelete = (product) => {
+    setProductToDelete(product);
+    setShowDeleteModal(true);
+  };
+
+  // Executa a exclusão após confirmação
+  const handleDelete = async () => {
+    if (!productToDelete) return;
+
     try {
-      await deleteDoc(doc(db, "products", id));
-      setProducts((prev) => prev.filter((product) => product.id !== id));
+      await deleteDoc(doc(db, "products", productToDelete.id));
+      setProducts((prev) =>
+        prev.filter((product) => product.id !== productToDelete.id)
+      );
     } catch (error) {
       console.error("Error deleting product:", error);
+    } finally {
+      setShowDeleteModal(false);
+      setProductToDelete(null);
     }
   };
 
@@ -222,6 +238,7 @@ export const ManageProducts = () => {
           name="price"
           value={searchFilters.price}
           onChange={handleSearchChange}
+          className="search-input"
         />
         <input
           type="text"
@@ -229,6 +246,7 @@ export const ManageProducts = () => {
           name="refProduct"
           value={searchFilters.refProduct}
           onChange={handleSearchChange}
+          className="search-input"
         />
         <input
           type="text"
@@ -236,6 +254,7 @@ export const ManageProducts = () => {
           name="description"
           value={searchFilters.description}
           onChange={handleSearchChange}
+          className="search-input"
         />
         <input
           type="text"
@@ -243,6 +262,7 @@ export const ManageProducts = () => {
           name="category"
           value={searchFilters.category}
           onChange={handleSearchChange}
+          className="search-input"
         />
       </div>
       <table className="products-table">
@@ -275,7 +295,7 @@ export const ManageProducts = () => {
                 </button>
                 <button
                   className="delete-button"
-                  onClick={() => handleDelete(product.id)}
+                  onClick={() => confirmDelete(product)}
                 >
                   Excluir
                 </button>
@@ -284,43 +304,114 @@ export const ManageProducts = () => {
           ))}
         </tbody>
       </table>
+
+      {/* Modal de confirmação de exclusão */}
+      {showDeleteModal && (
+        <div className="modal-delete">
+          <div className="modal-content-delete">
+            <h3>Confirmar exclusão</h3>
+            <p>
+              Tem certeza que deseja excluir o produto{" "}
+              <strong>{productToDelete?.refProduct}</strong>?
+            </p>
+            <div className="modal-buttons">
+              <button
+                className="cancel-button"
+                onClick={() => setShowDeleteModal(false)}
+              >
+                Cancelar
+              </button>
+              <button className="confirm-button" onClick={handleDelete}>
+                Excluir
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {isEditing && editProduct && (
         <div className="modal">
           <div className="modal-content">
-            <IconButton
-              className="access-back"
-              edge="start"
-              color="inherit"
-              component={NavLink}
-              to="/"
-            >
-              <KeyboardBackspace />
-            </IconButton>
             <h3>Editar Produto</h3>
-            <form onSubmit={handleUpdate}>
+            <form onSubmit={handleUpdate} className="form-content">
               <div className="form-grid">
-                {Object.keys(editProduct)
-                  .filter((key) => key !== "id" && key !== "images")
-                  .map((key) => (
-                    <div className="form-group" key={key}>
-                      <label htmlFor={key}>{labelMap[key] || key}</label>
-                      <input
-                        type="text"
-                        value={editProduct[key]}
-                        onChange={(e) =>
-                          setEditProduct({
-                            ...editProduct,
-                            [key]: e.target.value,
-                          })
-                        }
-                        id={key}
-                      />
-                    </div>
-                  ))}
+                {[
+                  "address",
+                  "price",
+                  "dimension",
+                  "state",
+                  "city",
+                  "neighborhood",
+                  "refProduct",
+                  "bedrooms",
+                  "parkingSpaces",
+                ].map((field) => (
+                  <div className="form-group" key={field}>
+                    <label className="form-label">
+                      {labelMap[field] || field}
+                    </label>
+                    <input
+                      type="text"
+                      name={field}
+                      value={editProduct[field] || ""}
+                      onChange={(e) =>
+                        setEditProduct({
+                          ...editProduct,
+                          [field]: e.target.value,
+                        })
+                      }
+                      className="form-input"
+                      required
+                    />
+                  </div>
+                ))}
+              </div>
+
+              <div className="form-grid">
                 <div className="form-group">
-                  <label>Link do Vídeo</label>
+                  <label className="form-label">Categoria</label>
+                  <select
+                    name="category"
+                    value={editProduct.category || ""}
+                    onChange={(e) =>
+                      setEditProduct({
+                        ...editProduct,
+                        category: e.target.value,
+                      })
+                    }
+                    className="form-input"
+                    required
+                  >
+                    <option value="">Selecione uma Categoria</option>
+                    <option value="Apartamento">Apartamento</option>
+                    <option value="Casa">Casa</option>
+                    <option value="Fazenda">Fazenda</option>
+                    <option value="Sítio">Sítio</option>
+                    <option value="Terreno">Terreno</option>
+                    <option value="Galpão">Galpão</option>
+                    <option value="Sala Comercial">Sala Comercial</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Descrição</label>
+                  <textarea
+                    name="description"
+                    value={editProduct.description || ""}
+                    onChange={(e) =>
+                      setEditProduct({
+                        ...editProduct,
+                        description: e.target.value,
+                      })
+                    }
+                    className="form-textarea"
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Link do Vídeo (YouTube)</label>
                   <input
-                    type="text"
+                    type="url"
+                    name="videoLink"
                     value={editProduct.videoLink || ""}
                     onChange={(e) =>
                       setEditProduct({
@@ -328,17 +419,66 @@ export const ManageProducts = () => {
                         videoLink: e.target.value,
                       })
                     }
-                    placeholder="Adicionar link do vídeo"
+                    className="form-input"
                   />
                 </div>
+                <div className="form-group">
+                  <label className="form-label">Status do Imóvel</label>
+                  <select
+                    name="status"
+                    value={editProduct.status || ""}
+                    onChange={(e) =>
+                      setEditProduct({ ...editProduct, status: e.target.value })
+                    }
+                    className="form-input"
+                    required
+                  >
+                    <option value="">Selecione o Status</option>
+                    <option value="Obra finalizada">Pronto para morar</option>
+                    <option value="Lançamento">Lançamento</option>
+                    <option value="Reformando">Reformando</option>
+                    <option value="Recém reformado">Recém reformado</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Imóvel para:</label>
+                  <select
+                    name="productType"
+                    value={editProduct.productType || ""}
+                    onChange={(e) =>
+                      setEditProduct({
+                        ...editProduct,
+                        productType: e.target.value,
+                      })
+                    }
+                    className="form-input"
+                    required
+                  >
+                    <option value="venda">Venda</option>
+                    <option value="aluguel">Aluguel</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Destaque</label>
+                  <select
+                    name="isFeatured"
+                    value={editProduct.isFeatured || "não"}
+                    onChange={(e) =>
+                      setEditProduct({
+                        ...editProduct,
+                        isFeatured: e.target.value,
+                      })
+                    }
+                    className="form-input"
+                    required
+                  >
+                    <option value="não">Não</option>
+                    <option value="sim">Sim</option>
+                  </select>
+                </div>
               </div>
-              <div className="form-group">
-                <label>Imagens</label>
-                <div
-                  ref={imagePreviewRef}
-                  className="image-preview-container"
-                  style={{ display: "flex", gap: "10px" }}
-                >
+              <div className="form-group-images">
+                <div ref={imagePreviewRef} className="image-preview-container">
                   {editProduct.images &&
                     editProduct.images.map((imageUrl, index) => (
                       <div
@@ -352,16 +492,16 @@ export const ManageProducts = () => {
                         style={{
                           border:
                             imageUrl === editProduct.mainImage
-                              ? "3px solid green"
+                              ? "4px solid green"
                               : "1px solid gray",
-                          padding: "3px",
+                          padding: "0px",
                           cursor: "move",
+                          borderRadius: "5px",
                         }}
                         onClick={() => handleSetMainImage(imageUrl)}
                       >
                         <img
                           src={imageUrl}
-                          alt={`Imagem ${index + 1}`}
                           width={100}
                           height={100}
                           style={{ objectFit: "cover" }}
@@ -369,6 +509,7 @@ export const ManageProducts = () => {
                         />
                       </div>
                     ))}
+                  <div />
                 </div>
                 <input
                   type="file"
@@ -380,10 +521,10 @@ export const ManageProducts = () => {
               </div>
               <button
                 type="submit"
+                className="form-button"
                 disabled={isUploading}
-                className="update-button"
               >
-                {isUploading ? "Atualizando..." : "Atualizar Produto"}
+                {isUploading ? "Atualizando..." : "Salvar Alterações"}
               </button>
             </form>
           </div>

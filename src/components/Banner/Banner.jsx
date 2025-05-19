@@ -60,11 +60,6 @@ export const Banner = () => {
           venda, compra e locação, através de um processo seguro e transparente
           que somente um profissional qualificado pode lhe oferecer.
         </p>
-        <div className="icons-banner">
-          <WhatsApp fontSize="small" className="banner-icon" />
-          <Instagram fontSize="small" className="banner-icon" />
-          <YouTube fontSize="small" className="banner-icon" />
-        </div>
       </div>
       <div className="carousel">
         {isLoading

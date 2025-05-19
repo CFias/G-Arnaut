@@ -1,189 +1,169 @@
-/* Estilo do container principal */
+/* Container geral */
 .add-product-container {
-  padding: 20px;
-  min-height: 100vh;
-  border-radius: 12px;
-  background-color: #fff;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  font-family: var(--main-font);
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 25px 30px;
+    background: #272727;
+    border-radius: 10px;
+    font-family: var(--main-font);
 }
 
+/* Cabeçalho do formulário */
 .add-product-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.product-logo {
-  width: 100px;
-  object-fit: contain;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 25px;
 }
 
 .form-title {
-  font-size: 24px;
-  font-weight: bold;
-  font-family: var(--main-font);
-  color: var(--text-color-one);
-  margin: 0;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #cccccc;
+}
+
+.product-logo {
+    height: 50px;
+    opacity: 0.7;
 }
 
 .form-content {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
 }
 
+/* Grupos de formulário */
 .form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+    display: flex;
+    flex-direction: column;
 }
 
 .form-label {
-  font-weight: 600;
-  color: var(--text-color-one);
-  font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #555;
+    user-select: none;
 }
 
 .form-input,
-.form-textarea {
-  width: 100%;
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  background: var(--text-color-two);
-  font-size: 14px;
-  font-family: var(--main-font);
-  transition: border-color 0.3s ease;
+.form-textarea,
+.form-input-file {
+    padding: 10px 14px;
+    border: 1.8px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+    outline-offset: 2px;
 }
 
 .form-input:focus,
-.form-textarea:focus {
-  border-color: var(--btn-color-one);
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+.form-textarea:focus,
+.form-input-file:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 6px rgba(0, 123, 255, 0.5);
 }
 
 .form-textarea {
-  height: 120px;
-  grid-column: span 2;
+    resize: vertical;
+    min-height: 80px;
+    font-family: inherit;
 }
 
-.custom-file-input {
-  display: inline-block;
-  padding: 12px;
-  width: 100%;
-  background-color: var(--btn-color-one);
-  color: white;
-  border-radius: 8px;
-  text-align: center;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.custom-file-input:hover {
-  background-color: darken(var(--btn-color-one), 10%);
-}
-
-.form-input-file {
-  display: none;
-}
-
+/* Botão do formulário */
 .form-button {
-  padding: 12px;
-  background-color: var(--btn-color-one);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-family: var(--main-font);
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  grid-column: span 2;
-}
-
-.form-button:hover:not(:disabled) {
-  background-color: darken(var(--btn-color-one), 10%);
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 13px;
+    border-radius: 7px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.25s ease;
+    margin-top: 10px;
 }
 
 .form-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
+    background-color: #6c757d;
+    cursor: not-allowed;
 }
 
-/* Container de pré-visualização */
+.form-button:hover:not(:disabled) {
+    background-color: #0056b3;
+}
+
+/* Input file customizado */
+.image-upload-container {
+    position: relative;
+}
+
+.form-input-file {
+    opacity: 0;
+    position: absolute;
+    width: 100%;
+    height: 38px;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    z-index: 2;
+}
+
+.custom-file-input {
+    display: inline-block;
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.8px solid #ccc;
+    border-radius: 6px;
+    text-align: center;
+    font-weight: 600;
+    color: #555;
+    background: #f2f2f2;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.25s ease;
+}
+
+.custom-file-input:hover {
+    background-color: #e0e0e0;
+}
+
+/* Preview das imagens */
 .image-preview {
-  display: flex;
-  flex-wrap: wrap;
-  /* Permite que as imagens fiquem em múltiplas linhas */
-  gap: 10px;
-  /* Espaçamento entre as imagens */
-  justify-content: start;
-  /* Alinha as imagens à esquerda */
+    margin-top: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
-/* Miniatura da imagem */
 .image-thumbnail {
-  width: 100px;
-  /* Tamanho fixo para uniformidade */
-  height: 100px;
-  object-fit: cover;
-  /* Garante que a imagem preencha o espaço sem distorcer */
-  border-radius: 8px;
-  /* Bordas arredondadas */
-  border: 2px solid var(--btn-color-one);
-  /* Destaque nas bordas */
-  position: relative;
-  /* Para posicionar o botão de exclusão */
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  /* Sombra leve */
-  transition: transform 0.2s ease-in-out;
+    width: 90px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1.5px solid #ccc;
+    transition: transform 0.2s ease;
 }
 
 .image-thumbnail:hover {
-  transform: scale(1.05);
-  /* Efeito de zoom ao passar o mouse */
+    transform: scale(1.05);
+    border-color: #007bff;
 }
 
-/* Botão para excluir imagem */
-.image-delete {
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  width: 20px;
-  height: 20px;
-  background-color: red;
-  color: white;
-  font-size: 12px;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
-  transition: background-color 0.2s ease-in-out;
-}
+/* Responsividade simples */
+@media (max-width: 640px) {
+    .add-product-container {
+        margin: 20px 15px;
+        padding: 20px;
+    }
 
-.image-delete:hover {
-  background-color: darkred;
-}
+    .product-logo {
+        height: 40px;
+    }
 
-/* Personalização para melhor exibição no formulário */
-.custom-file-input {
-  display: block;
-  margin-bottom: 15px;
-  /* Espaço entre o botão e as pré-visualizações */
-}
-
-
-@media (max-width: 768px) {
-  .form-content {
-    grid-template-columns: 1fr;
-    /* Em telas menores, os campos ocupam uma coluna */
-  }
+    .form-button {
+        font-size: 1rem;
+        padding: 12px;
+    }
 }
