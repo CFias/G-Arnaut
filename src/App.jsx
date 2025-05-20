@@ -13,7 +13,6 @@ import { ProductDetails } from "./pages/ProductDetails/ProductDetails";
 import { AddPosts } from "./pages/AddPosts/AddPosts";
 import { AddProducts } from "./pages/AddProducts/AddProducts";
 import RentalsPage from "./pages/RentalsPage/RentalsPage";
-import ImportVideo from "./pages/ImportVideo/ImportVideo";
 import { EditProduct } from "./components/EditProduct/EditProduct";
 import { AddFeaturedProducts } from "./pages/AddFeaturedProducts/AddFeaturedProducts ";
 import { RentProducts } from "./pages/RentProducts/RentProducts";
@@ -37,7 +36,6 @@ function App() {
         <Route path="/about" element={<AboutAgent />} />
         <Route path="/filtered-products" element={<FilteredProducts />} />
         <Route path="/location" element={<RentalsPage />} />
-        <Route path="/import-video" element={<ImportVideo />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/add-posts" element={<AddPosts />} />
         <Route path="/add-dest" element={<AddFeaturedProducts />} />

@@ -9,10 +9,13 @@ import {
   AppBar,
   Toolbar,
   InputBase,
-  Button,
   Box,
-  CardActions,
   Divider,
+  Drawer,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
 } from "@mui/material";
 import {
   AddCircle,
@@ -37,7 +40,7 @@ import {
   Legend,
 } from "chart.js";
 
-// Register the chart.js components
+// Register chart components
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -46,6 +49,9 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+
+// Sidebar width
+const drawerWidth = 240;
 
 export const Admin = () => {
   const [productCount, setProductCount] = useState(0);
@@ -83,19 +89,46 @@ export const Admin = () => {
       },
     },
     scales: {
-      x: {
-        beginAtZero: true,
-      },
-      y: {
-        beginAtZero: true,
-      },
+      x: { beginAtZero: true },
+      y: { beginAtZero: true },
     },
   };
 
+  // Links e ícones da sidebar
+  const sideLinks = [
+    { text: "Importar Vídeo", icon: <AddCircle />, link: "/import-video" },
+    { text: "Adicionar Produto", icon: <AddCircle />, link: "/add-products" },
+    { text: "Adicionar Post", icon: <AddCircle />, link: "/add-posts" },
+    {
+      text: "Gerenciar Produtos",
+      icon: <AdminPanelSettings />,
+      link: "/admin/manage-products",
+    },
+    {
+      text: "Gerenciar Posts",
+      icon: <AdminPanelSettings />,
+      link: "/manage-posts",
+    },
+    {
+      text: "Gerenciar Usuários",
+      icon: <ManageAccounts />,
+      link: "/manage-users",
+    },
+    { text: "Configurações", icon: <Settings />, link: "/settings" },
+    {
+      text: "Editar Perfil",
+      icon: <ManageAccountsRounded />,
+      link: "/edit-profile",
+    },
+  ];
+
   return (
     <>
-      {/* AppBar - Header Section */}
-      <AppBar position="static" color="primary" elevation={3}>
+      {/* AppBar */}
+      <AppBar
+        position="fixed"
+        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      >
         <Toolbar>
           <IconButton edge="start" color="inherit" component={NavLink} to="/">
             <KeyboardBackspace />
@@ -114,7 +147,12 @@ export const Admin = () => {
           />
           <NavLink
             to="/profile"
-            style={{ display: "flex", alignItems: "center", marginLeft: 16 }}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              marginLeft: 16,
+              color: "white",
+            }}
           >
             <Typography variant="body1" sx={{ marginRight: 1 }}>
               {userName}
@@ -124,18 +162,50 @@ export const Admin = () => {
         </Toolbar>
       </AppBar>
 
-      <Box sx={{ padding: 4 }}>
+      {/* Sidebar */}
+      <Drawer
+        variant="permanent"
+        sx={{
+          width: drawerWidth,
+          [`& .MuiDrawer-paper`]: {
+            width: drawerWidth,
+            boxSizing: "border-box",
+          },
+        }}
+      >
+        <Toolbar />
+        <Box sx={{ overflow: "auto" }}>
+          <List>
+            {sideLinks.map((item, index) => (
+              <ListItem
+                button
+                key={item.text}
+                component={NavLink}
+                to={item.link}
+                sx={{ textDecoration: "none", color: "inherit" }}
+              >
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} />
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+      </Drawer>
+
+      {/* Conteúdo Principal */}
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          p: 4,
+          marginLeft: `${drawerWidth}px`,
+          marginTop: "64px", // altura do AppBar
+        }}
+      >
         <Grid container spacing={4}>
-          {/* Metrics Section */}
+          {/* Cards de contagem */}
           <Grid item xs={12} md={6} lg={3}>
-            <Card
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                padding: 3,
-              }}
-            >
+            <Card sx={{ textAlign: "center", padding: 3 }}>
               <Typography variant="h6" color="textSecondary">
                 Total de Produtos
               </Typography>
@@ -145,14 +215,7 @@ export const Admin = () => {
             </Card>
           </Grid>
           <Grid item xs={12} md={6} lg={3}>
-            <Card
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                padding: 3,
-              }}
-            >
+            <Card sx={{ textAlign: "center", padding: 3 }}>
               <Typography variant="h6" color="textSecondary">
                 Total de Posts
               </Typography>
@@ -162,7 +225,7 @@ export const Admin = () => {
             </Card>
           </Grid>
 
-          {/* Statistics Chart */}
+          {/* Gráfico */}
           <Grid item xs={12} md={12} lg={6}>
             <Card sx={{ padding: 3 }}>
               <Typography
@@ -175,92 +238,8 @@ export const Admin = () => {
               <Bar data={chartData} options={chartOptions} />
             </Card>
           </Grid>
-
-          {/* Card Actions */}
-          <Grid item xs={12} sm={6} md={4}>
-            <CardAction
-              title="Importar Vídeo do YouTube"
-              icon={<AddCircle />}
-              link="/import-video"
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <CardAction
-              title="Adicionar Produtos"
-              icon={<AddCircle />}
-              link="/add-products"
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <CardAction
-              title="Adicionar Post"
-              icon={<AddCircle />}
-              link="/add-posts"
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <CardAction
-              title="Gerenciar Produtos"
-              icon={<AdminPanelSettings />}
-              link="/admin/manage-products"
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <CardAction
-              title="Gerenciar Publicações"
-              icon={<AdminPanelSettings />}
-              link="/manage-posts"
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <CardAction
-              title="Gerenciar Usuários"
-              icon={<ManageAccounts />}
-              link="/manage-users"
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <CardAction
-              title="Configurações"
-              icon={<Settings />}
-              link="/settings"
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <CardAction
-              title="Editar Perfil"
-              icon={<ManageAccountsRounded />}
-              link="/edit-profile"
-            />
-          </Grid>
         </Grid>
       </Box>
     </>
   );
 };
-
-// Admin Card Action Component
-const CardAction = ({ title, icon, link }) => (
-  <Card
-    component={NavLink}
-    to={link}
-    sx={{
-      textDecoration: "none",
-      textAlign: "center",
-      padding: 3,
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      cursor: "pointer",
-      backgroundColor: "#f5f5f5",
-      borderRadius: 2,
-      transition: "transform 0.2s ease",
-      "&:hover": { transform: "scale(1.05)" },
-    }}
-  >
-    {icon}
-    <Typography variant="body1" sx={{ marginTop: 2, color: "inherit" }}>
-      {title}
-    </Typography>
-  </Card>
-);
