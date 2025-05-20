@@ -4,6 +4,7 @@ import { collection, addDoc, doc, getDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import Logo from "../../assets/image/garnaut-gray-logo.png";
 import "./styles.css";
+import { NavLink } from "react-router-dom";
 
 export const AddProducts = () => {
   const [formData, setFormData] = useState({
@@ -118,37 +119,14 @@ export const AddProducts = () => {
 
   return (
     <div className="add-product-container">
+      <NavLink className="access-back" to="/admin">
+        Voltar
+      </NavLink>
       <div className="add-product-top">
         <h2 className="form-title">Adicionar imóvel</h2>
         <img className="product-logo" src={Logo} alt="Logo" />
       </div>
       <form className="form-content" onSubmit={handleSubmit}>
-        <div className="form-grid">
-          {[
-            "address",
-            "price",
-            "dimension",
-            "state",
-            "city",
-            "neighborhood",
-            "refProduct",
-            "bedrooms",
-            "parkingSpaces",
-          ].map((field) => (
-            <div className="form-group" key={field}>
-              <label className="form-label">{field}</label>
-              <input
-                type="text"
-                name={field}
-                value={formData[field]}
-                onChange={handleInputChange}
-                className="form-input"
-                required
-              />
-            </div>
-          ))}
-        </div>
-
         <div className="form-grid">
           <div className="form-group">
             <label className="form-label">Estado</label>
@@ -156,6 +134,31 @@ export const AddProducts = () => {
               type="text"
               name="state"
               value={formData.state}
+              placeholder="Ex: BA"
+              onChange={handleInputChange}
+              className="form-input"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label className="form-label">Endereço</label>
+            <input
+              type="text"
+              name="address"
+              value={formData.address}
+              placeholder="Ex: Rua das Flores, 123"
+              onChange={handleInputChange}
+              className="form-input"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label className="form-label">Bairro</label>
+            <input
+              type="text"
+              name="neighborhood"
+              value={formData.neighborhood}
+              placeholder="Ex: Pituba"
               onChange={handleInputChange}
               className="form-input"
               required
@@ -167,11 +170,88 @@ export const AddProducts = () => {
               type="text"
               name="city"
               value={formData.city}
+              placeholder="Ex: Salvador"
               onChange={handleInputChange}
               className="form-input"
               required
             />
           </div>
+          <div className="form-group">
+            <label className="form-label">Preço</label>
+            <input
+              type="text"
+              name="price"
+              value={formData.price}
+              placeholder="Ex: R$ 350.000,00"
+              onChange={(e) => {
+                const rawValue = e.target.value.replace(/\D/g, ""); // Remove tudo que não for número
+                const numericValue = parseFloat(rawValue) / 100;
+
+                const formattedValue = numericValue.toLocaleString("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                });
+
+                setFormData({ ...formData, price: formattedValue });
+              }}
+              className="form-input"
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Dimensão</label>
+            <input
+              type="text"
+              name="dimension"
+              value={formData.dimension}
+              placeholder="Ex: 200m²"
+              onChange={handleInputChange}
+              className="form-input"
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Referência</label>
+            <input
+              type="text"
+              name="refProduct"
+              value={formData.refProduct}
+              placeholder="Ex: COD123"
+              onChange={handleInputChange}
+              className="form-input"
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Quartos</label>
+            <input
+              type="text"
+              name="bedrooms"
+              value={formData.bedrooms}
+              placeholder="Ex: 3"
+              onChange={handleInputChange}
+              className="form-input"
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Vagas de Garagem</label>
+            <input
+              type="text"
+              name="parkingSpaces"
+              value={formData.parkingSpaces}
+              placeholder="Ex: 2"
+              onChange={handleInputChange}
+              className="form-input"
+              required
+            />
+          </div>
+        </div>
+        <div className="form-grid">
           <div className="form-group">
             <label className="form-label">Categoria</label>
             <select
@@ -190,17 +270,6 @@ export const AddProducts = () => {
               <option value="Galpão">Galpão</option>
               <option value="Sala Comercial">Sala Comercial</option>
             </select>
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">Descrição</label>
-            <textarea
-              name="description"
-              value={formData.description}
-              onChange={handleInputChange}
-              className="form-textarea"
-              required
-            />
           </div>
 
           <div className="form-group">
@@ -259,7 +328,16 @@ export const AddProducts = () => {
             </select>
           </div>
         </div>
-
+        <div className="form-group">
+          <label className="form-label">Descrição</label>
+          <textarea
+            name="description"
+            value={formData.description}
+            onChange={handleInputChange}
+            className="form-textarea"
+            required
+          />
+        </div>
         <div className="form-group">
           <label className="form-label">Imagens do Imóvel</label>
           <div className="image-upload-container">

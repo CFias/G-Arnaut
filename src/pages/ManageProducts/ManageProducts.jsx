@@ -20,22 +20,17 @@ export const ManageProducts = () => {
   const [newImages, setNewImages] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
   const [searchFilters, setSearchFilters] = useState({
-    price: "",
-    refProduct: "",
-    description: "",
-    category: "",
+    query: "",
   });
 
   const [dragging, setDragging] = useState(false);
   const [draggedImageIndex, setDraggedImageIndex] = useState(null);
 
-  // Modal delete confirmation state
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
 
   const imagePreviewRef = useRef(null);
 
-  // Mapeamento das chaves para labels amigáveis
   const labelMap = {
     address: "Endereço",
     price: "Preço",
@@ -79,23 +74,21 @@ export const ManageProducts = () => {
   }, []);
 
   useEffect(() => {
-    const filtered = products.filter((product) =>
-      Object.keys(searchFilters).every((key) => {
-        if (!searchFilters[key]) return true;
-        return String(product[key])
-          .toLowerCase()
-          .includes(searchFilters[key].toLowerCase());
-      })
-    );
+    const filtered = products.filter((product) => {
+      const query = searchFilters.query.toLowerCase();
+      return (
+        product.price.toString().includes(query) ||
+        product.refProduct.toLowerCase().includes(query) ||
+        product.description.toLowerCase().includes(query) ||
+        product.category.toLowerCase().includes(query)
+      );
+    });
+
     setFilteredProducts(filtered);
   }, [searchFilters, products]);
 
   const handleSearchChange = (e) => {
-    const { name, value } = e.target;
-    setSearchFilters((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setSearchFilters({ query: e.target.value });
   };
 
   // Abre modal e define qual produto será excluído
@@ -231,40 +224,16 @@ export const ManageProducts = () => {
         Voltar
       </NavLink>
       <h2 className="manage-products-heading">Gerenciar Produtos</h2>
-      <div className="search-filters">
+      <div className="search-bar-container">
         <input
           type="text"
-          placeholder="Buscar por preço"
-          name="price"
-          value={searchFilters.price}
-          onChange={handleSearchChange}
-          className="search-input"
-        />
-        <input
-          type="text"
-          placeholder="Buscar por referência"
-          name="refProduct"
-          value={searchFilters.refProduct}
-          onChange={handleSearchChange}
-          className="search-input"
-        />
-        <input
-          type="text"
-          placeholder="Buscar por descrição"
-          name="description"
-          value={searchFilters.description}
-          onChange={handleSearchChange}
-          className="search-input"
-        />
-        <input
-          type="text"
-          placeholder="Buscar por categoria"
-          name="category"
-          value={searchFilters.category}
+          placeholder="Buscar por preço, referência, descrição ou categoria"
+          value={searchFilters.query}
           onChange={handleSearchChange}
           className="search-input"
         />
       </div>
+
       <table className="products-table">
         <thead>
           <tr>
@@ -322,7 +291,7 @@ export const ManageProducts = () => {
                 Cancelar
               </button>
               <button className="confirm-button" onClick={handleDelete}>
-                Excluir
+                Confirmar
               </button>
             </div>
           </div>

@@ -85,7 +85,6 @@ export const FeaturedProducts = ({ product }) => {
               className="author-avatar"
             />
             <span className="author-name" >{product.author?.userName || "Gildavi Arnaut"}</span>
-
             <Verified className="icon-profile" fontSize="10" />
           </div>
           <span onClick={toggleFavorite}>

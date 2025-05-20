@@ -1,25 +1,22 @@
 /* Container geral */
 .add-product-container {
-    max-width: 600px;
     margin: 40px auto;
     padding: 25px 30px;
-    background: #272727;
     border-radius: 10px;
     font-family: var(--main-font);
 }
 
-/* Cabeçalho do formulário */
 .add-product-top {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 25px;
+    border-bottom: 1px solid #ccc;
 }
 
 .form-title {
     font-size: 1.8rem;
     font-weight: 700;
-    color: #cccccc;
+    color: var(--text-color-one);
 }
 
 .product-logo {
@@ -31,38 +28,37 @@
     display: flex;
     flex-direction: column;
     gap: 18px;
+    margin-top: 20px;
 }
 
-/* Grupos de formulário */
 .form-group {
     display: flex;
     flex-direction: column;
 }
 
 .form-label {
-    font-weight: 600;
-    margin-bottom: 6px;
-    color: #555;
+    font-weight: 400 !important;
+    color: var(--text-color-one) !important;
     user-select: none;
+    width: 100%;
 }
 
 .form-input,
 .form-textarea,
 .form-input-file {
     padding: 10px 14px;
-    border: 1.8px solid #ccc;
     border-radius: 6px;
     font-size: 1rem;
     transition: border-color 0.3s ease;
     outline-offset: 2px;
+    cursor: pointer;
 }
 
 .form-input:focus,
 .form-textarea:focus,
 .form-input-file:focus {
-    border-color: #007bff;
     outline: none;
-    box-shadow: 0 0 6px rgba(0, 123, 255, 0.5);
+    box-shadow: 0 0 6px rgba(17, 35, 54, 0.5);
 }
 
 .form-textarea {
@@ -73,7 +69,7 @@
 
 /* Botão do formulário */
 .form-button {
-    background-color: #007bff;
+    background-color: var(--btn-color-one);
     color: #fff;
     border: none;
     padding: 13px;
@@ -91,7 +87,7 @@
 }
 
 .form-button:hover:not(:disabled) {
-    background-color: #0056b3;
+    background-color: #2d3236;
 }
 
 /* Input file customizado */

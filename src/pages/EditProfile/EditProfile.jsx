@@ -12,6 +12,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
 import { db, storage } from "../../services/FirebaseConfig";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { NavLink } from "react-router-dom";
 
 const EditProfile = () => {
   const { currentUser, userName, setUserName } = useAuth();
@@ -63,6 +64,9 @@ const EditProfile = () => {
 
   return (
     <Box sx={{ p: 4, maxWidth: 500, mx: "auto" }}>
+      <NavLink className="access-back" to="/admin">
+        Voltar
+      </NavLink>
       <Typography variant="h5" mb={3}>
         Editar Perfil
       </Typography>
