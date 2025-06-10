@@ -19,7 +19,6 @@ export const CardFilter = () => {
 
   const navigate = useNavigate();
 
-  // Simula um carregamento inicial
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 2000);
     return () => clearTimeout(timer);
@@ -33,28 +32,39 @@ export const CardFilter = () => {
     try {
       let q = query(productsRef);
 
-      // Construção da consulta com filtros
+      // Filtros diretos que podem ser aplicados no Firestore
       if (category) {
         q = query(q, where("category", "==", category));
-      }
-      if (city) {
-        q = query(q, where("city", "==", city));
-      }
-      if (neighborhood) {
-        q = query(q, where("neighborhood", "==", neighborhood));
-      }
-      if (reference) {
-        q = query(q, where("refProduct", "==", reference));
-      }
-      if (price) {
-        q = query(q, where("price", "<=", price));
       }
       if (bedrooms) {
         q = query(q, where("bedrooms", "==", bedrooms));
       }
+      if (price) {
+        q = query(q, where("price", "<=", parseFloat(price)));
+      }
 
       const querySnapshot = await getDocs(q);
-      const filteredProducts = querySnapshot.docs.map((doc) => doc.data());
+      let filteredProducts = querySnapshot.docs.map((doc) => doc.data());
+
+      // Filtros locais mais flexíveis
+      if (city) {
+        filteredProducts = filteredProducts.filter((item) =>
+          item.city?.toLowerCase().includes(city.toLowerCase())
+        );
+      }
+
+      if (neighborhood) {
+        filteredProducts = filteredProducts.filter((item) =>
+          item.neighborhood?.toLowerCase().includes(neighborhood.toLowerCase())
+        );
+      }
+
+      if (reference) {
+        filteredProducts = filteredProducts.filter((item) =>
+          item.refProduct?.toLowerCase().includes(reference.toLowerCase())
+        );
+      }
+
       console.log("Produtos filtrados encontrados:", filteredProducts);
 
       navigate("/filtered-products", {
@@ -142,7 +152,7 @@ export const CardFilter = () => {
               id="price"
               className="filter-in"
               type="number"
-              placeholder="R$ 350,000"
+              placeholder="R$ 350.000"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
             />
