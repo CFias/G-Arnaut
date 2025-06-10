@@ -47,11 +47,11 @@ A plataforma foi criada para:
 
 ## 🧱 Tecnologias Utilizadas
 
-- **Frontend**: React.js (com React Router, TailwindCSS ou MUI)
-- **Backend/Serviços**: Firebase ou Supabase (autenticação, banco de dados e storage)
-- **Hospedagem**: Vercel ou Firebase Hosting
+- **Frontend**: React.js (com React Router, MUI)
+- **Backend/Serviços**: Firebase (autenticação, banco de dados e storage)
+- **Hospedagem**: Vercel
 - **Bibliotecas**:
-  - React Icons
+  - MUI
   - React Loading Skeleton
   - Outras ferramentas auxiliares para UI/UX
 
