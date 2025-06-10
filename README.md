@@ -56,18 +56,3 @@ A plataforma foi criada para:
   - Outras ferramentas auxiliares para UI/UX
 
 ---
-
-## 🚀 Como Rodar o Projeto Localmente
-
-```bash
-# Clone o repositório
-git clone https://github.com/seu-usuario/nome-do-repositorio.git
-
-# Acesse o diretório
-cd nome-do-repositorio
-
-# Instale as dependências
-npm install
-
-# Inicie o servidor de desenvolvimento
-npm run dev
