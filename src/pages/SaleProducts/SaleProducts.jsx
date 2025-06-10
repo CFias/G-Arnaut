@@ -2,7 +2,16 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { db } from "../../services/FirebaseConfig";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { MenuItem, Select, Breadcrumbs, Typography } from "@mui/material";
+import {
+  MenuItem,
+  Select,
+  Breadcrumbs,
+  Typography,
+  InputLabel,
+  FormControl,
+  FormControlLabel,
+  Switch,
+} from "@mui/material";
 import { Category, CropFree, DirectionsCar, Hotel } from "@mui/icons-material";
 import "./styles.css";
 import { Navbar } from "../../components/Navbar/Navbar";
@@ -19,8 +28,10 @@ export const SaleProducts = () => {
   const [sortOrder, setSortOrder] = useState("");
   const [totalProperties, setTotalProperties] = useState(0);
   const [showCategories, setShowCategories] = useState(true);
-  const navigate = useNavigate();
   const [propertyType, setPropertyType] = useState("");
+  const [selectedProductType, setSelectedProductType] = useState("venda");
+  const [filterActive, setFilterActive] = useState(false);
+  const navigate = useNavigate();
 
   const createWhatsAppLink = () => {
     const baseMessage = `Olá, Gildavi!\nVi alguns imóveis no seu site e gostaria de ter um atendimento personalizado.\nEstou procurando por: ${propertyType}`;
@@ -31,7 +42,9 @@ export const SaleProducts = () => {
   const fetchProducts = async () => {
     try {
       const productsRef = collection(db, "products");
-      const q = query(productsRef, where("productType", "==", "venda"));
+      const q = filterActive
+        ? query(productsRef, where("productType", "==", selectedProductType))
+        : productsRef;
       const querySnapshot = await getDocs(q);
       const productList = querySnapshot.docs.map((doc) => ({
         id: doc.id,
@@ -39,41 +52,41 @@ export const SaleProducts = () => {
       }));
 
       const saleProducts = productList.filter(
-        (product) => product.productType === "venda"
+        (product) => product.productType === selectedProductType
       );
 
       const distinctCategories = [
-        ...new Set(saleProducts.map((product) => product.category)),
+        ...new Set(saleProducts.map((p) => p.category)),
       ];
 
       const counts = distinctCategories.reduce((acc, category) => {
         acc[category] = saleProducts.filter(
-          (product) => product.category === category
+          (p) => p.category === category
         ).length;
         return acc;
       }, {});
 
-      const statusData = saleProducts.reduce((acc, product) => {
-        acc[product.status] = (acc[product.status] || 0) + 1;
+      const statusData = saleProducts.reduce((acc, p) => {
+        acc[p.status] = (acc[p.status] || 0) + 1;
         return acc;
       }, {});
 
-      const cityData = saleProducts.reduce((acc, product) => {
-        acc[product.city] = (acc[product.city] || 0) + 1;
+      const cityData = saleProducts.reduce((acc, p) => {
+        acc[p.city] = (acc[p.city] || 0) + 1;
         return acc;
       }, {});
 
-      const dimensionData = saleProducts.reduce((acc, product) => {
-        const dimension = product.dimension;
-        if (dimension >= 20 && dimension <= 500) {
-          const range = Math.floor(dimension / 100) * 100;
+      const dimensionData = saleProducts.reduce((acc, p) => {
+        const dim = p.dimension;
+        if (dim >= 20 && dim <= 500) {
+          const range = Math.floor(dim / 100) * 100;
           acc[range] = (acc[range] || 0) + 1;
         }
         return acc;
       }, {});
 
-      const parkingData = saleProducts.reduce((acc, product) => {
-        acc[product.parkingSpaces] = (acc[product.parkingSpaces] || 0) + 1;
+      const parkingData = saleProducts.reduce((acc, p) => {
+        acc[p.parkingSpaces] = (acc[p.parkingSpaces] || 0) + 1;
         return acc;
       }, {});
 
@@ -92,7 +105,7 @@ export const SaleProducts = () => {
 
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [selectedProductType, filterActive]);
 
   const handleSortChange = (event) => {
     const value = event.target.value;
@@ -110,13 +123,8 @@ export const SaleProducts = () => {
     navigate(`/product/${id}`);
   };
 
-  const toggleCategories = () => {
-    setShowCategories(!showCategories);
-  };
-
-  const loadMore = () => {
-    setVisibleProducts((prev) => prev + 12);
-  };
+  const toggleCategories = () => setShowCategories(!showCategories);
+  const loadMore = () => setVisibleProducts((prev) => prev + 12);
 
   return (
     <>
@@ -132,127 +140,111 @@ export const SaleProducts = () => {
             </Typography>
           </Breadcrumbs>
         </div>
-        <div className="sort-dropdown">
-          <div className="select-filter">
-            <Select
-              value={sortOrder}
-              onChange={handleSortChange}
-              displayEmpty
-              className="filter-sale"
-            >
-              <MenuItem className="item-custom-p" value="">
-                Ordenar por
-              </MenuItem>
-              <MenuItem className="menu-item-custom" value="low-to-high">
-                Menor Preço
-              </MenuItem>
-              <MenuItem className="menu-item-custom" value="high-to-low">
-                Maior Preço
-              </MenuItem>
-            </Select>
-          </div>
-        </div>
+
         <div className="filter-product-content-sale">
-          <div className="filter-side-sale-container">
-            <div className="filter-side-sale">
-              <p className="filter-title-sale">Venda</p>
-              <p className="total-properties">{totalProperties} Resultados</p>
-              {showCategories && (
-                <div className="categories-section">
-                  <ul className="category-list">
-                    {categories.map((category) => (
-                      <li key={category} className="category-item">
-                        {category}{" "}
-                        <span className="category-count">
-                          ({categoryCounts[category]})
-                        </span>
+          <div className="filter-side-sale">
+            <h2 className="filter-title-sale">Filtrar Imóveis</h2>
+
+            <FormControl fullWidth sx={{ mb: 2 }}>
+              <InputLabel id="product-type-label">Tipo de Imóvel</InputLabel>
+              <Select
+                labelId="product-type-label"
+                value={selectedProductType}
+                label="Tipo de Imóvel"
+                onChange={(e) => setSelectedProductType(e.target.value)}
+                disabled={!filterActive}
+              >
+                <MenuItem value="venda">Venda</MenuItem>
+                <MenuItem value="aluguel">Aluguel</MenuItem>
+                <MenuItem value="temporada">Temporada</MenuItem>
+                <MenuItem value="lancamento">Lançamento</MenuItem>
+              </Select>
+            </FormControl>
+
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={filterActive}
+                  onChange={() => setFilterActive(!filterActive)}
+                />
+              }
+              label="Ativar filtro de tipo"
+              sx={{ mb: 2 }}
+            />
+
+            <FormControl fullWidth sx={{ mb: 2 }}>
+              <InputLabel id="sort-label">Ordenar por</InputLabel>
+              <Select
+                labelId="sort-label"
+                value={sortOrder}
+                label="Ordenar por"
+                onChange={handleSortChange}
+              >
+                <MenuItem value="">Padrão</MenuItem>
+                <MenuItem value="low-to-high">Menor Preço</MenuItem>
+                <MenuItem value="high-to-low">Maior Preço</MenuItem>
+              </Select>
+            </FormControl>
+
+            <p className="total-properties">{totalProperties} Resultados</p>
+
+            {showCategories && (
+              <div className="categories-section">
+                <ul className="category-list">
+                  {categories.map((category) => (
+                    <li key={category} className="category-item">
+                      {category}{" "}
+                      <span className="category-count">
+                        ({categoryCounts[category]})
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="filters-sale">
+                  <h4>Status</h4>
+                  <ul>
+                    {Object.entries(statusCounts).map(([k, v]) => (
+                      <li key={k}>
+                        {k} ({v})
                       </li>
                     ))}
                   </ul>
-                  <div className="filters-sale">
-                    <h4>Status</h4>
-                    <ul>
-                      {Object.entries(statusCounts).map(([status, count]) => (
-                        <li key={status}>
-                          {status} ({count})
-                        </li>
-                      ))}
-                    </ul>
 
-                    <h4>Cidades</h4>
-                    <ul>
-                      {Object.entries(cityCounts).map(([city, count]) => (
-                        <li key={city}>
-                          {city} ({count})
-                        </li>
-                      ))}
-                    </ul>
+                  <h4>Cidades</h4>
+                  <ul>
+                    {Object.entries(cityCounts).map(([k, v]) => (
+                      <li key={k}>
+                        {k} ({v})
+                      </li>
+                    ))}
+                  </ul>
 
-                    <h4>Dimensão (m²)</h4>
-                    <ul>
-                      {Object.entries(dimensionCounts).map(([range, count]) => (
-                        <li key={range}>
-                          {range}m² ({count})
-                        </li>
-                      ))}
-                    </ul>
+                  <h4>Dimensão (m²)</h4>
+                  <ul>
+                    {Object.entries(dimensionCounts).map(([k, v]) => (
+                      <li key={k}>
+                        {k}m² ({v})
+                      </li>
+                    ))}
+                  </ul>
 
-                    <h4>Vagas de Estacionamento</h4>
-                    <ul>
-                      {Object.entries(parkingCounts).map(([spaces, count]) => (
-                        <li key={spaces}>
-                          {spaces} vagas ({count})
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                  <h4>Vagas de Estacionamento</h4>
+                  <ul>
+                    {Object.entries(parkingCounts).map(([k, v]) => (
+                      <li key={k}>
+                        {k} vagas ({v})
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-              )}
-
-              {!showCategories && (
-                <div className="show-categories-button">
-                  <button onClick={toggleCategories}>Mostrar Categorias</button>
-                </div>
-              )}
-            </div>
-            <div className="card-sale">
-              <div className="sale-infos-card">
-                <h2>Inscreva-se no canal</h2>
-                <p>Acompanhe os detalhes de cada imóvel</p>
               </div>
-              <a
-                className="whatsapp-link"
-                href="https://youtube.com/@daviarnaut9716?si=bmPSV-84PBMfkUVh" // ⬅️ Substitua pelo link real do seu canal
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <button>Acessar canal</button>
-              </a>
-            </div>
+            )}
 
-            <div className="card-sale">
-              <div className="sale-infos-card">
-                <h2>Deseja um atendimento personalizado?</h2>
-                <p>Informe o tipo de imóvel que você procura:</p>
-                <input
-                  type="text"
-                  placeholder="Ex: Casa com 3 quartos, apartamento no centro..."
-                  value={propertyType}
-                  onChange={(e) => setPropertyType(e.target.value)}
-                  className="whatsapp-input"
-                />
+            {!showCategories && (
+              <div className="show-categories-button">
+                <button onClick={toggleCategories}>Mostrar Categorias</button>
               </div>
-              <a
-                href={createWhatsAppLink()}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="whatsapp-link"
-              >
-                <button disabled={!propertyType}>
-                  Atendimento personalizado
-                </button>
-              </a>
-            </div>
+            )}
           </div>
 
           <div className="product-list-filter">

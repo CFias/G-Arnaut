@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Navbar } from "../Navbar/Navbar";
 import { Category, CropFree, DirectionsCar, Hotel } from "@mui/icons-material";
 import "./styles.css";
 
 export const FilteredProducts = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [filteredProducts, setFilteredProducts] = useState([]);
 
   useEffect(() => {
@@ -14,58 +15,66 @@ export const FilteredProducts = () => {
     }
   }, [location.state]);
 
+  const handleClick = (id) => {
+    navigate(`/product/${id}`);
+  };
+
   return (
     <>
       <Navbar />
       <div className="filtered-products-container">
         <h2>Imóveis filtrados</h2>
-        <div className="product-list">
+        <div className="filtered-list">
           {filteredProducts.length > 0 ? (
             filteredProducts.map((product) => (
-              <div key={product.id} className="product-card">
+              <div
+                key={product.id}
+                className="filtered-card"
+                onClick={() => handleClick(product.id)}
+                style={{ cursor: "pointer" }}
+              >
                 {product.images && product.images.length > 0 && (
-                  <div className="product-images">
-                    <p className="product-status">{product.status}</p>
-                    <p className="product-ref">
-                      Referência: {product.refProduct}
-                    </p>
+                  <div className="filtered-images">
+                    <p className="filtered-status">{product.status}</p>
                     <img
-                      className="product-img"
+                      className="filtered-img"
                       src={product.images[0]}
                       alt={product.address}
                     />
                   </div>
                 )}
-                <div className="product-infos">
-                  <h3 className="product-address">{product.city}</h3>
-                  <p className="product-neighborhood">{product.neighborhood}</p>
-                  <div className="infos-details">
-                    <p className="product-category">
-                      <Category className="product-icon" fontSize="small" />{" "}
-                      {product.category}
-                    </p>
-                    <div className="product-dimension">
-                      <CropFree className="product-icon" fontSize="small" />
-                      <p className="product-size">{product.dimension} m²</p>
+                <div className="filtered-infos">
+                  <h3 className="filtered-address">{product.city}</h3>
+                  <p className="filtered-neighborhood">
+                    {product.neighborhood}
+                  </p>
+                  <div className="filtered-details">
+                    <div className="filtered-dimension">
+                      <Category className="filtered-icon" fontSize="small" />{" "}
+                      <p className="filtered-category">{product.category}</p>
                     </div>
-                    <div className="product-dimension">
-                      <Hotel className="product-icon" fontSize="small" />
-                      <p className="product-size">{product.bedrooms}</p>
+                    <div className="filtered-dimension">
+                      <CropFree className="filtered-icon" fontSize="small" />
+                      <p className="filtered-size">{product.dimension} m²</p>
                     </div>
-                    <div className="product-dimension">
+                    <div className="filtered-dimension">
+                      <Hotel className="filtered-icon" fontSize="small" />
+                      <p className="filtered-size">{product.bedrooms}</p>
+                    </div>
+                    <div className="filtered-dimension">
                       <DirectionsCar
-                        className="product-icon"
+                        className="filtered-icon"
                         fontSize="small"
                       />
-                      <p className="product-size">{product.parkingSpaces}</p>
+                      <p className="filtered-size">{product.parkingSpaces}</p>
                     </div>
                   </div>
-                  <div className="product-price-mod">
-                    <div className="product-oldPrice">
+                  <div className="filtered-price-mod">
+                    <div className="filtered-oldPrice">
                       <s>R$ {product.oldPrice}</s>
-                      <p className="product-price">R$ {product.price}</p>
+                      <p className="filtered-price">R$ {product.price}</p>
                     </div>
-                    <h3 className="product-type">{product.productType}</h3>
+                    <h3 className="filtered-type">{product.productType}</h3>
                   </div>
                 </div>
               </div>
