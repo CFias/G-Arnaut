@@ -8,6 +8,8 @@ import {
   FavoriteBorder,
   Hotel,
   Verified,
+  ArrowBack,
+  ArrowForward,
 } from "@mui/icons-material";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -17,10 +19,12 @@ import Profile from "../../assets/image/arnaut-profile.png";
 export const FeaturedProducts = ({ product }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [currentImage, setCurrentImage] = useState(0);
+  const [hovered, setHovered] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 2000); // Simula o carregamento por 2 segundos
+    const timer = setTimeout(() => setIsLoading(false), 2000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -28,39 +32,33 @@ export const FeaturedProducts = ({ product }) => {
     navigate(`/product/${id}`);
   };
 
-  const toggleFavorite = () => {
+  const toggleFavorite = (e) => {
+    e.stopPropagation();
     setIsFavorite((prevState) => !prevState);
+  };
+
+  const nextImage = (e) => {
+    e.stopPropagation();
+    setCurrentImage((prev) =>
+      prev === product.images.length - 1 ? 0 : prev + 1
+    );
+  };
+
+  const prevImage = (e) => {
+    e.stopPropagation();
+    setCurrentImage((prev) =>
+      prev === 0 ? product.images.length - 1 : prev - 1
+    );
   };
 
   if (isLoading) {
     return (
       <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f5f5f5">
-        <div className="product-card">
-          <div className="product-images">
+        <div className="featured-card">
+          <div className="featured-images">
             <Skeleton height={150} width="100%" />
           </div>
-          <div className="product-infos">
-            <div className="first-item">
-              <Skeleton circle={true} height={40} width={40} />
-              <div className="infos-profile">
-                <Skeleton height={10} width="50%" />
-                <Skeleton height={10} width="30%" />
-              </div>
-            </div>
-            <Skeleton height={20} width="70%" />
-            <Skeleton height={15} width="60%" />
-            <Skeleton height={15} width="90%" />
-            <div className="infos-details">
-              <Skeleton height={10} width="30%" />
-              <Skeleton height={10} width="30%" />
-              <Skeleton height={10} width="30%" />
-              <Skeleton height={10} width="30%" />
-              <Skeleton height={10} width="30%" />
-            </div>
-            <div className="product-price-mod">
-              <Skeleton height={100} width="100%" />
-            </div>
-          </div>
+          <div className="featured-infos">{/* ...skeleton content */}</div>
         </div>
       </SkeletonTheme>
     );
@@ -69,57 +67,73 @@ export const FeaturedProducts = ({ product }) => {
   if (!product) return null;
 
   return (
-    <div className="product-card" onClick={() => handleCardClick(product.id)}>
+    <div className="featured-card" onClick={() => handleCardClick(product.id)}>
       {product.images && product.images.length > 0 && (
-        <div className="product-images">
-          <p className="product-status">{product.status}</p>
-          <p className="product-ref">Ref: {product.refProduct}</p>
-          <img className="product-img" src={product.images[0]} alt="Product" />
+        <div
+          className="featured-images"
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
+        >
+          <p className="featured-status">{product.status}</p>
+          <p className="featured-ref">Ref: {product.refProduct}</p>
+          <img
+            className="featured-img"
+            src={product.images[currentImage]}
+            alt="Product"
+          />
+          {hovered && (
+            <>
+              <button className="carousel-arrow left" onClick={prevImage}>
+                <ArrowBack fontSize="small" />
+              </button>
+              <button className="carousel-arrow right" onClick={nextImage}>
+                <ArrowForward fontSize="small" />
+              </button>
+            </>
+          )}
         </div>
       )}
-      <div className="product-infos">
+      <div className="featured-infos">
         <div className="first-item">
           <div className="infos-profile">
             <img
               src={product.author?.photoURL || Profile}
               className="author-avatar"
+              alt="Author"
             />
-            <span className="author-name" >{product.author?.userName || "Gildavi Arnaut"}</span>
+            <span className="author-name">
+              {product.author?.userName || "Gildavi Arnaut"}
+            </span>
             <Verified className="icon-profile" fontSize="10" />
           </div>
-          <span onClick={toggleFavorite}>
-            {isFavorite ? (
-              <Favorite fontSize="small" style={{ color: "#3D3D3D" }} />
-            ) : (
-              <FavoriteBorder fontSize="small" />
-            )}
-          </span>
-        </div>
-        <div className="product-type">
-          {" "}
-          <p className="product-category">{product.category}</p>À
-          <p className="product-category"> {product.productType}</p>
         </div>
 
-        <h3 className="product-city">{product.city}</h3>
-        <p className="product-neighborhood">{product.neighborhood}</p>
-        <p className="product-address">{product.address}</p>
+        <div className="featured-type">
+          <p className="featured-category">{product.category}</p>À
+          <p className="featured-category">{product.productType}</p>
+        </div>
+
+        <h3 className="featured-city">{product.city}</h3>
+        <p className="featured-neighborhood">{product.neighborhood}</p>
+        <p className="featured-address">{product.address}</p>
+
         <div className="infos-details">
-          <div className="product-dimension">
-            <CropFree className="product-icon" fontSize="small" />
-            <p className="product-size">{product.dimension} m²</p>
+          <div className="featured-dimension">
+            <CropFree className="featured-icon" fontSize="small" />
+            <p className="featured-size">{product.dimension} m²</p>
           </div>
-          <div className="product-dimension">
-            <Hotel className="product-icon" fontSize="small" />
-            <p className="product-size">{product.bedrooms}</p>
+          <div className="featured-dimension">
+            <Hotel className="featured-icon" fontSize="small" />
+            <p className="featured-size">{product.bedrooms}</p>
           </div>
-          <div className="product-dimension">
-            <DirectionsCar className="product-icon" fontSize="small" />
-            <p className="product-size">{product.parkingSpaces}</p>
+          <div className="featured-dimension">
+            <DirectionsCar className="featured-icon" fontSize="small" />
+            <p className="featured-size">{product.parkingSpaces}</p>
           </div>
         </div>
-        <div className="product-price-mod">
-          <p className="product-price">R$ {product.price}</p>
+
+        <div className="featured-price-mod">
+          <p className="featured-price">R$ {product.price}</p>
           <East fontSize="small" />
         </div>
       </div>

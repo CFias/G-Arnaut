@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { db } from "../../services/FirebaseConfig";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
+import SearchIcon from "@mui/icons-material/Search";
 import {
   MenuItem,
   Select,
@@ -9,8 +10,8 @@ import {
   Typography,
   InputLabel,
   FormControl,
-  FormControlLabel,
-  Switch,
+  TextField,
+  InputAdornment,
 } from "@mui/material";
 import { Category, CropFree, DirectionsCar, Hotel } from "@mui/icons-material";
 import "./styles.css";
@@ -28,55 +29,84 @@ export const SaleProducts = () => {
   const [sortOrder, setSortOrder] = useState("");
   const [totalProperties, setTotalProperties] = useState(0);
   const [showCategories, setShowCategories] = useState(true);
-  const [propertyType, setPropertyType] = useState("");
-  const [selectedProductType, setSelectedProductType] = useState("venda");
-  const [filterActive, setFilterActive] = useState(false);
-  const navigate = useNavigate();
 
-  const createWhatsAppLink = () => {
-    const baseMessage = `Olá, Gildavi!\nVi alguns imóveis no seu site e gostaria de ter um atendimento personalizado.\nEstou procurando por: ${propertyType}`;
-    const encodedMessage = encodeURIComponent(baseMessage);
-    return `https://wa.me/5571991900974?text=${encodedMessage}`;
-  };
+  const [selectedProductType, setSelectedProductType] = useState("venda");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("");
+  const [selectedCity, setSelectedCity] = useState("");
+  const [selectedNeighborhood, setSelectedNeighborhood] = useState("");
+  const [selectedBedrooms, setSelectedBedrooms] = useState("");
+  const [selectedParking, setSelectedParking] = useState("");
+
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const navigate = useNavigate();
 
   const fetchProducts = async () => {
     try {
       const productsRef = collection(db, "products");
-      const q = filterActive
-        ? query(productsRef, where("productType", "==", selectedProductType))
-        : productsRef;
-      const querySnapshot = await getDocs(q);
+      const querySnapshot = await getDocs(productsRef);
       const productList = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
 
-      const saleProducts = productList.filter(
-        (product) => product.productType === selectedProductType
+      let filtered = productList.filter(
+        (p) => p.productType === selectedProductType
       );
 
-      const distinctCategories = [
-        ...new Set(saleProducts.map((p) => p.category)),
-      ];
+      if (selectedCategory)
+        filtered = filtered.filter((p) => p.category === selectedCategory);
+
+      if (selectedStatus)
+        filtered = filtered.filter((p) => p.status === selectedStatus);
+
+      if (selectedCity)
+        filtered = filtered.filter((p) => p.city === selectedCity);
+
+      if (selectedNeighborhood)
+        filtered = filtered.filter(
+          (p) => p.neighborhood === selectedNeighborhood
+        );
+
+      if (selectedBedrooms)
+        filtered = filtered.filter(
+          (p) => Number(p.bedrooms) === Number(selectedBedrooms)
+        );
+
+      if (selectedParking)
+        filtered = filtered.filter(
+          (p) => Number(p.parkingSpaces) === Number(selectedParking)
+        );
+
+      if (searchTerm) {
+        const lowerSearch = searchTerm.toLowerCase();
+        filtered = filtered.filter(
+          (p) =>
+            p.city?.toLowerCase().includes(lowerSearch) ||
+            p.neighborhood?.toLowerCase().includes(lowerSearch) ||
+            p.reference?.toLowerCase().includes(lowerSearch)
+        );
+      }
+
+      const distinctCategories = [...new Set(filtered.map((p) => p.category))];
 
       const counts = distinctCategories.reduce((acc, category) => {
-        acc[category] = saleProducts.filter(
-          (p) => p.category === category
-        ).length;
+        acc[category] = filtered.filter((p) => p.category === category).length;
         return acc;
       }, {});
 
-      const statusData = saleProducts.reduce((acc, p) => {
+      const statusData = filtered.reduce((acc, p) => {
         acc[p.status] = (acc[p.status] || 0) + 1;
         return acc;
       }, {});
 
-      const cityData = saleProducts.reduce((acc, p) => {
+      const cityData = filtered.reduce((acc, p) => {
         acc[p.city] = (acc[p.city] || 0) + 1;
         return acc;
       }, {});
 
-      const dimensionData = saleProducts.reduce((acc, p) => {
+      const dimensionData = filtered.reduce((acc, p) => {
         const dim = p.dimension;
         if (dim >= 20 && dim <= 500) {
           const range = Math.floor(dim / 100) * 100;
@@ -85,15 +115,15 @@ export const SaleProducts = () => {
         return acc;
       }, {});
 
-      const parkingData = saleProducts.reduce((acc, p) => {
+      const parkingData = filtered.reduce((acc, p) => {
         acc[p.parkingSpaces] = (acc[p.parkingSpaces] || 0) + 1;
         return acc;
       }, {});
 
       setCategories(distinctCategories);
       setCategoryCounts(counts);
-      setProducts(saleProducts);
-      setTotalProperties(saleProducts.length);
+      setProducts(filtered);
+      setTotalProperties(filtered.length);
       setStatusCounts(statusData);
       setCityCounts(cityData);
       setDimensionCounts(dimensionData);
@@ -105,7 +135,16 @@ export const SaleProducts = () => {
 
   useEffect(() => {
     fetchProducts();
-  }, [selectedProductType, filterActive]);
+  }, [
+    selectedProductType,
+    selectedCategory,
+    selectedStatus,
+    selectedCity,
+    selectedNeighborhood,
+    selectedBedrooms,
+    selectedParking,
+    searchTerm,
+  ]);
 
   const handleSortChange = (event) => {
     const value = event.target.value;
@@ -123,7 +162,6 @@ export const SaleProducts = () => {
     navigate(`/product/${id}`);
   };
 
-  const toggleCategories = () => setShowCategories(!showCategories);
   const loadMore = () => setVisibleProducts((prev) => prev + 12);
 
   return (
@@ -145,51 +183,156 @@ export const SaleProducts = () => {
           <div className="filter-side-sale">
             <h2 className="filter-title-sale">Filtrar Imóveis</h2>
 
+            {/* Toggle Venda/Aluguel */}
             <FormControl fullWidth sx={{ mb: 2 }}>
-              <InputLabel id="product-type-label">Tipo de Imóvel</InputLabel>
+              <label className="toggle-label">Imóveis para:</label>
+              <div className="toggle-button-group">
+                <button
+                  className={`toggle-button ${
+                    selectedProductType === "venda" ? "active" : ""
+                  }`}
+                  onClick={() => setSelectedProductType("venda")}
+                >
+                  Venda
+                </button>
+                <button
+                  className={`toggle-button ${
+                    selectedProductType === "aluguel" ? "active" : ""
+                  }`}
+                  onClick={() => setSelectedProductType("aluguel")}
+                >
+                  Aluguel
+                </button>
+              </div>
+            </FormControl>
+
+            <FormControl className="" fullWidth sx={{ mb: 2 }}>
+              <TextField
+                label="Buscar por bairro, cidade ou referência"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                variant="outlined"
+                fullWidth
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon sx={{ color: "#999", fontSize: 18 }} />
+                    </InputAdornment>
+                  ),
+                }}
+                className="floating-label-search"
+              />
+            </FormControl>
+
+            {/* Demais filtros */}
+            <FormControl fullWidth sx={{ mb: 2 }}>
+              <InputLabel id="category-label">Categoria</InputLabel>
               <Select
-                labelId="product-type-label"
-                value={selectedProductType}
-                label="Tipo de Imóvel"
-                onChange={(e) => setSelectedProductType(e.target.value)}
-                disabled={!filterActive}
+                labelId="category-label"
+                value={selectedCategory}
+                label="Categoria"
+                onChange={(e) => setSelectedCategory(e.target.value)}
               >
-                <MenuItem value="venda">Venda</MenuItem>
-                <MenuItem value="aluguel">Aluguel</MenuItem>
-                <MenuItem value="temporada">Temporada</MenuItem>
-                <MenuItem value="lancamento">Lançamento</MenuItem>
+                <MenuItem value="">Todas</MenuItem>
+                <MenuItem value="Casa">Casa</MenuItem>
+                <MenuItem value="Apartamento">Apartamento</MenuItem>
+                <MenuItem value="Terreno">Terreno</MenuItem>
+                <MenuItem value="Comercial">Comercial</MenuItem>
               </Select>
             </FormControl>
 
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={filterActive}
-                  onChange={() => setFilterActive(!filterActive)}
-                />
-              }
-              label="Ativar filtro de tipo"
-              sx={{ mb: 2 }}
-            />
-
             <FormControl fullWidth sx={{ mb: 2 }}>
-              <InputLabel id="sort-label">Ordenar por</InputLabel>
+              <InputLabel id="status-label">Status da Obra</InputLabel>
               <Select
-                labelId="sort-label"
-                value={sortOrder}
-                label="Ordenar por"
-                onChange={handleSortChange}
+                labelId="status-label"
+                value={selectedStatus}
+                label="Status da Obra"
+                onChange={(e) => setSelectedStatus(e.target.value)}
               >
-                <MenuItem value="">Padrão</MenuItem>
-                <MenuItem value="low-to-high">Menor Preço</MenuItem>
-                <MenuItem value="high-to-low">Maior Preço</MenuItem>
+                <MenuItem value="">Todos</MenuItem>
+                <MenuItem value="Pronto">Pronto</MenuItem>
+                <MenuItem value="Em Obra">Em Obra</MenuItem>
+                <MenuItem value="Lançamento">Lançamento</MenuItem>
               </Select>
             </FormControl>
 
-            <p className="total-properties">{totalProperties} Resultados</p>
+            <FormControl fullWidth sx={{ mb: 2 }}>
+              <InputLabel id="city-label">Cidade</InputLabel>
+              <Select
+                labelId="city-label"
+                value={selectedCity}
+                label="Cidade"
+                onChange={(e) => setSelectedCity(e.target.value)}
+              >
+                <MenuItem value="">Todas</MenuItem>
+                {Object.keys(cityCounts).map((city) => (
+                  <MenuItem key={city} value={city}>
+                    {city}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
 
-            {showCategories && (
-              <div className="categories-section">
+            <FormControl fullWidth sx={{ mb: 2 }}>
+              <InputLabel id="neighborhood-label">Bairro</InputLabel>
+              <Select
+                labelId="neighborhood-label"
+                value={selectedNeighborhood}
+                label="Bairro"
+                onChange={(e) => setSelectedNeighborhood(e.target.value)}
+              >
+                <MenuItem value="">Todos</MenuItem>
+                {[...new Set(products.map((p) => p.neighborhood))].map(
+                  (bairro) => (
+                    <MenuItem key={bairro} value={bairro}>
+                      {bairro}
+                    </MenuItem>
+                  )
+                )}
+              </Select>
+            </FormControl>
+
+            <FormControl fullWidth sx={{ mb: 2 }}>
+              <InputLabel id="bedrooms-label">Quartos</InputLabel>
+              <Select
+                labelId="bedrooms-label"
+                value={selectedBedrooms}
+                label="Quartos"
+                onChange={(e) => setSelectedBedrooms(e.target.value)}
+              >
+                <MenuItem value="">Todos</MenuItem>
+                {[1, 2, 3, 4, 5].map((num) => (
+                  <MenuItem key={num} value={num}>
+                    {num}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+            <FormControl fullWidth sx={{ mb: 2 }}>
+              <InputLabel id="parking-label">
+                Vagas de Estacionamento
+              </InputLabel>
+              <Select
+                labelId="parking-label"
+                value={selectedParking}
+                label="Vagas de Estacionamento"
+                onChange={(e) => setSelectedParking(e.target.value)}
+              >
+                <MenuItem value="">Todas</MenuItem>
+                {[0, 1, 2, 3, 4].map((num) => (
+                  <MenuItem key={num} value={num}>
+                    {num}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
+
+          <div className="product-list-filter">
+            <div className="list-product-two">
+              <div className="toggle-categories-button">
+                <p className="total-properties">{totalProperties} Resultados</p>
                 <ul className="category-list">
                   {categories.map((category) => (
                     <li key={category} className="category-item">
@@ -200,54 +343,21 @@ export const SaleProducts = () => {
                     </li>
                   ))}
                 </ul>
-                <div className="filters-sale">
-                  <h4>Status</h4>
-                  <ul>
-                    {Object.entries(statusCounts).map(([k, v]) => (
-                      <li key={k}>
-                        {k} ({v})
-                      </li>
-                    ))}
-                  </ul>
-
-                  <h4>Cidades</h4>
-                  <ul>
-                    {Object.entries(cityCounts).map(([k, v]) => (
-                      <li key={k}>
-                        {k} ({v})
-                      </li>
-                    ))}
-                  </ul>
-
-                  <h4>Dimensão (m²)</h4>
-                  <ul>
-                    {Object.entries(dimensionCounts).map(([k, v]) => (
-                      <li key={k}>
-                        {k}m² ({v})
-                      </li>
-                    ))}
-                  </ul>
-
-                  <h4>Vagas de Estacionamento</h4>
-                  <ul>
-                    {Object.entries(parkingCounts).map(([k, v]) => (
-                      <li key={k}>
-                        {k} vagas ({v})
-                      </li>
-                    ))}
-                  </ul>
-                </div>
               </div>
-            )}
-
-            {!showCategories && (
-              <div className="show-categories-button">
-                <button onClick={toggleCategories}>Mostrar Categorias</button>
+              <div className="form-control">
+                <label htmlFor="ordenar">Ordenar por</label>
+                <select
+                  id="ordenar"
+                  value={sortOrder}
+                  onChange={handleSortChange}
+                >
+                  <option value="">Padrão</option>
+                  <option value="low-to-high">Menor Preço</option>
+                  <option value="high-to-low">Maior Preço</option>
+                </select>
               </div>
-            )}
-          </div>
+            </div>
 
-          <div className="product-list-filter">
             {products.slice(0, visibleProducts).map((product) => (
               <div
                 key={product.id}
