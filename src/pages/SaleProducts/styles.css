@@ -61,11 +61,244 @@
 .filter-side-sale {
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    background: var(--card-color);
     border: 1px solid rgba(128, 128, 128, 0.219);
     padding: 10px;
     border-radius: 10px;
+    overflow-y: scroll;
+    position: sticky;
+    width: 350px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
+
+/* Estilo para o container do select, se precisar */
+.form-control {
+    width: 100%;
+    margin-bottom: 1rem;
+    position: relative;
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Estilo para o label (se tiver) */
+.form-control label {
+    font-size: 14px;
+    color: #666;
+    display: block;
+    margin-bottom: 4px;
+}
+
+/* Estilo para o select */
+.form-control select {
+    width: 100%;
+    padding: 6px 8px;
+    font-size: 14px;
+    color: #333;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    /* linha fina embaixo */
+    outline: none;
+    -webkit-appearance: none;
+    /* remove setinha padrão no Safari */
+    -moz-appearance: none;
+    /* remove setinha no Firefox */
+    appearance: none;
+    cursor: pointer;
+    transition: border-color 0.2s ease-in-out;
+}
+
+/* Linha embaixo fica mais escura quando o select está focado */
+.form-control select:focus {
+    border-bottom-color: #1976d2;
+    /* azul MUI padrão */
+}
+
+/* Estilo para a seta customizada (opcional) */
+.form-control {
+    position: relative;
+    width: 10vw;
+    margin: 0;
+}
+
+.list-product-two {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px;
+    width: 100%;
+}
+
+.form-control::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    border-left: 3px solid transparent;
+    border-right: 3px solid transparent;
+    border-top: 3px solid #666;
+    transform: translateY(-50%);
+}
+
+.form-control select::-ms-expand {
+    display: none;
+}
+
+.custom-search-wrapper {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 14px 12px;
+    border: 1px solid var(--color-neutral-low-medium, #ddd);
+    border-radius: 8px;
+    color: var(--color-neutral-low-dark, #333);
+    background-color: #fff;
+    transition: border-color 0.3s;
+}
+
+.custom-search-wrapper:focus-within {
+    border-color: #888;
+}
+
+.custom-search-icon {
+    font-size: 20px;
+    color: var(--color-neutral-low-dark, #999);
+}
+
+.custom-search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    background: transparent;
+    color: #333;
+}
+
+.custom-search-input::placeholder {
+    color: #bbb;
+}
+
+.floating-label-search .MuiOutlinedInput-root {
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+.floating-label-search .MuiInputLabel-root {
+    font-size: 14px;
+    color: #999;
+}
+
+.floating-label-search .MuiOutlinedInput-input {
+    font-size: 14px;
+    padding: 12px 14px;
+}
+
+.floating-label-search .Mui-focused .MuiInputLabel-root {
+    color: #666;
+}
+
+.filters-container {
+    max-width: 350px;
+    font-family: Arial, sans-serif;
+}
+
+.filter-group {
+    margin-bottom: 20px;
+}
+
+.filter-label {
+    margin-bottom: 6px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #222;
+}
+
+.options-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.option-box {
+    padding: 8px 14px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    border-radius: 20px;
+    border: 2px solid #ccc;
+    background-color: #fff;
+    color: #444;
+    cursor: pointer;
+    user-select: none;
+    font-weight: 400;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.option-box:hover {
+    border-color: #1976d2;
+    color: #1976d2;
+}
+
+.option-box.selected {
+    border-color: #1976d2;
+    background-color: #e3f2fd;
+    color: #1976d2;
+    font-weight: 600;
+}
+
+
+.toggle-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-color-one);
+    margin-bottom: 8px;
+}
+
+.toggle-button-group {
+    display: flex;
+    background: #EDECF2;
+    width: 100%;
+    border-radius: 25px;
+    box-sizing: border-box;
+}
+
+.toggle-button {
+    flex: 1;
+    padding: 10px;
+    background-color: #EDECF2;
+    color: var(--text-color-one);
+    border-radius: 35px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    box-shadow: none;
+}
+
+.toggle-button.active {
+    background-color: var(--btn-color-one);
+    color: #fff;
+    font-weight: 600;
+    border-color: var(--btn-color-one);
+}
+
+.toggle-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.toggle-button:hover {
+    background-color: rgb(68, 69, 87);
+    color: #fff;
+}
+
+.filter-side-sale::-webkit-scrollbar {
+    display: none;
+}
+
 
 .filters-sale {
     display: flex;
