@@ -3,26 +3,26 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    padding: 3rem;
     font-family: var(--main-font);
-    margin-top: 2rem;
     width: 100%;
+    background-image: url("../../assets/image/mapa-arnaut.png");
+
 }
 
 .filter-content {
     display: grid;
     justify-items: center;
     align-items: center;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 5px;
     flex-wrap: wrap;
 }
 
 .filter-card {
-    border-top: 15px solid var(--btn-color-one);
-    background-image: url("../../assets/image/mapa-arnaut.png");
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    background-position: center;
-    background-size: cover;
+    background: var(--card-color);
     padding: 1rem;
     border-radius: 15px;
     display: flex;
@@ -32,12 +32,12 @@
 }
 
 .filter-header {
-    text-align: start;
+    text-align: center;
     margin-bottom: 2rem;
     display: flex;
     flex-direction: column;
-    justify-content: start;
-    align-items: start;
+    justify-content: center;
+    align-items: center;
     width: 80%;
 }
 
@@ -85,6 +85,12 @@
     outline: none;
 }
 
+.filter-btn {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
 .filter-submit-button {
     background-color: var(--btn-color-one);
     display: flex;
@@ -95,7 +101,6 @@
     border-radius: 8px;
     font-size: 14px;
     cursor: pointer;
-    width: 8vw;
 }
 
 .filter-submit-button:hover {

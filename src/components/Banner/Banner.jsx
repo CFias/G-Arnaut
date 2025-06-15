@@ -1,15 +1,39 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { db } from "../../services/FirebaseConfig";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import "./styles.css";
-import { Instagram, WhatsApp, YouTube } from "@mui/icons-material";
+import arnautbanner from "../../assets/image/arnaut-banner.png";
+import {
+  Instagram,
+  WhatsApp,
+  YouTube,
+  ArrowBackIos,
+  ArrowForwardIos,
+} from "@mui/icons-material";
+
+// ✅ Setas personalizadas com ícones do MUI
+const CustomPrevArrow = ({ onClick }) => (
+  <div className="custom-arrow custom-prev" onClick={onClick}>
+    <ArrowBackIos fontSize="small" />
+  </div>
+);
+
+const CustomNextArrow = ({ onClick }) => (
+  <div className="custom-arrow custom-next" onClick={onClick}>
+    <ArrowForwardIos fontSize="small" />
+  </div>
+);
 
 export const Banner = () => {
   const [featuredItems, setFeaturedItems] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isLoading, setIsLoading] = useState(true); // Estado para o carregamento
+  const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchFeaturedItems = async () => {
@@ -24,7 +48,7 @@ export const Banner = () => {
           ...doc.data(),
         }));
         setFeaturedItems(items);
-        setIsLoading(false); // Define carregamento como concluído
+        setIsLoading(false);
       } catch (error) {
         console.error("Erro ao buscar produtos destacados:", error);
       }
@@ -33,59 +57,86 @@ export const Banner = () => {
     fetchFeaturedItems();
   }, []);
 
-  useEffect(() => {
-    if (featuredItems.length > 0) {
-      const interval = setInterval(() => {
-        setCurrentIndex((prevIndex) =>
-          prevIndex === featuredItems.length - 1 ? 0 : prevIndex + 1
-        );
-      }, 10000);
-      return () => clearInterval(interval);
-    }
-  }, [featuredItems]);
+  const handleClick = (id) => {
+    navigate(`/product/${id}`);
+  };
+
+  const settings = {
+    dots: false,
+    infinite: true,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 4500,
+    pauseOnHover: true,
+    centerMode: true,
+    centerPadding: "0px",
+    prevArrow: <CustomPrevArrow />,
+    nextArrow: <CustomNextArrow />,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+    ],
+  };
 
   return (
     <section className="banner-container">
-      <div className="banner-ap">
-        <h3>
-          Olá, Sou Gildavi Arnaut, Gestor Imobiliário,{" "}
-          <span>CRECI-Ba 19.425</span>, minha missão é auxiliar na concretização
-          do sonho do imóvel ideal
-        </h3>
-        <p>
-          Realizando sonhos desde 2013, entusiasta e estudioso do mercado
-          imobiliário, com vasta experiência, meu compromisso é assessorar-lhe,
-          da melhor forma possível, com atendimento personalizado, focado em
-          suas necessidades, oferecendo sempre as melhores oportunidades para
-          venda, compra e locação, através de um processo seguro e transparente
-          que somente um profissional qualificado pode lhe oferecer.
-        </p>
-      </div>
-      <div className="carousel">
-        {isLoading
-          ? // Skeleton Loader para o carrossel
-            Array.from({ length: 1 }).map((_, index) => (
-              <Skeleton
-                key={index}
-                height={300}
-                width="100%"
-                style={{ borderRadius: "8px" }}
-              />
-            ))
-          : featuredItems.map((item, index) => (
-              <div
-                key={item.id}
-                className={`banner-item ${
-                  index === currentIndex ? "active" : "hidden"
-                }`}
-                style={{
-                  backgroundImage:
-                    item.images && item.images[0]
-                      ? `url(${item.images[0]})`
-                      : "none",
-                }}
-              ></div>
-            ))}
+      <div className="banner-content">
+        <div className="banner-ap">
+          <div className="banner-names">
+            <h3>Gildavi Arnaut</h3>
+            <h4>Gestor Imobiliário</h4>
+            <h5>CRECI-Ba 19.425 </h5>
+            <p>
+              Realizando sonhos desde 2013, entusiasta e estudioso do mercado
+              imobiliário, com vasta experiência, meu compromisso é
+              assessorar-lhe, da melhor forma possível, com atendimento
+              personalizado, focado em suas necessidades, oferecendo sempre as
+              melhores oportunidades para venda, compra e locação, através de um
+              processo seguro e transparente que somente um profissional
+              qualificado pode lhe oferecer.
+            </p>
+            <div className="social-icons">
+              <WhatsApp className="social-icon" />
+              <Instagram className="social-icon" />
+              <YouTube className="social-icon" />
+            </div>
+
+            <div className="highlight-cards-wrapper">
+              {isLoading ? (
+                <Skeleton count={3} height={180} />
+              ) : (
+                <Slider {...settings}>
+                  {featuredItems.map((item) => (
+                    <div
+                      key={item.id}
+                      className="highlight-card"
+                      onClick={() => handleClick(item.id)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <img
+                        src={item.images?.[0]}
+                        alt={item.neighborhood}
+                        className="highlight-img"
+                      />
+                    </div>
+                  ))}
+                </Slider>
+              )}
+            </div>
+          </div>
+        </div>
+        <img src={arnautbanner} alt="Gildavi Arnaut" />
       </div>
     </section>
   );

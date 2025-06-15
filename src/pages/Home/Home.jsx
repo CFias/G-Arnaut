@@ -9,8 +9,23 @@ import VideoList from "../../components/VideoList/VideoList.jsx";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../services/FirebaseConfig";
 import { FeaturedProducts } from "../../components/FeaturedProducts/FeaturedProducts.jsx";
-import "./styles.css";
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
+import "./styles.css";
+import PropertyTypes from "../../components/PropertyTypes/PropertyTypes.jsx";
+
+const Section = ({ title, subtitle, loading, children }) => (
+  <section className="section-2">
+    <h3 className="home-h3">
+      {loading ? <Skeleton width={300} /> : title}
+      {loading ? (
+        <Skeleton width={250} height={30} />
+      ) : (
+        <p className="home-p">{subtitle}</p>
+      )}
+    </h3>
+    {children}
+  </section>
+);
 
 export const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -18,10 +33,10 @@ export const Home = () => {
   const [recentProducts, setRecentProducts] = useState([]);
   const [launchProducts, setLaunchProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [isProductsLoaded, setIsProductsLoaded] = useState(false); // Flag for products loading state
+  const [isProductsLoaded, setIsProductsLoaded] = useState(false);
 
-  const itemsPerPage = 15;
-  const recentSectionRef = useRef(null); // Referência para a seção "Imóveis Recentes"
+  const itemsPerPage = 18;
+  const recentSectionRef = useRef(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -32,40 +47,38 @@ export const Home = () => {
           ...doc.data(),
         }));
 
-        const filteredFeatured = productsArray.filter(
-          (product) => product.isFeatured?.toLowerCase() === "sim"
+        setFeaturedProducts(
+          productsArray
+            .filter((product) => product.isFeatured?.toLowerCase() === "sim")
+            .slice(0, 6)
         );
-        setFeaturedProducts(filteredFeatured.slice(0, 5));
 
-        const filteredRecent = productsArray.filter(
-          (product) => product.isFeatured?.toLowerCase() === "não"
+        setRecentProducts(
+          productsArray.filter(
+            (product) => product.isFeatured?.toLowerCase() === "não"
+          )
         );
-        setRecentProducts(filteredRecent);
 
-        const filteredLaunch = productsArray.filter(
-          (product) =>
-            product.status?.toLowerCase() === "lançamento" ||
-            product.status?.toLowerCase() === "lancamento"
+        setLaunchProducts(
+          productsArray.filter(
+            (product) =>
+              product.status?.toLowerCase() === "lançamento" ||
+              product.status?.toLowerCase() === "lancamento"
+          )
         );
-        setLaunchProducts(filteredLaunch);
 
-        setIsProductsLoaded(true); // Set flag to true when products are loaded
+        setIsProductsLoaded(true);
       } catch (error) {
         console.error("Erro ao buscar produtos:", error);
       }
     };
 
     fetchProducts();
-
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1500); // Shortened the loading time
-
+    const timer = setTimeout(() => setIsLoading(false), 1500);
     return () => clearTimeout(timer);
   }, []);
 
   const totalPages = Math.ceil(recentProducts.length / itemsPerPage);
-
   const paginatedProducts = recentProducts.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
@@ -78,10 +91,42 @@ export const Home = () => {
     }
   };
 
+  useEffect(() => {
+    if (window.location.pathname === "/") {
+      const showFloatingCard = () => {
+        const floatingCard = document.getElementById("floating-card");
+        floatingCard.style.display = "block";
+        setTimeout(() => {
+          floatingCard.style.opacity = "1";
+        }, 100);
+      };
+
+      if (performance.navigation.type === 1) {
+        showFloatingCard();
+      }
+
+      document.getElementById("close-card")?.addEventListener("click", () => {
+        const floatingCard = document.getElementById("floating-card");
+        floatingCard.style.opacity = "0"; 
+        setTimeout(() => {
+          floatingCard.style.display = "none";
+        }, 300);
+      });
+    }
+  }, []);
+
   return (
     <>
       <Navbar />
       <main className="home-container">
+        <div id="floating-card" className="floating-card">
+          <div className="card-content-floating">
+            <h4>Bem-vindo ao nosso site!</h4>
+            <p>Confira nossos produtos incríveis.</p>
+            <button id="close-card">Fechar</button>
+          </div>
+        </div>
+
         <section className="section-1">
           <Banner />
         </section>
@@ -89,16 +134,15 @@ export const Home = () => {
         <section className="section-card">
           <CardFilter />
         </section>
+        {/* <section className="section-card">
+          <PropertyTypes />
+        </section> */}
 
-        <section className="section-2">
-          <h3 className="home-h3">
-            {isLoading ? <Skeleton width={370} /> : "Imóveis em Destaque"}
-            {isLoading ? (
-              <Skeleton width={250} height={30} />
-            ) : (
-              <p className="home-p">Imóveis que podem te interessar</p>
-            )}
-          </h3>
+        <Section
+          title="Imóveis em Destaque"
+          subtitle="Imóveis que podem te interessar"
+          loading={isLoading}
+        >
           <div className="featured-products">
             {isProductsLoaded ? (
               featuredProducts.length > 0 ? (
@@ -110,22 +154,17 @@ export const Home = () => {
               )
             ) : (
               <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f0f0f0">
-                <Skeleton height={200} />
-                <Skeleton height={200} style={{ marginTop: 10 }} />
+                <Skeleton height={200} count={2} />
               </SkeletonTheme>
             )}
           </div>
-        </section>
+        </Section>
 
-        <section className="section-2">
-          <h3 className="home-h3">
-            {isLoading ? <Skeleton width={250} /> : "Lançamentos"}
-            {isLoading ? (
-              <Skeleton width={200} height={30} />
-            ) : (
-              <p className="home-p">Confira os imóveis recém-lançados</p>
-            )}
-          </h3>
+        <Section
+          title="Lançamentos"
+          subtitle="Confira os imóveis recém-lançados"
+          loading={isLoading}
+        >
           <div className="featured-products">
             {isProductsLoaded ? (
               launchProducts.length > 0 ? (
@@ -137,12 +176,11 @@ export const Home = () => {
               )
             ) : (
               <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f0f0f0">
-                <Skeleton height={200} />
-                <Skeleton height={200} style={{ marginTop: 10 }} />
+                <Skeleton height={200} count={2} />
               </SkeletonTheme>
             )}
           </div>
-        </section>
+        </Section>
 
         <section className="section-3" ref={recentSectionRef}>
           <h3 className="home-h3">
@@ -151,8 +189,7 @@ export const Home = () => {
           </h3>
           {isLoading ? (
             <div className="skeleton-card">
-              <Skeleton height={200} />
-              <Skeleton height={200} style={{ marginTop: 10 }} />
+              <Skeleton height={200} count={2} />
             </div>
           ) : (
             <>
@@ -165,7 +202,6 @@ export const Home = () => {
                   <p>Não há produtos recentes no momento.</p>
                 )}
               </div>
-
               {recentProducts.length > itemsPerPage && (
                 <>
                   <div className="pagination">
@@ -193,7 +229,7 @@ export const Home = () => {
                       <KeyboardArrowRight fontSize="small" />
                     </button>
                   </div>
-                  <p className="home-p-2">15 imóveis por página</p>
+                  <p className="home-p-2">18 imóveis por página</p>
                 </>
               )}
             </>
@@ -203,8 +239,7 @@ export const Home = () => {
         <section className="section-3">
           {isLoading ? (
             <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f0f0f0">
-              <Skeleton height={200} />
-              <Skeleton height={200} style={{ marginTop: 10 }} />
+              <Skeleton height={200} count={2} />
             </SkeletonTheme>
           ) : (
             <VideoList />

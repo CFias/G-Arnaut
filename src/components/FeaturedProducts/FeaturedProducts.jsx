@@ -4,8 +4,6 @@ import {
   CropFree,
   DirectionsCar,
   East,
-  Favorite,
-  FavoriteBorder,
   Hotel,
   Verified,
   ArrowBack,

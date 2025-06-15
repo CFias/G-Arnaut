@@ -1,220 +1,203 @@
+/* Container principal */
 .banner-container {
+    position: relative;
     width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     overflow: hidden;
+    display: flex;
+    justify-content: center;
+    background-image: url('../../assets/image/banner-bg.png');
+    background-size: cover;
+    background-position: center;
 }
 
+/* Área interna centralizada */
+.banner-content {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 65vw;
+}
+
+/* Imagem lateral */
+.banner-container img {
+    width: 500px;
+    object-fit: cover;
+    z-index: 1;
+}
+
+/* Bloco com nome, descrição e redes */
 .banner-ap {
-    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     z-index: 2;
-    color: white;
-    padding: 20px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    width: 65%;
+}
+
+/* Textos */
+.banner-names {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    height: 100%;
-}
-
-.banner-ap h3 {
-    color: var(--text-color-two);
-    font-size: 24px;
-    text-align: center;
-}
-
-.banner-ap h3 span {
-    color: var(--text-color-three);
-}
-
-.banner-ap p {
-    font-size: 16px;
-    color: var(--text-color-two);
-    font-family: var(--main-font);
-    margin-top: 1rem;
-    font-weight: 300;
-    text-align: center;
-}
-
-.icons-banner {
-    display: flex;
-    justify-content: center;
+    align-items: start;
+    color: #F2EBE0;
     gap: 10px;
-    margin-top: 10px;
+    padding-bottom: 60px;
 }
 
-.banner-icon {
-    color: var(--text-color-two);
+.banner-names h3 {
+    font-size: 34px;
+    font-weight: bold;
+    color: #FFD87A;
+    margin: 0;
 }
 
-.carousel {
-    position: relative;
-    width: 100%;
-    height: 500px;
+.banner-names h4 {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--text-color, #051426);
+    margin: 0;
 }
 
+.banner-names h5 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #FFD87A;
+}
 
-.banner-item {
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-position: center;
+.banner-names p {
+    font-size: 18px;
+    color: var(--text-color, #051426);
+    width: 680px;
+    font-weight: 500;
+    text-align: start;
+}
+
+/* Ícones sociais */
+.social-icons {
+    display: flex;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.social-icon {
+    font-size: 28px !important;
+    color: #051426;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.social-icon:hover {
+    color: #1f385e;
+}
+
+/* Carrossel centralizado e sobreposto */
+.highlight-cards-wrapper {
     position: absolute;
-    opacity: 0;
-    transition: opacity 1s ease-in-out;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 65vw;
+    z-index: 3;
 }
 
-.banner-item.active {
-    opacity: 1;
+/* Card do carrossel */
+.highlight-card {
+    padding: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    display: flex !important;
+    justify-content: center;
+    background: transparent;
 }
 
-.banner-item.hidden {
-    opacity: 0;
+.highlight-card:hover {
+    transform: scale(1.01);
 }
 
-.banner-item::after {
-    content: '';
+/* Imagem com filtro escurecido */
+.highlight-img {
+    width: 230px;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+    border-radius: 8px;
+    filter: brightness(0.6);
+    transition: filter 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.highlight-card:hover .highlight-img {
+    filter: brightness(0.8);
+}
+
+/* Seta de navegação */
+.slick-prev,
+.slick-next {
+    z-index: 3;
+    background: transparent;
+    border: none;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.slick-prev {
+    left: -40px;
+}
+
+.slick-next {
+    right: -40px;
+}
+
+.slick-prev::before,
+.slick-next::before {
+    font-size: 24px;
+    color: #000;
+}
+
+/* Dots de navegação */
+.slick-dots {
+    bottom: -30px;
+}
+
+.slick-dots li button:before {
+    font-size: 10px;
+    color: #bbb;
+}
+
+.slick-dots li.slick-active button:before {
+    color: #0d6efd;
+}
+
+/* Destaque para imagem central */
+.slick-center .highlight-card {
+    transform: scale(1.06);
+    z-index: 5;
+}
+
+.slick-center .highlight-img {
+    filter: brightness(1);
+}
+
+.custom-arrow {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #051426c9;
-    opacity: 0.9;
-    pointer-events: none;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 5;
+    padding: 6px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.3s ease;
 }
 
-.banner-placeholder {
-    text-align: center;
-    padding: 50px;
-    font-size: 20px;
-    color: gray;
+.custom-arrow:hover {
 }
 
-@media (max-width: 1024px) {
-    .banner-container {
-        width: 100%;
-    }
-
-    .banner-ap {
-        width: 90%;
-        height: auto;
-        padding: 10px;
-    }
-
-    .banner-ap p {
-        font-size: 12px;
-    }
-
-    .banner-ap h3 {
-        font-size: 16px;
-    }
-
-    .banner-logo {
-        width: 60px;
-    }
-
-    .banner-item {
-        height: 30vh;
-    }
-
-    .carousel {
-        width: 100%;
-        height: 30vh;
-    }
+.custom-prev {
+    left: -25px;
 }
 
-@media (max-width: 768px) {
-    .banner-container {
-        width: 100%;
-        height: auto;
-        background-position: center;
-        gap: 10px;
-        padding: 0;
-        margin: 0;
-    }
-
-    .carousel {
-        width: 100%;
-        height: 30vh;
-    }
-
-    .banner-ap {
-        width: 100vw;
-    }
-
-    .banner-ap p {
-        font-size: 8px;
-    }
-
-    .banner-ap h3 {
-        font-size: 12px;
-    }
-
-   
-
-    .banner-infos {
-        width: 70%;
-    }
-
-    .txt-banner {
-        font-size: 60px;
-    }
-
-    .cap-banner {
-        font-size: 30px;
-    }
-
-
-    .filter {
-        position: relative;
-        width: 92vw;
-        top: 35%;
-    }
-
-    .banner-link {
-        font-size: 10px;
-        padding: 8px;
-    }
-}
-
-@media (max-width: 480px) {
-    .banner-container {
-        width: 100vw;
-        border-radius: 10px;
-        align-items: start;
-        justify-content: center;
-        height: 30vh;
-        margin: 0;
-        padding: 0;
-        border-radius: 0;
-    }
-
-    .txt-banner {
-        font-size: 40px;
-    }
-
-    .cap-banner {
-        font-size: 20px;
-    }
-
-    .banner-ap {
-        width: 95%;
-        align-items: center;
-        height: auto;
-    }
-
-    .banner-item {
-        justify-content: center;
-        height: 30vh;
-        width: 100vw;
-        margin: 0;
-    }
-
-    .banner-link {
-        font-size: 8px;
-        padding: 6px;
-    }
+.custom-next {
+    right: -25px;
 }
