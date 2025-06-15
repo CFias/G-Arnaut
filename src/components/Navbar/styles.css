@@ -53,7 +53,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    width: 65%;
+    width: 65vw;
 }
 
 .nav-logo-item {
@@ -145,14 +145,14 @@
     display: flex;
     align-items: center;
     text-decoration: none;
-    color: var(--text-color-one);
+    color: var(--text-color-two);
     transition: 250ms;
     font-size: 14px;
     font-weight: 400;
 }
 
 .nav-link-login:hover, .nav-link-register:hover {
-    background: rgb(224, 224, 224);
+    color: rgb(221, 221, 221);
 }
 
 .nav-links {

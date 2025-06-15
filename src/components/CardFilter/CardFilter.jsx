@@ -84,7 +84,6 @@ export const CardFilter = () => {
           Use os filtros abaixo para encontrar imóveis que atendam às suas
           necessidades
         </p>
-        <img src={Logo} alt="G-Arnaut" className="logo-filter" />
       </div>
       <div className="filter-card">
         <form className="filter-content" onSubmit={handleFilter}>
@@ -171,13 +170,15 @@ export const CardFilter = () => {
             />
           </div>
         </form>
-        <button
-          type="button"
-          className="filter-submit-button"
-          onClick={handleFilter}
-        >
-          Buscar Imóveis <East fontSize="small" />
-        </button>
+        <div className="filter-btn">
+          <button
+            type="button"
+            className="filter-submit-button"
+            onClick={handleFilter}
+          >
+            Buscar Imóveis <East fontSize="small" />
+          </button>
+        </div>
       </div>
     </div>
   );
