@@ -19,6 +19,18 @@
     display: flex;
 }
 
+.nav-logo-name-list {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav-logo-name-list h5 {
+    font-size: 24px;
+    font-weight: 200;
+    color: var(--text-color-two);
+}
+
 .top-item-text {
     font-size: 16px;
     padding: .5rem;
@@ -53,7 +65,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    width: 65vw;
+    width: 80vw;
 }
 
 .nav-logo-item {
@@ -115,8 +127,12 @@
     
 }
 
-.sticky:hover {
-    background-color: rgba(0, 0, 0, 0.9);
+.sticky-content {
+    width: 80vw;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px 20px;
 }
 
 .nav-link-item {
