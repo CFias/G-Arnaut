@@ -5,13 +5,13 @@ import { Navbar } from "../../components/Navbar/Navbar";
 import { Footer } from "../../components/Footer/Footer";
 import { Banner } from "../../components/Banner/Banner";
 import { CardFilter } from "../../components/CardFilter/CardFilter";
-import VideoList from "../../components/VideoList/VideoList.jsx";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../services/FirebaseConfig";
 import { FeaturedProducts } from "../../components/FeaturedProducts/FeaturedProducts.jsx";
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
 import "./styles.css";
-import PropertyTypes from "../../components/PropertyTypes/PropertyTypes.jsx";
+import { SocialCard } from "../../components/SocialCard/SocialCard.jsx";
+import { CookieConsent } from "../../components/CookieConsent/CookieConsent.jsx";
 
 const Section = ({ title, subtitle, loading, children }) => (
   <section className="section-2">
@@ -35,7 +35,7 @@ export const Home = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isProductsLoaded, setIsProductsLoaded] = useState(false);
 
-  const itemsPerPage = 18;
+  const itemsPerPage = 15;
   const recentSectionRef = useRef(null);
 
   useEffect(() => {
@@ -107,7 +107,7 @@ export const Home = () => {
 
       document.getElementById("close-card")?.addEventListener("click", () => {
         const floatingCard = document.getElementById("floating-card");
-        floatingCard.style.opacity = "0"; 
+        floatingCard.style.opacity = "0";
         setTimeout(() => {
           floatingCard.style.display = "none";
         }, 300);
@@ -118,12 +118,13 @@ export const Home = () => {
   return (
     <>
       <Navbar />
+      <CookieConsent />
       <main className="home-container">
         <div id="floating-card" className="floating-card">
           <div className="card-content-floating">
             <h4>Bem-vindo ao nosso site!</h4>
             <p>Confira nossos produtos incríveis.</p>
-            <button id="close-card">Fechar</button>
+            <button className="close-card" id="close-card">Fechar</button>
           </div>
         </div>
 
@@ -134,9 +135,19 @@ export const Home = () => {
         <section className="section-card">
           <CardFilter />
         </section>
-        {/* <section className="section-card">
-          <PropertyTypes />
-        </section> */}
+        <section className="section-3">
+          {isLoading ? (
+            <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f0f0f0">
+              <Skeleton height={200} count={2} />
+            </SkeletonTheme>
+          ) : (
+            <>
+              <div className="social-cards-wrapper">
+                <SocialCard type="instagram" />
+              </div>
+            </>
+          )}
+        </section>
 
         <Section
           title="Imóveis em Destaque"
@@ -181,7 +192,19 @@ export const Home = () => {
             )}
           </div>
         </Section>
-
+        <section className="section-3">
+          {isLoading ? (
+            <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f0f0f0">
+              <Skeleton height={200} count={2} />
+            </SkeletonTheme>
+          ) : (
+            <>
+              <div className="social-cards-wrapper">
+                <SocialCard type="facebook" />
+              </div>
+            </>
+          )}
+        </section>
         <section className="section-3" ref={recentSectionRef}>
           <h3 className="home-h3">
             {isLoading ? <Skeleton width={150} /> : "Imóveis Recentes"}
@@ -202,6 +225,19 @@ export const Home = () => {
                   <p>Não há produtos recentes no momento.</p>
                 )}
               </div>
+              <section className="section-3">
+                {isLoading ? (
+                  <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f0f0f0">
+                    <Skeleton height={200} count={2} />
+                  </SkeletonTheme>
+                ) : (
+                  <>
+                    <div className="social-cards-wrapper">
+                      <SocialCard type="whatsapp" />
+                    </div>
+                  </>
+                )}
+              </section>
               {recentProducts.length > itemsPerPage && (
                 <>
                   <div className="pagination">
@@ -229,20 +265,10 @@ export const Home = () => {
                       <KeyboardArrowRight fontSize="small" />
                     </button>
                   </div>
-                  <p className="home-p-2">18 imóveis por página</p>
+                  <p className="home-p-2">15 imóveis por página</p>
                 </>
               )}
             </>
-          )}
-        </section>
-
-        <section className="section-3">
-          {isLoading ? (
-            <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f0f0f0">
-              <Skeleton height={200} count={2} />
-            </SkeletonTheme>
-          ) : (
-            <VideoList />
           )}
         </section>
       </main>

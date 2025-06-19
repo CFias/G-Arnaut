@@ -102,75 +102,77 @@ export const Navbar = () => {
           id="navList"
           className={`nav-unorderd-list ${isSticky ? "sticky" : ""}`}
         >
-          <img src={Logo} alt="G Arnaut" className="nav-logo" />
-          <div className="nav-links">
-            <NavLink to="/" className="nav-link-item">
-              Início
-            </NavLink>
-            <NavLink to="/Sale-Products" className="nav-link-item">
-              Venda
-            </NavLink>
-            <NavLink to="/Rent-Products" className="nav-link-item">
-              Locação
-            </NavLink>
-            <NavLink to="/about" className="nav-link-item">
-              O corretor
-            </NavLink>
-          </div>
-          <div className="nav-btn">
-            {!currentUser ? (
-              <>
-                <NavLink to="/login" className="nav-link-login">
-                  Login
-                </NavLink>
-                <NavLink to="/register" className="nav-link-register">
-                  Criar conta
-                </NavLink>
-              </>
-            ) : (
-              <div className="nav-profile">
-                <Avatar
-                  onClick={handleOpenMenu}
-                  sx={{
-                    cursor: "pointer",
-                    backgroundColor: "#051426",
-                    fontSize: "14px",
-                  }}
-                >
-                  {userName ? userName.charAt(0).toUpperCase() : "U"}
-                </Avatar>
-                <Menu
-                  anchorEl={anchorEl}
-                  open={Boolean(anchorEl)}
-                  onClose={handleCloseMenu}
-                  PaperProps={{ style: { width: "250px" } }}
-                >
-                  <MenuItem className="nav-welcome" disabled>
-                    Bem-vindo, {userName}
-                  </MenuItem>
-                  {hasAdminAccess && (
-                    <MenuItem>
-                      <NavLink to="/admin" className="nav-link-login">
-                        Administrar
-                      </NavLink>
-                    </MenuItem>
-                  )}
-                  <MenuItem
-                    onClick={() => {
-                      handleCloseMenu();
-                      handleLogout();
+          <div className="sticky-content">
+            <div className="nav-logo-name-list">
+              <img src={Logo} alt="G Arnaut" className="nav-logo" />
+              <h5>G Arnaut</h5>
+            </div>
+            <div className="nav-links">
+              <NavLink to="/" className="nav-link-item">
+                Início
+              </NavLink>
+              <NavLink to="/Sale-Products" className="nav-link-item">
+                Imóveis
+              </NavLink>
+              <NavLink to="/about" className="nav-link-item">
+                O corretor
+              </NavLink>
+            </div>
+            <div className="nav-btn">
+              {!currentUser ? (
+                <>
+                  <NavLink to="/login" className="nav-link-login">
+                    Login
+                  </NavLink>
+                  <NavLink to="/register" className="nav-link-register">
+                    Criar conta
+                  </NavLink>
+                </>
+              ) : (
+                <div className="nav-profile">
+                  <Avatar
+                    onClick={handleOpenMenu}
+                    sx={{
+                      cursor: "pointer",
+                      backgroundColor: "#051426",
+                      fontSize: "14px",
                     }}
-                    className="logout-button"
                   >
-                    Sair
-                    <LogoutRounded
-                      fontSize="10"
-                      style={{ marginLeft: "8px" }}
-                    />
-                  </MenuItem>
-                </Menu>
-              </div>
-            )}
+                    {userName ? userName.charAt(0).toUpperCase() : "U"}
+                  </Avatar>
+                  <Menu
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={handleCloseMenu}
+                    PaperProps={{ style: { width: "250px" } }}
+                  >
+                    <MenuItem className="nav-welcome" disabled>
+                      Bem-vindo, {userName}
+                    </MenuItem>
+                    {hasAdminAccess && (
+                      <MenuItem>
+                        <NavLink to="/admin" className="nav-link-login">
+                          Administrar
+                        </NavLink>
+                      </MenuItem>
+                    )}
+                    <MenuItem
+                      onClick={() => {
+                        handleCloseMenu();
+                        handleLogout();
+                      }}
+                      className="logout-button"
+                    >
+                      Sair
+                      <LogoutRounded
+                        fontSize="10"
+                        style={{ marginLeft: "8px" }}
+                      />
+                    </MenuItem>
+                  </Menu>
+                </div>
+              )}
+            </div>
           </div>
         </ul>
       </nav>

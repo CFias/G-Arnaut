@@ -1,0 +1,121 @@
+.social-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 65vw;
+  margin: auto;
+}
+
+.social-card-content {
+  display: flex;
+  align-items: center;
+  justify-content:space-between;
+  width: 100%;
+  background: #e9f4fc;
+  padding: 1rem;
+  border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.social-card {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    border-radius: 10px;
+}
+
+.social-image {
+  width: 150px;
+  height: 150px;
+  border-radius: 10px;
+  margin-right: 1rem;
+  rotate: -5deg;
+  object-fit: cover;
+}
+
+.social-info {
+    display: flex;
+    flex-direction: column;
+    height: 130px;
+    justify-content: space-around;
+}
+
+.social-info h4 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-color-one);
+}
+
+.social-info p {
+    font-size: 14px;
+    font-weight: 400;
+    color: rgb(54, 54, 54);
+}
+
+.cx-btn {
+    height: 150px;
+    display: flex;
+    align-items: end;
+}
+
+.follow-button {
+    background-color: var(--btn-color-two);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-color-two);
+    border: 1px solid var(--text-color-one);
+    border-radius: 25px;
+    font-size: 14px;
+    cursor: pointer;
+    width: 170px;
+
+}
+
+.follow-button:hover {
+    background-color: var(--btn-color-one);
+    color: var(--text-color-two);
+}
+
+@media screen and (max-width: 600px) {
+    .social-container {
+        width: 95vw;
+    }
+
+    .social-card-content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .social-card {
+        align-items: center;
+        width: 100%;
+        flex-direction: row-reverse;
+        gap: 5px;
+    }
+
+    .social-image {
+        width: 100%;
+        max-width: 100px;
+        margin-right: 0;
+        rotate: 0deg;
+    }
+
+    .social-info {
+        align-items: start;
+        text-align: start;
+    }
+
+    .social-info h4 {
+        font-size: 16px;
+    }
+
+    .social-info p {
+        font-size: 12px;
+    }
+
+    .follow-button {
+        width: 100%;
+    }
+    
+}

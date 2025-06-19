@@ -65,14 +65,14 @@
 .featured-status {
     font-size: 10px;
     position: absolute;
-    background: var(--card-color);
+    background: #E9F4FC;
     border-radius: 15px;
     z-index: 1;
     top: 1;
     padding: 5px;
     font-family: var(--main-font);
-    font-weight: 500;
-    color: var(--text-color-one);
+    font-weight: 700;
+    color: var(--btn-color-one);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -322,13 +322,13 @@
     }
 
     .featured-img {
-        width: 150px;
-        height: 150px;
-        border-radius: 5px;
+        width: 170px;
+        height: 170px;
+        border-radius: 10px;
     }
 
     .featured-infos {
-        width: 150px;
+        width: 170px;
         justify-content: start;
     }
 
@@ -337,14 +337,13 @@
     }
 
     .infos-details {
-        flex-direction: column;
+        flex-direction: row !important;
         justify-content: start;
         align-items: start;
     }
 
     .featured-category,
     .featured-dimension,
-    .featured-status,
     .featured-type,
     .featured-neighborhood,
     .featured-icon,
@@ -352,6 +351,8 @@
     .featured-size {
         font-size: 12px;
         font-weight: 400;
+        text-align: start;
+        padding: 0;
     }
 
     .featured-price {

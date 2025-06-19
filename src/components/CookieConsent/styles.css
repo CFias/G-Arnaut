@@ -1,0 +1,30 @@
+.cookie-consent {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: var(--btn-color-one); /* azul escuro */
+  color: #fff;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 999;
+  font-family: var(--main-font);
+}
+
+.cookie-consent button {
+  background: #fff;
+  color: var(--btn-color-one);
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-weight: 500;
+  border-radius: 35px;
+  font-family: var(--main-font);
+}
+
+
+.cookie-consent button:hover {
+  background: #dfe1ff;
+}

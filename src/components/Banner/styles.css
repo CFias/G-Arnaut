@@ -210,8 +210,9 @@
 
 @media (max-width: 600px) {
   .banner-container {
-        flex-direction: column;
+        flex-direction: column-reverse;
         align-items: center;
+        display: none;
     }
 
     .banner-content {
