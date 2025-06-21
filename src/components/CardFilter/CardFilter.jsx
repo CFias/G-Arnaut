@@ -32,7 +32,6 @@ export const CardFilter = () => {
     try {
       let q = query(productsRef);
 
-      // Filtros diretos que podem ser aplicados no Firestore
       if (category) {
         q = query(q, where("category", "==", category));
       }
@@ -46,7 +45,6 @@ export const CardFilter = () => {
       const querySnapshot = await getDocs(q);
       let filteredProducts = querySnapshot.docs.map((doc) => doc.data());
 
-      // Filtros locais mais flexíveis
       if (city) {
         filteredProducts = filteredProducts.filter((item) =>
           item.city?.toLowerCase().includes(city.toLowerCase())
@@ -71,7 +69,6 @@ export const CardFilter = () => {
         state: { filteredProducts },
       });
     } catch (error) {
-      console.error("Erro ao buscar produtos:", error);
       alert("Erro ao buscar produtos.");
     }
   };
