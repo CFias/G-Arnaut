@@ -106,7 +106,7 @@
 
 .featured-products {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 20px;
     padding-top: 2rem;
     width: 65vw;
@@ -121,6 +121,7 @@
     gap: 10px;
     border-radius: 20px;
     margin-top: 2rem;
+
 }
 
 .pagination button {
@@ -143,7 +144,9 @@
 .pagination button.active {
     color: var(--text-color-one);
     font-weight: bold;
-    background: transparent;
+    background: var(--btn-color-one);
+    color: var(--text-color-two);
+
 }
 
 .pagination button:disabled {

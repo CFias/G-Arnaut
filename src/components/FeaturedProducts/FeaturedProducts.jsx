@@ -8,6 +8,7 @@ import {
   Verified,
   ArrowBack,
   ArrowForward,
+  FilterList,
 } from "@mui/icons-material";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -72,7 +73,12 @@ export const FeaturedProducts = ({ product }) => {
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
         >
-          <p className="featured-status">{product.status}</p>
+          <p className="featured-status">
+            <span>
+              <FilterList fontSize="10" />{" "}
+            </span>
+            {product.status}
+          </p>
           <p className="featured-ref">Ref: {product.refProduct}</p>
           <img
             className="featured-img"
@@ -105,34 +111,34 @@ export const FeaturedProducts = ({ product }) => {
             <Verified className="icon-profile" fontSize="10" />
           </div>
         </div>
-
-        <div className="featured-type">
-          <p className="featured-category">{product.category}</p>À
-          <p className="featured-category">{product.productType}</p>
-        </div>
-
-        <h3 className="featured-city">{product.city}</h3>
-        <p className="featured-neighborhood">{product.neighborhood}</p>
-        <p className="featured-address">{product.address}</p>
-
         <div className="infos-details">
-          <div className="featured-dimension">
-            <CropFree className="featured-icon" fontSize="small" />
-            <p className="featured-size">{product.dimension} m²</p>
+          <h3 className="featured-city">{product.city}</h3>
+          <p className="featured-neighborhood">{product.neighborhood}</p>
+          <div className="infos-all">
+            <div className="featured-dimension">
+              <CropFree className="featured-icon" fontSize="small" />
+              <p className="featured-size">{product.dimension} m²</p>
+            </div>
+            <div className="featured-dimension">
+              <Hotel className="featured-icon" fontSize="small" />
+              <p className="featured-size">{product.bedrooms}</p>
+            </div>
+            <div className="featured-dimension">
+              <DirectionsCar className="featured-icon" fontSize="small" />
+              <p className="featured-size">{product.parkingSpaces}</p>
+            </div>
           </div>
-          <div className="featured-dimension">
-            <Hotel className="featured-icon" fontSize="small" />
-            <p className="featured-size">{product.bedrooms}</p>
+          <div className="end-card">
+            <div className="featured-price-mod">
+              <div className="featured-type">
+                <p className="featured-category">{product.category}</p>À
+                <p className="featured-category">{product.productType}</p>
+              </div>
+              <p className="price-name">Preço do imóvel</p>
+              <p className="featured-price">R$ {product.price}</p>
+            </div>
+            <p className="more-imovel">Ver mais</p>
           </div>
-          <div className="featured-dimension">
-            <DirectionsCar className="featured-icon" fontSize="small" />
-            <p className="featured-size">{product.parkingSpaces}</p>
-          </div>
-        </div>
-
-        <div className="featured-price-mod">
-          <p className="featured-price">R$ {product.price}</p>
-          <East fontSize="small" />
         </div>
       </div>
     </div>

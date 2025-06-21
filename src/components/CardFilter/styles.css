@@ -29,6 +29,7 @@
     flex-direction: column;
     position: relative;
     gap: 10px;
+    width: 65vw;
 }
 
 .filter-header {

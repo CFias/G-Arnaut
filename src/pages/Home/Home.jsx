@@ -35,8 +35,22 @@ export const Home = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isProductsLoaded, setIsProductsLoaded] = useState(false);
 
-  const itemsPerPage = 15;
+  const itemsPerPage = 12;
   const recentSectionRef = useRef(null);
+
+  const renderSkeletonCards = (count = 6) => (
+    <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f5f5f5">
+      <div className="skeleton-grid">
+        {Array.from({ length: count }).map((_, i) => (
+          <div key={i} className="skeleton-card-item">
+            <Skeleton height={150} borderRadius={10} />
+            <Skeleton height={20} width="80%" style={{ marginTop: 10 }} />
+            <Skeleton height={15} width="60%" />
+          </div>
+        ))}
+      </div>
+    </SkeletonTheme>
+  );
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -124,7 +138,9 @@ export const Home = () => {
           <div className="card-content-floating">
             <h4>Bem-vindo ao nosso site!</h4>
             <p>Confira nossos produtos incríveis.</p>
-            <button className="close-card" id="close-card">Fechar</button>
+            <button className="close-card" id="close-card">
+              Fechar
+            </button>
           </div>
         </div>
 
@@ -135,17 +151,14 @@ export const Home = () => {
         <section className="section-card">
           <CardFilter />
         </section>
+
         <section className="section-3">
           {isLoading ? (
-            <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f0f0f0">
-              <Skeleton height={200} count={2} />
-            </SkeletonTheme>
+            renderSkeletonCards(2)
           ) : (
-            <>
-              <div className="social-cards-wrapper">
-                <SocialCard type="instagram" />
-              </div>
-            </>
+            <div className="social-cards-wrapper">
+              <SocialCard type="instagram" />
+            </div>
           )}
         </section>
 
@@ -164,9 +177,7 @@ export const Home = () => {
                 <p>Não há produtos em destaque no momento.</p>
               )
             ) : (
-              <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f0f0f0">
-                <Skeleton height={200} count={2} />
-              </SkeletonTheme>
+              renderSkeletonCards(6)
             )}
           </div>
         </Section>
@@ -186,34 +197,28 @@ export const Home = () => {
                 <p>Não há imóveis com status Lançamento.</p>
               )
             ) : (
-              <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f0f0f0">
-                <Skeleton height={200} count={2} />
-              </SkeletonTheme>
+              renderSkeletonCards(6)
             )}
           </div>
         </Section>
+
         <section className="section-3">
           {isLoading ? (
-            <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f0f0f0">
-              <Skeleton height={200} count={2} />
-            </SkeletonTheme>
+            renderSkeletonCards(2)
           ) : (
-            <>
-              <div className="social-cards-wrapper">
-                <SocialCard type="facebook" />
-              </div>
-            </>
+            <div className="social-cards-wrapper">
+              <SocialCard type="facebook" />
+            </div>
           )}
         </section>
+
         <section className="section-3" ref={recentSectionRef}>
           <h3 className="home-h3">
             {isLoading ? <Skeleton width={150} /> : "Imóveis Recentes"}
             <p className="home-p">Imóveis adicionados recentemente</p>
           </h3>
           {isLoading ? (
-            <div className="skeleton-card">
-              <Skeleton height={200} count={2} />
-            </div>
+            renderSkeletonCards(6)
           ) : (
             <>
               <div className="featured-products">
@@ -225,19 +230,7 @@ export const Home = () => {
                   <p>Não há produtos recentes no momento.</p>
                 )}
               </div>
-              <section className="section-3">
-                {isLoading ? (
-                  <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f0f0f0">
-                    <Skeleton height={200} count={2} />
-                  </SkeletonTheme>
-                ) : (
-                  <>
-                    <div className="social-cards-wrapper">
-                      <SocialCard type="whatsapp" />
-                    </div>
-                  </>
-                )}
-              </section>
+
               {recentProducts.length > itemsPerPage && (
                 <>
                   <div className="pagination">
@@ -247,7 +240,6 @@ export const Home = () => {
                     >
                       <KeyboardArrowLeft fontSize="small" />
                     </button>
-
                     {Array.from({ length: totalPages }, (_, index) => (
                       <button
                         key={index + 1}
@@ -257,7 +249,6 @@ export const Home = () => {
                         {index + 1}
                       </button>
                     ))}
-
                     <button
                       onClick={() => handlePageChange(currentPage + 1)}
                       disabled={currentPage === totalPages}
@@ -265,9 +256,18 @@ export const Home = () => {
                       <KeyboardArrowRight fontSize="small" />
                     </button>
                   </div>
-                  <p className="home-p-2">15 imóveis por página</p>
+                  <p className="home-p-2">12 imóveis por página</p>
                 </>
               )}
+              <section className="section-3">
+                {isLoading ? (
+                  renderSkeletonCards(2)
+                ) : (
+                  <div className="social-cards-wrapper">
+                    <SocialCard type="whatsapp" />
+                  </div>
+                )}
+              </section>
             </>
           )}
         </section>

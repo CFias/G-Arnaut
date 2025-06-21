@@ -48,28 +48,29 @@
 .banner-names h3 {
     font-size: 34px;
     font-weight: bold;
-    color: #FFD87A;
+    color: #F3D357;
+
     margin: 0;
 }
 
 .banner-names h4 {
     font-size: 18px;
     font-weight: 500;
-    color: var(--text-color, #051426);
+    color: #092946;
     margin: 0;
 }
 
 .banner-names h5 {
     font-size: 22px;
     font-weight: 700;
-    color: #FFD87A;
+    color: #F3D357;
+
 }
 
 .banner-names p {
     font-size: 18px;
-    color: var(--text-color, #051426);
-    width: 680px;
-    font-weight: 500;
+    color: #092946;
+    font-weight: 400;
     text-align: start;
 }
 
@@ -78,11 +79,14 @@
     display: flex;
     gap: 15px;
     margin-top: 15px;
+    color: #fffafa;
+
 }
 
 .social-icon {
     font-size: 28px !important;
-    color: #051426;
+    color: #092946;
+
     cursor: pointer;
     transition: color 0.3s ease;
 }
@@ -189,8 +193,7 @@
     transition: background 0.3s ease;
 }
 
-.custom-arrow:hover {
-}
+.custom-arrow:hover {}
 
 .custom-prev {
     left: -25px;
@@ -200,16 +203,12 @@
     right: -25px;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1200px) {}
 
-}
-
-@media (max-width: 900px) {
-
-}
+@media (max-width: 900px) {}
 
 @media (max-width: 600px) {
-  .banner-container {
+    .banner-container {
         flex-direction: column-reverse;
         align-items: center;
         display: none;

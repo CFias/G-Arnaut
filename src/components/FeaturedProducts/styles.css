@@ -2,7 +2,7 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: var(--btn-color-one);
     border: none;
     padding: 5px;
     border-radius: 50%;
@@ -23,7 +23,7 @@
 }
 
 .carousel-arrow:hover {
-    background-color: rgba(255, 255, 255, 1);
+    background-color: var(--btn-color-two);
 }
 
 .featured-images .carousel-arrow {
@@ -45,9 +45,12 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border-radius: 15px;
+    border-radius: 10px;
     cursor: pointer;
-    padding: 5px;
+    padding: 8px;
+    background: var(--card-color);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
 }
 
 .featured-images {
@@ -63,20 +66,32 @@
 }
 
 .featured-status {
+    display: flex;
+    align-items: center;
     font-size: 10px;
     position: absolute;
-    background: #E9F4FC;
+    background: var(--card-color);
     border-radius: 15px;
     z-index: 1;
     top: 1;
-    padding: 5px;
+    padding: 1px 5px;
     font-family: var(--main-font);
-    font-weight: 700;
+    font-weight: 600;
     color: var(--btn-color-one);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     margin: 5px;
+    gap: 5px;
+}
+
+.featured-status span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    border-radius: 50%;
+    background: var(--btn-color-two);
+    color: var(--btn-color-two);
 }
 
 .featured-ref {
@@ -94,9 +109,9 @@
 }
 
 .featured-img {
-    width: 230px;
-    height: 230px;
-    border-radius: 15px;
+    width: 275px;
+    height: 275px;
+    border-radius: 8px;
     transition: filter 0.3s ease-in-out;
     filter: brightness(0.6);
     object-fit: cover;
@@ -113,13 +128,13 @@
     flex-direction: column;
     font-family: var(--main-font);
     color: var(--text-color-one);
-    width: 230px;
+    width: 275px;
 }
 
 .featured-city {
     font-family: var(--main-font);
-    color: var(--text-color-one);
-    font-size: 16px;
+    color: rgb(83, 83, 83);
+    font-size: 14px;
     font-weight: 500;
     white-space: nowrap;
     overflow: hidden;
@@ -134,60 +149,94 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    text-transform: capitalize;
 }
 
 .featured-neighborhood {
-    font-size: 16px;
+    font-size: 12px;
+    color: rgb(83, 83, 83);
     font-weight: 500;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+    text-transform: uppercase;
 }
 
 .featured-category {
-    font-size: 12px;
+    font-size: 8px;
     display: flex;
-    font-weight: 400;
+    font-weight: 600;
     text-transform: uppercase;
+    font-family: var(--main-font);
 }
 
 .featured-type {
     display: flex;
+    font-family: var(--main-font);
     justify-content: start;
     align-items: center;
-    font-size: 12px;
-    color: var(--text-color-one);
+    font-size: 8px;
+    color: var(--btn-color-one);
+    font-weight: 600;
     text-align: center;
     gap: 2px;
+    border-radius: 3px;
+    padding: 4px;
+    background: #e6effa;
 }
 
 .featured-dimension {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 5px;
-    font-weight: 600;
+    padding: 1px 5px;
+    font-weight: 500;
+    background: #e6effa;
+    font-size: 10px;
+    border-radius: 3px;
+}
+
+.more-imovel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    color: var(--btn-color-one);
+    font-size: 10px;
+    font-weight: 500;
+    border-radius: 3px;
 }
 
 .featured-icon {
-    padding: 2px;
-    color: var(--text-color-one);
+    padding: 4px;
+    color: var(--btn-color-one);
 }
 
 .featured-size {
-    font-size: 14px;
-    font-weight: 400;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--btn-color-one);
 }
 
 .featured-price-mod {
     display: flex;
-    align-items: center;
+    align-items: start;
     justify-content: space-between;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.price-name {
+    font-size: 10px;
+    font-weight: 500;
+    color: rgb(83, 83, 83);
 }
 
 .featured-price {
-    color: var(--text-color-one);
+    color: var(--btn-color-one);
     font-family: var(--main-font);
-    font-size: 18px;
+    font-size: 14px;
     font-weight: 600;
     white-space: nowrap;
     overflow: hidden;
@@ -196,31 +245,68 @@
 
 .first-item {
     display: flex;
-    align-items: center;
+    align-items: start;
     justify-content: space-between;
     gap: 5px;
     width: 100%;
     margin: 3px 0;
 }
 
+.profile-solo {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    width: 100%;
+}
+
 .infos-profile {
     display: flex;
     align-items: center;
+    justify-content: start;
     gap: 5px;
 }
 
 .infos-profile p {
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 600;
 }
 
+.author-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-color-one);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.end-card {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    margin: 0;
+    width: 100%;
+    gap: 2px;
+}
+
 .icon-profile {
-    color: var(--btn-color-one);
+    color: var(--btn-color-two);
+    padding: 1px
 }
 
 .infos-details {
     display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 2px;
+    width: auto;
+    margin: 0;
+}
+
+.infos-all {
+    display: flex;
     align-items: center;
+    justify-content: start;
     gap: 2px;
 }
 
@@ -254,10 +340,9 @@
     background-color: #ddd;
 }
 
-/* Responsividade */
-/* @media (max-width: 1024px) {
+@media (max-width: 768px) {
     .featured-list {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr);
         gap: 10px;
     }
 
@@ -272,42 +357,11 @@
 
     .featured-type {
         font-size: 8px;
-        border-radius: 25px;
-    }
-
-    .featured-price {
-        font-size: 24px;
-    }
-
-    .author-name {
-        font-size: 12px;
-        font-weight: 600;
-    }
-} */
-
-@media (max-width: 768px) {
-    .featured-list {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-    }
-
-    .featured-img {
-        width: 120px;
-        height: 120px;
-    }
-
-    .featured-infos {
-        width: 120px;
-    }
-
-    .featured-type {
-        font-size: 8px;
         padding: 10px;
-        border-radius: 25px;
     }
 
     .featured-price {
-        font-size: 24px;
+        font-size: 14px;
     }
 
     .pagination-dots {
@@ -337,7 +391,7 @@
     }
 
     .infos-details {
-        flex-direction: row !important;
+        flex-direction: row;
         justify-content: start;
         align-items: start;
     }

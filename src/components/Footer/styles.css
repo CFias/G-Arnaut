@@ -5,6 +5,7 @@
     align-items: center;
     background: #F7F7F7;
     font-family: var(--main-font);
+    margin-top: 2rem;
 }
 
 .footer-content {
