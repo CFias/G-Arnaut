@@ -3,6 +3,7 @@ import instaImg from "../../assets/image/instaImg.png";
 import whatsappImg from "../../assets/image/wppImg.png";
 import facebookImg from "../../assets/image/faceImg.png";
 import "./styles.css";
+import { East } from "@mui/icons-material";
 
 const socialData = {
   instagram: {
@@ -54,7 +55,7 @@ export const SocialCard = ({ type }) => {
         </div>
         <div className="cx-btn">
           <button className="follow-button" onClick={handleClick}>
-            {social.buttonText}
+            {social.buttonText} <East fontSize="small" />
           </button>
         </div>
       </div>
