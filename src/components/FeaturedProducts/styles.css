@@ -34,12 +34,6 @@
     display: flex;
 }
 
-.featured-container {
-    display: grid;
-    justify-content: center;
-    align-items: center;
-}
-
 .featured-card {
     display: flex;
     flex-direction: column;
@@ -372,17 +366,16 @@
 @media (max-width: 480px) {
     .featured-card {
         border-radius: 5px;
-        margin: 0;
     }
 
     .featured-img {
-        width: 170px;
-        height: 170px;
+        width: 150px;
+        height: 160px;
         border-radius: 10px;
     }
 
     .featured-infos {
-        width: 170px;
+        width: 150px;
         justify-content: start;
     }
 
@@ -403,19 +396,22 @@
     .featured-icon,
     .featured-list,
     .featured-size {
-        font-size: 12px;
+        font-size: 10px;
         font-weight: 400;
         text-align: start;
         padding: 0;
     }
 
     .featured-price {
-        font-size: 18px;
+        font-size: 12px;
     }
 
-    .featured-list {
-        height: 80vh;
-        overflow: hidden;
+    .price-name {
+        font-size: 8px;
+    }
+
+    .more-imovel {
+      display: none;
     }
 
     .infos-profile p {

@@ -205,7 +205,8 @@
         grid-template-columns: repeat(2, 1fr);
         overflow: hidden;
         justify-items: center;
-        width: 100%;
+        width: 95vw;
+        padding-bottom: .7rem;
     }
 
     .home-h3 {

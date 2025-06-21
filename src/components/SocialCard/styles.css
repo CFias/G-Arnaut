@@ -69,12 +69,53 @@
     font-size: 14px;
     cursor: pointer;
     width: 170px;
-
+    gap: 5px;
 }
 
 .follow-button:hover {
     background-color: var(--btn-color-one);
     color: var(--text-color-two);
+}
+
+@media screen and (max-width: 480px) {
+    .social-container {
+        width: 95vw;
+    }
+
+    .social-card-content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .social-card {
+        align-items: center;
+        flex-direction: row-reverse;
+        gap: 5px;
+    }
+
+    .social-image {
+        width: 200px;
+        margin-right: 0;
+        rotate: 0deg;
+    }
+
+    .social-info {
+        align-items: start;
+        text-align: start;
+    }
+
+    .social-info h4 {
+        font-size: 14px;
+    }
+
+    .social-info p {
+        font-size: 10px;
+    }
+
+    .follow-button {
+        width: 100%;
+    }
+    
 }
 
 @media screen and (max-width: 600px) {
@@ -88,17 +129,17 @@
     }
 
     .social-card {
-        align-items: center;
+        align-items: start;
         width: 100%;
         flex-direction: row-reverse;
         gap: 5px;
     }
 
     .social-image {
-        width: 100%;
-        max-width: 100px;
+        width: 130px;
+        height: 130px;
         margin-right: 0;
-        rotate: 0deg;
+        rotate: 5deg;
     }
 
     .social-info {
@@ -107,15 +148,18 @@
     }
 
     .social-info h4 {
-        font-size: 16px;
+        font-size: 12px;
     }
 
     .social-info p {
-        font-size: 12px;
+        font-size: 10px;
     }
 
     .follow-button {
         width: 100%;
+        font-size: 10px;
+        font-weight: 500;
     }
     
 }
+
