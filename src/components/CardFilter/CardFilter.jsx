@@ -2,11 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../../services/FirebaseConfig";
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
 import "./styles.css";
-import { East } from "@mui/icons-material";
-import Logo from "../../assets/image/garnaut-gray-logo.png";
+import { East, Search } from "@mui/icons-material";
+import { InputAdornment, MenuItem, TextField } from "@mui/material";
 
 export const CardFilter = () => {
   const [city, setCity] = useState("");
@@ -24,53 +22,21 @@ export const CardFilter = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const handleFilter = async (e) => {
+  const handleFilter = (e) => {
     e.preventDefault();
 
-    const productsRef = collection(db, "products");
+    const filterCriteria = {
+      city,
+      price,
+      reference,
+      category,
+      neighborhood,
+      bedrooms,
+    };
 
-    try {
-      let q = query(productsRef);
-
-      if (category) {
-        q = query(q, where("category", "==", category));
-      }
-      if (bedrooms) {
-        q = query(q, where("bedrooms", "==", bedrooms));
-      }
-      if (price) {
-        q = query(q, where("price", "<=", parseFloat(price)));
-      }
-
-      const querySnapshot = await getDocs(q);
-      let filteredProducts = querySnapshot.docs.map((doc) => doc.data());
-
-      if (city) {
-        filteredProducts = filteredProducts.filter((item) =>
-          item.city?.toLowerCase().includes(city.toLowerCase())
-        );
-      }
-
-      if (neighborhood) {
-        filteredProducts = filteredProducts.filter((item) =>
-          item.neighborhood?.toLowerCase().includes(neighborhood.toLowerCase())
-        );
-      }
-
-      if (reference) {
-        filteredProducts = filteredProducts.filter((item) =>
-          item.refProduct?.toLowerCase().includes(reference.toLowerCase())
-        );
-      }
-
-      console.log("Produtos filtrados encontrados:", filteredProducts);
-
-      navigate("/filtered-products", {
-        state: { filteredProducts },
-      });
-    } catch (error) {
-      alert("Erro ao buscar produtos.");
-    }
+    navigate("/sale-products", {
+      state: { filterCriteria },
+    });
   };
 
   return (
@@ -85,88 +51,88 @@ export const CardFilter = () => {
       <div className="filter-card">
         <form className="filter-content" onSubmit={handleFilter}>
           <div className="filter-item">
-            <label htmlFor="city" className="filter-label">
-              Cidade
-            </label>
-            <input
-              id="city"
-              className="filter-in"
+            <TextField
+              label="Cidade"
               placeholder="Ex: Salvador"
-              type="text"
+              variant="outlined"
+              fullWidth
               value={city}
               onChange={(e) => setCity(e.target.value)}
+              className="filter-in"
             />
           </div>
+
           <div className="filter-item">
-            <label htmlFor="neighborhood" className="filter-label">
-              Bairro
-            </label>
-            <input
-              id="neighborhood"
-              className="filter-in"
+            <TextField
+              label="Bairro"
               placeholder="Ex: Imbuí"
-              type="text"
+              variant="outlined"
+              fullWidth
               value={neighborhood}
               onChange={(e) => setNeighborhood(e.target.value)}
+              className="filter-in"
             />
           </div>
+
           <div className="filter-item">
-            <label className="filter-label">Categoria</label>
-            <select
-              name="category"
+            <TextField
+              label="Categoria"
+              select
+              variant="outlined"
+              fullWidth
               value={category}
               onChange={(e) => setCategory(e.target.value)}
               className="filter-in"
               required
             >
-              <option value="">Selecione uma Categoria</option>
-              <option value="Apartamento">Apartamento</option>
-              <option value="Casa">Casa</option>
-              <option value="Fazenda">Fazenda</option>
-              <option value="Sítio">Sítio</option>
-              <option value="Terreno">Terreno</option>
-            </select>
+              <MenuItem value="">Selecione uma Categoria</MenuItem>
+              <MenuItem value="Apartamento">Apartamento</MenuItem>
+              <MenuItem value="Casa">Casa</MenuItem>
+              <MenuItem value="Fazenda">Fazenda</MenuItem>
+              <MenuItem value="Sítio">Sítio</MenuItem>
+              <MenuItem value="Terreno">Terreno</MenuItem>
+            </TextField>
           </div>
+
           <div className="filter-item">
-            <label htmlFor="reference" className="filter-label">
-              Referência
-            </label>
-            <input
-              id="reference"
-              className="filter-in"
-              type="text"
+            <TextField
+              label="Referência"
               placeholder="Ex: 12345"
+              variant="outlined"
+              fullWidth
               value={reference}
               onChange={(e) => setReference(e.target.value)}
+              className="filter-in"
             />
           </div>
+
           <div className="filter-item">
-            <label htmlFor="price" className="filter-label">
-              Preço Máximo
-            </label>
-            <input
-              id="price"
-              className="filter-in"
-              type="number"
+            <TextField
+              label="Preço Máximo"
               placeholder="R$ 350.000"
+              variant="outlined"
+              type="number"
+              fullWidth
               value={price}
               onChange={(e) => setPrice(e.target.value)}
+              className="filter-in"
             />
           </div>
+
           <div className="filter-item">
-            <label htmlFor="bedrooms" className="filter-label">
-              Quartos
-            </label>
-            <input
-              id="bedrooms"
-              className="filter-in"
-              type="number"
+            <TextField
+              label="Quartos"
               placeholder="Ex: 4"
+              variant="outlined"
+              type="number"
+              fullWidth
               value={bedrooms}
               onChange={(e) => setBedrooms(e.target.value)}
+              className="filter-in"
             />
           </div>
         </form>
+
         <div className="filter-btn">
           <button
             type="button"

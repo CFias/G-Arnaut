@@ -1,19 +1,29 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { db } from "../../services/FirebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
 import SearchIcon from "@mui/icons-material/Search";
 import {
   MenuItem,
-  Select,
   Breadcrumbs,
   Typography,
-  InputLabel,
   FormControl,
   TextField,
   InputAdornment,
+  FormLabel,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
+  Button,
+  Tooltip,
 } from "@mui/material";
-import { Category, CropFree, DirectionsCar, Hotel } from "@mui/icons-material";
+import {
+  Category,
+  CropFree,
+  DirectionsCar,
+  Hotel,
+  InfoOutlined,
+} from "@mui/icons-material";
 import "./styles.css";
 import { Navbar } from "../../components/Navbar/Navbar";
 
@@ -28,55 +38,83 @@ export const SaleProducts = () => {
   const [visibleProducts, setVisibleProducts] = useState(12);
   const [sortOrder, setSortOrder] = useState("");
   const [totalProperties, setTotalProperties] = useState(0);
-  const [showCategories, setShowCategories] = useState(true);
 
+  // Estados adaptados para arrays, para seleção múltipla
   const [selectedProductType, setSelectedProductType] = useState("venda");
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedStatus, setSelectedStatus] = useState("");
-  const [selectedCity, setSelectedCity] = useState("");
-  const [selectedNeighborhood, setSelectedNeighborhood] = useState("");
-  const [selectedBedrooms, setSelectedBedrooms] = useState("");
-  const [selectedParking, setSelectedParking] = useState("");
-
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedStatuses, setSelectedStatuses] = useState([]);
+  const [selectedCities, setSelectedCities] = useState([]);
+  const [selectedNeighborhoods, setSelectedNeighborhoods] = useState([]);
+  const [selectedBedrooms, setSelectedBedrooms] = useState([]);
+  const [selectedParking, setSelectedParking] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    // Se vieram filtros da tela anterior, aplique
+    if (location.state?.filterCriteria) {
+      const { category, city, neighborhood, reference, price, bedrooms } =
+        location.state.filterCriteria;
+
+      if (category) setSelectedCategories([category]);
+      if (city) setSelectedCities([city]);
+      if (neighborhood) setSelectedNeighborhoods([neighborhood]);
+      if (bedrooms) setSelectedBedrooms([bedrooms]);
+      if (price) setSortOrder("low-to-high"); // exemplo: aplicar ordenação se quiser
+      if (reference) setSearchTerm(reference);
+    }
+  }, [location.state]);
+
+  // Função genérica para alterar arrays de seleção múltipla
+  const handleCheckboxChange = (setter, selectedArray, value) => (e) => {
+    const checked = e.target.checked;
+    if (checked) {
+      setter([...selectedArray, value]);
+    } else {
+      setter(selectedArray.filter((item) => item !== value));
+    }
+  };
 
   const fetchProducts = async () => {
     try {
       const productsRef = collection(db, "products");
       const querySnapshot = await getDocs(productsRef);
-      const productList = querySnapshot.docs.map((doc) => ({
+      let productList = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
 
+      // Filtragem ajustada para múltiplas seleções
       let filtered = productList.filter(
         (p) => p.productType === selectedProductType
       );
 
-      if (selectedCategory)
-        filtered = filtered.filter((p) => p.category === selectedCategory);
-
-      if (selectedStatus)
-        filtered = filtered.filter((p) => p.status === selectedStatus);
-
-      if (selectedCity)
-        filtered = filtered.filter((p) => p.city === selectedCity);
-
-      if (selectedNeighborhood)
-        filtered = filtered.filter(
-          (p) => p.neighborhood === selectedNeighborhood
+      if (selectedCategories.length > 0)
+        filtered = filtered.filter((p) =>
+          selectedCategories.includes(p.category)
         );
 
-      if (selectedBedrooms)
-        filtered = filtered.filter(
-          (p) => Number(p.bedrooms) === Number(selectedBedrooms)
+      if (selectedStatuses.length > 0)
+        filtered = filtered.filter((p) => selectedStatuses.includes(p.status));
+
+      if (selectedCities.length > 0)
+        filtered = filtered.filter((p) => selectedCities.includes(p.city));
+
+      if (selectedNeighborhoods.length > 0)
+        filtered = filtered.filter((p) =>
+          selectedNeighborhoods.includes(p.neighborhood)
         );
 
-      if (selectedParking)
-        filtered = filtered.filter(
-          (p) => Number(p.parkingSpaces) === Number(selectedParking)
+      if (selectedBedrooms.length > 0)
+        filtered = filtered.filter((p) =>
+          selectedBedrooms.includes(Number(p.bedrooms))
+        );
+
+      if (selectedParking.length > 0)
+        filtered = filtered.filter((p) =>
+          selectedParking.includes(Number(p.parkingSpaces))
         );
 
       if (searchTerm) {
@@ -85,7 +123,7 @@ export const SaleProducts = () => {
           (p) =>
             p.city?.toLowerCase().includes(lowerSearch) ||
             p.neighborhood?.toLowerCase().includes(lowerSearch) ||
-            p.reference?.toLowerCase().includes(lowerSearch)
+            p.refProduct?.toLowerCase().includes(lowerSearch)
         );
       }
 
@@ -137,10 +175,10 @@ export const SaleProducts = () => {
     fetchProducts();
   }, [
     selectedProductType,
-    selectedCategory,
-    selectedStatus,
-    selectedCity,
-    selectedNeighborhood,
+    selectedCategories,
+    selectedStatuses,
+    selectedCities,
+    selectedNeighborhoods,
     selectedBedrooms,
     selectedParking,
     searchTerm,
@@ -164,6 +202,14 @@ export const SaleProducts = () => {
 
   const loadMore = () => setVisibleProducts((prev) => prev + 12);
 
+  // Opções para os checkboxes
+  const categoryOptions = ["Casa", "Apartamento", "Terreno", "Comercial"];
+  const statusOptions = ["Pronto", "Em Obra", "Lançamento"];
+  const bedroomOptions = [1, 2, 3, 4, 5];
+  const parkingOptions = [0, 1, 2, 3, 4];
+  const cityOptions = Object.keys(cityCounts || {});
+  const neighborhoodOptions = [...new Set(products.map((p) => p.neighborhood))];
+
   return (
     <>
       <Navbar />
@@ -178,12 +224,9 @@ export const SaleProducts = () => {
             </Typography>
           </Breadcrumbs>
         </div>
-
-        <div className="filter-product-content-sale">
+        <div className="filter-product-content">
           <div className="filter-side-sale">
             <h2 className="filter-title-sale">Filtrar Imóveis</h2>
-
-            {/* Toggle Venda/Aluguel */}
             <FormControl fullWidth sx={{ mb: 2 }}>
               <label className="toggle-label">Imóveis para:</label>
               <div className="toggle-button-group">
@@ -206,130 +249,306 @@ export const SaleProducts = () => {
               </div>
             </FormControl>
 
-            <FormControl className="" fullWidth sx={{ mb: 2 }}>
+            <FormControl fullWidth sx={{ mb: 2 }}>
               <TextField
                 label="Buscar por bairro, cidade ou referência"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 variant="outlined"
+                className="filter-in-search"
                 fullWidth
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <SearchIcon sx={{ color: "#999", fontSize: 18 }} />
+                      <SearchIcon sx={{ color: "#999", fontSize: 14 }} />
                     </InputAdornment>
                   ),
                 }}
-                className="floating-label-search"
               />
             </FormControl>
 
-            {/* Demais filtros */}
-            <FormControl fullWidth sx={{ mb: 2 }}>
-              <InputLabel id="category-label">Categoria</InputLabel>
-              <Select
-                labelId="category-label"
-                value={selectedCategory}
-                label="Categoria"
-                onChange={(e) => setSelectedCategory(e.target.value)}
+            {/* Categoria - checkbox */}
+            <FormControl
+              component="fieldset"
+              fullWidth
+              sx={{ mb: 2 }}
+              className="filter-group"
+            >
+              <FormLabel
+                className="filter-name-top"
+                component="legend"
+                sx={{ display: "flex", alignItems: "center", gap: 1 }}
               >
-                <MenuItem value="">Todas</MenuItem>
-                <MenuItem value="Casa">Casa</MenuItem>
-                <MenuItem value="Apartamento">Apartamento</MenuItem>
-                <MenuItem value="Terreno">Terreno</MenuItem>
-                <MenuItem value="Comercial">Comercial</MenuItem>
-              </Select>
-            </FormControl>
-
-            <FormControl fullWidth sx={{ mb: 2 }}>
-              <InputLabel id="status-label">Status da Obra</InputLabel>
-              <Select
-                labelId="status-label"
-                value={selectedStatus}
-                label="Status da Obra"
-                onChange={(e) => setSelectedStatus(e.target.value)}
-              >
-                <MenuItem value="">Todos</MenuItem>
-                <MenuItem value="Pronto">Pronto</MenuItem>
-                <MenuItem value="Em Obra">Em Obra</MenuItem>
-                <MenuItem value="Lançamento">Lançamento</MenuItem>
-              </Select>
-            </FormControl>
-
-            <FormControl fullWidth sx={{ mb: 2 }}>
-              <InputLabel id="city-label">Cidade</InputLabel>
-              <Select
-                labelId="city-label"
-                value={selectedCity}
-                label="Cidade"
-                onChange={(e) => setSelectedCity(e.target.value)}
-              >
-                <MenuItem value="">Todas</MenuItem>
-                {Object.keys(cityCounts).map((city) => (
-                  <MenuItem key={city} value={city}>
-                    {city}
-                  </MenuItem>
+                <span className="filter-content-sale">
+                  Categoria
+                  <Tooltip title="Selecione o tipo de imóvel que deseja" arrow>
+                    <InfoOutlined
+                      className="info-icon"
+                      sx={{ fontSize: 16, cursor: "help", color: "#666" }}
+                    />
+                  </Tooltip>
+                </span>
+              </FormLabel>
+              <FormGroup className="filter-checkbox-group">
+                {categoryOptions.map((category) => (
+                  <FormControlLabel
+                    className="filter-checkbox-label"
+                    key={category}
+                    control={
+                      <Checkbox
+                        className="filter-checkbox"
+                        checked={selectedCategories.includes(category)}
+                        onChange={handleCheckboxChange(
+                          setSelectedCategories,
+                          selectedCategories,
+                          category
+                        )}
+                        name={category}
+                      />
+                    }
+                    label={category}
+                  />
                 ))}
-              </Select>
+              </FormGroup>
             </FormControl>
 
-            <FormControl fullWidth sx={{ mb: 2 }}>
-              <InputLabel id="neighborhood-label">Bairro</InputLabel>
-              <Select
-                labelId="neighborhood-label"
-                value={selectedNeighborhood}
-                label="Bairro"
-                onChange={(e) => setSelectedNeighborhood(e.target.value)}
+            <FormControl
+              component="fieldset"
+              fullWidth
+              sx={{ mb: 2 }}
+              className="filter-group"
+            >
+              <FormLabel
+                className="filter-name-top"
+                component="legend"
+                sx={{ display: "flex", alignItems: "center", gap: 1 }}
               >
-                <MenuItem value="">Todos</MenuItem>
-                {[...new Set(products.map((p) => p.neighborhood))].map(
-                  (bairro) => (
-                    <MenuItem key={bairro} value={bairro}>
-                      {bairro}
-                    </MenuItem>
-                  )
-                )}
-              </Select>
-            </FormControl>
-
-            <FormControl fullWidth sx={{ mb: 2 }}>
-              <InputLabel id="bedrooms-label">Quartos</InputLabel>
-              <Select
-                labelId="bedrooms-label"
-                value={selectedBedrooms}
-                label="Quartos"
-                onChange={(e) => setSelectedBedrooms(e.target.value)}
-              >
-                <MenuItem value="">Todos</MenuItem>
-                {[1, 2, 3, 4, 5].map((num) => (
-                  <MenuItem key={num} value={num}>
-                    {num}
-                  </MenuItem>
+                <span className="filter-content-sale">
+                  Status da Obra
+                  <Tooltip title="Informe o status da obra" arrow>
+                    <InfoOutlined
+                      className="info-icon"
+                      sx={{ fontSize: 16, cursor: "help", color: "#666" }}
+                    />
+                  </Tooltip>
+                </span>
+              </FormLabel>
+              <FormGroup className="filter-checkbox-group">
+                {statusOptions.map((status) => (
+                  <FormControlLabel
+                    className="filter-checkbox-label"
+                    key={status}
+                    control={
+                      <Checkbox
+                        className="filter-checkbox"
+                        checked={selectedStatuses.includes(status)}
+                        onChange={handleCheckboxChange(
+                          setSelectedStatuses,
+                          selectedStatuses,
+                          status
+                        )}
+                        name={status}
+                      />
+                    }
+                    label={status}
+                  />
                 ))}
-              </Select>
+              </FormGroup>
             </FormControl>
 
-            <FormControl fullWidth sx={{ mb: 2 }}>
-              <InputLabel id="parking-label">
-                Vagas de Estacionamento
-              </InputLabel>
-              <Select
-                labelId="parking-label"
-                value={selectedParking}
-                label="Vagas de Estacionamento"
-                onChange={(e) => setSelectedParking(e.target.value)}
+            <FormControl
+              component="fieldset"
+              fullWidth
+              sx={{ mb: 2 }}
+              className="filter-group"
+            >
+              <FormLabel
+                className="filter-name-top"
+                component="legend"
+                sx={{ display: "flex", alignItems: "center", gap: 1 }}
               >
-                <MenuItem value="">Todas</MenuItem>
-                {[0, 1, 2, 3, 4].map((num) => (
-                  <MenuItem key={num} value={num}>
-                    {num}
-                  </MenuItem>
+                <span className="filter-content-sale">
+                  Cidade
+                  <Tooltip title="Selecione a cidade desejada" arrow>
+                    <InfoOutlined
+                      className="info-icon"
+                      sx={{ fontSize: 16, cursor: "help", color: "#666" }}
+                    />
+                  </Tooltip>
+                </span>
+              </FormLabel>
+              <FormGroup className="filter-checkbox-group">
+                {cityOptions.map((city) => (
+                  <FormControlLabel
+                    className="filter-checkbox-label"
+                    key={city}
+                    control={
+                      <Checkbox
+                        className="filter-checkbox"
+                        checked={selectedCities.includes(city)}
+                        onChange={handleCheckboxChange(
+                          setSelectedCities,
+                          selectedCities,
+                          city
+                        )}
+                        name={city}
+                      />
+                    }
+                    label={city}
+                  />
                 ))}
-              </Select>
+              </FormGroup>
             </FormControl>
+
+            <FormControl
+              component="fieldset"
+              fullWidth
+              sx={{ mb: 2 }}
+              className="filter-group"
+            >
+              <FormLabel
+                className="filter-name-top"
+                component="legend"
+                sx={{ display: "flex", alignItems: "center", gap: 1 }}
+              >
+                <span className="filter-content-sale">
+                  Bairro
+                  <Tooltip title="Selecione o bairro desejado" arrow>
+                    <InfoOutlined
+                      className="info-icon"
+                      sx={{ fontSize: 16, cursor: "help", color: "#666" }}
+                    />
+                  </Tooltip>
+                </span>
+              </FormLabel>
+              <FormGroup className="filter-checkbox-group">
+                {neighborhoodOptions.map((bairro) => (
+                  <FormControlLabel
+                    className="filter-checkbox-label"
+                    key={bairro}
+                    control={
+                      <Checkbox
+                        className="filter-checkbox"
+                        checked={selectedNeighborhoods.includes(bairro)}
+                        onChange={handleCheckboxChange(
+                          setSelectedNeighborhoods,
+                          selectedNeighborhoods,
+                          bairro
+                        )}
+                        name={bairro}
+                      />
+                    }
+                    label={bairro}
+                  />
+                ))}
+              </FormGroup>
+            </FormControl>
+
+            <FormControl
+              component="fieldset"
+              fullWidth
+              sx={{ mb: 2 }}
+              className="filter-group"
+            >
+              <FormLabel className="filter-name-top" component="legend">
+                <span className="filter-content-sale">
+                  Quartos
+                  <Tooltip title="Selecione a quantidade de quartos" arrow>
+                    <InfoOutlined
+                      className="info-icon"
+                      sx={{ fontSize: 16, cursor: "help", color: "#666" }}
+                    />
+                  </Tooltip>
+                </span>
+              </FormLabel>
+              <FormGroup row className="filter-checkbox-group">
+                {bedroomOptions.map((num) => (
+                  <FormControlLabel
+                    className="filter-checkbox-label"
+                    key={num}
+                    control={
+                      <Checkbox
+                        className="filter-checkbox"
+                        checked={selectedBedrooms.includes(num)}
+                        onChange={handleCheckboxChange(
+                          setSelectedBedrooms,
+                          selectedBedrooms,
+                          num
+                        )}
+                        name={`${num}`}
+                      />
+                    }
+                    label={num}
+                  />
+                ))}
+              </FormGroup>
+            </FormControl>
+
+            <FormControl
+              component="fieldset"
+              fullWidth
+              sx={{ mb: 2 }}
+              className="filter-group"
+            >
+              <FormLabel
+                className="filter-name-top"
+                component="legend"
+                sx={{ display: "flex", alignItems: "center", gap: 1 }}
+              >
+                <span className="filter-content-sale">
+                  Vagas de Estacionamento
+                  <Tooltip
+                    title="Selecione a quantidade de vagas de estacionamento"
+                    arrow
+                  >
+                    <InfoOutlined
+                      className="info-icon"
+                      sx={{ fontSize: 16, cursor: "help", color: "#666" }}
+                    />
+                  </Tooltip>
+                </span>
+              </FormLabel>
+              <FormGroup row className="filter-checkbox-group">
+                {parkingOptions.map((num) => (
+                  <FormControlLabel
+                    className="filter-checkbox-label"
+                    key={num}
+                    control={
+                      <Checkbox
+                        className="filter-checkbox"
+                        checked={selectedParking.includes(num)}
+                        onChange={handleCheckboxChange(
+                          setSelectedParking,
+                          selectedParking,
+                          num
+                        )}
+                        name={`${num}`}
+                      />
+                    }
+                    label={num}
+                  />
+                ))}
+              </FormGroup>
+            </FormControl>
+
+            {/* Botão para limpar filtros */}
+            <Button
+              variant="outlined"
+              onClick={() => {
+                setSelectedCategories([]);
+                setSelectedStatuses([]);
+                setSelectedCities([]);
+                setSelectedNeighborhoods([]);
+                setSelectedBedrooms([]);
+                setSelectedParking([]);
+                setSearchTerm("");
+                setSelectedProductType("venda");
+              }}
+            >
+              Limpar Filtros
+            </Button>
           </div>
-
-          <div className="product-list-filter">
+          <div className="filter-product-content-sale">
             <div className="list-product-two">
               <div className="toggle-categories-button">
                 <p className="total-properties">{totalProperties} Resultados</p>
@@ -357,73 +576,84 @@ export const SaleProducts = () => {
                 </select>
               </div>
             </div>
-
-            {products.slice(0, visibleProducts).map((product) => (
-              <div
-                key={product.id}
-                className="product-card-sale"
-                onClick={() => handleCardClick(product.id)}
-              >
-                {product.images && product.images.length > 0 && (
-                  <div className="product-images-sale">
-                    <img
-                      className="product-img-sale"
-                      src={product.images[0]}
-                      alt="Product"
-                    />
-                  </div>
-                )}
-                <div className="product-infos-sale">
-                  <h3 className="product-city-sale">{product.city}</h3>
-                  <p className="product-address-sale">{product.address}</p>
-                  <p className="product-neighborhood-sale">
-                    {product.neighborhood}
-                  </p>
-                  <div className="infos-details-sale">
-                    <p className="product-category-sale">
-                      <Category
-                        className="product-icon-sale"
-                        fontSize="small"
-                      />{" "}
-                      {product.category}
-                    </p>
-                    <div className="product-dimension-sale">
-                      <CropFree
-                        className="product-icon-sale"
-                        fontSize="small"
+            <div className="product-list-filter">
+              {products.slice(0, visibleProducts).map((product) => (
+                <div
+                  key={product.id}
+                  className="product-card-sale"
+                  onClick={() => handleCardClick(product.id)}
+                >
+                  {product.images && product.images.length > 0 && (
+                    <div className="product-images-sale">
+                      <img
+                        className="product-img-sale"
+                        src={product.images[0]}
+                        alt="Product"
                       />
-                      <p className="product-size-sale">
-                        {product.dimension} m²
+                    </div>
+                  )}
+                  <div className="product-infos-sale">
+                    <div className="infos-details-sale">
+                      <h3 className="product-city-sale">{product.city}</h3>
+                      <p className="product-address-sale">{product.address}</p>
+                      <p className="product-neighborhood-sale">
+                        {product.neighborhood}
                       </p>
+                      <div className="infos-all-sale">
+                        <div className="product-dimension-sale">
+                          <CropFree
+                            className="product-icon-sale"
+                            fontSize="small"
+                          />
+                          <p className="product-size-sale">
+                            {product.dimension} m²
+                          </p>
+                        </div>
+                        <div className="product-dimension-sale">
+                          <Hotel
+                            className="product-icon-sale"
+                            fontSize="small"
+                          />
+                          <p className="product-size-sale">
+                            {product.bedrooms}
+                          </p>
+                        </div>
+                        <div className="product-dimension-sale">
+                          <DirectionsCar
+                            className="product-icon-sale"
+                            fontSize="small"
+                          />
+                          <p className="product-size-sale">
+                            {product.parkingSpaces}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="end-card-sale">
+                        <div className="product-price-mod-sale">
+                          <div className="product-type-sale">
+                            <p className="product-category-sale">
+                              {product.category}
+                            </p>
+                            À
+                            <p className="product-category-sale">
+                              {product.productType}
+                            </p>
+                          </div>
+                          <p className="price-name-sale">Preço do imóvel</p>
+                          <p className="product-price-sale">
+                            R$ {product.price}
+                          </p>
+                        </div>
+                      </div>
                     </div>
-                    <div className="product-dimension-sale">
-                      <Hotel className="product-icon-sale" fontSize="small" />
-                      <p className="product-size-sale">{product.bedrooms}</p>
-                    </div>
-                    <div className="product-dimension-sale">
-                      <DirectionsCar
-                        className="product-icon-sale"
-                        fontSize="small"
-                      />
-                      <p className="product-size-sale">
-                        {product.parkingSpaces}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="product-price-mod-sale">
-                    <h3 className="product-price-sale">R$ {product.price}</h3>
-                    <h3 className="product-type-sale">{product.productType}</h3>
                   </div>
                 </div>
-              </div>
-            ))}
-
+              ))}
+            </div>
             {visibleProducts < products.length && (
-              <div className="load-more-container">
-                <button onClick={loadMore} className="load-more-button">
-                  Ver mais
-                </button>
-              </div>
+              <button className="load-more-button" onClick={loadMore}>
+                Ver mais
+              </button>
             )}
           </div>
         </div>
