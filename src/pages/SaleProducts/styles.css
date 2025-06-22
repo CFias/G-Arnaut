@@ -7,6 +7,14 @@
     background: var(--bg-color);
 }
 
+.filter-product-content {
+    display: flex;
+    justify-content: space-between;
+
+    width: 65vw;
+    gap: 5px;
+}
+
 .breadcrumb-container {
     display: flex;
     width: 50vw;
@@ -22,20 +30,18 @@
 
 .filter-product-content-sale {
     display: flex;
-    align-items: start;
+    justify-content: start;
+    flex-direction: column;
     padding: 0;
     margin: 0;
     gap: 2rem;
-    margin-top: 0.5rem;
 }
 
 .product-list-filter {
-    display: flex;
-    flex-direction: column;
-    justify-items: center;
-    width: 40vw;
-    background: var(--card-color);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     margin: 0;
+
 }
 
 .filter-title-sale {
@@ -50,11 +56,12 @@
 }
 
 .category-item {
-    background: rgba(128, 128, 128, 0.13);
-    color: var(--text-color-one);
+    background: #E6EFFA;
+    color: var(--btn-color-one);
+    font-weight: 500;
     border-radius: 3px;
     margin: 1px;
-    font-size: 12px;
+    font-size: 10px;
     padding: 5px;
 }
 
@@ -62,59 +69,108 @@
     display: flex;
     flex-direction: column;
     background: var(--card-color);
-    border: 1px solid rgba(128, 128, 128, 0.219);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     padding: 10px;
     border-radius: 10px;
-    overflow-y: scroll;
+    overflow-y: auto;
     position: sticky;
+    top: 0;
     width: 350px;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+    max-height: 100vh;
 }
 
-/* Estilo para o container do select, se precisar */
+
+.filter-in-search input {
+    width: 100%;
+    padding: 10px;
+    background: var(--card-color);
+    font-size: 12px;
+    font-family: var(--main-font);
+    color: var(--text-color-one);
+}
+
+.filter-side-sale legend {
+    font-size: 14px;
+    font-family: var(--main-font);
+    font-weight: 600;
+    color: var(--text-color-one);
+    margin-bottom: 6px;
+    display: block;
+    letter-spacing: 0.5px;
+}
+
+
+.filter-group {}
+
+.filter-name-top {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-color-one);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 10px;
+}
+
+.filter-content-sale {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #cccccc46;
+}
+
+.info-icon {
+    font-size: 16px;
+    cursor: help;
+    color: #666;
+}
+
+.filter-side-sale label {
+    font-family: var(--main-font);
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    cursor: pointer;
+    color: var(--text-color-one);
+}
+
 .form-control {
     width: 100%;
-    margin-bottom: 1rem;
     position: relative;
-    font-family: 'Roboto', sans-serif;
+    font-family: var(--main-font);
 }
 
-/* Estilo para o label (se tiver) */
 .form-control label {
     font-size: 14px;
-    color: #666;
+    color: var(--text-color-one);
     display: block;
     margin-bottom: 4px;
 }
 
-/* Estilo para o select */
 .form-control select {
     width: 100%;
+    font-family: var(--main-font);
     padding: 6px 8px;
-    font-size: 14px;
-    color: #333;
+    font-size: 12px;
+    color: var(--text-color-one);
     background: transparent;
     border: none;
     border-bottom: 1px solid #ccc;
-    /* linha fina embaixo */
     outline: none;
     -webkit-appearance: none;
-    /* remove setinha padrão no Safari */
     -moz-appearance: none;
-    /* remove setinha no Firefox */
     appearance: none;
     cursor: pointer;
     transition: border-color 0.2s ease-in-out;
 }
 
-/* Linha embaixo fica mais escura quando o select está focado */
 .form-control select:focus {
-    border-bottom-color: #1976d2;
-    /* azul MUI padrão */
+    border-bottom-color: var(--btn-color-one);
 }
 
-/* Estilo para a seta customizada (opcional) */
 .form-control {
     position: relative;
     width: 10vw;
@@ -127,6 +183,32 @@
     gap: 10px;
     padding: 10px;
     width: 100%;
+    background: var(--card-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.filter-checkbox.MuiCheckbox-root {
+    color: transparent !important;
+}
+
+
+.filter-checkbox-label .MuiFormControlLabel-label {
+    font-family: var(--main-font);
+    font-size: 12px;
+    color: #555;
+}
+
+.filter-checkbox .MuiSvgIcon-root {
+    background-color: #eaeaf0;
+    border-radius: 5px;
+    width: 20px;
+    height: 20px;
+}
+
+
+.filter-checkbox.Mui-checked {
+    color: var(--btn-color-one) !important;
 }
 
 .form-control::after {
@@ -245,8 +327,7 @@
 
 .option-box.selected {
     border-color: #1976d2;
-    background-color: #e3f2fd;
-    color: #1976d2;
+    background-color: #e3f2fdda;
     font-weight: 600;
 }
 
@@ -344,13 +425,13 @@
     margin: 0;
     padding: 0;
     height: 10px;
-    font-size: 14px !important;
-    color: gray !important;
+    font-size: 14px;
+    color: gray;
 }
 
 .item-custom-p {
     display: flex;
-    font-size: 14px !important;
+    font-size: 14px;
 }
 
 .select-filter {
@@ -365,8 +446,8 @@
 }
 
 .menu-item-custom {
-    font-size: 14px !important;
-    color: gray !important;
+    font-size: 14px;
+    color: gray;
 }
 
 .menu-item-custom:hover {
@@ -380,18 +461,19 @@
 
 .product-card-sale {
     display: flex;
-    padding: 10px;
-    gap: 10px;
-    border-top: 1px solid #EDEDED;
-    width: 100%;
-    cursor: pointer;
-    border: 1px solid rgba(128, 128, 128, 0.274);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     border-radius: 10px;
+    cursor: pointer;
+    padding: 8px;
+    background: var(--card-color);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .product-img-sale {
-    width: 220px;
-    height: 220px;
+    width: 200px;
+    height: 200px;
     border-radius: 5px;
     object-fit: cover;
 }
@@ -399,54 +481,169 @@
 .product-infos-sale {
     display: flex;
     flex-direction: column;
-    justify-content: start;
-    gap: 5px;
+    font-family: var(--main-font);
+    color: var(--text-color-one);
+    width: 200px;
 }
 
 .product-city-sale {
-    font-size: 16px;
-    font-weight: 400;
-    color: var(--text-color-one);
+    font-family: var(--main-font);
+    color: rgb(83, 83, 83);
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.product-address-sale, .product-neighborhood-sale {
-    font-size: 14px;
+.product-address-sale {
+    font-family: var(--main-font);
     color: var(--text-color-one);
+    font-size: 12px;
+    font-weight: 400;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-transform: capitalize;
 }
+
+.product-neighborhood-sale {
+    font-size: 12px;
+    color: rgb(83, 83, 83);
+    font-weight: 500;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    text-transform: uppercase;
+}
+
+.product-category-sale {
+    font-size: 8px;
+    display: flex;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-family: var(--main-font);
+}
+
+.product-type-sale {
+    display: flex;
+    font-family: var(--main-font);
+    justify-content: start;
+    align-items: center;
+    font-size: 8px;
+    color: var(--btn-color-one);
+    font-weight: 600;
+    text-align: center;
+    gap: 2px;
+    border-radius: 3px;
+    padding: 4px;
+    background: #e6effa;
+}
+
+
+
+.product-dimension-sale {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 5px;
+    padding: 1px 5px;
+    font-weight: 500;
+    background: #e6effa;
+    font-size: 10px;
+    border-radius: 3px;
+}
+
+.product-city-sale {}
+
+.product-neighborhood-sale {}
 
 .infos-details-sale {
     display: flex;
     flex-direction: column;
+    align-items: start;
+    gap: 2px;
+    width: auto;
+    margin: 0;
 }
 
-.product-category-sale, .product-dimension-sale, .product-size-sale {
+.infos-all-sale {
     display: flex;
     align-items: center;
-    gap: 5px;
-    font-size: 14px;
-    color: var(--text-color-one);
+    justify-content: start;
+    gap: 2px;
 }
 
+
 .product-icon-sale {
-    color: var(--text-color-one);
+    padding: 4px;
+    color: var(--btn-color-one);
 }
+
+.product-size-sale {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--btn-color-one);
+}
+
+.end-card-sale {}
 
 .product-price-mod-sale {
     display: flex;
-    width: 100%;
+    align-items: start;
     justify-content: space-between;
+    flex-direction: column;
+    gap: 2px;
 }
+
+.product-category-sale {
+    font-size: 8px;
+    display: flex;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-family: var(--main-font);
+}
+
+.price-name-sale {
+    font-size: 10px;
+    font-weight: 500;
+    color: rgb(83, 83, 83);
+}
+
+.more-imovel-sale {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    color: var(--btn-color-one);
+    font-size: 10px;
+    font-weight: 500;
+    border-radius: 3px;
+}
+
+
+.product-size-sale {
+    display: flex;
+}
+
+.product-icon-sale {
+    padding: 4px;
+    color: var(--btn-color-one);
+}
+
+
 
 .product-price-sale {
-    font-size: 18px;
-    font-weight: 500;
-    color: var(--text-color-one);
+    color: var(--btn-color-one);
+    font-family: var(--main-font);
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.product-type-sale {
-    font-size: 16px;
-    font-weight: 300;
-}
+
 
 .filter-side-sale-container {
     display: flex;
@@ -477,6 +674,10 @@
     cursor: pointer;
     border-radius: 4px;
     transition: background-color 0.3s ease;
+}
+
+.load-more-button:hover {
+    background-color: #FBFBFF;
 }
 
 .whatsapp-link {

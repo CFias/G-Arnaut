@@ -179,6 +179,13 @@
     }
 }
 
+@media (min-width: 1025px) and (max-width: 1445px) {
+    .featured-products {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+    }
+}
+
 /* Responsividade */
 @media (max-width: 1024px) {
     .featured-products {

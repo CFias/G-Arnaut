@@ -62,14 +62,16 @@
     background-color: var(--btn-color-two);
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
     color: var(--text-color-two);
     border: 1px solid var(--text-color-one);
     border-radius: 25px;
-    font-size: 14px;
+    font-size: 12px;
     cursor: pointer;
-    width: 170px;
     gap: 5px;
+    padding: 10px 20px;
+    max-width: 150px;
+    width: 100%;
 }
 
 .follow-button:hover {

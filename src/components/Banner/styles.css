@@ -203,9 +203,36 @@
     right: -25px;
 }
 
-@media (max-width: 1200px) {}
+@media (min-width: 1025px) and (max-width: 1445px) {
 
-@media (max-width: 900px) {}
+    .highlight-cards-wrapper {
+        width: 65vw;
+    }
+
+ 
+
+    .banner-names h3 {
+        font-size: 24px;
+        padding-top: 1rem;
+    }
+
+    .banner-names h4 {
+        font-size: 16px;
+    }
+
+    .banner-names h5 {
+        font-size: 20px;
+    }
+
+    .banner-names p {
+        font-size: 14px;
+        width: 100%;
+    }
+
+    .social-icons {
+        width: 100%;
+    }
+}
 
 @media (max-width: 600px) {
     .banner-container {

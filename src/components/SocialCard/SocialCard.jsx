@@ -19,7 +19,7 @@ const socialData = {
     alt: "WhatsApp",
     title: "Converse comigo no WhatsApp",
     description: "Atendimento rápido e direto",
-    buttonText: "Enviar mensagem",
+    buttonText: "Conversar",
     url: "https://wa.me/+557191900974",
   },
   facebook: {

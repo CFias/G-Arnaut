@@ -419,6 +419,35 @@
     }
 }
 
+@media (min-width: 1025px) and (max-width: 1445px) {
+    .featured-img {
+        width: 200px;
+        height: 200px;
+    }
+
+    .featured-infos {
+        width: 200px;
+    }
+
+    .featured-category,
+    .featured-dimension,
+    .featured-status,
+    .featured-type,
+    .featured-neighborhood,
+    .featured-icon,
+    .featured-list,
+    .featured-size {
+        font-size: 10px;
+        font-weight: 400;
+    }
+
+    .featured-price {
+        font-size: 16px;
+    }
+
+    
+}
+
 @media (min-width: 769px) and (max-width: 1024px) {
     .featured-list {
         grid-template-columns: repeat(3, 1fr);
