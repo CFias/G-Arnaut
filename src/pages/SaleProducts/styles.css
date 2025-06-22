@@ -10,7 +10,6 @@
 .filter-product-content {
     display: flex;
     justify-content: space-between;
-
     width: 65vw;
     gap: 5px;
 }
@@ -41,7 +40,6 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     margin: 0;
-
 }
 
 .filter-title-sale {
@@ -75,7 +73,7 @@
     overflow-y: auto;
     position: sticky;
     top: 0;
-    width: 350px;
+    width: 30%;
     max-height: 100vh;
 }
 
@@ -98,9 +96,6 @@
     display: block;
     letter-spacing: 0.5px;
 }
-
-
-.filter-group {}
 
 .filter-name-top {
     font-size: 14px;
@@ -333,7 +328,7 @@
 
 
 .toggle-label {
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 500;
     color: var(--text-color-one);
     margin-bottom: 8px;
@@ -554,10 +549,6 @@
     border-radius: 3px;
 }
 
-.product-city-sale {}
-
-.product-neighborhood-sale {}
-
 .infos-details-sale {
     display: flex;
     flex-direction: column;
@@ -585,8 +576,6 @@
     font-weight: 600;
     color: var(--btn-color-one);
 }
-
-.end-card-sale {}
 
 .product-price-mod-sale {
     display: flex;
@@ -631,8 +620,6 @@
     color: var(--btn-color-one);
 }
 
-
-
 .product-price-sale {
     color: var(--btn-color-one);
     font-family: var(--main-font);
@@ -642,8 +629,6 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
-
 
 .filter-side-sale-container {
     display: flex;
@@ -745,6 +730,81 @@
 
 .card-sale button:hover {
     background-color: #eeeeee;
+}
+
+@media (min-width: 1025px) and (max-width: 1445px) {
+    .filter-title-sale {
+        font-size: 16px;
+        font-weight: 500;
+        color: var(--text-color-one);
+        text-align: start;
+    }
+
+    .filter-checkbox .MuiSvgIcon-root {
+        background-color: #eaeaf0;
+        border-radius: 5px;
+        width: 15px;
+        height: 15px;
+    }
+
+    .toggle-label {
+        font-size: 10px !important;
+        font-weight: 500;
+        color: var(--text-color-one);
+        margin-bottom: 8px;
+    }
+
+    .toggle-button {
+        flex: 1;
+        padding: 8px;
+        background-color: #EDECF2;
+        color: var(--text-color-one);
+        border-radius: 25px;
+        font-size: 10px;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+    }
+
+    .product-img-sale {
+        width: 150px;
+        height: 150px;
+    }
+
+    .product-infos-sale {
+        width: 150px;
+    }
+
+    .product-city-sale {
+        font-size: 12px;
+    }
+
+    .product-address-sale {
+        font-size: 10px;
+    }
+
+    .product-neighborhood-sale {
+        font-size: 10px;
+    }
+
+    .product-size-sale {
+        font-size: 8px;
+    }
+
+    .product-type-sale {
+        font-size: 7px;
+    }
+
+    .product-category-sale {
+        font-size: 7px;
+    }
+
+    .price-name-sale {
+        font-size: 8px;
+    }
+
+    .product-price-sale {
+        font-size: 12px;
+    }
 }
 
 @media (max-width: 1024px) {

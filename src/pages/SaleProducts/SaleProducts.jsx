@@ -531,7 +531,6 @@ export const SaleProducts = () => {
               </FormGroup>
             </FormControl>
 
-            {/* Botão para limpar filtros */}
             <Button
               variant="outlined"
               onClick={() => {
@@ -595,10 +594,10 @@ export const SaleProducts = () => {
                   <div className="product-infos-sale">
                     <div className="infos-details-sale">
                       <h3 className="product-city-sale">{product.city}</h3>
-                      <p className="product-address-sale">{product.address}</p>
                       <p className="product-neighborhood-sale">
                         {product.neighborhood}
                       </p>
+                      <p className="product-address-sale">{product.address}</p>
                       <div className="infos-all-sale">
                         <div className="product-dimension-sale">
                           <CropFree
