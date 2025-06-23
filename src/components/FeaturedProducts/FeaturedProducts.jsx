@@ -131,7 +131,7 @@ export const FeaturedProducts = ({ product }) => {
           <div className="end-card">
             <div className="featured-price-mod">
               <div className="featured-type">
-                <p className="featured-category">{product.category}</p>À
+                <p className="featured-category">{product.category}</p>-
                 <p className="featured-category">{product.productType}</p>
               </div>
               <p className="price-name">Preço do imóvel</p>

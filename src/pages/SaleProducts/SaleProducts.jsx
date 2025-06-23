@@ -633,7 +633,7 @@ export const SaleProducts = () => {
                             <p className="product-category-sale">
                               {product.category}
                             </p>
-                            À
+                            -
                             <p className="product-category-sale">
                               {product.productType}
                             </p>

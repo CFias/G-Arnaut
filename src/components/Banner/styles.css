@@ -236,20 +236,27 @@
 
 @media (max-width: 600px) {
     .banner-container {
-        flex-direction: column-reverse;
         align-items: center;
-        display: none;
+        border-radius: 0 0 35px 35px;
     }
 
     .banner-content {
-        width: 90vw;
+        width: 95vw;
         flex-direction: column;
         align-items: center;
     }
 
     .banner-container img {
         width: 100%;
-        max-width: 300px;
+        max-width: 150px;
+    }
+
+    .social-icons {
+        display: none;
+    }
+
+    .highlight-cards-wrapper {
+        display: none;
     }
 
     .banner-names {
