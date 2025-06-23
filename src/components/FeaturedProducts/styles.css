@@ -389,21 +389,29 @@
         align-items: start;
     }
 
-    .featured-category,
-    .featured-dimension,
-    .featured-type,
-    .featured-neighborhood,
-    .featured-icon,
-    .featured-list,
-    .featured-size {
-        font-size: 10px;
-        font-weight: 400;
-        text-align: start;
-        padding: 0;
+    .featured-category {
+        font-size: 8px;
     }
 
     .featured-price {
         font-size: 12px;
+    }
+
+    .featured-type {
+        font-size: 8px;
+        padding: 5px;
+    }
+
+    .featured-city {
+        font-size: 12px;
+    }
+
+    .featured-neighborhood {
+        font-size: 10px;
+    }
+
+    .featured-size {
+        font-size: 8px;
     }
 
     .price-name {
@@ -411,7 +419,7 @@
     }
 
     .more-imovel {
-      display: none;
+        display: none;
     }
 
     .infos-profile p {
@@ -445,7 +453,7 @@
         font-size: 16px;
     }
 
-    
+
 }
 
 @media (min-width: 769px) and (max-width: 1024px) {
