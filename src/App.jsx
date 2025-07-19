@@ -20,8 +20,17 @@ import { SaleProducts } from "./pages/SaleProducts/SaleProducts";
 import { AboutAgent } from "./pages/AboutAgent/AboutAgent";
 import DynamicTitle from "./components/DynamicTitle/DynamicTitle";
 import EditProfile from "./pages/EditProfile/EditProfile";
+import { pageview } from "./gtag"; // importa o helper
+import { useLocation } from "react-router-dom"; 
+import { useEffect } from "react";
 
 function App() {
+  const location = useLocation();
+
+  useEffect(() => {
+    pageview(location.pathname + location.search);
+  }, [location]);
+
   return (
     <AuthProvider>
       <DynamicTitle />
