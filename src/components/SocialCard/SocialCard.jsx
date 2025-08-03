@@ -36,10 +36,28 @@ export const SocialCard = ({ type }) => {
   const social = socialData[type];
 
   if (!social) {
-    return null; 
+    return null;
   }
 
   const handleClick = () => {
+    if (typeof window.gtag === "function") {
+      let sendToId = "";
+
+      if (type === "whatsapp") {
+        sendToId = "AW-16519300622/WHATSAPP_ID"; // substitua pelo seu ID real WhatsApp
+      } else if (type === "instagram") {
+        sendToId = "AW-16519300622/INSTAGRAM_ID"; // substitua pelo seu ID real Instagram
+      } else if (type === "facebook") {
+        sendToId = "AW-16519300622/FACEBOOK_ID"; // substitua pelo seu ID real Facebook
+      }
+
+      if (sendToId) {
+        window.gtag("event", "conversion", {
+          send_to: sendToId,
+        });
+      }
+    }
+
     window.open(social.url, "_blank");
   };
 

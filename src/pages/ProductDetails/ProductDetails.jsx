@@ -269,31 +269,51 @@ Veja o produto: ${productLink}`;
           <div className="product-ref-one">
             <div className="info-container">
               <div className="info-content">
-                <div className="detail-data">
-                  <span>
-                    <CalendarToday fontSize="small" />{" "}
-                    {formatDate(product.createdAt)}
-                  </span>
-                  <span onClick={toggleFavorite}>
-                    {isFavorite ? (
-                      <Favorite fontSize="small" style={{ color: "red" }} />
-                    ) : (
-                      <FavoriteBorder fontSize="small" />
-                    )}
-                  </span>
-                </div>
-                <div className="detail-status">{product.status}</div>
-                <div className="detail-category">{product.category}</div>
                 <h1 className="detail-h1">
                   {product.city} {product.state}
                 </h1>
                 <div className="detail-address">{product.address}</div>
                 <div className="detail-price">R$ {product.price}</div>
                 <div className="detail-dimension">{product.dimension} m²</div>
+                <div className="detail-status">{product.status}</div>
+                <div className="detail-category">{product.category}</div>
                 <div className="detail-description">
                   <p>{product.description}</p>
                 </div>
               </div>
+              <button
+                onClick={() => {
+                  if (typeof window.gtag === "function") {
+                    window.gtag("event", "conversion", {
+                      send_to: "AW-16519300622/XXXXXXXXXXX", // seu ID de conversão
+                    });
+                  }
+
+                  const urlImovel = `https://www.arnautimoveis.com/product/${product.id}`;
+
+                  const mensagem = `
+Olá, tenho interesse no imóvel:
+Cidade: ${product.city}
+Endereço: ${product.address}
+Preço: R$ ${product.price}
+Dimensão: ${product.dimension} m²
+Categoria: ${product.category}
+Status: ${product.status}
+Descrição: ${product.description}
+
+Veja mais detalhes aqui: ${urlImovel}
+`;
+
+                  const encodedMensagem = encodeURIComponent(mensagem.trim());
+
+                  const urlWpp = `https://wa.me/557191900974?text=${encodedMensagem}`;
+
+                  window.open(urlWpp, "_blank");
+                }}
+                className="whatsapp-button"
+              >
+                Fale comigo no WhatsApp
+              </button>
             </div>
           </div>
         </div>

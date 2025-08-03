@@ -150,44 +150,30 @@
     width: 250px;
 }
 
-.detail-data {
-    display: flex;
-    justify-content: space-between;
-    color: gray;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    border-bottom: 1px solid rgba(128, 128, 128, 0.315);
-}
-
 .detail-status {
-    font-size: 16px;
-    color: var(--btn-color-two);
-    font-weight: 600;
-    margin-top: 1rem;
+    font-weight: 500;
+    font-size: 12px;
+    border-radius: 3px;
 }
 
 .detail-h1 {
-    font-size: 30px;
+    font-size: 18px;
     font-weight: 500;
     width: 100%;
     color: var(--text-color-one);
-    margin: .5rem 0;
 }
 
 .detail-dimension, .detail-bedrooms, .detail-parkingSpaces {
-    display: flex;
-    font-size: 16px;
-    color: var(--text-color-one);
-    margin: .5rem 0;
+    font-weight: 500;
+    font-size: 12px;
+    border-radius: 3px;
 }
 
 .detail-address {
     display: flex;
-    font-size: 20px;
+    font-size: 12px;
     color: var(--text-color-one);
     font-weight: 400;
-    margin: .5rem 0;
 }
 
 .detail-neighborhood {
@@ -197,9 +183,10 @@
 }
 
 .detail-category {
-    font-size: 16px;
-    color: var(--btn-color-two);
-    font-weight: 600;
+    font-weight: 500;
+    color: rgb(58, 58, 58);
+    font-size: 12px;
+    border-radius: 3px;
 }
 
 .detail-productType {
@@ -209,24 +196,17 @@
     font-weight: 400;
 }
 
-.detail-oldPrice {
-    display: flex;
-    font-size: 20px;
-    color: var(--text-color-one);
-}
-
 .detail-price {
     display: flex;
-    font-size: 34px;
-    color: var(--btn-color-two);
-    font-weight: 400;
-    margin-top: 2rem;
+    font-size: 16px;
+    color: var(--btn-color-one);
+    font-weight: 500;
 }
 
 .whatsapp-button {
     background-color: #E3EDFB;
     color: var(--btn-color-two);
-    font-size: 24px;
+    font-size: 18px;
     font-weight: 500;
     border: none;
     padding: 10px 20px;
@@ -330,8 +310,22 @@
 
 .detail-description {
     white-space: pre-wrap;
+    font-size: 14px;
     word-wrap: break-word;
-    margin-top: 10px;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(128, 128, 128, 0.315);
+}
+
+.whatsapp-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 1rem;
+    font-size: 14px;
+    color: var(--btn-color-two);
+    background: #1e2238;
 }
 
 .recommended-product-address {
@@ -549,8 +543,11 @@
 
 @media (max-width: 480px) {
     .product-details-container {
-        padding: 10px;
+        padding: 0;
+        margin: 1px;
         flex-direction: column;
+        align-items: center;
+        justify-content: center;
     }
 
     .info-container {
@@ -570,12 +567,15 @@
     }
 
     .videos-list-container {
-        width: 95vw;
+        width: 100%;
+        height: 35vh;
     }
 
     .videos-list-content {
         justify-content: center;
         align-items: center;
+        width: 100vw;
+        padding: 5px;
     }
 
     .recommended-products-container {
@@ -602,15 +602,27 @@
         flex-direction: column;
     }
 
+    .image-container {
+        flex-direction: column-reverse
+        
+    }
+
+    .thumbnails-container {
+        flex-direction: row;
+        justify-content: space-around;
+        gap: 5px;
+    }
+
     .thumbnail {
-        width: 50px;
-        height: 50px;
+        width: 45px;
+        height: 45px;
 
     }
 
     .main-image {
-        width: 300px;
-        height: 400px;
+        width: 98vw;
+        height: 300px;
+        margin-top: 3px;
     }
 
     .video-icon {
@@ -620,35 +632,55 @@
     }
 
     .detail-h1 {
-        font-size: 30px;
+        font-size: 16px;
     }
 
     .detail-dimension,
     .detail-bedrooms,
     .detail-parkingSpaces,
     .detail-address {
-        font-size: 16px;
+        font-size: 12px;
     }
 
     .detail-price {
-        font-size: 30px;
+        font-size: 16px;
     }
 
+    .recommended-h2 {
+        font-size: 16px;
+        margin-bottom: 10px;
+        justify-content: center;
+    }
+
+    .recommended-products-container-mobile {
+        width: 100%;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+    }
+
+    .recommended-products {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        justify-items: center;
+    }
+
+
     .recommended-product-image {
-        width: 150px;
-        height: 200px;
+        width: 160px;
+        height: 125px;
     }
 
     .recommended-infos {
-        width: 150px;
+        width: 160px;
     }
 
     .recommended-product-name {
-        font-size: 14px;
+        font-size: 12px;
     }
 
     .recommended-product-price {
-        font-size: 16px;
+        font-size: 12px;
     }
 
     .recommended-product-local {
@@ -656,7 +688,7 @@
     }
 
     .recommended-product-address {
-        font-size: 14px;
+        font-size: 12px;
     }
 
     .recommended-product-status, .recommended-product-type {
