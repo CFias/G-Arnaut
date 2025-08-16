@@ -229,7 +229,7 @@
 }
 
 .whatsapp-button:hover {
-    background-color: #cbdef8;
+    background-color: rgb(149, 206, 149);
 }
 
 .recommended-products-container-mobile {
@@ -318,14 +318,13 @@
 }
 
 .whatsapp-button {
-    background-color: transparent;
     border: none;
     cursor: pointer;
     width: 100%;
     margin-top: 1rem;
     font-size: 14px;
-    color: var(--btn-color-two);
-    background: #1e2238;
+    color: rgb(6, 59, 6);
+    background: rgb(140, 226, 140);
 }
 
 .recommended-product-address {

@@ -87,9 +87,14 @@ export const Navbar = () => {
           <span className="top-local">Salvador-BA</span>
           <img className="bander-icon" src={BanderOne} alt="Brasil" />
         </h5>
-        <h5 className="top-item">
+        <a
+          href="https://wa.me/5571991900974"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="top-item-phone"
+        >
           <Phone fontSize="10" className="top-icon" /> 71 99190-0974
-        </h5>
+        </a>
       </div>
 
       <nav className="nav-content">
@@ -124,9 +129,9 @@ export const Navbar = () => {
                   <NavLink to="/login" className="nav-link-login">
                     Login
                   </NavLink>
-                  <NavLink to="/register" className="nav-link-register">
+                  {/* <NavLink to="/register" className="nav-link-register">
                     Criar conta
-                  </NavLink>
+                  </NavLink> */}
                 </>
               ) : (
                 <div className="nav-profile">
