@@ -51,6 +51,22 @@
     color: var(--text-color-three);
 }
 
+.top-item-phone {
+    font-size: 16px;
+    padding: .5rem;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    gap: 4px;
+    color: var(--text-color-three);
+    transition: 250ms;
+}
+
+.top-item-phone:hover {
+    color: rgb(221, 221, 221);
+}
+
 .top-local {
     color: var(--text-color-three);
     font-weight: 500;
