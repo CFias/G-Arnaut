@@ -92,6 +92,13 @@ export const Navbar = () => {
           target="_blank"
           rel="noopener noreferrer"
           className="top-item-phone"
+          onClick={() => {
+            if (window.gtag) {
+              window.gtag("event", "conversion", {
+                send_to: "AW-16519300622/YTVFCJrxnoUbEI6MgsU9",
+              });
+            }
+          }}
         >
           <Phone fontSize="10" className="top-icon" /> 71 99190-0974
         </a>

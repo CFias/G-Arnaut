@@ -13,6 +13,7 @@ const socialData = {
     description: "Tudo em primeira mão",
     buttonText: "Seguir",
     url: "https://www.instagram.com/arnaut_corretor_de_imoveis/",
+    sendTo: "AW-16519300622/INSTAGRAM_ID", // substitua pelo ID real quando criar
   },
   whatsapp: {
     image: whatsappImg,
@@ -20,7 +21,8 @@ const socialData = {
     title: "Converse comigo no WhatsApp",
     description: "Atendimento rápido e direto",
     buttonText: "Conversar",
-    url: "https://wa.me/+557191900974",
+    url: "https://wa.me/557191900974",
+    sendTo: "AW-16519300622/YTVFCJrxnoUbEI6MgsU9", // ID já fornecido
   },
   facebook: {
     image: facebookImg,
@@ -29,6 +31,7 @@ const socialData = {
     description: "Fique atualizado com nossos posts",
     buttonText: "Curtir",
     url: "https://www.facebook.com/share/1DdWamTSJw/",
+    sendTo: "AW-16519300622/FACEBOOK_ID", // substitua pelo ID real quando criar
   },
 };
 
@@ -40,22 +43,10 @@ export const SocialCard = ({ type }) => {
   }
 
   const handleClick = () => {
-    if (typeof window.gtag === "function") {
-      let sendToId = "";
-
-      if (type === "whatsapp") {
-        sendToId = "AW-16519300622/WHATSAPP_ID"; // substitua pelo seu ID real WhatsApp
-      } else if (type === "instagram") {
-        sendToId = "AW-16519300622/INSTAGRAM_ID"; // substitua pelo seu ID real Instagram
-      } else if (type === "facebook") {
-        sendToId = "AW-16519300622/FACEBOOK_ID"; // substitua pelo seu ID real Facebook
-      }
-
-      if (sendToId) {
-        window.gtag("event", "conversion", {
-          send_to: sendToId,
-        });
-      }
+    if (typeof window.gtag === "function" && social.sendTo) {
+      window.gtag("event", "conversion", {
+        send_to: social.sendTo,
+      });
     }
 
     window.open(social.url, "_blank");
