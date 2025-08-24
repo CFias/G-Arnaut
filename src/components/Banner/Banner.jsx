@@ -114,7 +114,7 @@ export const Banner = () => {
 
             <div className="highlight-cards-wrapper">
               {isLoading ? (
-                <Skeleton count={3} height={180} />
+                <Skeleton count={0} height={180} />
               ) : (
                 <Slider {...settings}>
                   {featuredItems.map((item) => (
@@ -128,6 +128,7 @@ export const Banner = () => {
                         src={item.images?.[0]}
                         alt={item.neighborhood}
                         className="highlight-img"
+                        loading="lazy"
                       />
                     </div>
                   ))}
@@ -136,7 +137,7 @@ export const Banner = () => {
             </div>
           </div>
         </div>
-        <img src={arnautbanner} alt="Gildavi Arnaut" />
+        <img loading="lazy" src={arnautbanner} alt="Gildavi Arnaut" />
       </div>
     </section>
   );

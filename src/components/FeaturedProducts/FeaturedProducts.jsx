@@ -27,13 +27,11 @@ export const FeaturedProducts = ({ product }) => {
     return () => clearTimeout(timer);
   }, []);
 
-  const handleCardClick = (id) => {
-    navigate(`/product/${id}`);
-  };
+  const handleCardClick = (id) => navigate(`/product/${id}`);
 
   const toggleFavorite = (e) => {
     e.stopPropagation();
-    setIsFavorite((prevState) => !prevState);
+    setIsFavorite((prev) => !prev);
   };
 
   const nextImage = (e) => {
@@ -83,7 +81,8 @@ export const FeaturedProducts = ({ product }) => {
           <img
             className="featured-img"
             src={product.images[currentImage]}
-            alt="Product"
+            alt={`Imagem do imóvel ${product.refProduct}`}
+            loading="lazy"
           />
           {hovered && (
             <>
@@ -104,6 +103,7 @@ export const FeaturedProducts = ({ product }) => {
               src={product.author?.photoURL || Profile}
               className="author-avatar"
               alt="Author"
+              loading="lazy"
             />
             <span className="author-name">
               {product.author?.userName || "Gildavi Arnaut"}

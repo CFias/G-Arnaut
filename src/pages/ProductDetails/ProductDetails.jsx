@@ -239,6 +239,7 @@ Veja o produto: ${productLink}`;
                       src={recommendedProduct.images[0]}
                       alt={recommendedProduct.name}
                       className="recommended-product-image"
+                      loading="lazy"
                     />
                     <div className="recommended-infos">
                       <div className="recommended-product-local">
