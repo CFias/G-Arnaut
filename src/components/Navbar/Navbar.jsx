@@ -88,20 +88,41 @@ export const Navbar = () => {
           <img className="bander-icon" src={BanderOne} alt="Brasil" />
         </h5>
         <a
-          href="https://wa.me/5571991900974"
-          target="_blank"
-          rel="noopener noreferrer"
+          href="#"
           className="top-item-phone"
-          onClick={() => {
-            if (window.gtag) {
-              window.gtag("event", "conversion", {
-                send_to: "AW-16519300622/YTVFCJrxnoUbEI6MgsU9",
-              });
+          onClick={(e) => {
+            e.preventDefault(); // evita sair imediatamente
+            const showMenu = window.confirm(
+              "Deseja enviar mensagem pelo WhatsApp? Clique Cancelar para ligar."
+            );
+
+            if (showMenu) {
+              // WhatsApp
+              if (window.gtag) {
+                window.gtag("event", "conversion", {
+                  send_to: "AW-16519300622/YTVFCJrxnoUbEI6MgsU9",
+                });
+              }
+              setTimeout(() => {
+                window.open("https://wa.me/5571991900974", "_blank");
+              }, 400);
+            } else {
+              // Chamada telefônica
+              if (window.gtag) {
+                window.gtag("event", "conversion", {
+                  send_to: "AW-16519300622/7BEFCO_5wYsbEI6MgsU9",
+                });
+              }
+              setTimeout(() => {
+                window.open("tel:+5571991900974", "_blank");
+              }, 400);
             }
           }}
         >
           <Phone fontSize="10" className="top-icon" /> 71 99190-0974
         </a>
+
+
       </div>
 
       <nav className="nav-content">

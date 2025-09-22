@@ -1,38 +1,28 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html lang="pt-br">
-  <head>
-    <meta charset="UTF-8" />
-    <link
-      rel="icon"
-      type="image/svg+xml"
-      href="./src/assets/image/garnaut-gray-logo-icon.png"
-    />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Google tag (gtag.js) -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=AW-16519300622"
-    ></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-      gtag("config", "AW-16519300622");
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="./src/assets/image/garnaut-gray-logo-icon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-      // Snippet de acompanhamento de chamadas (número: 71 99190-0974)
-      gtag("config", "AW-16519300622/7BEFCO_5wYsbEI6MgsU9", {
-        phone_conversion_number: "71 99190-0974",
-      });
-    </script>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-16519300622"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "AW-16519300622"); // apenas a tag global
+  </script>
 
-    <title>G Arnaut Corretor</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+  <title>G Arnaut Corretor</title>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+
 </html>
