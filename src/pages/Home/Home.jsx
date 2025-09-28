@@ -137,7 +137,7 @@ export const Home = () => {
         <div id="floating-card" className="floating-card">
           <div className="card-content-floating">
             <h4>Bem-vindo ao nosso site!</h4>
-            <p>Confira nossos produtos incríveis.</p>
+            <p>Confira nossos imóveis.</p>
             <button className="close-card" id="close-card">
               Fechar
             </button>

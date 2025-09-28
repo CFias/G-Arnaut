@@ -20,6 +20,7 @@ export const ProductDetails = () => {
   const [modalImages, setModalImages] = useState([]);
   const [modalImageIndex, setModalImageIndex] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [imgLoaded, setImgLoaded] = useState(false);
 
   // Busca o produto específico baseado no id
   useEffect(() => {
@@ -42,6 +43,16 @@ export const ProductDetails = () => {
 
     fetchProduct();
   }, [id]);
+
+  useEffect(() => {
+    if (modalImages.length > 0) {
+      modalImages.forEach((imgSrc) => {
+        const img = new Image();
+        img.src = imgSrc; // pré-carrega a imagem
+      });
+    }
+  }, [modalImages]);
+
 
   // Busca produtos recomendados
   useEffect(() => {
@@ -109,6 +120,7 @@ Veja o produto: ${productLink}`;
     setModalImageIndex(0);
     setIsModalOpen(true);
   };
+
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -179,9 +191,8 @@ Veja o produto: ${productLink}`;
                       key={index}
                       src={image}
                       alt={`Miniatura ${index}`}
-                      className={`thumbnail ${
-                        image === selectedImage ? "active-thumbnail" : ""
-                      }`}
+                      className={`thumbnail ${image === selectedImage ? "active-thumbnail" : ""
+                        }`}
                       onClick={() => setSelectedImage(image)}
                     />
                   ))}
@@ -373,11 +384,17 @@ Veja mais detalhes aqui: ${urlImovel}
                 <button className="prev-button" onClick={handlePreviousImage}>
                   <West />
                 </button>
+
+                {!imgLoaded && <Skeleton height={400} width={600} />} {/* Skeleton enquanto carrega */}
                 <img
                   src={modalImages[modalImageIndex]}
                   alt="Imagem principal do modal"
                   className="modal-image-product"
+                  loading="lazy"  // lazy loading nativo
+                  onLoad={() => setImgLoaded(true)} // marca quando terminar de carregar
+                  style={{ display: imgLoaded ? "block" : "none" }}
                 />
+
                 <button className="next-button" onClick={handleNextImage}>
                   <East />
                 </button>

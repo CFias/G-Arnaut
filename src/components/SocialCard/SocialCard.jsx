@@ -3,6 +3,7 @@ import instaImg from "../../assets/image/instaImg.png";
 import whatsappImg from "../../assets/image/wppImg.png";
 import facebookImg from "../../assets/image/faceImg.png";
 import { East } from "@mui/icons-material";
+import "./styles.css";
 
 const socialData = {
   instagram: {
@@ -53,39 +54,54 @@ export const SocialCard = ({ type }) => {
   };
 
   return (
-    <div>
-      <div>
-        <img src={social.image} alt={social.alt} />
-        <div>
-          <h4>{social.title}</h4>
-          <p>{social.description}</p>
+    <div className="social-container">
+      <div className="social-card-content">
+        <div className="social-card">
+          <img src={social.image} alt={social.alt} className="social-image" />
+          <div className="social-info">
+            <h4>{social.title}</h4>
+            <p>{social.description}</p>
+          </div>
         </div>
-      </div>
-      <div>
-        {type === "whatsapp" ? (
-          <div>
-            <button onClick={() => setShowOptions(!showOptions)}>
+
+        <div className="cx-btn">
+          {type === "whatsapp" ? (
+            <div>
+              <button
+                className="follow-button"
+                onClick={() => setShowOptions(!showOptions)}
+              >
+                {social.buttonText} <East fontSize="small" />
+              </button>
+
+              {showOptions && (
+                <div>
+                  <button
+                    className="follow-button"
+                    onClick={() => handleClick(social.url, social.sendTo)}
+                  >
+                    WhatsApp
+                  </button>
+                  <button
+                    className="follow-button"
+                    onClick={() =>
+                      handleClick(social.phoneUrl, social.phoneSendTo)
+                    }
+                  >
+                    Ligar
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <button
+              className="follow-button"
+              onClick={() => handleClick(social.url, social.sendTo)}
+            >
               {social.buttonText} <East fontSize="small" />
             </button>
-
-            {showOptions && (
-              <div>
-                <button onClick={() => handleClick(social.url, social.sendTo)}>
-                  WhatsApp
-                </button>
-                <button
-                  onClick={() => handleClick(social.phoneUrl, social.phoneSendTo)}
-                >
-                  Ligar
-                </button>
-              </div>
-            )}
-          </div>
-        ) : (
-          <button onClick={() => handleClick(social.url, social.sendTo)}>
-            {social.buttonText} <East fontSize="small" />
-          </button>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

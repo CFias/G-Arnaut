@@ -163,7 +163,9 @@
     color: var(--text-color-one);
 }
 
-.detail-dimension, .detail-bedrooms, .detail-parkingSpaces {
+.detail-dimension,
+.detail-bedrooms,
+.detail-parkingSpaces {
     font-weight: 500;
     font-size: 12px;
     border-radius: 3px;
@@ -336,7 +338,8 @@
     text-overflow: ellipsis;
 }
 
-.recommended-product-status, .recommended-product-type {
+.recommended-product-status,
+.recommended-product-type {
     display: flex;
     color: var(--text-color-one);
     font-size: 12px;
@@ -368,9 +371,9 @@
 }
 
 .modal-image-product {
-    width: 650px;
-    height: 550px;
-    object-fit: cover;
+    max-width: 90vw;
+    max-height: 80vh;
+    object-fit: contain;
     display: flex;
     border-radius: 15px;
     margin: 0;
@@ -603,7 +606,6 @@
 
     .image-container {
         flex-direction: column-reverse
-        
     }
 
     .thumbnails-container {
@@ -690,7 +692,8 @@
         font-size: 12px;
     }
 
-    .recommended-product-status, .recommended-product-type {
+    .recommended-product-status,
+    .recommended-product-type {
         font-size: 12px;
     }
 
@@ -723,12 +726,17 @@
         font-size: 22px;
     }
 
-    .detail-address, .detail-neighborhood {
+    .detail-address,
+    .detail-neighborhood {
         font-size: 14px;
         font-weight: 500;
     }
 
-    .detail-bedrooms, .detail-status, .detail-category, .detail-dimension, .detail-parkingSpaces {
+    .detail-bedrooms,
+    .detail-status,
+    .detail-category,
+    .detail-dimension,
+    .detail-parkingSpaces {
         font-size: 12px;
     }
 
@@ -751,7 +759,9 @@
         justify-content: space-between;
     }
 
-    .recommended-product-address, .recommended-product-status, .recommended-product-type {
+    .recommended-product-address,
+    .recommended-product-status,
+    .recommended-product-type {
         font-size: 12px;
         text-align: start;
     }
