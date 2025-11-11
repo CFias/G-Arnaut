@@ -8,7 +8,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./styles.css";
-import arnautbanner from "../../assets/image/arnaut-banner.png";
+import arnautbanner from "../../assets/image/arnautbanner3.png";
 import {
   Instagram,
   WhatsApp,
@@ -56,6 +56,7 @@ export const Banner = () => {
 
     fetchFeaturedItems();
   }, []);
+  
 
   const handleClick = (id) => {
     navigate(`/product/${id}`);

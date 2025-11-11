@@ -21,8 +21,10 @@ import { AboutAgent } from "./pages/AboutAgent/AboutAgent";
 import DynamicTitle from "./components/DynamicTitle/DynamicTitle";
 import EditProfile from "./pages/EditProfile/EditProfile";
 import { pageview } from "./gtag"; // importa o helper
-import { useLocation } from "react-router-dom"; 
+import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import RegisterImovel from "./pages/RegisterImovel/RegisterImovel.jsx";
+
 
 function App() {
   const location = useLocation();
@@ -38,6 +40,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/register-imovel" element={<RegisterImovel />} />
         <Route path="/Rent-Products" element={<RentProducts />} />
         <Route path="/edit-profile" element={<EditProfile />} />
         <Route path="/edit-produto/:id" element={<EditProduct />} />

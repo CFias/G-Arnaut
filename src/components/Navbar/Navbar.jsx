@@ -147,6 +147,9 @@ export const Navbar = () => {
               <NavLink to="/Sale-Products" className="nav-link-item">
                 Imóveis
               </NavLink>
+              {/* <NavLink to="/register-imovel" className="nav-link-item">
+                Cadastrar Imóvel
+              </NavLink> */}
               <NavLink to="/about" className="nav-link-item">
                 O corretor
               </NavLink>
