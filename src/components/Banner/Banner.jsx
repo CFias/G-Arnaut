@@ -1,12 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { db } from "../../services/FirebaseConfig";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
 import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import "./styles.css";
 import arnautbanner from "../../assets/image/arnautbanner3.png";
 import {
@@ -17,7 +14,7 @@ import {
   ArrowForwardIos,
 } from "@mui/icons-material";
 
-// ✅ Setas personalizadas com ícones do MUI
+// setas
 const CustomPrevArrow = ({ onClick }) => (
   <div className="custom-arrow custom-prev" onClick={onClick}>
     <ArrowBackIos fontSize="small" />
@@ -36,31 +33,44 @@ export const Banner = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    let isMounted = true;
+
     const fetchFeaturedItems = async () => {
       try {
         const q = query(
           collection(db, "products"),
           where("isFeatured", "==", "sim")
         );
+
         const querySnapshot = await getDocs(q);
+
         const items = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
-        setFeaturedItems(items);
-        setIsLoading(false);
+
+        if (isMounted) {
+          setFeaturedItems(items);
+          setIsLoading(false);
+        }
       } catch (error) {
         console.error("Erro ao buscar produtos destacados:", error);
       }
     };
 
     fetchFeaturedItems();
-  }, []);
-  
 
-  const handleClick = (id) => {
-    navigate(`/product/${id}`);
-  };
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const handleClick = useCallback(
+    (id) => {
+      navigate(`/product/${id}`);
+    },
+    [navigate]
+  );
 
   const settings = {
     dots: false,
@@ -72,20 +82,17 @@ export const Banner = () => {
     pauseOnHover: true,
     centerMode: true,
     centerPadding: "0px",
+    lazyLoad: "ondemand",
     prevArrow: <CustomPrevArrow />,
     nextArrow: <CustomNextArrow />,
     responsive: [
       {
         breakpoint: 1024,
-        settings: {
-          slidesToShow: 2,
-        },
+        settings: { slidesToShow: 2 },
       },
       {
         breakpoint: 600,
-        settings: {
-          slidesToShow: 1,
-        },
+        settings: { slidesToShow: 1 },
       },
     ],
   };
@@ -97,16 +104,15 @@ export const Banner = () => {
           <div className="banner-names">
             <h3>Gildavi Arnaut</h3>
             <h4>Gestor Imobiliário</h4>
-            <h5>CRECI-Ba 19.425 </h5>
+            <h5>CRECI-Ba 19.425</h5>
+
             <p>
               Realizando sonhos desde 2013, entusiasta e estudioso do mercado
               imobiliário, com vasta experiência, meu compromisso é
-              assessorar-lhe, da melhor forma possível, com atendimento
-              personalizado, focado em suas necessidades, oferecendo sempre as
-              melhores oportunidades para venda, compra e locação, através de um
-              processo seguro e transparente que somente um profissional
-              qualificado pode lhe oferecer.
+              assessorar-lhe com atendimento personalizado e oportunidades
+              seguras para compra, venda e locação.
             </p>
+
             <div className="social-icons">
               <WhatsApp className="social-icon" />
               <Instagram className="social-icon" />
@@ -115,7 +121,7 @@ export const Banner = () => {
 
             <div className="highlight-cards-wrapper">
               {isLoading ? (
-                <Skeleton count={0} height={180} />
+                <Skeleton height={180} count={3} />
               ) : (
                 <Slider {...settings}>
                   {featuredItems.map((item) => (
@@ -126,10 +132,19 @@ export const Banner = () => {
                       style={{ cursor: "pointer" }}
                     >
                       <img
-                        src={item.images?.[0]}
+                        src={item.images?.[0] || "/placeholder-imovel.webp"}
                         alt={item.neighborhood}
                         className="highlight-img"
                         loading="lazy"
+                        decoding="async"
+                        srcSet={`
+                          ${item.images?.[0]}?w=400 400w,
+                          ${item.images?.[0]}?w=800 800w
+                        `}
+                        sizes="(max-width:768px) 400px, 800px"
+                        onError={(e) => {
+                          e.target.src = "/placeholder-imovel.webp";
+                        }}
                       />
                     </div>
                   ))}
@@ -138,7 +153,13 @@ export const Banner = () => {
             </div>
           </div>
         </div>
-        <img loading="lazy" src={arnautbanner} alt="Gildavi Arnaut" />
+
+        <img
+          loading="lazy"
+          decoding="async"
+          src={arnautbanner}
+          alt="Gildavi Arnaut"
+        />
       </div>
     </section>
   );

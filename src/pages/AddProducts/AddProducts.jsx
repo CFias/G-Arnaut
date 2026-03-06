@@ -4,6 +4,7 @@ import { collection, addDoc, doc, getDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import Logo from "../../assets/image/garnaut-gray-logo.png";
 import "./styles.css";
+import imageCompression from "browser-image-compression";
 import { NavLink } from "react-router-dom";
 
 export const AddProducts = () => {
@@ -35,17 +36,47 @@ export const AddProducts = () => {
     }));
   };
 
+  const removeImage = (index) => {
+    setImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const compressImage = async (file) => {
+    const options = {
+      maxSizeMB: 1, // tamanho máximo da imagem
+      maxWidthOrHeight: 1920, // limite de resolução
+      useWebWorker: true,
+    };
+
+    try {
+      const compressedFile = await imageCompression(file, options);
+      return compressedFile;
+    } catch (error) {
+      console.error("Erro ao comprimir imagem:", error);
+      return file;
+    }
+  };
+
   const handleImageChange = (e) => {
-    const files = e.target.files;
-    const previewImages = Array.from(files).map((file) =>
-      URL.createObjectURL(file)
-    );
+    const files = Array.from(e.target.files);
+
+    const previewImages = files.map((file) => ({
+      file,
+      preview: URL.createObjectURL(file),
+    }));
+
     setImages(previewImages);
   };
 
   const uploadImage = async (imageFile) => {
-    const imageRef = ref(storage, `products/${Date.now()}_${imageFile.name}`);
-    const snapshot = await uploadBytes(imageRef, imageFile);
+    const compressedFile = await compressImage(imageFile);
+
+    const imageRef = ref(
+      storage,
+      `products/${Date.now()}_${compressedFile.name}`
+    );
+
+    const snapshot = await uploadBytes(imageRef, compressedFile);
+
     return getDownloadURL(snapshot.ref);
   };
 
@@ -59,8 +90,9 @@ export const AddProducts = () => {
 
     setIsUploading(true);
     try {
-      const imageFiles = Array.from(e.target.images.files);
-      const imageUrls = await Promise.all(imageFiles.map(uploadImage));
+      const imageUrls = await Promise.all(
+        images.map((img) => uploadImage(img.file))
+      );
 
       const currentUser = auth.currentUser;
       if (!currentUser) {
@@ -355,12 +387,21 @@ export const AddProducts = () => {
             </label>
             <div className="image-preview">
               {images.map((image, index) => (
-                <img
-                  key={index}
-                  src={image}
-                  alt={`preview-${index}`}
-                  className="image-thumbnail"
-                />
+                <div key={index} className="image-preview-item">
+                  <img
+                    src={image.preview}
+                    alt={`preview-${index}`}
+                    className="image-thumbnail"
+                  />
+
+                  <button
+                    type="button"
+                    className="remove-image-button"
+                    onClick={() => removeImage(index)}
+                  >
+                    ✕
+                  </button>
+                </div>
               ))}
             </div>
           </div>

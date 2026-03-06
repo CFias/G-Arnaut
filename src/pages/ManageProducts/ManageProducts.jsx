@@ -7,8 +7,9 @@ import {
   updateDoc,
   deleteDoc,
 } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import { NavLink } from "react-router-dom";
+import imageCompression from "browser-image-compression";
 import "./styles.css";
 
 export const ManageProducts = () => {
@@ -18,7 +19,10 @@ export const ManageProducts = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editProduct, setEditProduct] = useState(null);
   const [newImages, setNewImages] = useState([]);
+  const [previewImages, setPreviewImages] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+
   const [searchFilters, setSearchFilters] = useState({
     query: "",
   });
@@ -50,6 +54,22 @@ export const ManageProducts = () => {
     bedrooms: "Quartos",
     refProduct: "Referência do produto",
     dimension: "Dimensão",
+  };
+
+  const compressImage = async (file) => {
+    const options = {
+      maxSizeMB: 1,
+      maxWidthOrHeight: 1920,
+      useWebWorker: true,
+    };
+
+    try {
+      const compressedFile = await imageCompression(file, options);
+      return compressedFile;
+    } catch (error) {
+      console.error("Erro ao comprimir imagem:", error);
+      return file;
+    }
   };
 
   useEffect(() => {
@@ -87,6 +107,38 @@ export const ManageProducts = () => {
     setFilteredProducts(filtered);
   }, [searchFilters, products]);
 
+
+  const handleRemoveImage = async (index) => {
+    const confirm = window.confirm("Deseja remover esta imagem?");
+    if (!confirm) return;
+
+    const imageUrl = editProduct.images[index];
+
+    try {
+      const imageRef = ref(storage, imageUrl);
+      await deleteObject(imageRef);
+    } catch (error) {
+      console.warn("Erro ao remover do storage:", error);
+    }
+
+    const updatedImages = [...editProduct.images];
+    updatedImages.splice(index, 1);
+
+    setEditProduct((prev) => ({
+      ...prev,
+      images: updatedImages,
+      mainImage: updatedImages[0] || "",
+    }));
+  };
+
+  const handleCloseModal = () => {
+    setIsEditing(false);
+    setEditProduct(null);
+    setNewImages([]);
+    setPreviewImages([]);
+    setUploadProgress(0);
+  };
+
   const handleSearchChange = (e) => {
     setSearchFilters({ query: e.target.value });
   };
@@ -123,16 +175,28 @@ export const ManageProducts = () => {
     e.preventDefault();
     setIsUploading(true);
     try {
-      const uploadedImages = await Promise.all(
-        newImages.map(async (imageFile) => {
-          const imageRef = ref(
-            storage,
-            `products/${Date.now()}_${imageFile.name}`
-          );
-          const snapshot = await uploadBytes(imageRef, imageFile);
-          return getDownloadURL(snapshot.ref);
-        })
-      );
+      let uploadedImages = [];
+
+      for (let i = 0; i < newImages.length; i++) {
+        const file = newImages[i];
+
+        const compressedFile = await compressImage(file);
+
+        const imageRef = storageRef(
+          storage,
+          `products/${Date.now()}_${compressedFile.name}`
+        );
+
+        const snapshot = await uploadBytes(imageRef, compressedFile);
+
+        const url = await getDownloadURL(snapshot.ref);
+
+        uploadedImages.push(url);
+
+        setUploadProgress(
+          Math.round(((i + 1) / newImages.length) * 100)
+        );
+      }
 
       const updatedProduct = {
         ...editProduct,
@@ -156,15 +220,30 @@ export const ManageProducts = () => {
     }
   };
 
+  const MAX_IMAGES = 10;
+
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
+
+    if (editProduct.images.length + files.length > MAX_IMAGES) {
+      alert(`Máximo permitido: ${MAX_IMAGES} imagens`);
+      return;
+    }
+
     setNewImages(files);
+
+    const previews = files.map((file) => ({
+      file,
+      url: URL.createObjectURL(file),
+    }));
+
+    setPreviewImages(previews);
   };
 
   const handleSetMainImage = (imageUrl) => {
     setEditProduct((prev) => ({
       ...prev,
-      mainImage: imageUrl, // Defina a imagem principal
+      mainImage: imageUrl,
     }));
   };
 
@@ -301,6 +380,9 @@ export const ManageProducts = () => {
       {isEditing && editProduct && (
         <div className="modal">
           <div className="modal-content">
+            <button className="modal-close" onClick={handleCloseModal}>
+              ✕
+            </button>
             <h3>Editar Produto</h3>
             <form onSubmit={handleUpdate} className="form-content">
               <div className="form-grid">
@@ -458,24 +540,40 @@ export const ManageProducts = () => {
                         onDragOver={(e) => handleDragOver(e, index)}
                         onDrop={(e) => handleDrop(e, index)}
                         onDragEnd={handleDragEnd}
-                        style={{
-                          border:
-                            imageUrl === editProduct.mainImage
-                              ? "4px solid green"
-                              : "1px solid gray",
-                          padding: "0px",
-                          cursor: "move",
-                          borderRadius: "5px",
-                        }}
-                        onClick={() => handleSetMainImage(imageUrl)}
                       >
+                        <div className="image-actions">
+
+                          <button
+                            className="btn-remove"
+                            onClick={() => handleRemoveImage(index)}
+                          >
+                            🗑
+                          </button>
+
+                          <button
+                            className="btn-main"
+                            onClick={() => handleSetMainImage(imageUrl)}
+                          >
+                            ⭐
+                          </button>
+
+                        </div>
+
+                        {imageUrl === editProduct.mainImage && (
+                          <span className="main-badge">CAPA</span>
+                        )}
+                        <p className="image-counter">
+                          {editProduct.images?.length || 0} / 20 imagens
+                        </p>
+
                         <img
                           src={imageUrl}
-                          width={100}
-                          height={100}
-                          style={{ objectFit: "cover" }}
+                          width={120}
+                          height={120}
                           className="image-preview"
                         />
+
+                        <span className="image-order">{index + 1}</span>
                       </div>
                     ))}
                   <div />
@@ -488,16 +586,51 @@ export const ManageProducts = () => {
                   disabled={isUploading}
                 />
               </div>
-              <button
-                type="submit"
-                className="form-button"
-                disabled={isUploading}
-              >
-                {isUploading ? "Atualizando..." : "Salvar Alterações"}
-              </button>
+              {uploadProgress > 0 && (
+                <div className="upload-progress">
+                  <div
+                    className="upload-bar"
+                    style={{ width: `${uploadProgress}%` }}
+                  ></div>
+                </div>
+              )}
+              <div className="modal-buttons">
+                <button
+                  type="button"
+                  className="cancel-button"
+                  onClick={handleCloseModal}
+                >
+                  Cancelar
+                </button>
+
+                <button
+                  type="submit"
+                  className="form-button"
+                  disabled={isUploading}
+                >
+                  {isUploading ? "Atualizando..." : "Salvar Alterações"}
+                </button>
+              </div>
+          
             </form>
           </div>
         </div>
+      )}
+      {previewImages.length > 0 && (
+        <>
+          <h4>Novas imagens</h4>
+
+          {previewImages.map((img, index) => (
+            <div key={index} className="image-item">
+              <img
+                src={img.url}
+                width={120}
+                height={120}
+                className="image-preview"
+              />
+            </div>
+          ))}
+        </>
       )}
     </div>
   );
