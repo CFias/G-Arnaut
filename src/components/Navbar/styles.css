@@ -3,19 +3,22 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: var(--btn-color-one);
+    background: var(--paper);
+    border-bottom: 1px solid var(--line);
 }
 
 .top-nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 65%;
-    font-family: var(--main-font);
+    width: 80vw;
+    max-width: 1200px;
+    padding: 8px 0;
+    font-family: var(--font-body);
 }
 
 .bander-icon {
-    width: 20px;
+    width: 18px;
     display: flex;
 }
 
@@ -26,54 +29,47 @@
 }
 
 .nav-logo-name-list h5 {
-    font-size: 24px;
-    font-weight: 200;
-    color: var(--text-color-two);
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--ink);
 }
 
 .top-item-text {
-    font-size: 16px;
-    padding: .5rem;
+    font-size: 12.5px;
+    padding: 0;
     font-weight: 400;
     display: flex;
     align-items: center;
-    gap: 8px;
-    color: var(--text-color-two);
-}
-
-.top-item {
-    font-size: 16px;
-    padding: .5rem;
-    font-weight: 400;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    color: var(--text-color-three);
+    gap: 6px;
+    color: var(--stone);
 }
 
 .top-item-phone {
-    font-size: 16px;
-    padding: .5rem;
-    font-weight: 400;
+    font-size: 12.5px;
+    padding: 0;
+    font-weight: 500;
     display: flex;
     align-items: center;
     text-decoration: none;
-    gap: 4px;
-    color: var(--text-color-three);
-    transition: 250ms;
+    gap: 5px;
+    color: var(--stone);
+    border: none;
+    transition: color 200ms;
 }
 
 .top-item-phone:hover {
-    color: rgb(221, 221, 221);
+    color: var(--brass-dark);
 }
 
 .top-local {
-    color: var(--text-color-three);
+    color: var(--ink);
     font-weight: 500;
 }
 
 .top-icon {
-    color: var(--text-color-three);
+    color: var(--stone);
 }
 
 .nav-content {
@@ -82,6 +78,7 @@
     align-items: center;
     justify-content: space-between;
     width: 80vw;
+    max-width: 1200px;
 }
 
 .nav-logo-item {
@@ -96,7 +93,7 @@
 }
 
 .nav-logo {
-    width: 70px;
+    width: 34px;
 }
 
 .nav-unorderd-list {
@@ -104,10 +101,10 @@
     align-items: center;
     justify-content: space-between;
     position: relative;
-    transition: all 0.4s ease;
+    transition: all 0.3s ease;
     margin: 0;
-    font-family: var(--main-font);
-    font-size: 16px;
+    font-family: var(--font-body);
+    font-size: 15px;
     font-weight: 400;
     width: 100%;
     z-index: 5;
@@ -117,13 +114,12 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    background: var(--card-color);
+    background: transparent;
     padding: 1px;
-    border-radius: 25px;
 }
 
 .nav-profile p {
-    color: var(--text-color-one);
+    color: var(--ink);
     font-weight: 500;
     font-size: 14px;
 }
@@ -134,81 +130,76 @@
     left: 0;
     right: 0;
     z-index: 1000;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid var(--line);
     transform: translateY(0);
-    transition: all 0.4s ease;
-    background: var(--btn-color-one);
+    transition: all 0.3s ease;
+    background: var(--paper);
     display: flex;
-    justify-content: space-around;
-    
+    justify-content: center;
 }
 
 .sticky-content {
     width: 80vw;
+    max-width: 1200px;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
-    padding: 10px 20px;
+    padding: 16px 0;
+}
+
+.nav-links {
+    display: flex;
+    gap: 2.5rem;
 }
 
 .nav-link-item {
     text-decoration: none;
-    color: var(--text-color-two);
-    font-weight: 300;
+    color: var(--stone);
+    font-weight: 400;
     position: relative;
     display: inline-block;
-    padding-bottom: 5px;
-    transition: color 0.3s ease, border-bottom 0.3s ease;
+    padding-bottom: 4px;
+    border-bottom: 1px solid transparent;
+    transition: color 200ms ease, border-color 200ms ease;
 }
 
-.nav-link-item.active {
-    color: var(--text-color-two);
-    border-bottom: 1px solid var(--text-color-two);
+.nav-link-item.active,
+.nav-link-item:hover {
+    color: var(--ink);
+    border-bottom-color: var(--brass);
 }
-
-.nav-link-item:not(.active) {
-    color: var(--text-color-two);
-    border-bottom: 2px solid transparent;
-}
-
-
 
 .nav-link-login, .nav-link-register {
     display: flex;
     align-items: center;
     text-decoration: none;
-    color: var(--text-color-two);
-    transition: 250ms;
+    color: var(--ink);
+    transition: color 200ms;
     font-size: 14px;
-    font-weight: 400;
+    font-weight: 500;
 }
 
 .nav-link-login:hover, .nav-link-register:hover {
-    color: rgb(221, 221, 221);
-}
-
-.nav-links {
-    display: flex;
-    gap: 2rem;
+    color: var(--brass-dark);
 }
 
 .nav-btn {
     display: flex;
     gap: 2rem;
+    align-items: center;
 }
 
 .nav-welcome {
-    color: var(--btn-color-one);
+    color: var(--ink);
 }
 
 .nav-link-name {
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 5px;
     padding: 5px;
     font-weight: 500;
-    color: var(--text-color-two);
+    color: var(--ink);
 }
 
 .logout-button {
@@ -218,12 +209,12 @@
     font-weight: 400;
     cursor: pointer;
     text-decoration: none;
-    color: var(--text-color-two);
+    color: var(--ink);
 }
 
 @media (max-width: 480px) {
     .nav-content {
-        width: 95%;
+        width: 92%;
     }
 }
 
@@ -231,10 +222,9 @@
     .side-user {
         display: flex;
         justify-content: space-between;
-        border-radius: 10px;
         padding: 0.8rem;
-        background: var(--btn-color-one);
-        color: var(--text-color-two);
+        background: var(--ink);
+        color: var(--paper);
         text-decoration: none;
         z-index: 10;
     }
@@ -242,41 +232,32 @@
     .user-infos {
         display: flex;
         align-items: center;
-        gap: .2rem;
-        color: var(--text-color-two);
+        gap: .5rem;
+        color: var(--paper);
     }
 
     .info-user {
         display: flex;
         flex-direction: column;
         justify-content: center;
-        color: var(--text-color-two);
+        color: var(--paper);
     }
 
     .nav-link-name-side {
         display: flex;
         justify-content: space-between;
-        color: var(--text-color-two);
-        font-family: var(--main-font);
+        color: var(--paper);
+        font-family: var(--font-body);
         font-size: 14px;
         font-weight: 600;
         margin: 0;
     }
 
     .nav-link-email-side {
-        color: var(--text-color-two);
-        opacity: 0.5;
+        color: var(--paper);
+        opacity: 0.6;
         font-size: 12px;
         margin: 0;
-    }
-
-    .logout-button-side {
-        display: flex;
-        align-items: center;
-        text-decoration: none;
-        gap: 5px;
-        color: var(--text-color-one);
-        font-family: var(--main-font);
     }
 
     .menu-icon {
@@ -287,15 +268,17 @@
     .sidebar {
         position: fixed;
         top: 0;
-        left: -250px;
-        width: 250px;
+        left: -280px;
+        width: 280px;
         height: 100%;
-        color: white;
+        color: var(--ink);
         display: flex;
         flex-direction: column;
         justify-content: center;
         transition: 0.3s ease;
         z-index: 10;
+        background: var(--paper);
+        border-right: 1px solid var(--line);
     }
 
     .sidebar.open {
@@ -304,29 +287,13 @@
 
     .sidebar-list {
         list-style: none;
-        padding: 0;
-        background-image: url("../../assets/image/garnaut-gray-logo-icon.png");
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
+        padding: 1rem;
+        background: var(--paper);
         height: 100%;
-        opacity: 2;
-        background: var(--bg-color-side);
-        padding: .5rem;
     }
-
-    .side-links {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        background: var(--card-color);
-        width: 100%;
-    }
-
-
 
     .sidebar-link-item:hover {
-        color: #304275;
+        color: var(--brass-dark);
     }
 
     .overlay {
@@ -335,13 +302,12 @@
         left: 0;
         width: 100vw;
         height: 100vh;
-        background: rgba(0, 0, 0, 0.5);
+        background: rgba(20, 24, 31, 0.5);
         z-index: 1;
     }
 
     .side-items-one-log {
-        color: var(--text-color-two);
-        border-radius: 10px;
+        color: var(--ink);
     }
 
     .top-nav {
@@ -353,12 +319,6 @@
         justify-content: space-between;
     }
 
-    .nav-logo-img {
-        width: 7rem;
-        position: absolute;
-        left: 40%;
-    }
-
     .nav-unorderd-list {
         display: none;
     }
@@ -366,113 +326,69 @@
     .nav-menu-icon {
         display: block;
         cursor: pointer;
-        font-size: 30px;
-        color: var(--text-color-two);
-        margin-top: 1rem;
-    }
-
-    .sidebar {
-        display: block;
-        z-index: 1;
-        background: var(--card-color);
+        font-size: 26px;
+        color: var(--ink);
+        margin-top: 0.5rem;
     }
 
     .sidebar-list {
         display: flex;
         flex-direction: column;
-        font-family: var(--main-font);
-        gap: 5px;
+        font-family: var(--font-body);
+        gap: 4px;
     }
 
-    .icon-name-side {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 1rem;
-    }
-
+    .icon-name-side,
     .icon-name-side-log {
         display: flex;
         justify-content: center;
         align-items: center;
         gap: 1rem;
-        color: var(--text-color-one);
+        color: var(--ink);
     }
 
     .sidebar-link-item {
         font-size: 14px;
         font-weight: 500;
-        color: var(--text-color-one);
+        color: var(--ink);
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: 1rem;
         text-decoration: none;
-        padding: .8rem;
-        border-radius: 5px;
+        padding: .9rem .5rem;
+        border-bottom: 1px solid var(--line);
     }
 
     .side-items-one {
         display: flex;
         flex-direction: column;
-        background: var(--card-color-side);
-        border-radius: 10px;
-        margin: .2rem 0;
-    }
-
-    .side-items-two {
-        display: flex;
-        flex-direction: column;
-        background: var(--card-color-side);
-        border-radius: 10px;
-    }
-
-    .side-items-three {
-        display: flex;
-        flex-direction: column;
-        background: var(--card-color-side);
-        border-radius: 10px;
-    }
-
-    .side-link-item {
-        color: var(--btn-color-one);
-        display: flex;
-        font-family: var(--main-font);
-        gap: 5px;
-        text-decoration: none;
-        font-size: 14px;
-        padding: 5px;
-    }
-
-    .nav-logo-img-side {
-        width: 8rem;
     }
 
     .sidebar-link-item-logout {
         font-size: 14px;
         font-weight: 500;
-        color: var(--text-color-two);
+        color: var(--paper);
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: 1rem;
         text-decoration: none;
         padding: .8rem;
-        border-radius: 10px;
-        background: var(--card-color-side-log);
+        background: var(--ink);
     }
 
     .sidebar-link-item-adm {
         font-size: 14px;
         font-weight: 500;
-        color: var(--text-color-one);
+        color: var(--brass-dark);
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: 1rem;
         text-decoration: none;
-        padding: .8rem;
-        border-radius: 10px;
+        padding: .9rem .5rem;
+        border-bottom: 1px solid var(--line);
     }
 }
 

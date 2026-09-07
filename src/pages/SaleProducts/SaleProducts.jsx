@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { db } from "../../services/FirebaseConfig";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs } from "firebase/firestore";
 import SearchIcon from "@mui/icons-material/Search";
 import {
   MenuItem,
@@ -49,6 +49,7 @@ export const SaleProducts = () => {
   const [selectedParking, setSelectedParking] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
+  const [rawProducts, setRawProducts] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -77,104 +78,87 @@ export const SaleProducts = () => {
     }
   };
 
-  const fetchProducts = async () => {
-    try {
-      const productsRef = collection(db, "products");
-      const querySnapshot = await getDocs(productsRef);
-      let productList = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-
-      // Filtragem ajustada para múltiplas seleções
-      let filtered = productList.filter(
-        (p) => p.productType === selectedProductType
-      );
-
-      if (selectedCategories.length > 0)
-        filtered = filtered.filter((p) =>
-          selectedCategories.includes(p.category)
+  // Busca no Firestore SÓ quando o tipo (venda/aluguel) muda — é o único
+  // filtro que realmente compensa mandar pro servidor. Os demais filtros
+  // (categoria, status, cidade, bairro, quartos, vagas, busca) rodam em
+  // cima do que já foi baixado, sem gerar uma nova leitura no Firestore
+  // a cada checkbox clicado.
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const q = query(
+          collection(db, "products"),
+          where("productType", "==", selectedProductType)
         );
-
-      if (selectedStatuses.length > 0)
-        filtered = filtered.filter((p) => selectedStatuses.includes(p.status));
-
-      if (selectedCities.length > 0)
-        filtered = filtered.filter((p) => selectedCities.includes(p.city));
-
-      if (selectedNeighborhoods.length > 0)
-        filtered = filtered.filter((p) =>
-          selectedNeighborhoods.includes(p.neighborhood)
-        );
-
-      if (selectedBedrooms.length > 0)
-        filtered = filtered.filter((p) =>
-          selectedBedrooms.includes(Number(p.bedrooms))
-        );
-
-      if (selectedParking.length > 0)
-        filtered = filtered.filter((p) =>
-          selectedParking.includes(Number(p.parkingSpaces))
-        );
-
-      if (searchTerm) {
-        const lowerSearch = searchTerm.toLowerCase();
-        filtered = filtered.filter(
-          (p) =>
-            p.city?.toLowerCase().includes(lowerSearch) ||
-            p.neighborhood?.toLowerCase().includes(lowerSearch) ||
-            p.refProduct?.toLowerCase().includes(lowerSearch)
-        );
+        const querySnapshot = await getDocs(q);
+        const productList = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setRawProducts(productList);
+      } catch (error) {
+        console.error("Erro ao buscar produtos:", error);
       }
+    };
 
-      const distinctCategories = [...new Set(filtered.map((p) => p.category))];
-
-      const counts = distinctCategories.reduce((acc, category) => {
-        acc[category] = filtered.filter((p) => p.category === category).length;
-        return acc;
-      }, {});
-
-      const statusData = filtered.reduce((acc, p) => {
-        acc[p.status] = (acc[p.status] || 0) + 1;
-        return acc;
-      }, {});
-
-      const cityData = filtered.reduce((acc, p) => {
-        acc[p.city] = (acc[p.city] || 0) + 1;
-        return acc;
-      }, {});
-
-      const dimensionData = filtered.reduce((acc, p) => {
-        const dim = p.dimension;
-        if (dim >= 20 && dim <= 500) {
-          const range = Math.floor(dim / 100) * 100;
-          acc[range] = (acc[range] || 0) + 1;
-        }
-        return acc;
-      }, {});
-
-      const parkingData = filtered.reduce((acc, p) => {
-        acc[p.parkingSpaces] = (acc[p.parkingSpaces] || 0) + 1;
-        return acc;
-      }, {});
-
-      setCategories(distinctCategories);
-      setCategoryCounts(counts);
-      setProducts(filtered);
-      setTotalProperties(filtered.length);
-      setStatusCounts(statusData);
-      setCityCounts(cityData);
-      setDimensionCounts(dimensionData);
-      setParkingCounts(parkingData);
-    } catch (error) {
-      console.error("Erro ao buscar produtos:", error);
-    }
-  };
+    fetchProducts();
+  }, [selectedProductType]);
 
   useEffect(() => {
-    fetchProducts();
+    let filtered = rawProducts;
+
+    if (selectedCategories.length > 0)
+      filtered = filtered.filter((p) => selectedCategories.includes(p.category));
+
+    if (selectedStatuses.length > 0)
+      filtered = filtered.filter((p) => selectedStatuses.includes(p.status));
+
+    if (selectedCities.length > 0)
+      filtered = filtered.filter((p) => selectedCities.includes(p.city));
+
+    if (selectedNeighborhoods.length > 0)
+      filtered = filtered.filter((p) => selectedNeighborhoods.includes(p.neighborhood));
+
+    if (selectedBedrooms.length > 0)
+      filtered = filtered.filter((p) => selectedBedrooms.includes(Number(p.bedrooms)));
+
+    if (selectedParking.length > 0)
+      filtered = filtered.filter((p) => selectedParking.includes(Number(p.parkingSpaces)));
+
+    if (searchTerm) {
+      const lowerSearch = searchTerm.toLowerCase();
+      filtered = filtered.filter(
+        (p) =>
+          p.city?.toLowerCase().includes(lowerSearch) ||
+          p.neighborhood?.toLowerCase().includes(lowerSearch) ||
+          p.refProduct?.toLowerCase().includes(lowerSearch)
+      );
+    }
+
+    if (sortOrder === "low-to-high") {
+      filtered = [...filtered].sort((a, b) => a.price - b.price);
+    } else if (sortOrder === "high-to-low") {
+      filtered = [...filtered].sort((a, b) => b.price - a.price);
+    }
+
+    const distinctCategories = [...new Set(filtered.map((p) => p.category))];
+    const counts = distinctCategories.reduce((acc, category) => {
+      acc[category] = filtered.filter((p) => p.category === category).length;
+      return acc;
+    }, {});
+    const cityData = filtered.reduce((acc, p) => {
+      acc[p.city] = (acc[p.city] || 0) + 1;
+      return acc;
+    }, {});
+
+    setCategories(distinctCategories);
+    setCategoryCounts(counts);
+    setCityCounts(cityData);
+    setProducts(filtered);
+    setTotalProperties(filtered.length);
+    setVisibleProducts(12); // volta pra primeira "página" a cada mudança de filtro
   }, [
-    selectedProductType,
+    rawProducts,
     selectedCategories,
     selectedStatuses,
     selectedCities,
@@ -182,19 +166,8 @@ export const SaleProducts = () => {
     selectedBedrooms,
     selectedParking,
     searchTerm,
+    sortOrder,
   ]);
-
-  const handleSortChange = (event) => {
-    const value = event.target.value;
-    setSortOrder(value);
-    let sortedProducts = [...products];
-    if (value === "low-to-high") {
-      sortedProducts.sort((a, b) => a.price - b.price);
-    } else if (value === "high-to-low") {
-      sortedProducts.sort((a, b) => b.price - a.price);
-    }
-    setProducts(sortedProducts);
-  };
 
   const handleCardClick = (id) => {
     navigate(`/product/${id}`);
@@ -567,7 +540,7 @@ export const SaleProducts = () => {
                 <select
                   id="ordenar"
                   value={sortOrder}
-                  onChange={handleSortChange}
+                  onChange={(e) => setSortOrder(e.target.value)}
                 >
                   <option value="">Padrão</option>
                   <option value="low-to-high">Menor Preço</option>
@@ -587,7 +560,10 @@ export const SaleProducts = () => {
                       <img
                         className="product-img-sale"
                         src={product.images[0]}
-                        alt="Product"
+                        alt={`${product.category} em ${product.neighborhood || product.city}`}
+                        loading="lazy"
+                        width={280}
+                        height={180}
                       />
                     </div>
                   )}

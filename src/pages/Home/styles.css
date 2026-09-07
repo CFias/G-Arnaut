@@ -1,19 +1,18 @@
 .home-container {
-    font-family: var(--main-font);
+    font-family: var(--font-body);
     opacity: 0;
-    background: var(--bg-color);
-    animation: fadeIn 1s ease-in-out forwards;
+    background: var(--paper);
+    animation: fadeIn 0.6s ease-in-out forwards;
 }
 
 .floating-card {
     position: fixed;
     bottom: 90px;
     right: 20px;
-    background-color: var(--card-color);
-    border-top: 5px solid var(--btn-color-one);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    background-color: var(--paper);
+    border: 1px solid var(--line);
+    border-top: 2px solid var(--brass);
     padding: 20px;
-    border-radius: 5px;
     display: none;
     z-index: 1000;
     width: 250px;
@@ -22,37 +21,36 @@
 }
 
 .card-content-floating h4 {
+    font-family: var(--font-display);
     font-size: 16px;
     font-weight: 600;
-    color: var(--text-color-one);
+    color: var(--ink);
     margin-bottom: 10px;
 }
 
 .card-content-floating p {
-    font-size: 12px;
-    color: var(--text-color-one);
+    font-size: 13px;
+    color: var(--stone);
     margin-bottom: 15px;
 }
 
 .floating-card .card-content-floating {
-    text-align: center;
+    text-align: left;
 }
 
 .floating-card button {
-    color: var(--text-color-one);
-    background: var(--text-color-two);
-    border: 1px solid var(--text-color-one);
-    padding: 8px 12px;
-    font-size: 14px;
-    border-radius: 35px;
+    color: var(--ink);
+    background: transparent;
+    border: 1px solid var(--line);
+    padding: 8px 14px;
+    font-size: 13px;
     cursor: pointer;
+    transition: border-color 200ms;
 }
 
 .floating-card button:hover {
-    background-color: #0056b3;
-    color: var(--text-color-two);
+    border-color: var(--brass);
 }
-
 
 @keyframes fadeIn {
     0% {
@@ -66,21 +64,24 @@
 
 .home-h3 {
     display: flex;
-    justify-content: center;
     flex-direction: column;
     align-items: start;
-    font-size: 28px;
+    gap: 6px;
+    font-family: var(--font-display);
+    font-size: 26px;
     font-weight: 600;
-    padding-top: 2rem;
-    color: var(--text-color-one);
-    background: var(--bg-color);
-    width: 65vw;
+    letter-spacing: -0.01em;
+    padding-top: 3rem;
+    color: var(--ink);
+    background: var(--paper);
+    width: 100%;
+    max-width: 1200px;
 }
 
 .home-p {
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 400;
-    color: gray;
+    color: var(--stone);
 }
 
 .section-1 {
@@ -95,7 +96,7 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    padding-top: 2rem;
+    padding-top: 1rem;
 }
 
 .section-card {
@@ -106,65 +107,67 @@
 
 .featured-products {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
-    padding-top: 2rem;
-    width: 65vw;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    margin-top: 2rem;
+    width: 100%;
+    max-width: 1200px;
 }
 
-
+.featured-products>* {
+    background: var(--paper);
+}
 
 .pagination {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px;
-    border-radius: 20px;
-    margin-top: 2rem;
-
+    gap: 4px;
+    margin-top: 2.5rem;
 }
 
 .pagination button {
-    color: var(--text-color-one);
-    border: none;
-    padding: 6px 10px;
+    color: var(--stone);
+    border: 1px solid var(--line);
+    padding: 8px 13px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 12px;
+    font-size: 13px;
     cursor: pointer;
     background: transparent;
+    transition: border-color 200ms, color 200ms;
 }
 
-.pagination button:hover {
-    background: transparent;
-    color: var(--text-color-one);
+.pagination button:hover:not(:disabled) {
+    border-color: var(--brass);
+    color: var(--ink);
 }
 
 .pagination button.active {
-    color: var(--text-color-one);
-    font-weight: bold;
-    background: var(--btn-color-one);
-    color: var(--text-color-two);
-
+    color: var(--paper);
+    font-weight: 500;
+    background: var(--ink);
+    border-color: var(--ink);
 }
 
 .pagination button:disabled {
-    color: #999;
+    color: var(--stone-light);
     cursor: not-allowed;
     background: transparent;
 }
 
 .home-p-2 {
     margin-top: 10px;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 400;
-    color: gray;
+    color: var(--stone-light);
 }
 
 .skeleton-card {
-    border-radius: 15px;
-    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background: linear-gradient(90deg, var(--line) 25%, #EFEBE0 50%, var(--line) 75%);
     background-size: 200% 100%;
     animation: loading 1.5s infinite ease-in-out;
 }
@@ -179,65 +182,43 @@
     }
 }
 
-@media (min-width: 1025px) and (max-width: 1445px) {
-    .featured-products {
-        grid-template-columns: repeat(4, 1fr);
-        gap: 20px;
-    }
-}
-
-/* Responsividade */
 @media (max-width: 1024px) {
     .featured-products {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 15px;
+        grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
     }
-
 }
 
 @media (max-width: 768px) {
     .featured-products {
         grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
     }
 
     .home-h3 {
-        font-size: 22px;
-        padding: 10px;
+        font-size: 21px;
+        padding: 2rem 10px 0;
     }
 }
 
 @media (max-width: 480px) {
     .featured-products {
-        grid-template-columns: repeat(2, 1fr);
-        overflow: hidden;
-        justify-items: center;
+        grid-template-columns: repeat(1, 1fr);
         width: 95vw;
-        padding-bottom: .7rem;
+        margin: 1.5rem auto 0;
+        padding-top: 0;
     }
 
     .home-h3 {
         width: 95%;
-        font-size: 18px;
-        margin: 0.5rem;
-        margin-top: 2rem;
+        font-size: 19px;
+        margin: 0 auto;
+        padding-top: 2rem;
     }
 
     .section-2, .section-1, .section-3 {
         gap: 0;
     }
 
-    .home-p {
-        font-size: 12px;
-    }
-
     .pagination {
-        margin-top: 1rem;
-    }
-
-    .pagination button {
-        font-size: 10px;
+        margin-top: 1.5rem;
     }
 }
-
-@media (min-width: 769px) {}

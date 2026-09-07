@@ -1,17 +1,51 @@
+.featured-card {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    background: var(--paper);
+    transition: box-shadow 200ms ease;
+    width: 100%;
+}
+
+.featured-card:hover {
+    box-shadow: 0 6px 20px rgba(20, 24, 31, 0.08);
+    position: relative;
+    z-index: 2;
+}
+
+.featured-images {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--line);
+}
+
+.featured-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 400ms ease;
+}
+
+.featured-card:hover .featured-img {
+    transform: scale(1.03);
+}
+
 .carousel-arrow {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background-color: var(--btn-color-one);
+    background-color: rgba(20, 24, 31, 0.55);
+    color: var(--paper);
     border: none;
-    padding: 5px;
+    padding: 6px;
     border-radius: 50%;
     cursor: pointer;
     z-index: 3;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background-color 0.3s ease;
 }
 
 .carousel-arrow.left {
@@ -22,10 +56,6 @@
     right: 10px;
 }
 
-.carousel-arrow:hover {
-    background-color: var(--btn-color-two);
-}
-
 .featured-images .carousel-arrow {
     display: none;
 }
@@ -34,492 +64,212 @@
     display: flex;
 }
 
-.featured-card {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border-radius: 10px;
-    cursor: pointer;
-    padding: 8px;
-    background: var(--card-color);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-
-}
-
-.featured-images {
-    position: relative;
-}
-
-.author-avatar {
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 1px solid var(--btn-color-one);
-}
-
 .featured-status {
     display: flex;
     align-items: center;
-    font-size: 10px;
+    gap: 5px;
+    font-size: 11px;
     position: absolute;
-    background: var(--card-color);
-    border-radius: 15px;
+    top: 10px;
+    left: 10px;
+    background: var(--paper);
     z-index: 1;
-    top: 1;
-    padding: 1px 5px;
-    font-family: var(--main-font);
-    font-weight: 600;
-    color: var(--btn-color-one);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin: 5px;
-    gap: 5px;
-}
-
-.featured-status span {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    border-radius: 50%;
-    background: var(--btn-color-two);
-    color: var(--btn-color-two);
+    padding: 4px 9px;
+    font-weight: 500;
+    color: var(--ink);
 }
 
 .featured-ref {
-    font-size: 6px;
+    font-size: 11px;
     position: absolute;
     z-index: 2;
-    padding: 5px;
-    font-family: var(--main-font);
+    padding: 4px 9px;
     font-weight: 500;
-    color: var(--text-color-two);
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    margin: 5px;
-    bottom: 0;
-}
-
-.featured-img {
-    width: 275px;
-    height: 275px;
-    border-radius: 8px;
-    transition: filter 0.3s ease-in-out;
-    filter: brightness(0.6);
-    object-fit: cover;
-    max-width: none;
-    margin: 0;
-}
-
-.featured-img:hover {
-    filter: brightness(0.5);
+    color: var(--paper);
+    background: rgba(20, 24, 31, 0.55);
+    bottom: 10px;
+    right: 10px;
 }
 
 .featured-infos {
     display: flex;
     flex-direction: column;
-    font-family: var(--main-font);
-    color: var(--text-color-one);
-    width: 275px;
-}
-
-.featured-city {
-    font-family: var(--main-font);
-    color: rgb(83, 83, 83);
-    font-size: 14px;
-    font-weight: 500;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.featured-address {
-    font-family: var(--main-font);
-    color: var(--text-color-one);
-    font-size: 12px;
-    font-weight: 400;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-transform: capitalize;
-}
-
-.featured-neighborhood {
-    font-size: 12px;
-    color: rgb(83, 83, 83);
-    font-weight: 500;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-    text-transform: uppercase;
-}
-
-.featured-category {
-    font-size: 8px;
-    display: flex;
-    font-weight: 600;
-    text-transform: uppercase;
-    font-family: var(--main-font);
-}
-
-.featured-type {
-    display: flex;
-    font-family: var(--main-font);
-    justify-content: start;
-    align-items: center;
-    font-size: 8px;
-    color: var(--btn-color-one);
-    font-weight: 600;
-    text-align: center;
-    gap: 2px;
-    border-radius: 3px;
-    padding: 4px;
-    background: #e6effa;
-}
-
-.featured-dimension {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    padding: 1px 5px;
-    font-weight: 500;
-    background: #e6effa;
-    font-size: 10px;
-    border-radius: 3px;
-}
-
-.more-imovel {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    color: var(--btn-color-one);
-    font-size: 10px;
-    font-weight: 500;
-    border-radius: 3px;
-}
-
-.featured-icon {
-    padding: 4px;
-    color: var(--btn-color-one);
-}
-
-.featured-size {
-    font-size: 10px;
-    font-weight: 600;
-    color: var(--btn-color-one);
-}
-
-.featured-price-mod {
-    display: flex;
-    align-items: start;
-    justify-content: space-between;
-    flex-direction: column;
-    gap: 2px;
-}
-
-.price-name {
-    font-size: 10px;
-    font-weight: 500;
-    color: rgb(83, 83, 83);
-}
-
-.featured-price {
-    color: var(--btn-color-one);
-    font-family: var(--main-font);
-    font-size: 14px;
-    font-weight: 600;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    color: var(--ink);
+    width: 100%;
+    padding: 16px;
 }
 
 .first-item {
     display: flex;
-    align-items: start;
-    justify-content: space-between;
-    gap: 5px;
-    width: 100%;
-    margin: 3px 0;
-}
-
-.profile-solo {
-    display: flex;
     align-items: center;
-    gap: 5px;
     width: 100%;
+    margin-bottom: 12px;
 }
 
 .infos-profile {
     display: flex;
     align-items: center;
-    justify-content: start;
-    gap: 5px;
+    gap: 8px;
 }
 
-.infos-profile p {
-    font-size: 12px;
-    font-weight: 600;
+.author-avatar {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 .author-name {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--text-color-one);
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-}
-
-.end-card {
-    display: flex;
-    align-items: end;
-    justify-content: space-between;
-    margin: 0;
-    width: 100%;
-    gap: 2px;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--stone);
 }
 
 .icon-profile {
-    color: var(--btn-color-two);
-    padding: 1px
+    color: var(--brass);
+    padding: 0;
+    font-size: 14px !important;
 }
 
 .infos-details {
     display: flex;
     flex-direction: column;
     align-items: start;
-    gap: 2px;
-    width: auto;
-    margin: 0;
+    gap: 3px;
+    width: 100%;
+}
+
+.featured-city {
+    font-family: var(--font-display);
+    color: var(--ink);
+    font-size: 17px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.featured-neighborhood {
+    font-size: 13.5px;
+    color: var(--stone);
+    font-weight: 400;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 100%;
+    margin-bottom: 10px;
 }
 
 .infos-all {
     display: flex;
     align-items: center;
-    justify-content: start;
+    gap: 16px;
+    width: 100%;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+    margin-bottom: 14px;
+}
+
+.featured-dimension {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    padding: 0;
+}
+
+.featured-icon {
+    padding: 0;
+    color: var(--brass-dark);
+    font-size: 16px !important;
+}
+
+.featured-size {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+}
+
+.end-card {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.featured-price-mod {
+    display: flex;
+    flex-direction: column;
     gap: 2px;
+}
+
+.featured-type {
+    display: flex;
+    gap: 4px;
+    font-size: 11px;
+    color: var(--stone);
+    font-weight: 500;
+    text-transform: capitalize;
+    margin-bottom: 4px;
+}
+
+.featured-category {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.price-name {
+    display: none;
+}
+
+.featured-price {
+    font-family: var(--font-display);
+    color: var(--ink);
+    font-size: 18px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.more-imovel {
+    color: var(--brass-dark);
+    font-size: 13px;
+    font-weight: 500;
 }
 
 .pagination-dots {
     display: flex;
     justify-content: center;
-    margin: 20px;
+    gap: 8px;
+    margin: 32px 0;
 }
 
 .pagination-dots .dot {
-    padding: 5px 10px;
-    margin: 0 5px;
+    width: 28px;
+    height: 28px;
     cursor: pointer;
-    border-radius: 50%;
-    background-color: var(--card-color);
-    color: var(--text-color-one);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: bold;
-    font-family: var(--main-font);
-    font-size: 12px;
+    color: var(--stone);
+    font-size: 13px;
+    border: 1px solid var(--line);
 }
 
 .pagination-dots .dot.active {
-    background-color: var(--btn-color-one);
-    color: white;
+    background-color: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
 }
 
-.pagination-dots .dot:hover {
-    background-color: #ddd;
-}
-
-@media (max-width: 768px) {
-    .featured-list {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-    }
-
-    .featured-img {
-        width: 220px;
-        height: 220px;
-    }
-
-    .featured-infos {
-        width: 220px;
-    }
-
-    .featured-type {
-        font-size: 8px;
-        padding: 10px;
-    }
-
-    .featured-price {
-        font-size: 14px;
-    }
-
-    .pagination-dots {
-        margin-top: 20px;
-    }
+.pagination-dots .dot.nav {
+    border: none;
+    font-size: 16px;
 }
 
 @media (max-width: 480px) {
-    .featured-card {
-        border-radius: 5px;
-    }
-
-    .featured-img {
-        width: 150px;
-        height: 160px;
-        border-radius: 10px;
-    }
-
-    .featured-infos {
-        width: 150px;
-        justify-content: start;
-    }
-
-    .featured-address {
-        font-size: 12px;
-    }
-
-    .infos-details {
-        flex-direction: row;
-        justify-content: start;
-        align-items: start;
-    }
-
-    .featured-category {
-        font-size: 8px;
-    }
-
-    .featured-price {
-        font-size: 12px;
-    }
-
-    .featured-type {
-        font-size: 8px;
-        padding: 5px;
-    }
-
-    .featured-city {
-        font-size: 12px;
-    }
-
-    .featured-neighborhood {
-        font-size: 10px;
-    }
-
-    .featured-size {
-        font-size: 8px;
-    }
-
-    .price-name {
-        font-size: 8px;
-    }
-
     .more-imovel {
         display: none;
-    }
-
-    .infos-profile p {
-        font-size: 10px;
-    }
-}
-
-@media (min-width: 1025px) and (max-width: 1445px) {
-    .featured-img {
-        width: 200px;
-        height: 200px;
-    }
-
-    .featured-infos {
-        width: 200px;
-    }
-
-    .featured-category,
-    .featured-dimension,
-    .featured-status,
-    .featured-type,
-    .featured-neighborhood,
-    .featured-icon,
-    .featured-list,
-    .featured-size {
-        font-size: 10px;
-        font-weight: 400;
-    }
-
-    .featured-price {
-        font-size: 16px;
-    }
-
-
-}
-
-@media (min-width: 769px) and (max-width: 1024px) {
-    .featured-list {
-        grid-template-columns: repeat(3, 1fr);
-    }
-
-    .featured-img {
-        width: 140px;
-        height: 140px;
-    }
-
-    .featured-infos {
-        width: 140px;
-        justify-content: center;
-    }
-
-    .infos-details {
-        width: 140px;
-        align-items: center;
-        gap: 2px;
-    }
-
-    .featured-category,
-    .featured-dimension,
-    .featured-status,
-    .featured-type,
-    .featured-neighborhood,
-    .featured-icon,
-    .featured-list,
-    .featured-size {
-        font-size: 12px;
-        font-weight: 400;
-    }
-
-    .featured-price {
-        font-size: 18px;
-    }
-}
-
-@media (min-width: 1024px) and (max-width: 1240px) {
-    .featured-list {
-        grid-template-columns: repeat(3, 1fr);
-    }
-
-    .featured-img {
-        width: 180px;
-        height: 180px;
-    }
-
-    .featured-infos {
-        width: 180px;
-    }
-}
-
-@media (max-width: 240px) {
-    .featured-list {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .featured-img {
-        width: 120px;
-        height: 120px;
-    }
-
-    .featured-infos {
-        width: 120px;
     }
 }

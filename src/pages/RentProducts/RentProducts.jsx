@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"; // Importa o hook useNavigate para navegação
-import { db, storage } from "../../services/FirebaseConfig";
-import { collection, getDocs } from "firebase/firestore";
-import { getDownloadURL, ref } from "firebase/storage";
+import { useNavigate } from "react-router-dom";
+import { db } from "../../services/FirebaseConfig";
+import { collection, query, where, getDocs, limit, startAfter } from "firebase/firestore";
 import {
   Category,
   CropFree,
@@ -13,75 +12,55 @@ import {
 import "./styles.css";
 import { Navbar } from "../../components/Navbar/Navbar";
 
-export const RentProducts = () => {
-  const [products, setProducts] = useState([]); // Estado para armazenar os produtos
-  const [currentPage, setCurrentPage] = useState(1); // Estado para controlar a página atual
-  const productsPerPage = 12; // Número de produtos por página
-  const navigate = useNavigate(); // Hook para navegação
+const PRODUCTS_PER_PAGE = 12;
 
-  // Função para buscar os produtos do Firestore
-  const fetchProducts = async () => {
+export const RentProducts = () => {
+  const [products, setProducts] = useState([]);
+  const [lastDoc, setLastDoc] = useState(null);
+  const [hasMore, setHasMore] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
+
+  const fetchProducts = async (cursor = null) => {
+    setIsLoading(true);
     try {
-      const querySnapshot = await getDocs(collection(db, "products"));
-      const productList = querySnapshot.docs.map((doc) => ({
+      // Query filtrada + paginada no próprio Firestore, em vez de baixar
+      // TODA a coleção e filtrar no navegador. As imagens já vêm como
+      // URLs prontas salvas no documento (AddProducts já grava a URL
+      // final do Storage) — não é necessário nenhuma chamada extra a
+      // getDownloadURL aqui, o que eliminava o maior gargalo de
+      // performance da página.
+      const constraints = [
+        collection(db, "products"),
+        where("productType", "==", "aluguel"),
+        limit(PRODUCTS_PER_PAGE),
+      ];
+      if (cursor) constraints.splice(2, 0, startAfter(cursor));
+
+      const q = query(...constraints);
+      const querySnapshot = await getDocs(q);
+
+      const newProducts = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
 
-      // Filtrando os produtos do tipo 'aluguel'
-      const rentProducts = productList.filter(
-        (product) => product.productType === "aluguel"
-      );
-
-      // Função para obter URLs das imagens do produto
-      const productsWithImages = await Promise.all(
-        rentProducts.map(async (product) => {
-          if (product.images && product.images.length > 0) {
-            const imageUrls = await Promise.all(
-              product.images.map(async (imagePath) => {
-                try {
-                  const imageRef = ref(storage, imagePath);
-                  const downloadURL = await getDownloadURL(imageRef);
-                  return downloadURL;
-                } catch (error) {
-                  console.error("Erro ao obter URL da imagem:", error);
-                  return null;
-                }
-              })
-            );
-            return { ...product, images: imageUrls.filter(Boolean) };
-          }
-          return product;
-        })
-      );
-
-      // Evita atualizar o estado com os mesmos produtos
-      setProducts((prevProducts) => {
-        const newProducts = productsWithImages.filter(
-          (product) => !prevProducts.some((p) => p.id === product.id)
-        );
-        return [...prevProducts, ...newProducts];
-      });
+      setProducts((prev) => (cursor ? [...prev, ...newProducts] : newProducts));
+      setLastDoc(querySnapshot.docs[querySnapshot.docs.length - 1] || null);
+      setHasMore(querySnapshot.docs.length === PRODUCTS_PER_PAGE);
     } catch (error) {
-      console.error("Erro ao buscar produtos:", error);
+      console.error("Erro ao buscar produtos para aluguel:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  // Função executada ao montar o componente para buscar os produtos
   useEffect(() => {
     fetchProducts();
   }, []);
 
-  const totalPages = Math.ceil(products.length / productsPerPage); // Calcula o total de páginas
-  const paginatedProducts = products.slice(
-    (currentPage - 1) * productsPerPage,
-    currentPage * productsPerPage
-  ); // Produtos a serem exibidos na página atual
-
-  // Função para redirecionar ao clicar no card do produto
-  const handleCardClick = (id) => {
-    navigate(`/product/${id}`); // Redireciona para a rota específica do produto
-  };
+  const handleCardClick = (id) => navigate(`/product/${id}`);
+  const loadMore = () => fetchProducts(lastDoc);
 
   return (
     <>
@@ -89,18 +68,21 @@ export const RentProducts = () => {
       <div className="filter-product-container">
         <h1>Imóveis disponíveis para Aluguel</h1>
         <div className="product-list-filter">
-          {paginatedProducts.map((product) => (
+          {products.map((product) => (
             <div
               key={product.id}
               className="product-card"
-              onClick={() => handleCardClick(product.id)} // Evento de clique no card
+              onClick={() => handleCardClick(product.id)}
             >
               {product.images && product.images.length > 0 && (
                 <div className="product-images">
                   <img
                     className="product-img"
                     src={product.images[0]}
-                    alt="Product"
+                    alt={`${product.category} em ${product.neighborhood || product.city}`}
+                    loading="lazy"
+                    width={280}
+                    height={180}
                   />
                 </div>
               )}
@@ -134,18 +116,15 @@ export const RentProducts = () => {
               </div>
             </div>
           ))}
-          {totalPages > 1 && (
-            <div className="pagination">
-              {Array.from({ length: totalPages }, (_, index) => (
-                <span
-                  key={index}
-                  className={`dot ${currentPage === index + 1 ? "active" : ""}`}
-                  onClick={() => setCurrentPage(index + 1)}
-                >
-                  {index + 1}
-                </span>
-              ))}
-            </div>
+
+          {isLoading && <p>Carregando imóveis...</p>}
+          {!isLoading && products.length === 0 && (
+            <p>Nenhum imóvel disponível para aluguel no momento.</p>
+          )}
+          {!isLoading && hasMore && products.length > 0 && (
+            <button className="load-more-button" onClick={loadMore}>
+              Ver mais
+            </button>
           )}
         </div>
       </div>

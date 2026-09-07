@@ -3,7 +3,7 @@ import { Navbar } from "../../components/Navbar/Navbar";
 import "./styles.css";
 import agentImage from "../../assets/image/arnaut-profile.jpg"; // fallback
 import { useAuth } from "../../contexts/AuthContext"; // ajuste o caminho se necessário
-import Profile from "../../assets/image/arnaut-profile.png"; // imagem padrão
+import Profile from "../../assets/image/arnaut-profile.webp"; // imagem padrão
 
 export const AboutAgent = () => {
   const { currentUser } = useAuth();

@@ -10,7 +10,8 @@ import {
   FilterList,
 } from "@mui/icons-material";
 import "./styles.css";
-import Profile from "../../assets/image/arnaut-profile.png";
+import Profile from "../../assets/image/arnaut-profile.webp";
+import { formatPrice, formatDimension } from "../../utils/formatters";
 
 const FeaturedProductsComponent = ({ product }) => {
   const navigate = useNavigate();
@@ -23,19 +24,21 @@ const FeaturedProductsComponent = ({ product }) => {
     if (product?.id) navigate(`/product/${product.id}`);
   }, [navigate, product]);
 
-  const nextImage = useCallback((e) => {
-    e.stopPropagation();
-    setCurrentImage((prev) =>
-      prev === images.length - 1 ? 0 : prev + 1
-    );
-  }, [images.length]);
+  const nextImage = useCallback(
+    (e) => {
+      e.stopPropagation();
+      setCurrentImage((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+    },
+    [images.length],
+  );
 
-  const prevImage = useCallback((e) => {
-    e.stopPropagation();
-    setCurrentImage((prev) =>
-      prev === 0 ? images.length - 1 : prev - 1
-    );
-  }, [images.length]);
+  const prevImage = useCallback(
+    (e) => {
+      e.stopPropagation();
+      setCurrentImage((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+    },
+    [images.length],
+  );
 
   if (!product) return null;
 
@@ -112,7 +115,9 @@ const FeaturedProductsComponent = ({ product }) => {
           <div className="infos-all">
             <div className="featured-dimension">
               <CropFree className="featured-icon" fontSize="small" />
-              <p className="featured-size">{product.dimension} m²</p>
+              <p className="featured-size">
+                {formatDimension(product.dimension)}
+              </p>
             </div>
 
             <div className="featured-dimension">
@@ -134,7 +139,7 @@ const FeaturedProductsComponent = ({ product }) => {
               </div>
 
               <p className="price-name">Preço do imóvel</p>
-              <p className="featured-price">R$ {product.price}</p>
+              <p className="featured-price">{formatPrice(product.price)}</p>
             </div>
 
             <p className="more-imovel">Ver mais</p>

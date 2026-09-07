@@ -1,7 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Work+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap');
 @import "slick-carousel/slick/slick.css";
 @import "slick-carousel/slick/slick-theme.css";
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Jost:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 
 * {
@@ -11,23 +10,52 @@
 }
 
 :root {
-  /* Fonts */
-  --main-font: "Poppins", serif;
+  /* Fontes — duas famílias, propositalmente distintas.
+     Display: geométrica/angular, ecoa o traço arquitetônico do logo.
+     Corpo: humanista, legível, boa para pt-BR. */
+  --font-display: "Bricolage Grotesque", sans-serif;
+  --font-body: "Work Sans", sans-serif;
+  --main-font: var(--font-body); /* mantido para compatibilidade com CSS existente */
 
-  --btn-color-one: #1e4e77;
-  --btn-color-two: #3175B6;
-  --text-color-one: #3D3D3D;
-  --text-color-opa: #ececec;
-  --text-color-two: #F2F2F2;
-  --text-color-three: #f3d355;
-  --bg-color: #FBFBFF;
-  --bg-color-item: #E8F0FE;
-  --bg-color-side: #e4e4e4;
-  --bg-color-side-two: #141A28;
+  /* Sistema de cor — premium minimalista.
+     Um único acento (brass); tudo o resto é neutro. */
+  --ink: #14181F;
+  --paper: #F6F4EF;
+  --brass: #A6813C;
+  --brass-dark: #8A6B30;
+  --stone: #6B6558;
+  --stone-light: #A8A296;
+  --line: #E4E0D6;
+  --line-on-ink: rgba(246, 244, 239, 0.14);
+
+  /* Tokens antigos mantidos apontando para os novos valores, para não
+     quebrar arquivos CSS ainda não migrados componente a componente. */
+  --btn-color-one: var(--ink);
+  --btn-color-two: var(--brass);
+  --text-color-one: var(--ink);
+  --text-color-opa: var(--stone-light);
+  --text-color-two: var(--paper);
+  --text-color-three: var(--brass);
+  --bg-color: var(--paper);
+  --bg-color-item: #EFEBE0;
+  --bg-color-side: var(--line);
+  --bg-color-side-two: var(--ink);
   --card-color: #FFFFFF;
-  --card-color-two: #4883B2;
+  --card-color-two: var(--brass);
   --card-color-side: #FFFFFF;
-  --card-color-side-log: #c52222;
+  --card-color-side-log: #8A3B2F;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--paper);
+  color: var(--ink);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 .loading {

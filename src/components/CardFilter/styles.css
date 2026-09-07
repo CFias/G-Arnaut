@@ -1,370 +1,123 @@
-/* Container do Filtro */
 .filter-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 3rem;
-    font-family: var(--main-font);
+    padding: 3rem 4vw;
+    font-family: var(--font-body);
     width: 100%;
-    background: var(--card-color);
-
+    max-width: 1200px;
 }
 
 .filter-content {
     display: grid;
-    justify-items: center;
-    align-items: center;
+    align-items: end;
     grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-
+    gap: 20px;
 }
 
 .filter-card {
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    padding: 1rem;
-    border-radius: 10px;
-    border-top: 10px solid var(--btn-color-two);
+    padding: 2rem;
+    border: 1px solid var(--line);
     display: flex;
     flex-direction: column;
     position: relative;
-    gap: 10px;
-    background-image: url("../../assets/image/mapa-arnaut.png");
+    gap: 20px;
+    width: 100%;
 }
 
 .filter-header {
-    text-align: center;
-    margin-bottom: 2rem;
+    text-align: left;
+    margin-bottom: 1.5rem;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 80%;
-}
-
-.logo-filter {
-    width: 100px;
-    position: absolute;
-    top: 10%;
-    right: 5%;
+    width: 100%;
 }
 
 .filter-title {
-    font-size: 28px;
+    font-family: var(--font-display);
+    font-size: 22px;
     font-weight: 600;
-    color: var(--text-color-one);
-    margin: 0;
+    color: var(--ink);
+    margin: 0 0 4px 0;
 }
 
 .filter-description {
     font-size: 14px;
-    color: #555;
+    color: var(--stone);
 }
 
 .filter-item {
-    width: 200px;
+    width: 100%;
     margin: 0;
 }
 
-.filter-in {
-    width: 100%;
-    padding: 10px;
-    border-radius: 25px;
-    background: var(--card-color);
-    border-radius: 15px;
-    border: 1px solid #ddd;
-    font-size: 12px;
-    color: var(--text-color-one);
-}
-
-.filter-in input {
-    width: 100%;
-    height: 10px;
-    font-size: 12px;
-    color: var(--text-color-one);
-    font-family: var(--main-font);
-}
-
-.filter-in .MuiSelect-select {
-  padding: 10px;
-  font-size: 12px;
-  height: 40px;
-  display: flex;
-  align-items: center; /* centraliza verticalmente */
-  box-sizing: border-box;
-}
-
 .filter-in .MuiOutlinedInput-root {
-    border-radius: 25px;
-    background: var(--card-color);
+    border-radius: 0;
+    background: transparent;
+    font-size: 13px;
 }
 
-.filter-in label {
-    font-size: 12px;
-    font-family: var(--main-font);
-    color: var(--text-color-one);
-    display: block;
-    margin-bottom: 5px;
+.filter-in .MuiOutlinedInput-notchedOutline {
+    border-color: var(--line);
 }
 
-.filter-in:focus {
-    border-color: #007bff;
-    outline: none;
+.filter-in .MuiInputLabel-root {
+    font-size: 13px;
+    font-family: var(--font-body);
 }
 
 .filter-btn {
     width: 100%;
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
 }
 
 .filter-submit-button {
-    background-color: var(--btn-color-two);
+    background-color: var(--ink);
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    color: var(--text-color-two);
-    border: 1px solid var(--text-color-one);
-    border-radius: 25px;
-    font-size: 12px;
+    justify-content: center;
+    color: var(--paper);
+    border: 1px solid var(--ink);
+    padding: 12px 20px;
+    font-size: 13px;
+    font-weight: 500;
     cursor: pointer;
-    gap: 5px;
+    gap: 8px;
+    transition: background-color 200ms;
 }
 
 .filter-submit-button:hover {
-    background-color: var(--btn-color-one);
-    color: var(--text-color-two);
-}
-
-@media (min-width: 1025px) and (max-width: 1445px) {
-    .filter-content {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-    }
-
-    .filter-submit-button {
-        font-size: 14px;
-        width: 12vw;
-    }
-
-    .filter-card {
-        width: 65vw;
-    }
-
-    .filter-header .filter-title {
-        font-size: 24px;
-    }
-
-    .filter-header .filter-description {
-        font-size: 14px;
-    }
-
-    .filter-item {
-        width: 100%;
-    }
-
-    .filter-in {
-        font-size: 12px;
-    }
-
-    .filter-btn {
-        width: 100%;
-        display: flex;
-        justify-content: end;
-    }
-}
-
-@media (max-width: 1248px) {
-    .filter-content {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-    }
-
-    .filter-submit-button {
-        font-size: 12px;
-        right: 5%;
-        width: 10vw;
-    }
-
-    .filter-card {
-        width: 80%;
-    }
-
-    .filter-header .filter-title {
-        font-size: 24px;
-    }
-
-    .filter-header .filter-description {
-        font-size: 14px;
-    }
-
-    .filter-item {
-        width: 100%;
-    }
-
-    .filter-in {
-        font-size: 12px;
-    }
-
+    background-color: var(--brass-dark);
+    border-color: var(--brass-dark);
 }
 
 @media (max-width: 1024px) {
     .filter-content {
-        display: grid;
         grid-template-columns: repeat(2, 1fr);
     }
-
-    .filter-submit-button {
-        font-size: 12px;
-        right: 5%;
-        width: 10vw;
-    }
-
-    .filter-card {
-        width: 80%;
-    }
-
-    .filter-header .filter-title {
-        font-size: 24px;
-    }
-
-    .filter-header .filter-description {
-        font-size: 14px;
-    }
-
-    .filter-item {
-        width: 100%;
-    }
-
-    .filter-in {
-        font-size: 12px;
-    }
-
 }
 
-@media (max-width: 768px) {
+@media (max-width: 640px) {
     .filter-container {
-        height: auto;
+        padding: 2rem 6vw;
     }
 
     .filter-content {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: 1fr;
     }
 
     .filter-card {
-        max-width: 100%;
-        padding: 1rem;
+        padding: 1.5rem;
+    }
+
+    .filter-btn {
+        justify-content: stretch;
     }
 
     .filter-submit-button {
-        font-size: 14px;
-        bottom: -100px;
-        right: 10%;
+        width: 100%;
         justify-content: center;
-    }
-
-    .filter-title {
-        font-size: 18px;
-    }
-
-    .filter-description {
-        font-size: 14px;
-    }
-}
-
-@media (max-width: 740px) {
-    .filter-container {
-        padding: 0;
-    }
-
-    .filter-submit-button {
-        font-size: 12px;
-        padding: 10px;
-        gap: 5px;
-        font-weight: 600;
-        font-family: var(--main-font);
-        width: auto;
-        bottom: -5%;
-    }
-
-    .filter-content {
-        display: grid;
-        grid-template-columns: repeat(1, 1fr);
-    }
-
-    .filter-card {
-        padding: 1rem;
-        width: 95%;
-        border-radius: 10px;
-    }
-
-    .filter-label {
-        font-size: 14px;
-    }
-
-    .logo-filter {
-        width: 60px;
-    }
-
-    .filter-title {
-        font-size: 14px;
-    }
-
-    .filter-in {
-        font-size: 10px;
-        width: 100%;
-        padding: 10px;
-    }
-
-    .filter-description {
-        font-size: 10px;
-    }
-}
-
-@media (max-width: 480px) {
-    .filter-container {
-        padding-top: 2rem;
-    }
-
-    .filter-submit-button {
-        font-size: 10px;
-        padding: 10px;
-        gap: 5px;
-        font-weight: 500;
-        font-family: var(--main-font);
-        width: auto;
-        bottom: -5%;
-    }
-
-    .filter-content {
-        display: grid;
-        grid-template-columns: repeat(1, 1fr);
-    }
-
-    .filter-card {
-        padding: 1rem;
-        width: 95%;
-        border-radius: 10px;
-    }
-
-    .filter-label {
-        font-size: 14px;
-    }
-
-    .logo-filter {
-        width: 60px;
-    }
-
-    .filter-title {
-        font-size: 14px;
-    }
-
-    .filter-in {
-        font-size: 10px;
-    }
-
-    .filter-description {
-        font-size: 10px;
     }
 }

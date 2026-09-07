@@ -97,10 +97,10 @@ export const ManageProducts = () => {
     const filtered = products.filter((product) => {
       const query = searchFilters.query.toLowerCase();
       return (
-        product.price.toString().includes(query) ||
-        product.refProduct.toLowerCase().includes(query) ||
-        product.description.toLowerCase().includes(query) ||
-        product.category.toLowerCase().includes(query)
+        String(product.price ?? "").toLowerCase().includes(query) ||
+        (product.refProduct ?? "").toLowerCase().includes(query) ||
+        (product.description ?? "").toLowerCase().includes(query) ||
+        (product.category ?? "").toLowerCase().includes(query)
       );
     });
 
@@ -182,7 +182,7 @@ export const ManageProducts = () => {
 
         const compressedFile = await compressImage(file);
 
-        const imageRef = storageRef(
+        const imageRef = ref(
           storage,
           `products/${Date.now()}_${compressedFile.name}`
         );

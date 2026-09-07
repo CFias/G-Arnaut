@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { doc, getDoc, collection, getDocs } from "firebase/firestore";
+import { doc, getDoc, collection, getDocs, query, where, limit } from "firebase/firestore";
 import { db } from "../../services/FirebaseConfig";
 import { CalendarToday, East, West, WhatsApp } from "@mui/icons-material";
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
@@ -54,18 +54,25 @@ export const ProductDetails = () => {
   }, [modalImages]);
 
 
-  // Busca produtos recomendados
+  // Busca produtos recomendados — filtrados pela mesma categoria do
+  // imóvel atual e limitados a poucos resultados, em vez de baixar a
+  // coleção inteira só para sugerir alguns cards. Só roda depois que o
+  // produto principal já carregou, pois depende da categoria dele.
   useEffect(() => {
+    if (!product?.category) return;
+
     const fetchRecommendedProducts = async () => {
       try {
-        const productsRef = collection(db, "products");
-        const q = getDocs(productsRef); // Aqui você pode adicionar filtros, como buscar produtos da mesma categoria ou cidade
-        const querySnapshot = await q;
-        const recommendedProductsData = [];
-
-        querySnapshot.forEach((doc) => {
-          recommendedProductsData.push({ id: doc.id, ...doc.data() });
-        });
+        const q = query(
+          collection(db, "products"),
+          where("category", "==", product.category),
+          limit(7) // pega 1 a mais para sobrar 6 depois de excluir o atual
+        );
+        const querySnapshot = await getDocs(q);
+        const recommendedProductsData = querySnapshot.docs
+          .map((doc) => ({ id: doc.id, ...doc.data() }))
+          .filter((p) => p.id !== product.id)
+          .slice(0, 6);
 
         setRecommendedProducts(recommendedProductsData);
       } catch (error) {
@@ -74,7 +81,7 @@ export const ProductDetails = () => {
     };
 
     fetchRecommendedProducts();
-  }, []);
+  }, [product?.id, product?.category]);
 
   const formatDate = (timestamp) => {
     if (timestamp) {

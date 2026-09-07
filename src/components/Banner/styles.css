@@ -1,138 +1,160 @@
-/* Container principal */
 .banner-container {
     position: relative;
     width: 100%;
     overflow: hidden;
     display: flex;
     justify-content: center;
-    background-image: url('../../assets/image/banner-bg.png');
-    background-size: cover;
-    background-position: center;
+    background: var(--ink);
 }
 
-/* Área interna centralizada */
 .banner-content {
     position: relative;
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    width: 65vw;
+    width: 100%;
+    max-width: 1400px;
+    min-height: 620px;
 }
 
-/* Imagem lateral */
 .banner-container img {
-    width: 500px;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-    z-index: 1;
+    object-position: top center;
 }
 
-/* Bloco com nome, descrição e redes */
 .banner-ap {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    z-index: 2;
+    padding: 64px 4vw;
+    height: 100%;
 }
 
-/* Textos */
 .banner-names {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     align-items: start;
-    color: #F2EBE0;
-    gap: 10px;
-    padding-bottom: 60px;
+    height: 100%;
+    max-width: 460px;
+}
+
+.banner-intro {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 4px;
 }
 
 .banner-names h3 {
-    font-size: 34px;
-    font-weight: bold;
-    color: #F3D357;
-
-    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(36px, 4vw, 54px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    color: var(--paper);
+    margin: 0 0 2px 0;
 }
 
 .banner-names h4 {
-    font-size: 18px;
-    font-weight: 500;
-    color: #092946;
-    margin: 0;
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--stone-light);
+    margin: 0 0 14px 0;
 }
 
 .banner-names h5 {
-    font-size: 22px;
-    font-weight: 700;
-    color: #F3D357;
-
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--brass);
+    margin: 0 0 20px 0;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--brass);
+    width: fit-content;
 }
 
 .banner-names p {
-    font-size: 18px;
-    color: #092946;
+    font-size: 15.5px;
+    line-height: 1.65;
+    color: var(--stone-light);
     font-weight: 400;
     text-align: start;
+    margin-bottom: 28px;
 }
 
-/* Ícones sociais */
 .social-icons {
     display: flex;
-    gap: 15px;
-    margin-top: 15px;
-    color: #fffafa;
+    gap: 10px;
+    margin-bottom: 40px;
+}
 
+.social-icons a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border: 1px solid var(--line-on-ink);
+    transition: border-color 200ms ease, color 200ms ease;
+}
+
+.banner-img {
+    width: 350px !important;
+    height: 622px !important;
 }
 
 .social-icon {
-    font-size: 28px !important;
-    color: #092946;
-
-    cursor: pointer;
-    transition: color 0.3s ease;
+    font-size: 17px !important;
+    color: var(--stone-light);
 }
 
-.social-icon:hover {
-    color: #1f385e;
+.social-icons a:hover {
+    border-color: var(--brass);
 }
 
-/* Carrossel centralizado e sobreposto */
+.social-icons a:hover .social-icon {
+    color: var(--brass);
+}
+
+/* Carrossel de destaques — no fluxo normal, abaixo do texto, não mais
+   sobreposto à imagem do corretor. */
 .highlight-cards-wrapper {
-    position: absolute;
-    bottom: 4px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 65vw;
-    z-index: 3;
+    width: 100%;
+    max-width: 460px;
+    margin-top: 32px;
 }
 
-/* Card do carrossel */
+.highlight-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--stone-light);
+    margin: 0 0 12px 0;
+}
+
+.no-featured {
+    color: var(--stone-light);
+    font-size: 14px;
+}
+
 .highlight-card {
-    padding: 10px;
+    padding: 0 6px 0 0;
     overflow: hidden;
-    transition: transform 0.3s ease;
+    transition: opacity 0.2s ease;
     display: flex !important;
-    justify-content: center;
     background: transparent;
 }
 
 .highlight-card:hover {
-    transform: scale(1.01);
+    opacity: 0.85;
 }
 
 .highlight-img {
-    width: 230px;
-    height: 180px;
+    width: 100%;
+    height: 96px;
     object-fit: cover;
     display: block;
-    border-radius: 8px;
-    filter: brightness(0.6);
-    transition: filter 0.3s ease;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--line-on-ink);
     cursor: pointer;
-}
-
-.highlight-card:hover .highlight-img {
-    filter: brightness(0.8);
 }
 
 .slick-prev,
@@ -142,44 +164,27 @@
     border: none;
     top: 50%;
     transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
 }
 
 .slick-prev {
-    left: -40px;
+    left: -6px;
 }
 
 .slick-next {
-    right: -40px;
+    right: -6px;
 }
 
 .slick-prev::before,
 .slick-next::before {
-    font-size: 24px;
-    color: #000;
+    font-size: 16px;
+    color: var(--stone-light);
+    opacity: 1;
 }
 
-/* Dots de navegação */
 .slick-dots {
-    bottom: -30px;
-}
-
-.slick-dots li button:before {
-    font-size: 10px;
-    color: #bbb;
-}
-
-.slick-dots li.slick-active button:before {
-    color: #0d6efd;
-}
-
-/* Destaque para imagem central */
-.slick-center .highlight-card {
-    transform: scale(1.06);
-    z-index: 5;
-}
-
-.slick-center .highlight-img {
-    filter: brightness(1);
+    display: none !important;
 }
 
 .custom-arrow {
@@ -187,115 +192,48 @@
     top: 50%;
     transform: translateY(-50%);
     z-index: 5;
-    padding: 6px;
-    border-radius: 50%;
+    padding: 4px;
     cursor: pointer;
-    transition: background 0.3s ease;
+    color: var(--stone-light);
 }
 
-.custom-arrow:hover {}
-
 .custom-prev {
-    left: -25px;
+    left: -22px;
 }
 
 .custom-next {
-    right: -25px;
+    right: -22px;
 }
 
-@media (min-width: 1025px) and (max-width: 1445px) {
-
-    .highlight-cards-wrapper {
-        width: 65vw;
+@media (max-width: 900px) {
+    .banner-content {
+        grid-template-columns: 1fr;
+        min-height: 0;
     }
 
- 
+    .banner-container img {
+        max-height: 360px;
+        order: -1;
+    }
 
+    .banner-ap {
+        padding: 8vw 6vw;
+        height: auto;
+    }
+
+    .banner-names {
+        height: auto;
+        gap: 32px;
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
     .banner-names h3 {
-        font-size: 24px;
-        padding-top: 1rem;
-    }
-
-    .banner-names h4 {
-        font-size: 16px;
-    }
-
-    .banner-names h5 {
-        font-size: 20px;
+        font-size: 30px;
     }
 
     .banner-names p {
         font-size: 14px;
-        width: 100%;
-    }
-
-    .social-icons {
-        width: 100%;
-    }
-}
-
-@media (max-width: 600px) {
-    .banner-container {
-        align-items: center;
-        border-radius: 0 0 35px 35px;
-    }
-
-    .banner-content {
-        width: 95vw;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .banner-container img {
-        width: 100%;
-        max-width: 150px;
-    }
-
-    .social-icons {
-        display: none;
-    }
-
-    .highlight-cards-wrapper {
-        display: none;
-    }
-
-    .banner-names {
-        text-align: center;
-        padding-bottom: 30px;
-        width: 90vw;
-    }
-
-    .highlight-cards-wrapper {
-        width: 90vw;
-    }
-
-    .highlight-card {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-    }
-
-    .banner-names h3 {
-        font-size: 18px;
-        padding-top: 1rem;
-    }
-
-    .banner-names h4 {
-        font-size: 12px;
-    }
-
-    .banner-names h5 {
-        font-size: 16px;
-    }
-
-    .banner-names p {
-        font-size: 12px;
-        width: 100%;
-    }
-
-    .social-icons {
-        justify-content: center;
-        margin-top: 10px;
-        width: 100%;
     }
 }

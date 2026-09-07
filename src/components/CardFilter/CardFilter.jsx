@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { collection, query, where, getDocs } from "firebase/firestore";
-import { db } from "../../services/FirebaseConfig";
 import "./styles.css";
-import { East, Search } from "@mui/icons-material";
-import { InputAdornment, MenuItem, TextField } from "@mui/material";
+import { East } from "@mui/icons-material";
+import { MenuItem, TextField } from "@mui/material";
 
 export const CardFilter = () => {
   const [city, setCity] = useState("");
@@ -13,14 +11,8 @@ export const CardFilter = () => {
   const [category, setCategory] = useState("");
   const [neighborhood, setNeighborhood] = useState("");
   const [bedrooms, setBedrooms] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 2000);
-    return () => clearTimeout(timer);
-  }, []);
 
   const handleFilter = (e) => {
     e.preventDefault();
@@ -34,7 +26,7 @@ export const CardFilter = () => {
       bedrooms,
     };
 
-    navigate("/sale-products", {
+    navigate("/Sale-Products", {
       state: { filterCriteria },
     });
   };

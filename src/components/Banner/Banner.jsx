@@ -5,7 +5,7 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import Skeleton from "react-loading-skeleton";
 import Slider from "react-slick";
 import "./styles.css";
-import arnautbanner from "../../assets/image/arnautbanner3.png";
+import arnautbanner from "../../assets/image/arnautbanner3.webp";
 import {
   Instagram,
   WhatsApp,
@@ -39,7 +39,7 @@ export const Banner = () => {
       try {
         const q = query(
           collection(db, "products"),
-          where("isFeatured", "==", "sim")
+          where("isFeatured", "==", "sim"),
         );
 
         const querySnapshot = await getDocs(q);
@@ -69,7 +69,7 @@ export const Banner = () => {
     (id) => {
       navigate(`/product/${id}`);
     },
-    [navigate]
+    [navigate],
   );
 
   const settings = {
@@ -102,64 +102,53 @@ export const Banner = () => {
       <div className="banner-content">
         <div className="banner-ap">
           <div className="banner-names">
-            <h3>Gildavi Arnaut</h3>
-            <h4>Gestor Imobiliário</h4>
-            <h5>CRECI-Ba 19.425</h5>
+            <div className="banner-intro">
+              <h3>Gildavi Arnaut</h3>
+              <h4>Gestor Imobiliário</h4>
+              <h5>CRECI-Ba 19.425</h5>
 
-            <p>
-              Realizando sonhos desde 2013, entusiasta e estudioso do mercado
-              imobiliário, com vasta experiência, meu compromisso é
-              assessorar-lhe com atendimento personalizado e oportunidades
-              seguras para compra, venda e locação.
-            </p>
+              <p>
+                Realizando sonhos desde 2013, entusiasta e estudioso do mercado
+                imobiliário, com vasta experiência, meu compromisso é
+                assessorar-lhe com atendimento personalizado e oportunidades
+                seguras para compra, venda e locação.
+              </p>
 
-            <div className="social-icons">
-              <WhatsApp className="social-icon" />
-              <Instagram className="social-icon" />
-              <YouTube className="social-icon" />
-            </div>
-
-            <div className="highlight-cards-wrapper">
-              {isLoading ? (
-                <Skeleton height={180} count={3} />
-              ) : (
-                <Slider {...settings}>
-                  {featuredItems.map((item) => (
-                    <div
-                      key={item.id}
-                      className="highlight-card"
-                      onClick={() => handleClick(item.id)}
-                      style={{ cursor: "pointer" }}
-                    >
-                      <img
-                        src={item.images?.[0] || "/placeholder-imovel.webp"}
-                        alt={item.neighborhood}
-                        className="highlight-img"
-                        loading="lazy"
-                        decoding="async"
-                        srcSet={`
-                          ${item.images?.[0]}?w=400 400w,
-                          ${item.images?.[0]}?w=800 800w
-                        `}
-                        sizes="(max-width:768px) 400px, 800px"
-                        onError={(e) => {
-                          e.target.src = "/placeholder-imovel.webp";
-                        }}
-                      />
-                    </div>
-                  ))}
-                </Slider>
-              )}
+              <div className="social-icons">
+                <a
+                  href="https://wa.me/5571991900974"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="WhatsApp"
+                >
+                  <WhatsApp className="social-icon" />
+                </a>
+                <a
+                  href="https://instagram.com/garnautcorretor"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Instagram"
+                >
+                  <Instagram className="social-icon" />
+                </a>
+                <a
+                  href="https://youtube.com/@garnautcorretor"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="YouTube"
+                >
+                  <YouTube className="social-icon" />
+                </a>
+              </div>
             </div>
           </div>
         </div>
+        <img src={arnautbanner} alt="Gildavi Arnaut" className="banner-img" />
 
-        <img
-          loading="lazy"
-          decoding="async"
-          src={arnautbanner}
-          alt="Gildavi Arnaut"
-        />
+        {/* Esta é a maior imagem visível ao carregar a página (LCP) —
+            NÃO deve ter lazy loading, que só deveria ser usado em
+            imagens fora da tela inicial. Aplicado aqui, ele atrasava
+            o próprio carregamento em vez de acelerar. */}
       </div>
     </section>
   );

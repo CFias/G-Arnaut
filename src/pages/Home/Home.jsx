@@ -5,7 +5,7 @@ import { Navbar } from "../../components/Navbar/Navbar";
 import { Footer } from "../../components/Footer/Footer";
 import { Banner } from "../../components/Banner/Banner";
 import { CardFilter } from "../../components/CardFilter/CardFilter";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, query, where, limit, getDocs } from "firebase/firestore";
 import { db } from "../../services/FirebaseConfig";
 import { FeaturedProducts } from "../../components/FeaturedProducts/FeaturedProducts.jsx";
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
@@ -55,47 +55,58 @@ export const Home = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const querySnapshot = await getDocs(collection(db, "products"));
-        const productsArray = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
+        // Três queries filtradas e limitadas no próprio Firestore, em
+        // paralelo, em vez de baixar a coleção inteira e filtrar no
+        // navegador. "Lançamento"/"lançamento" grafias diferentes viravam
+        // duas queries só por segurança de dado legado.
+        const [featuredSnap, recentSnap, launchSnap] = await Promise.all([
+          getDocs(
+            query(
+              collection(db, "products"),
+              where("isFeatured", "==", "sim"),
+              limit(6),
+            ),
+          ),
+          getDocs(
+            query(
+              collection(db, "products"),
+              where("isFeatured", "==", "não"),
+              limit(48),
+            ),
+          ),
+          getDocs(
+            query(
+              collection(db, "products"),
+              where("status", "==", "Lançamento"),
+              limit(12),
+            ),
+          ),
+        ]);
 
-        setFeaturedProducts(
-          productsArray
-            .filter((product) => product.isFeatured?.toLowerCase() === "sim")
-            .slice(0, 6)
-        );
+        const mapDocs = (snap) =>
+          snap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 
-        setRecentProducts(
-          productsArray.filter(
-            (product) => product.isFeatured?.toLowerCase() === "não"
-          )
-        );
-
-        setLaunchProducts(
-          productsArray.filter(
-            (product) =>
-              product.status?.toLowerCase() === "lançamento" ||
-              product.status?.toLowerCase() === "lancamento"
-          )
-        );
-
+        setFeaturedProducts(mapDocs(featuredSnap));
+        setRecentProducts(mapDocs(recentSnap));
+        setLaunchProducts(mapDocs(launchSnap));
         setIsProductsLoaded(true);
       } catch (error) {
         console.error("Erro ao buscar produtos:", error);
+      } finally {
+        // O loading geral da página some assim que os dados reais
+        // chegam — antes ficava um atraso fixo de 1,5s desacoplado do
+        // carregamento de verdade.
+        setIsLoading(false);
       }
     };
 
     fetchProducts();
-    const timer = setTimeout(() => setIsLoading(false), 1500);
-    return () => clearTimeout(timer);
   }, []);
 
   const totalPages = Math.ceil(recentProducts.length / itemsPerPage);
   const paginatedProducts = recentProducts.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   const handlePageChange = (pageNumber) => {
@@ -151,17 +162,6 @@ export const Home = () => {
         <section className="section-card">
           <CardFilter />
         </section>
-
-        <section className="section-3">
-          {isLoading ? (
-            renderSkeletonCards(2)
-          ) : (
-            <div className="social-cards-wrapper">
-              <SocialCard type="instagram" />
-            </div>
-          )}
-        </section>
-
         <Section
           title="Imóveis em Destaque"
           subtitle="Imóveis que podem te interessar"
@@ -201,17 +201,6 @@ export const Home = () => {
             )}
           </div>
         </Section>
-
-        <section className="section-3">
-          {isLoading ? (
-            renderSkeletonCards(2)
-          ) : (
-            <div className="social-cards-wrapper">
-              <SocialCard type="facebook" />
-            </div>
-          )}
-        </section>
-
         <section className="section-3" ref={recentSectionRef}>
           <h3 className="home-h3">
             {isLoading ? <Skeleton width={150} /> : "Imóveis Recentes"}
@@ -259,15 +248,6 @@ export const Home = () => {
                   <p className="home-p-2">12 imóveis por página</p>
                 </>
               )}
-              <section className="section-3">
-                {isLoading ? (
-                  renderSkeletonCards(2)
-                ) : (
-                  <div className="social-cards-wrapper">
-                    <SocialCard type="whatsapp" />
-                  </div>
-                )}
-              </section>
             </>
           )}
         </section>

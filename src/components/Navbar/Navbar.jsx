@@ -18,22 +18,18 @@ import {
 } from "@mui/icons-material";
 import { useAuth } from "../../contexts/AuthContext";
 import { logout } from "../../services/FirebaseConfig"; // Importa a função de logout
+import { isAdminUser } from "../../config/adminUsers";
 import "./styles.css";
 import { Avatar, Menu, MenuItem } from "@mui/material";
-import Logo from "../../assets/image/garnaut-white-logo.png";
+import Logo from "../../assets/image/garnaut-gray-logo.png";
 import BanderOne from "../../assets/image/brazil-bander.png";
-import Profile from "../../assets/image/arnaut-profile.png";
+import Profile from "../../assets/image/arnaut-profile.webp";
 
 export const Navbar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null); // Estado para o menu do avatar
   const { currentUser, userName, loading, photoURL } = useAuth();
-
-  const allowedUIDs = [
-    "SCQFrh1l7iVOKNbsInx0JGgT9ww1",
-    "KduymIJGpXciGs7UlcN3uylAXBZ2",
-  ];
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -77,7 +73,7 @@ export const Navbar = () => {
 
   if (loading) return <div className="loading-main">Loading...</div>;
 
-  const hasAdminAccess = allowedUIDs.includes(currentUser?.uid);
+  const hasAdminAccess = isAdminUser(currentUser);
 
   return (
     <header className="nav-container">

@@ -26,7 +26,10 @@ export const AddProducts = () => {
     videoLink: "",
   });
   const [images, setImages] = useState([]);
+  const [imageError, setImageError] = useState("");
   const [isUploading, setIsUploading] = useState(false);
+
+  const MAX_IMAGES = 10;
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -37,7 +40,12 @@ export const AddProducts = () => {
   };
 
   const removeImage = (index) => {
-    setImages((prev) => prev.filter((_, i) => i !== index));
+    setImages((prev) => {
+      const removed = prev[index];
+      if (removed) URL.revokeObjectURL(removed.preview);
+      return prev.filter((_, i) => i !== index);
+    });
+    setImageError("");
   };
 
   const compressImage = async (file) => {
@@ -58,13 +66,35 @@ export const AddProducts = () => {
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
+    const remainingSlots = MAX_IMAGES - images.length;
 
-    const previewImages = files.map((file) => ({
+    if (remainingSlots <= 0) {
+      setImageError(
+        `Limite de ${MAX_IMAGES} imagens atingido. Remova alguma para adicionar outra.`,
+      );
+      e.target.value = "";
+      return;
+    }
+
+    const filesToAdd = files.slice(0, remainingSlots);
+
+    if (files.length > remainingSlots) {
+      setImageError(
+        `Só cabem mais ${remainingSlots} ${remainingSlots === 1 ? "imagem" : "imagens"} (limite de ${MAX_IMAGES}) — as demais não foram adicionadas.`,
+      );
+    } else {
+      setImageError("");
+    }
+
+    const previewImages = filesToAdd.map((file) => ({
       file,
       preview: URL.createObjectURL(file),
     }));
 
-    setImages(previewImages);
+    // Acumula em vez de substituir — antes, escolher imagens uma segunda
+    // vez descartava silenciosamente as que já tinham sido selecionadas.
+    setImages((prev) => [...prev, ...previewImages]);
+    e.target.value = ""; // permite reselecionar o mesmo arquivo depois de removê-lo
   };
 
   const uploadImage = async (imageFile) => {
@@ -72,7 +102,7 @@ export const AddProducts = () => {
 
     const imageRef = ref(
       storage,
-      `products/${Date.now()}_${compressedFile.name}`
+      `products/${Date.now()}_${compressedFile.name}`,
     );
 
     const snapshot = await uploadBytes(imageRef, compressedFile);
@@ -91,7 +121,7 @@ export const AddProducts = () => {
     setIsUploading(true);
     try {
       const imageUrls = await Promise.all(
-        images.map((img) => uploadImage(img.file))
+        images.map((img) => uploadImage(img.file)),
       );
 
       const currentUser = auth.currentUser;
@@ -140,7 +170,9 @@ export const AddProducts = () => {
         isFeatured: "não",
         videoLink: "",
       });
+      images.forEach((img) => URL.revokeObjectURL(img.preview));
       setImages([]);
+      setImageError("");
     } catch (error) {
       console.error("Erro ao adicionar produto:", error);
       alert("Erro ao adicionar produto.");
@@ -371,8 +403,18 @@ export const AddProducts = () => {
           />
         </div>
         <div className="form-group">
-          <label className="form-label">Imagens do Imóvel</label>
-          <div className="image-upload-container">
+          <div className="image-upload-header">
+            <label className="form-label">Imagens do imóvel</label>
+            <span
+              className={`image-counter ${images.length >= MAX_IMAGES ? "at-limit" : ""}`}
+            >
+              {images.length} / {MAX_IMAGES}
+            </span>
+          </div>
+
+          <div
+            className={`image-dropzone ${images.length >= MAX_IMAGES ? "disabled" : ""}`}
+          >
             <input
               type="file"
               multiple
@@ -381,30 +423,47 @@ export const AddProducts = () => {
               onChange={handleImageChange}
               id="image-input"
               className="form-input-file"
+              disabled={images.length >= MAX_IMAGES}
             />
-            <label htmlFor="image-input" className="custom-file-input">
-              Escolher Imagens
+            <label htmlFor="image-input" className="image-dropzone-label">
+              <span className="image-dropzone-title">
+                {images.length >= MAX_IMAGES
+                  ? "Limite de imagens atingido"
+                  : "Clique para escolher imagens"}
+              </span>
+              <span className="image-dropzone-hint">
+                JPG ou PNG · até {MAX_IMAGES} fotos · a primeira vira a capa do
+                anúncio
+              </span>
             </label>
+          </div>
+
+          {imageError && <p className="image-error">{imageError}</p>}
+
+          {images.length > 0 && (
             <div className="image-preview">
               {images.map((image, index) => (
-                <div key={index} className="image-preview-item">
+                <div key={image.preview} className="image-preview-item">
+                  {index === 0 && (
+                    <span className="image-cover-badge">Capa</span>
+                  )}
                   <img
                     src={image.preview}
                     alt={`preview-${index}`}
                     className="image-thumbnail"
                   />
-
                   <button
                     type="button"
                     className="remove-image-button"
                     onClick={() => removeImage(index)}
+                    aria-label="Remover imagem"
                   >
                     ✕
                   </button>
                 </div>
               ))}
             </div>
-          </div>
+          )}
         </div>
         <button type="submit" className="form-button" disabled={isUploading}>
           {isUploading ? "Carregando..." : "Adicionar Produto"}
