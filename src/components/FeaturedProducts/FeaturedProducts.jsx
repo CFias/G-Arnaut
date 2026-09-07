@@ -115,6 +115,7 @@ const FeaturedProductsComponent = ({ product }) => {
             <div className="featured-dimension">
               <CropFree className="featured-icon" fontSize="small" />
               <p className="featured-size">
+                {product.dimension}
               </p>
             </div>
 
