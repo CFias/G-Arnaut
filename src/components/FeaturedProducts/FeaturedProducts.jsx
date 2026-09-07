@@ -11,7 +11,6 @@ import {
 } from "@mui/icons-material";
 import "./styles.css";
 import Profile from "../../assets/image/arnaut-profile.webp";
-import { formatPrice, formatDimension } from "../../utils/formatters";
 
 const FeaturedProductsComponent = ({ product }) => {
   const navigate = useNavigate();
@@ -116,7 +115,6 @@ const FeaturedProductsComponent = ({ product }) => {
             <div className="featured-dimension">
               <CropFree className="featured-icon" fontSize="small" />
               <p className="featured-size">
-                {formatDimension(product.dimension)}
               </p>
             </div>
 
@@ -139,7 +137,7 @@ const FeaturedProductsComponent = ({ product }) => {
               </div>
 
               <p className="price-name">Preço do imóvel</p>
-              <p className="featured-price">{formatPrice(product.price)}</p>
+              <p className="featured-price">{product.price}</p>
             </div>
 
             <p className="more-imovel">Ver mais</p>
