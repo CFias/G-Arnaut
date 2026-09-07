@@ -109,8 +109,6 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
     gap: 1px;
-    background: var(--line);
-    border: 1px solid var(--line);
     margin-top: 2rem;
     width: 100%;
     max-width: 1200px;

@@ -183,288 +183,337 @@ export const AddProducts = () => {
 
   return (
     <div className="add-product-container">
-      <NavLink className="access-back" to="/admin">
-        Voltar
-      </NavLink>
+      <nav className="breadcrumb-container" aria-label="breadcrumb">
+        <NavLink className="breadcrumb-link" to="/admin">
+          Início
+        </NavLink>
+        <span className="breadcrumb-separator">/</span>
+        <span className="breadcrumb-current">Adicionar imóvel</span>
+      </nav>
+
       <div className="add-product-top">
         <h2 className="form-title">Adicionar imóvel</h2>
         <img className="product-logo" src={Logo} alt="Logo" />
       </div>
+
       <form className="form-content" onSubmit={handleSubmit}>
-        <div className="form-grid">
-          <div className="form-group">
-            <label className="form-label">Estado</label>
-            <input
-              type="text"
-              name="state"
-              value={formData.state}
-              placeholder="Ex: BA"
-              onChange={handleInputChange}
-              className="form-input"
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label className="form-label">Endereço</label>
-            <input
-              type="text"
-              name="address"
-              value={formData.address}
-              placeholder="Ex: Rua das Flores, 123"
-              onChange={handleInputChange}
-              className="form-input"
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label className="form-label">Bairro</label>
-            <input
-              type="text"
-              name="neighborhood"
-              value={formData.neighborhood}
-              placeholder="Ex: Pituba"
-              onChange={handleInputChange}
-              className="form-input"
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label className="form-label">Cidade</label>
-            <input
-              type="text"
-              name="city"
-              value={formData.city}
-              placeholder="Ex: Salvador"
-              onChange={handleInputChange}
-              className="form-input"
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label className="form-label">Preço</label>
-            <input
-              type="text"
-              name="price"
-              value={formData.price}
-              placeholder="Ex: R$ 350.000,00"
-              onChange={(e) => {
-                const rawValue = e.target.value.replace(/\D/g, ""); // Remove tudo que não for número
-                const numericValue = parseFloat(rawValue) / 100;
-
-                const formattedValue = numericValue.toLocaleString("pt-BR", {
-                  style: "currency",
-                  currency: "BRL",
-                });
-
-                setFormData({ ...formData, price: formattedValue });
-              }}
-              className="form-input"
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">Dimensão</label>
-            <input
-              type="text"
-              name="dimension"
-              value={formData.dimension}
-              placeholder="Ex: 200m²"
-              onChange={handleInputChange}
-              className="form-input"
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">Referência</label>
-            <input
-              type="text"
-              name="refProduct"
-              value={formData.refProduct}
-              placeholder="Ex: COD123"
-              onChange={handleInputChange}
-              className="form-input"
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">Quartos</label>
-            <input
-              type="text"
-              name="bedrooms"
-              value={formData.bedrooms}
-              placeholder="Ex: 3"
-              onChange={handleInputChange}
-              className="form-input"
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">Vagas de Garagem</label>
-            <input
-              type="text"
-              name="parkingSpaces"
-              value={formData.parkingSpaces}
-              placeholder="Ex: 2"
-              onChange={handleInputChange}
-              className="form-input"
-              required
-            />
-          </div>
-        </div>
-        <div className="form-grid">
-          <div className="form-group">
-            <label className="form-label">Categoria</label>
-            <select
-              name="category"
-              value={formData.category}
-              onChange={handleInputChange}
-              className="form-input"
-              required
-            >
-              <option value="">Selecione uma Categoria</option>
-              <option value="Apartamento">Apartamento</option>
-              <option value="Casa">Casa</option>
-              <option value="Fazenda">Fazenda</option>
-              <option value="Sítio">Sítio</option>
-              <option value="Terreno">Terreno</option>
-              <option value="Galpão">Galpão</option>
-              <option value="Sala Comercial">Sala Comercial</option>
-            </select>
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">Link do Vídeo (YouTube)</label>
-            <input
-              type="url"
-              name="videoLink"
-              value={formData.videoLink}
-              onChange={handleInputChange}
-              className="form-input"
-            />
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">Status do Imóvel</label>
-            <select
-              name="status"
-              value={formData.status}
-              onChange={handleInputChange}
-              className="form-input"
-              required
-            >
-              <option value="">Selecione o Status</option>
-              <option value="Obra finalizada">Pronto para morar</option>
-              <option value="Lançamento">Lançamento</option>
-              <option value="Reformando">Reformando</option>
-              <option value="Recém reformado">Recém reformado</option>
-            </select>
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">Imóvel para:</label>
-            <select
-              name="productType"
-              value={formData.productType}
-              onChange={handleInputChange}
-              className="form-input"
-              required
-            >
-              <option value="venda">Venda</option>
-              <option value="aluguel">Aluguel</option>
-            </select>
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">Destaque</label>
-            <select
-              name="isFeatured"
-              value={formData.isFeatured}
-              onChange={handleInputChange}
-              className="form-input"
-              required
-            >
-              <option value="não">Não</option>
-              <option value="sim">Sim</option>
-            </select>
-          </div>
-        </div>
-        <div className="form-group">
-          <label className="form-label">Descrição</label>
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleInputChange}
-            className="form-textarea"
-            required
-          />
-        </div>
-        <div className="form-group">
-          <div className="image-upload-header">
-            <label className="form-label">Imagens do imóvel</label>
-            <span
-              className={`image-counter ${images.length >= MAX_IMAGES ? "at-limit" : ""}`}
-            >
-              {images.length} / {MAX_IMAGES}
-            </span>
-          </div>
-
-          <div
-            className={`image-dropzone ${images.length >= MAX_IMAGES ? "disabled" : ""}`}
-          >
-            <input
-              type="file"
-              multiple
-              accept="image/*"
-              name="images"
-              onChange={handleImageChange}
-              id="image-input"
-              className="form-input-file"
-              disabled={images.length >= MAX_IMAGES}
-            />
-            <label htmlFor="image-input" className="image-dropzone-label">
-              <span className="image-dropzone-title">
-                {images.length >= MAX_IMAGES
-                  ? "Limite de imagens atingido"
-                  : "Clique para escolher imagens"}
-              </span>
-              <span className="image-dropzone-hint">
-                JPG ou PNG · até {MAX_IMAGES} fotos · a primeira vira a capa do
-                anúncio
-              </span>
-            </label>
-          </div>
-
-          {imageError && <p className="image-error">{imageError}</p>}
-
-          {images.length > 0 && (
-            <div className="image-preview">
-              {images.map((image, index) => (
-                <div key={image.preview} className="image-preview-item">
-                  {index === 0 && (
-                    <span className="image-cover-badge">Capa</span>
-                  )}
-                  <img
-                    src={image.preview}
-                    alt={`preview-${index}`}
-                    className="image-thumbnail"
-                  />
-                  <button
-                    type="button"
-                    className="remove-image-button"
-                    onClick={() => removeImage(index)}
-                    aria-label="Remover imagem"
-                  >
-                    ✕
-                  </button>
-                </div>
-              ))}
+        <div className="form-section">
+          <h3 className="form-section-title">Localização</h3>
+          <div className="form-grid">
+            <div className="form-group">
+              <label className="form-label">
+                Estado <span className="required-mark">*</span>
+              </label>
+              <input
+                type="text"
+                name="state"
+                value={formData.state}
+                placeholder="Ex: BA"
+                onChange={handleInputChange}
+                className="form-input"
+                required
+              />
             </div>
-          )}
+            <div className="form-group">
+              <label className="form-label">
+                Cidade <span className="required-mark">*</span>
+              </label>
+              <input
+                type="text"
+                name="city"
+                value={formData.city}
+                placeholder="Ex: Salvador"
+                onChange={handleInputChange}
+                className="form-input"
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label className="form-label">
+                Bairro <span className="required-mark">*</span>
+              </label>
+              <input
+                type="text"
+                name="neighborhood"
+                value={formData.neighborhood}
+                placeholder="Ex: Pituba"
+                onChange={handleInputChange}
+                className="form-input"
+                required
+              />
+            </div>
+            <div className="form-group form-group--full">
+              <label className="form-label">
+                Endereço <span className="required-mark">*</span>
+              </label>
+              <input
+                type="text"
+                name="address"
+                value={formData.address}
+                placeholder="Ex: Rua das Flores, 123"
+                onChange={handleInputChange}
+                className="form-input"
+                required
+              />
+            </div>
+          </div>
         </div>
+
+        <div className="form-section">
+          <h3 className="form-section-title">Detalhes do imóvel</h3>
+          <div className="form-grid">
+            <div className="form-group">
+              <label className="form-label">
+                Categoria <span className="required-mark">*</span>
+              </label>
+              <select
+                name="category"
+                value={formData.category}
+                onChange={handleInputChange}
+                className="form-input"
+                required
+              >
+                <option value="">Selecione uma Categoria</option>
+                <option value="Apartamento">Apartamento</option>
+                <option value="Casa">Casa</option>
+                <option value="Fazenda">Fazenda</option>
+                <option value="Sítio">Sítio</option>
+                <option value="Terreno">Terreno</option>
+                <option value="Galpão">Galpão</option>
+                <option value="Sala Comercial">Sala Comercial</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label className="form-label">
+                Status do Imóvel <span className="required-mark">*</span>
+              </label>
+              <select
+                name="status"
+                value={formData.status}
+                onChange={handleInputChange}
+                className="form-input"
+                required
+              >
+                <option value="">Selecione o Status</option>
+                <option value="Obra finalizada">Pronto para morar</option>
+                <option value="Lançamento">Lançamento</option>
+                <option value="Reformando">Reformando</option>
+                <option value="Recém reformado">Recém reformado</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label className="form-label">
+                Preço <span className="required-mark">*</span>
+              </label>
+              <input
+                type="text"
+                name="price"
+                value={formData.price}
+                placeholder="Ex: R$ 350.000,00"
+                onChange={(e) => {
+                  const rawValue = e.target.value.replace(/\D/g, ""); // Remove tudo que não for número
+                  const numericValue = parseFloat(rawValue) / 100;
+
+                  const formattedValue = numericValue.toLocaleString("pt-BR", {
+                    style: "currency",
+                    currency: "BRL",
+                  });
+
+                  setFormData({ ...formData, price: formattedValue });
+                }}
+                className="form-input"
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label className="form-label">
+                Dimensão <span className="required-mark">*</span>
+              </label>
+              <input
+                type="text"
+                name="dimension"
+                value={formData.dimension}
+                placeholder="Ex: 200m²"
+                onChange={handleInputChange}
+                className="form-input"
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label className="form-label">
+                Quartos <span className="required-mark">*</span>
+              </label>
+              <input
+                type="text"
+                name="bedrooms"
+                value={formData.bedrooms}
+                placeholder="Ex: 3"
+                onChange={handleInputChange}
+                className="form-input"
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label className="form-label">
+                Vagas de Garagem <span className="required-mark">*</span>
+              </label>
+              <input
+                type="text"
+                name="parkingSpaces"
+                value={formData.parkingSpaces}
+                placeholder="Ex: 2"
+                onChange={handleInputChange}
+                className="form-input"
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label className="form-label">
+                Referência <span className="required-mark">*</span>
+              </label>
+              <input
+                type="text"
+                name="refProduct"
+                value={formData.refProduct}
+                placeholder="Ex: COD123"
+                onChange={handleInputChange}
+                className="form-input"
+                required
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="form-section">
+          <h3 className="form-section-title">Publicação</h3>
+          <div className="form-grid">
+            <div className="form-group">
+              <label className="form-label">
+                Imóvel para <span className="required-mark">*</span>
+              </label>
+              <select
+                name="productType"
+                value={formData.productType}
+                onChange={handleInputChange}
+                className="form-input"
+                required
+              >
+                <option value="venda">Venda</option>
+                <option value="aluguel">Aluguel</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label className="form-label">
+                Destaque <span className="required-mark">*</span>
+              </label>
+              <select
+                name="isFeatured"
+                value={formData.isFeatured}
+                onChange={handleInputChange}
+                className="form-input"
+                required
+              >
+                <option value="não">Não</option>
+                <option value="sim">Sim</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label className="form-label">Link do Vídeo (YouTube)</label>
+              <input
+                type="url"
+                name="videoLink"
+                value={formData.videoLink}
+                placeholder="https://youtube.com/..."
+                onChange={handleInputChange}
+                className="form-input"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="form-section">
+          <h3 className="form-section-title">Descrição</h3>
+          <div className="form-group">
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleInputChange}
+              className="form-textarea"
+              placeholder="Descreva os principais diferenciais do imóvel..."
+              required
+            />
+          </div>
+        </div>
+
+        <div className="form-section">
+          <h3 className="form-section-title">Imagens do imóvel</h3>
+          <div className="form-group">
+            <div className="image-upload-header">
+              <label className="form-label">
+                Fotos <span className="required-mark">*</span>
+              </label>
+              <span
+                className={`image-counter ${images.length >= MAX_IMAGES ? "at-limit" : ""}`}
+              >
+                {images.length} / {MAX_IMAGES}
+              </span>
+            </div>
+
+            <div
+              className={`image-dropzone ${images.length >= MAX_IMAGES ? "disabled" : ""}`}
+            >
+              <input
+                type="file"
+                multiple
+                accept="image/*"
+                name="images"
+                onChange={handleImageChange}
+                id="image-input"
+                className="form-input-file"
+                disabled={images.length >= MAX_IMAGES}
+              />
+              <label htmlFor="image-input" className="image-dropzone-label">
+                <span className="image-dropzone-title">
+                  {images.length >= MAX_IMAGES
+                    ? "Limite de imagens atingido"
+                    : "Clique para escolher imagens"}
+                </span>
+                <span className="image-dropzone-hint">
+                  JPG ou PNG · até {MAX_IMAGES} fotos · a primeira vira a capa
+                  do anúncio
+                </span>
+              </label>
+            </div>
+
+            {imageError && <p className="image-error">{imageError}</p>}
+
+            {images.length > 0 && (
+              <div className="image-preview">
+                {images.map((image, index) => (
+                  <div key={image.preview} className="image-preview-item">
+                    {index === 0 && (
+                      <span className="image-cover-badge">Capa</span>
+                    )}
+                    <img
+                      src={image.preview}
+                      alt={`preview-${index}`}
+                      className="image-thumbnail"
+                    />
+                    <button
+                      type="button"
+                      className="remove-image-button"
+                      onClick={() => removeImage(index)}
+                      aria-label="Remover imagem"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
         <button type="submit" className="form-button" disabled={isUploading}>
           {isUploading ? "Carregando..." : "Adicionar Produto"}
         </button>

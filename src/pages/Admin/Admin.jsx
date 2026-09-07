@@ -138,13 +138,21 @@ export const Admin = () => {
 
   return (
     <>
-      <AppBar position="fixed" sx={{ zIndex: (t) => t.zIndex.drawer + 1 }}>
+      <AppBar
+        position="fixed"
+        elevation={0}
+        sx={{
+          zIndex: (t) => t.zIndex.drawer + 1,
+          background: "var(--ink)",
+          borderBottom: "1px solid var(--line)",
+        }}
+      >
         <Toolbar sx={{ gap: 2 }}>
           <IconButton
             edge="start"
             component={NavLink}
             to="/"
-            sx={{ color: "#F6F4EF" }}
+            sx={{ color: "var(--paper)" }}
           >
             <KeyboardBackspace />
           </IconButton>
@@ -156,17 +164,23 @@ export const Admin = () => {
               display: "flex",
               alignItems: "center",
               gap: 1,
-              background: "rgba(246,244,239,0.08)",
-              border: "1px solid rgba(246,244,239,0.14)",
+              background: "color-mix(in srgb, var(--paper) 8%, transparent)",
+              border:
+                "1px solid color-mix(in srgb, var(--paper) 14%, transparent)",
               padding: "8px 14px",
               width: "100%",
               maxWidth: 360,
             }}
           >
-            <Search sx={{ fontSize: 18, color: "#A8A296" }} />
+            <Search
+              sx={{
+                fontSize: 18,
+                color: "color-mix(in srgb, var(--paper) 55%, transparent)",
+              }}
+            />
             <InputBase
               placeholder="Pesquisar..."
-              sx={{ color: "#F6F4EF", fontSize: 14, width: "100%" }}
+              sx={{ color: "var(--paper)", fontSize: 14, width: "100%" }}
             />
           </Box>
 
@@ -181,12 +195,19 @@ export const Admin = () => {
             }}
           >
             <Typography
-              sx={{ color: "#F6F4EF", fontSize: 14, fontWeight: 500 }}
+              sx={{ color: "var(--paper)", fontSize: 14, fontWeight: 500 }}
             >
               {userName}
             </Typography>
             <Avatar
-              sx={{ width: 32, height: 32, bgcolor: "#A6813C", fontSize: 14 }}
+              sx={{
+                width: 32,
+                height: 32,
+                bgcolor: "var(--brass)",
+                color: "var(--ink)",
+                fontSize: 14,
+                fontWeight: 600,
+              }}
             >
               {userName ? userName.charAt(0).toUpperCase() : "U"}
             </Avatar>
@@ -201,6 +222,9 @@ export const Admin = () => {
           [`& .MuiDrawer-paper`]: {
             width: drawerWidth,
             boxSizing: "border-box",
+            background: "var(--paper)",
+            borderRight: "1px solid var(--line)",
+            boxShadow: "none",
           },
         }}
       >
@@ -213,14 +237,37 @@ export const Admin = () => {
                 component={NavLink}
                 to={item.link}
                 className={({ isActive }) => (isActive ? "active" : "")}
-                sx={{ py: 1.4, px: 3 }}
+                sx={{
+                  py: 1.4,
+                  px: 3,
+                  borderLeft: "2px solid transparent",
+                  color: "var(--ink)",
+                  "&:hover": {
+                    backgroundColor:
+                      "color-mix(in srgb, var(--ink) 5%, transparent)",
+                  },
+                  "&.active": {
+                    borderLeft: "2px solid var(--brass)",
+                    backgroundColor:
+                      "color-mix(in srgb, var(--brass) 8%, transparent)",
+                  },
+                  "&.active .MuiListItemIcon-root": {
+                    color: "var(--brass-dark)",
+                  },
+                  "&.active .MuiListItemText-primary": {
+                    fontWeight: 600,
+                  },
+                }}
               >
-                <ListItemIcon sx={{ minWidth: 38, color: "#6B6558" }}>
+                <ListItemIcon sx={{ minWidth: 38, color: "var(--stone)" }}>
                   {item.icon}
                 </ListItemIcon>
                 <ListItemText
                   primary={item.text}
-                  primaryTypographyProps={{ fontSize: 14.5 }}
+                  primaryTypographyProps={{
+                    fontSize: 14.5,
+                    color: "var(--ink)",
+                  }}
                 />
               </ListItemButton>
             ))}
@@ -235,21 +282,30 @@ export const Admin = () => {
           p: 4,
           marginLeft: `${drawerWidth}px`,
           marginTop: "64px",
-          background: "#F6F4EF",
+          background: "color-mix(in srgb, var(--ink) 3%, var(--paper))",
           minHeight: "calc(100vh - 64px)",
         }}
       >
         <Grid container spacing={3}>
           <Grid item xs={12} md={6} lg={3}>
-            <Card sx={{ p: 3 }}>
-              <Typography sx={{ fontSize: 13, color: "text.secondary", mb: 1 }}>
+            <Card
+              sx={{
+                p: 3,
+                boxShadow: "none",
+                border: "1px solid var(--line)",
+                borderRadius: "3px",
+                background: "var(--paper)",
+              }}
+            >
+              <Typography sx={{ fontSize: 13, color: "var(--stone)", mb: 1 }}>
                 Total de produtos
               </Typography>
               <Typography
                 sx={{
-                  fontFamily: "Bricolage Grotesque",
+                  fontFamily: "var(--font-display)",
                   fontWeight: 700,
                   fontSize: 40,
+                  color: "var(--ink)",
                 }}
               >
                 {productCount}
@@ -257,16 +313,24 @@ export const Admin = () => {
             </Card>
           </Grid>
           <Grid item xs={12} md={6} lg={3}>
-            <Card sx={{ p: 3 }}>
-              <Typography sx={{ fontSize: 13, color: "text.secondary", mb: 1 }}>
+            <Card
+              sx={{
+                p: 3,
+                boxShadow: "none",
+                border: "1px solid var(--line)",
+                borderRadius: "3px",
+                background: "var(--paper)",
+              }}
+            >
+              <Typography sx={{ fontSize: 13, color: "var(--stone)", mb: 1 }}>
                 Total de posts
               </Typography>
               <Typography
                 sx={{
-                  fontFamily: "Bricolage Grotesque",
+                  fontFamily: "var(--font-display)",
                   fontWeight: 700,
                   fontSize: 40,
-                  color: "#A6813C",
+                  color: "var(--brass-dark)",
                 }}
               >
                 {postCount}
@@ -275,8 +339,16 @@ export const Admin = () => {
           </Grid>
 
           <Grid item xs={12} lg={6}>
-            <Card sx={{ p: 3 }}>
-              <Typography sx={{ fontSize: 13, color: "text.secondary", mb: 2 }}>
+            <Card
+              sx={{
+                p: 3,
+                boxShadow: "none",
+                border: "1px solid var(--line)",
+                borderRadius: "3px",
+                background: "var(--paper)",
+              }}
+            >
+              <Typography sx={{ fontSize: 13, color: "var(--stone)", mb: 2 }}>
                 Estatísticas visuais
               </Typography>
               <Box sx={{ height: 240 }}>

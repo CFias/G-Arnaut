@@ -1,9 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { doc, getDoc, collection, getDocs, query, where, limit } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  collection,
+  getDocs,
+  query,
+  where,
+  limit,
+} from "firebase/firestore";
 import { db } from "../../services/FirebaseConfig";
 import { CalendarToday, East, West, WhatsApp } from "@mui/icons-material";
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
+import { CropFree, Hotel, DirectionsCar } from "@mui/icons-material";
 import { Navbar } from "../../components/Navbar/Navbar";
 import Logo from "../../assets/image/garnaut-white-logo.png";
 import Skeleton from "react-loading-skeleton";
@@ -44,15 +53,20 @@ export const ProductDetails = () => {
     fetchProduct();
   }, [id]);
 
+  // Pré-carrega só a imagem atual e as vizinhas do modal (índice -1/0/+1),
+  // em vez de todas de uma vez — evita disparar N downloads simultâneos
+  // num imóvel com 10 fotos quando o visitante só vai ver uma por vez.
   useEffect(() => {
-    if (modalImages.length > 0) {
-      modalImages.forEach((imgSrc) => {
-        const img = new Image();
-        img.src = imgSrc; // pré-carrega a imagem
-      });
-    }
-  }, [modalImages]);
+    if (modalImages.length === 0) return;
 
+    [modalImageIndex - 1, modalImageIndex, modalImageIndex + 1].forEach((i) => {
+      const src = modalImages[i];
+      if (src) {
+        const img = new Image();
+        img.src = src;
+      }
+    });
+  }, [modalImages, modalImageIndex]);
 
   // Busca produtos recomendados — filtrados pela mesma categoria do
   // imóvel atual e limitados a poucos resultados, em vez de baixar a
@@ -66,7 +80,7 @@ export const ProductDetails = () => {
         const q = query(
           collection(db, "products"),
           where("category", "==", product.category),
-          limit(7) // pega 1 a mais para sobrar 6 depois de excluir o atual
+          limit(7), // pega 1 a mais para sobrar 6 depois de excluir o atual
         );
         const querySnapshot = await getDocs(q);
         const recommendedProductsData = querySnapshot.docs
@@ -115,7 +129,7 @@ Veja o produto: ${productLink}`;
     const whatsappMessage = generateWhatsappMessage();
     const whatsappNumber = "557191900974";
     const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
-      whatsappMessage
+      whatsappMessage,
     )}`;
     window.open(whatsappURL, "_blank");
   };
@@ -125,9 +139,9 @@ Veja o produto: ${productLink}`;
     setSelectedVideo(null);
     setModalImages(product.images); // Mostrar todas as imagens no modal
     setModalImageIndex(0);
+    setImgLoaded(false);
     setIsModalOpen(true);
   };
-
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -135,12 +149,14 @@ Veja o produto: ${productLink}`;
 
   const handleNextImage = () => {
     if (modalImageIndex < modalImages.length - 1) {
+      setImgLoaded(false);
       setModalImageIndex(modalImageIndex + 1);
     }
   };
 
   const handlePreviousImage = () => {
     if (modalImageIndex > 0) {
+      setImgLoaded(false);
       setModalImageIndex(modalImageIndex - 1);
     }
   };
@@ -176,9 +192,15 @@ Veja o produto: ${productLink}`;
     return (
       <div className="loading">
         <img className="loading-logo" src={Logo} alt="Arnaut" />
-        <Skeleton height={300} />
-        <Skeleton width="60%" />
-        <Skeleton width="80%" />
+        <div className="loading-grid">
+          <Skeleton height={480} />
+          <div className="loading-sidebar">
+            <Skeleton width="70%" height={28} />
+            <Skeleton width="90%" />
+            <Skeleton width="40%" height={32} style={{ marginTop: 12 }} />
+            <Skeleton width="100%" height={80} style={{ marginTop: 12 }} />
+          </div>
+        </div>
       </div>
     );
   }
@@ -198,9 +220,14 @@ Veja o produto: ${productLink}`;
                       key={index}
                       src={image}
                       alt={`Miniatura ${index}`}
-                      className={`thumbnail ${image === selectedImage ? "active-thumbnail" : ""
-                        }`}
+                      className={`thumbnail ${
+                        image === selectedImage ? "active-thumbnail" : ""
+                      }`}
                       onClick={() => setSelectedImage(image)}
+                      loading="lazy"
+                      decoding="async"
+                      width={80}
+                      height={80}
                     />
                   ))}
             </div>
@@ -211,8 +238,16 @@ Veja o produto: ${productLink}`;
               >
                 <img
                   src={selectedImage}
+                  srcSet={`
+                    ${selectedImage}?w=500 500w,
+                    ${selectedImage}?w=800 800w,
+                    ${selectedImage}?w=1200 1200w
+                  `}
+                  sizes="(max-width:768px) 100vw, 650px"
                   alt="Imagem principal do produto"
                   className="main-image"
+                  fetchpriority="high"
+                  decoding="async"
                 />
               </div>
             )}
@@ -224,10 +259,11 @@ Veja o produto: ${productLink}`;
                 <div className="video-imovel">
                   <iframe
                     src={`https://www.youtube.com/embed/${extractVideoId(
-                      product.videoLink
+                      product.videoLink,
                     )}`}
                     title="Vídeo do Produto"
                     frameBorder="0"
+                    loading="lazy"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
                     className="main-video"
@@ -258,6 +294,9 @@ Veja o produto: ${productLink}`;
                       alt={recommendedProduct.name}
                       className="recommended-product-image"
                       loading="lazy"
+                      decoding="async"
+                      width={175}
+                      height={175}
                     />
                     <div className="recommended-infos">
                       <div className="recommended-product-local">
@@ -268,11 +307,13 @@ Veja o produto: ${productLink}`;
                       <div className="recommended-product-address">
                         {recommendedProduct.address}
                       </div>
-                      <div className="recommended-product-status">
-                        {recommendedProduct.status}
-                      </div>
-                      <div className="recommended-product-type">
-                        {recommendedProduct.productType}
+                      <div className="recommended-badges">
+                        <span className="recommended-product-status">
+                          {recommendedProduct.status}
+                        </span>
+                        <span className="recommended-product-type">
+                          {recommendedProduct.productType}
+                        </span>
                       </div>
                       <div className="recommended-product-price">
                         R$ {recommendedProduct.price}
@@ -292,10 +333,39 @@ Veja o produto: ${productLink}`;
                   {product.city} {product.state}
                 </h1>
                 <div className="detail-address">{product.address}</div>
+
+                <div className="detail-badges">
+                  <span className="detail-badge">{product.status}</span>
+                  <span className="detail-badge">{product.category}</span>
+                  {product.productType && (
+                    <span className="detail-badge">{product.productType}</span>
+                  )}
+                </div>
+
+                <div className="detail-specs">
+                  <div className="detail-spec">
+                    <CropFree className="detail-spec-icon" fontSize="small" />
+                    <span>{product.dimension} m²</span>
+                  </div>
+                  {product.bedrooms && (
+                    <div className="detail-spec">
+                      <Hotel className="detail-spec-icon" fontSize="small" />
+                      <span>{product.bedrooms}</span>
+                    </div>
+                  )}
+                  {product.parkingSpaces && (
+                    <div className="detail-spec">
+                      <DirectionsCar
+                        className="detail-spec-icon"
+                        fontSize="small"
+                      />
+                      <span>{product.parkingSpaces}</span>
+                    </div>
+                  )}
+                </div>
+
                 <div className="detail-price">R$ {product.price}</div>
-                <div className="detail-dimension">{product.dimension} m²</div>
-                <div className="detail-status">{product.status}</div>
-                <div className="detail-category">{product.category}</div>
+
                 <div className="detail-description">
                   <p>{product.description}</p>
                 </div>
@@ -331,6 +401,7 @@ Veja mais detalhes aqui: ${urlImovel}
                 }}
                 className="whatsapp-button"
               >
+                <WhatsApp fontSize="small" />
                 Fale comigo no WhatsApp
               </button>
             </div>
@@ -355,6 +426,10 @@ Veja mais detalhes aqui: ${urlImovel}
                     src={recommendedProduct.images[0]}
                     alt={recommendedProduct.name}
                     className="recommended-product-image"
+                    loading="lazy"
+                    decoding="async"
+                    width={175}
+                    height={175}
                   />
                   <div className="recommended-infos">
                     <div className="recommended-product-local">
@@ -365,11 +440,13 @@ Veja mais detalhes aqui: ${urlImovel}
                     <div className="recommended-product-address">
                       {recommendedProduct.address}
                     </div>
-                    <div className="recommended-product-status">
-                      {recommendedProduct.status}
-                    </div>
-                    <div className="recommended-product-type">
-                      {recommendedProduct.productType}
+                    <div className="recommended-badges">
+                      <span className="recommended-product-status">
+                        {recommendedProduct.status}
+                      </span>
+                      <span className="recommended-product-type">
+                        {recommendedProduct.productType}
+                      </span>
                     </div>
                     <div className="recommended-product-price">
                       R$ {recommendedProduct.price}
@@ -391,17 +468,16 @@ Veja mais detalhes aqui: ${urlImovel}
                 <button className="prev-button" onClick={handlePreviousImage}>
                   <West />
                 </button>
-
-                {!imgLoaded && <Skeleton height={400} width={600} />} {/* Skeleton enquanto carrega */}
+                {!imgLoaded && <Skeleton height={400} width={600} />}{" "}
+                {/* Skeleton enquanto carrega */}
                 <img
                   src={modalImages[modalImageIndex]}
                   alt="Imagem principal do modal"
                   className="modal-image-product"
-                  loading="lazy"  // lazy loading nativo
+                  loading="lazy" // lazy loading nativo
                   onLoad={() => setImgLoaded(true)} // marca quando terminar de carregar
                   style={{ display: imgLoaded ? "block" : "none" }}
                 />
-
                 <button className="next-button" onClick={handleNextImage}>
                   <East />
                 </button>

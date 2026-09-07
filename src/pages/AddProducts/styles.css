@@ -3,8 +3,34 @@
     margin: 40px auto;
     padding: 32px;
     border: 1px solid var(--line);
-    background: var(--paper);
     font-family: var(--font-body);
+}
+
+.breadcrumb-container {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    margin-bottom: 20px;
+}
+
+.breadcrumb-link {
+    color: var(--stone);
+    text-decoration: none;
+    transition: color 200ms ease;
+}
+
+.breadcrumb-link:hover {
+    color: var(--brass-dark);
+}
+
+.breadcrumb-separator {
+    color: var(--line);
+}
+
+.breadcrumb-current {
+    color: var(--ink);
+    font-weight: 500;
 }
 
 .add-product-top {
@@ -31,7 +57,31 @@
 .form-content {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+    gap: 28px;
+}
+
+.form-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+}
+
+.form-section+.form-section {
+    padding-top: 28px;
+    border-top: 1px solid var(--line);
+}
+
+.form-section-title {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    color: var(--ink);
+    margin: 0;
 }
 
 .form-grid {
@@ -46,10 +96,19 @@
     gap: 6px;
 }
 
+.form-group--full {
+    grid-column: 1 / -1;
+}
+
 .form-label {
     font-size: 13px;
     font-weight: 500;
-    color: var(--stone);
+    color: rgb(35, 35, 35) !important;
+}
+
+.required-mark {
+    color: #A34B3D;
+    font-weight: 600;
 }
 
 .form-input,
@@ -57,17 +116,30 @@
 select.form-input {
     padding: 11px 14px;
     border: 1px solid var(--line);
-    background: var(--white, #fff);
+    background: color-mix(in srgb, var(--ink) 2.5%, var(--paper));
     font-family: var(--font-body);
     font-size: 14px;
     color: var(--ink);
-    transition: border-color 200ms ease;
+    transition: border-color 200ms ease, background-color 200ms ease;
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+    color: var(--stone);
+    opacity: 0.75;
 }
 
 .form-input:focus,
 .form-textarea:focus {
     outline: none;
     border-color: var(--brass);
+    background: var(--paper);
+}
+
+.form-input:user-invalid,
+.form-textarea:user-invalid,
+select.form-input:user-invalid {
+    border-color: #A34B3D;
 }
 
 .form-textarea {
@@ -242,6 +314,10 @@ select.form-input {
 
     .form-grid {
         grid-template-columns: 1fr;
+    }
+
+    .form-group--full {
+        grid-column: auto;
     }
 
     .product-logo {
