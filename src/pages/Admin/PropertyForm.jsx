@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useOutletContext, useParams } from "react-router-dom";
-import { ImagePlus, Star, X } from "lucide-react";
+import { ImagePlus, Lock, MapPin, Star, X } from "lucide-react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useToast } from "../../contexts/ToastContext";
 import { createProduct, fetchProduct, toFirestore, updateProduct } from "../../services/products";
 import { MAX_IMAGES, uploadMany } from "../../services/images";
+import { EMPTY_OWNER, fetchOwner, hasOwnerData, saveOwner } from "../../services/owners";
 import { LISTING_STATUS, NEGOCIOS, SITUACOES, TIPOS, negocioGroup } from "../../lib/constants";
-import { maskMoney } from "../../lib/format";
+import { formatPhone, maskMoney } from "../../lib/format";
 
 const EMPTY = {
   title: "",
@@ -129,6 +130,9 @@ export default function PropertyForm() {
   const { reload } = useOutletContext();
 
   const [form, setForm] = useState(EMPTY);
+  const [owner, setOwner] = useState(EMPTY_OWNER);
+  const [ownerLoaded, setOwnerLoaded] = useState(false);
+  const [geo, setGeo] = useState({ loading: false, msg: "" });
   const [photos, setPhotos] = useState([]); // { key, url } | { key, file, preview }
   const [loading, setLoading] = useState(isEdit);
   const [notFound, setNotFound] = useState(false);
@@ -149,6 +153,22 @@ export default function PropertyForm() {
         if (!p) return setNotFound(true);
         setForm(formFromProduct(p));
         setPhotos(p.images.map((url) => ({ key: url, url })));
+        fetchOwner(id)
+          .then((o) => {
+            if (!alive || !o) return;
+            const pad = (n) => String(n).padStart(2, "0");
+            const ex = o.exclusiveUntil;
+            setOwner({
+              name: o.name,
+              phone: formatPhone(o.phone),
+              email: o.email,
+              exclusiveUntil: ex ? `${ex.getFullYear()}-${pad(ex.getMonth() + 1)}-${pad(ex.getDate())}` : "",
+              commission: o.commission == null ? "" : String(o.commission),
+              notes: o.notes,
+            });
+            setOwnerLoaded(true);
+          })
+          .catch(() => { });
       })
       .catch(() => alive && setNotFound(true))
       .finally(() => alive && setLoading(false));
@@ -170,6 +190,36 @@ export default function PropertyForm() {
     if (INTEGER.includes(name)) v = value.replace(/\D/g, "").slice(0, 6);
     setForm((f) => ({ ...f, [name]: v }));
     setError("");
+  };
+
+  const setOwnerField = (e) => {
+    const { name, value } = e.target;
+    setOwner((o) => ({ ...o, [name]: name === "phone" ? formatPhone(value) : value }));
+  };
+
+  /** Busca latitude/longitude pelo endereço no OpenStreetMap (gratuito). */
+  const geocode = async () => {
+    const q = [form.address, form.neighborhood, form.city, form.state, "Brasil"].filter(Boolean).join(", ");
+    if (!form.neighborhood && !form.address) {
+      setGeo({ loading: false, msg: "Preencha endereço ou bairro primeiro." });
+      return;
+    }
+    setGeo({ loading: true, msg: "" });
+    try {
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=br&q=${encodeURIComponent(q)}`,
+        { headers: { "Accept-Language": "pt-BR" } },
+      );
+      const [hit] = await res.json();
+      if (!hit) {
+        setGeo({ loading: false, msg: "Endereço não encontrado. Tente só rua e bairro, ou preencha à mão." });
+        return;
+      }
+      setForm((f) => ({ ...f, lat: Number(hit.lat).toFixed(6), lng: Number(hit.lon).toFixed(6) }));
+      setGeo({ loading: false, msg: "Coordenadas preenchidas. Confira no mapa da página do imóvel." });
+    } catch {
+      setGeo({ loading: false, msg: "Não foi possível buscar agora. Preencha à mão se precisar." });
+    }
   };
 
   const toggle = (name) => setForm((f) => ({ ...f, [name]: !f[name] }));
@@ -216,15 +266,30 @@ export default function PropertyForm() {
       const images = photos.map((p) => (p.file ? uploaded[k++] : p.url));
       const data = toFirestore({ ...form, images, listingStatus: status === "edit" ? form.listingStatus : status });
 
+      // Proprietário fica em coleção privada; se falhar, o imóvel já foi salvo
+      const persistOwner = async (productId) => {
+        if (!hasOwnerData(owner) && !ownerLoaded) return;
+        try {
+          await saveOwner(productId, owner);
+        } catch (err) {
+          console.error("Erro ao salvar proprietário:", err);
+          toast("Imóvel salvo, mas os dados do proprietário não — confira as regras do Firestore");
+        }
+      };
+
       if (isEdit) {
         await updateProduct(id, data);
+        await persistOwner(id);
         toast("Alterações salvas");
+        navigate("/admin/imoveis");
       } else {
-        await createProduct(data, { userName, photoURL });
+        const newId = await createProduct(data, { userName, photoURL });
+        await persistOwner(newId);
         await reload();
         toast(status === "Rascunho" ? "Rascunho salvo" : "Imóvel publicado no site");
+        // Publicado: já mostra quem pode se interessar por ele
+        navigate(status === "Rascunho" ? "/admin/imoveis" : `/admin/imoveis?match=${newId}`);
       }
-      navigate("/admin/imoveis");
     } catch (e) {
       console.error("Erro ao salvar imóvel:", e);
       setError("Não foi possível salvar. Verifique a conexão e tente de novo.");
@@ -266,6 +331,13 @@ export default function PropertyForm() {
         <Field {...fieldProps} name="state" label="Estado" placeholder="BA" maxLength={2} />
         <Field {...fieldProps} name="lat" label="Latitude" placeholder="-12.9714" inputMode="decimal" hint="Opcional — posiciona o imóvel no mapa." />
         <Field {...fieldProps} name="lng" label="Longitude" placeholder="-38.5014" inputMode="decimal" />
+        <div className="field geo-field">
+          <span className="field-label" aria-hidden="true">&nbsp;</span>
+          <button type="button" className="btn btn--outline" onClick={geocode} disabled={geo.loading}>
+            <MapPin size={15} /> {geo.loading ? "Buscando…" : "Buscar pelo endereço"}
+          </button>
+          {geo.msg && <span className="field-hint">{geo.msg}</span>}
+        </div>
       </Section>
 
       <Section n="03" title="Características" desc="Esses números aparecem no card e nos filtros.">
@@ -358,6 +430,42 @@ export default function PropertyForm() {
               </select>
             </div>
           )}
+        </div>
+      </section>
+
+      <section className="form-section">
+        <div className="form-section-head">
+          <span className="form-step">06</span>
+          <div>
+            <h2>Proprietário <span className="private-tag"><Lock size={12} /> só no painel</span></h2>
+            <p>Não aparece no site. Fica guardado separado dos dados públicos do imóvel.</p>
+          </div>
+        </div>
+        <div className="form-grid">
+          <label className="field">
+            <span className="field-label">Nome</span>
+            <input className="input input--soft" name="name" value={owner.name} onChange={setOwnerField} autoComplete="off" />
+          </label>
+          <label className="field">
+            <span className="field-label">Telefone</span>
+            <input className="input input--soft" name="phone" value={owner.phone} onChange={setOwnerField} inputMode="tel" placeholder="(71) 99999-9999" autoComplete="off" />
+          </label>
+          <label className="field">
+            <span className="field-label">E-mail</span>
+            <input className="input input--soft" name="email" type="email" value={owner.email} onChange={setOwnerField} autoComplete="off" />
+          </label>
+          <label className="field">
+            <span className="field-label">Exclusividade até</span>
+            <input className="input input--soft" name="exclusiveUntil" type="date" value={owner.exclusiveUntil} onChange={setOwnerField} />
+          </label>
+          <label className="field">
+            <span className="field-label">Comissão (%)</span>
+            <input className="input input--soft" name="commission" inputMode="decimal" value={owner.commission} onChange={setOwnerField} placeholder="Ex: 6" />
+          </label>
+          <label className="field field--full">
+            <span className="field-label">Observações</span>
+            <textarea className="textarea input--soft" name="notes" rows={3} value={owner.notes} onChange={setOwnerField} placeholder="Chaves, horários de visita, condições de negociação…" />
+          </label>
         </div>
       </section>
 

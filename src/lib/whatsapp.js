@@ -19,16 +19,18 @@ export const productMessage = (p) =>
  * navegador não bloquear a janela; aqui só registramos a conversão e,
  * quando faz sentido, o lead no Firestore — sem bloquear a navegação.
  */
-export function trackWhatsApp({ product, source = "whatsapp", name = "", message = "" } = {}) {
+export function trackWhatsApp({ product, source = "whatsapp", name = "", phone = "", message = "", ...extra } = {}) {
   trackConversion(CONVERSIONS.whatsapp);
-  if (product || name) {
+  if (product || name || phone) {
     createLead({
       name,
+      phone,
       productId: product?.id || null,
       productTitle: product?.title || "",
       productCode: product?.code || "",
       source,
       message,
+      ...extra,
     });
   }
 }

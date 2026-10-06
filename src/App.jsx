@@ -34,6 +34,7 @@ const Overview = lazy(() => import("./pages/Admin/Overview"));
 const PropertiesPage = lazy(() => import("./pages/Admin/PropertiesTable"));
 const PropertyForm = lazy(() => import("./pages/Admin/PropertyForm"));
 const Leads = lazy(() => import("./pages/Admin/Leads"));
+const Agenda = lazy(() => import("./pages/Admin/Agenda"));
 const AddPosts = named(() => import("./pages/AddPosts/AddPosts"), "AddPosts");
 const AddFeaturedProducts = named(
   () => import("./pages/AddFeaturedProducts/AddFeaturedProducts"),
@@ -114,6 +115,7 @@ function App() {
                 <Route path="cadastrar" element={<PropertyForm key="novo" />} />
                 <Route path="editar/:id" element={<PropertyForm />} />
                 <Route path="leads" element={<Leads />} />
+                <Route path="agenda" element={<Agenda />} />
               </Route>
               <Route path="/add-posts" element={admin(<AddPosts />)} />
               <Route path="/add-dest" element={admin(<AddFeaturedProducts />)} />

@@ -11,8 +11,20 @@ import {
   deleteLead,
   saveLead,
 } from "../../services/leads";
-import { LEAD_SOURCES, LEAD_STAGES, leadSourceLabel } from "../../lib/constants";
+import { LEAD_SOURCES, LEAD_STAGES, NEGOCIOS, TIPOS, leadSourceLabel } from "../../lib/constants";
 import {
+  EMPTY_WANTS,
+  hasWants,
+  leadScore,
+  leadWants,
+  matchingProducts,
+  scoreLevel,
+  visitPeriodLabel,
+} from "../../lib/crm";
+import {
+  brlShort,
+  digitsToNumber,
+  maskMoney,
   followUpLabel,
   followUpState,
   formatPhone,
@@ -22,7 +34,7 @@ import {
   toLocalInput,
   waPhone,
 } from "../../lib/format";
-import { waLink } from "../../lib/whatsapp";
+import { productUrl, waLink } from "../../lib/whatsapp";
 
 const EMPTY = {
   name: "",
@@ -33,6 +45,7 @@ const EMPTY = {
   productId: "",
   followUp: "",
   firstNote: "",
+  wants: EMPTY_WANTS,
 };
 
 function formFromLead(l) {
@@ -45,6 +58,7 @@ function formFromLead(l) {
     productId: l.productId || "",
     followUp: toLocalInput(l.followUpAt),
     firstNote: "",
+    wants: { ...EMPTY_WANTS, ...(l.wants || {}) },
   };
 }
 
@@ -99,7 +113,11 @@ export default function LeadDrawer({ lead, products, onClose, onSaved, onDeleted
       setError("Informe ao menos o nome ou o telefone.");
       return;
     }
-    const payload = { ...form, followUpAt: fromLocalInput(form.followUp) };
+    const payload = {
+      ...form,
+      followUpAt: fromLocalInput(form.followUp),
+      wants: hasWants(form.wants) ? form.wants : null,
+    };
     // Lead antigo vindo do site guardava só o título do imóvel: preserva se não trocar
     const prod = product || (lead && form.productId === (lead.productId || "") && lead.productId
       ? { id: lead.productId, title: lead.productTitle, code: lead.productCode }
@@ -163,6 +181,16 @@ export default function LeadDrawer({ lead, products, onClose, onSaved, onDeleted
     }
   };
 
+  const setWant = (k, v) => set("wants", { ...form.wants, [k]: v });
+  const bairros = useMemo(
+    () => [...new Set(products.map((p) => p.neighborhood).filter(Boolean))].sort((a, b) => a.localeCompare(b, "pt-BR")),
+    [products],
+  );
+  const matches = useMemo(() => (lead ? matchingProducts(lead, products).slice(0, 6) : []), [lead, products]);
+  const inferred = lead && !hasWants(lead.wants) ? leadWants(lead, products) : null;
+  const score = lead ? leadScore(lead) : null;
+  const level = scoreLevel(score);
+
   const fState = lead ? followUpState(lead.followUpAt) : null;
   const phone = waPhone(form.phone);
 
@@ -176,6 +204,12 @@ export default function LeadDrawer({ lead, products, onClose, onSaved, onDeleted
             {!isNew && (
               <span className="muted small">
                 {leadSourceLabel(lead.source)} · entrou {relativeDate(lead.createdAt).toLowerCase()}
+                {level && (
+                  <>
+                    {" · "}
+                    <span className={`score score--${level.key}`}>{level.label} · {score}</span>
+                  </>
+                )}
               </span>
             )}
           </div>
@@ -191,6 +225,16 @@ export default function LeadDrawer({ lead, products, onClose, onSaved, onDeleted
               <button type="button" className="btn btn--outline btn--sm" onClick={finishFollowUp} disabled={saving}>
                 <CalendarCheck size={15} /> Marcar como feito
               </button>
+            </div>
+          )}
+
+          {!isNew && lead.visitAt && (
+            <div className="followup-banner followup-banner--visita">
+              <span>
+                Pediu visita para{" "}
+                {lead.visitAt.toLocaleDateString("pt-BR", { weekday: "long", day: "numeric", month: "long" })}
+                {lead.visitPeriod ? ` (${visitPeriodLabel(lead.visitPeriod).toLowerCase()})` : ""}
+              </span>
             </div>
           )}
 
@@ -267,6 +311,36 @@ export default function LeadDrawer({ lead, products, onClose, onSaved, onDeleted
               </span>
               <span className="field-hint">Leads com retorno vencido aparecem em destaque na lista e na visão geral.</span>
             </label>
+            <fieldset className="field--full wants">
+              <legend className="field-label">
+                O que procura
+                {inferred && <small className="muted"> — deduzido do imóvel de interesse, ajuste se quiser</small>}
+              </legend>
+              <div className="wants-grid">
+                <select className="select input--soft input--sm" aria-label="Negócio" value={form.wants.negocio} onChange={(e) => setWant("negocio", e.target.value)}>
+                  <option value="">Negócio: tanto faz</option>
+                  {NEGOCIOS.map((n) => <option key={n.key} value={n.key}>{n.label}</option>)}
+                </select>
+                <select className="select input--soft input--sm" aria-label="Tipo" value={form.wants.tipo} onChange={(e) => setWant("tipo", e.target.value)}>
+                  <option value="">Tipo: tanto faz</option>
+                  {TIPOS.map((t) => <option key={t} value={t}>{t}</option>)}
+                </select>
+                <input className="input input--soft input--sm" list="lead-bairros" aria-label="Bairro" placeholder="Bairro: tanto faz" value={form.wants.bairro} onChange={(e) => setWant("bairro", e.target.value)} />
+                <datalist id="lead-bairros">{bairros.map((b) => <option key={b} value={b} />)}</datalist>
+                <select className="select input--soft input--sm" aria-label="Quartos" value={form.wants.quartos} onChange={(e) => setWant("quartos", Number(e.target.value))}>
+                  <option value={0}>Quartos: tanto faz</option>
+                  {[1, 2, 3, 4].map((n) => <option key={n} value={n}>{n}+ quartos</option>)}
+                </select>
+                <input
+                  className="input input--soft input--sm wants-price"
+                  inputMode="numeric"
+                  aria-label="Valor máximo"
+                  placeholder={inferred?.priceMax ? `Até R$ ${maskMoney(String(inferred.priceMax))}` : "Valor máximo (R$)"}
+                  value={form.wants.priceMax ? maskMoney(String(form.wants.priceMax)) : ""}
+                  onChange={(e) => setWant("priceMax", digitsToNumber(e.target.value))}
+                />
+              </div>
+            </fieldset>
             {isNew && (
               <label className="field field--full">
                 <span className="field-label">Anotação inicial</span>
@@ -274,6 +348,39 @@ export default function LeadDrawer({ lead, products, onClose, onSaved, onDeleted
               </label>
             )}
           </form>
+
+          {!isNew && (
+            <section className="matches">
+              <h3>Imóveis que combinam <span className="muted small">({matches.length})</span></h3>
+              {matches.length === 0 ? (
+                <p className="muted small">
+                  {leadWants(lead, products) ? "Nenhum imóvel publicado combina com o que ele procura agora." : "Preencha “O que procura” para ver sugestões."}
+                </p>
+              ) : (
+                <ul className="match-list">
+                  {matches.map((m) => (
+                    <li key={m.id} className="match">
+                      <div className="match-img img-placeholder">{m.cover && <img src={m.cover} alt="" loading="lazy" />}</div>
+                      <div className="match-text">
+                        <strong className="text-ellipsis">{m.title}</strong>
+                        <small>{m.code} · {m.neighborhood} · {m.price ? brlShort(m.price) : "sob consulta"}</small>
+                      </div>
+                      {phone && (
+                        <a
+                          className="btn btn--outline btn--sm"
+                          href={waLink(`Olá${lead.hasName ? `, ${lead.name.split(" ")[0]}` : ""}! Separei este imóvel que combina com o que você procura: ${m.title}.\n${productUrl(m.id)}`, phone)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Enviar
+                        </a>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
+          )}
 
           {!isNew && (
             <section className="notes">
@@ -293,7 +400,7 @@ export default function LeadDrawer({ lead, products, onClose, onSaved, onDeleted
                   Adicionar anotação
                 </button>
               </div>
-              {lead.notes.length === 0 ? (
+              {lead.notes.length === 0 && !lead.createdAt ? (
                 <p className="muted small">Nenhuma anotação ainda.</p>
               ) : (
                 <ol className="timeline">

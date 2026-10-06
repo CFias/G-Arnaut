@@ -79,6 +79,8 @@ export const LEAD_STAGES = ["Novo", "Em contato", "Visita marcada", "Fechado"];
 export const LEAD_SOURCES = [
   { value: "whatsapp", label: "WhatsApp (site)" },
   { value: "form", label: "Formulário do site" },
+  { value: "visita", label: "Pedido de visita (site)" },
+  { value: "alerta", label: "Alerta de imóvel (site)" },
   { value: "telefone", label: "Ligação" },
   { value: "indicacao", label: "Indicação" },
   { value: "instagram", label: "Instagram" },

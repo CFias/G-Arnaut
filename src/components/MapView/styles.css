@@ -1,4 +1,5 @@
 .mapview {
+  isolation: isolate;
   position: relative;
   width: 100%;
   height: 100%;
@@ -48,5 +49,40 @@
   box-shadow: 0 6px 16px -10px rgba(15, 27, 51, .5);
   transition: background-color .2s, color .2s, transform .2s;
 }
-.mapview-pin:hover { transform: translate(-50%, -50%) scale(1.05); }
-.mapview-pin.is-on { background: var(--primary); border-color: var(--primary); color: #FFFFFF; }
+
+.mapview-pin:hover {
+  transform: translate(-50%, -50%) scale(1.05);
+}
+
+.mapview-pin.is-on {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #FFFFFF;
+}
+
+.mapview-real {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  font-family: var(--font);
+}
+
+.mapview-real .leaflet-control-attribution {
+  font-size: 10px;
+}
+
+.mapview .mapview-caption {
+  z-index: 500;
+}
+
+/* Pílula de preço dentro do Leaflet: posicionada pelo próprio marcador */
+.mapview-pin--real {
+  position: relative;
+  display: inline-block;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+}
+
+.mapview-pin--real:hover {
+  transform: translate(-50%, -50%) scale(1.05);
+}

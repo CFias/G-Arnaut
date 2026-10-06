@@ -15,6 +15,7 @@ import {
   waPhone,
 } from "../../lib/format";
 import { waLink } from "../../lib/whatsapp";
+import { leadScore, scoreLevel, visitPeriodLabel } from "../../lib/crm";
 
 const slug = (s) => normalizeText(s).replace(/\s+/g, "-");
 
@@ -57,6 +58,7 @@ export function LeadCard({ lead, compact = false, onStage, onOpen }) {
   }
 
   const phone = waPhone(lead.phone);
+  const level = scoreLevel(leadScore(lead));
 
   return (
     <article
@@ -70,10 +72,19 @@ export function LeadCard({ lead, compact = false, onStage, onOpen }) {
       <span className="lead-avatar" aria-hidden="true">{initials(lead.name)}</span>
       <div className="lead-body">
         <div className="lead-top">
-          <strong className="text-ellipsis">{lead.name}</strong>
+          <strong className="text-ellipsis">
+            {level && <span className={`score-dot score-dot--${level.key}`} title={`Lead ${level.label.toLowerCase()}`} />}
+            {lead.name}
+          </strong>
           <span className="lead-date">{relativeDate(lead.createdAt)}</span>
         </div>
         {product}
+        {lead.visitAt && lead.stage !== "Fechado" && (
+          <span className="followup-tag followup-tag--visita">
+            Visita pedida: {lead.visitAt.toLocaleDateString("pt-BR", { day: "numeric", month: "short" }).replace(".", "")}
+            {lead.visitPeriod ? ` · ${visitPeriodLabel(lead.visitPeriod).toLowerCase()}` : ""}
+          </span>
+        )}
         {lead.phone && (
           <span className="lead-phone">
             <Phone size={12} /> {formatPhone(lead.phone)}
@@ -121,6 +132,7 @@ export default function Leads() {
   const [filter, setFilter] = useState(params.get("filtro") === "retornos" ? "Retornos" : "Todos");
   const [search, setSearch] = useState("");
   const [openId, setOpenId] = useState(null); // id | "novo" | null
+  const [sort, setSort] = useState("recentes");
 
   const counts = useMemo(() => {
     const c = { Todos: leads.length, Retornos: leads.filter(isDue).length };
@@ -143,8 +155,9 @@ export default function Leads() {
       );
     });
     if (filter === "Retornos") list = [...list].sort((a, b) => a.followUpAt - b.followUpAt);
+    else if (sort === "quentes") list = [...list].sort((a, b) => (leadScore(b) ?? -1) - (leadScore(a) ?? -1));
     return list;
-  }, [leads, filter, search]);
+  }, [leads, filter, search, sort]);
 
   const replaceLead = (saved, isNew) =>
     setLeads((list) => (isNew ? [saved, ...list] : list.map((l) => (l.id === saved.id ? saved : l))));
@@ -192,6 +205,10 @@ export default function Leads() {
             onChange={(e) => setSearch(e.target.value)}
           />
         </label>
+        <select className="select input--sm leads-sort" aria-label="Ordenar" value={sort} onChange={(e) => setSort(e.target.value)}>
+          <option value="recentes">Mais recentes</option>
+          <option value="quentes">Mais quentes</option>
+        </select>
         <button type="button" className="btn btn--primary btn--sm" onClick={() => setOpenId("novo")}>
           <Plus size={15} /> Novo lead
         </button>

@@ -4,6 +4,49 @@ import { ArrowRight } from "lucide-react";
 import { PropertiesTable } from "./PropertiesTable";
 import { LeadCard, isDue } from "./Leads";
 import { followUpLabel } from "../../lib/format";
+import { leadSourceLabel } from "../../lib/constants";
+
+const ADVANCED = { "Em contato": 1, "Visita marcada": 2, Fechado: 3 };
+
+function formatDuration(ms) {
+  const h = ms / 3600000;
+  if (h < 1) return `${Math.max(1, Math.round(h * 60))} min`;
+  if (h < 48) return `${Math.round(h)} h`;
+  return `${Math.round(h / 24)} dias`;
+}
+
+/** Funil, origem dos leads e tempo até o primeiro registro de atendimento. */
+function funnelStats(leads) {
+  const total = leads.length;
+  const reached = (min) => leads.filter((l) => (ADVANCED[l.stage] || 0) >= min).length;
+  const steps = [
+    { label: "Leads", n: total },
+    { label: "Em contato", n: reached(1) },
+    { label: "Visita", n: reached(2) },
+    { label: "Fechado", n: reached(3) },
+  ].map((s) => ({ ...s, pct: total ? Math.round((s.n / total) * 100) : 0 }));
+
+  const bySource = new Map();
+  leads.forEach((l) => {
+    const cur = bySource.get(l.source) || { n: 0, closed: 0 };
+    cur.n += 1;
+    if (l.stage === "Fechado") cur.closed += 1;
+    bySource.set(l.source, cur);
+  });
+  const sources = [...bySource.entries()]
+    .map(([source, v]) => ({ label: leadSourceLabel(source), ...v }))
+    .sort((a, b) => b.n - a.n);
+
+  const firstTouch = leads
+    .map((l) => {
+      const first = [...l.notes].filter((n) => n.at).sort((a, b) => a.at - b.at)[0];
+      return first && l.createdAt ? first.at - l.createdAt : null;
+    })
+    .filter((x) => x != null && x >= 0);
+  const avgFirstTouch = firstTouch.length ? firstTouch.reduce((a, b) => a + b, 0) / firstTouch.length : null;
+
+  return { steps, sources, avgFirstTouch, maxSource: Math.max(1, ...sources.map((s) => s.n)) };
+}
 
 const WEEKS = 8;
 const DAY = 86400000;
@@ -72,6 +115,7 @@ export default function Overview() {
   if (loading) return <div className="admin-loading">Carregando painel…</div>;
 
   const due = leads.filter(isDue).sort((a, b) => a.followUpAt - b.followUpAt);
+  const funnel = funnelStats(leads);
 
   return (
     <div className="admin-stack">
@@ -145,7 +189,48 @@ export default function Overview() {
         </section>
       </div>
 
-      <PropertiesTable products={products} compact title="Mais vistos" />
+      {leads.length > 0 && (
+        <div className="overview-grid">
+          <section className="admin-card">
+            <div className="admin-card-head">
+              <h2>Funil de atendimento</h2>
+              {funnel.avgFirstTouch != null && (
+                <span className="muted small">1º registro em média: {formatDuration(funnel.avgFirstTouch)}</span>
+              )}
+            </div>
+            <div className="funnel-bars">
+              {funnel.steps.map((s, i) => (
+                <div key={s.label} className="funnel-row">
+                  <span className="funnel-label">{s.label}</span>
+                  <div className="funnel-track">
+                    <div className={`funnel-fill${i === funnel.steps.length - 1 ? " is-gold" : ""}`} style={{ width: `${Math.max(2, s.pct)}%` }} />
+                  </div>
+                  <span className="funnel-value">{s.n} <small>{s.pct}%</small></span>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section className="admin-card">
+            <div className="admin-card-head">
+              <h2>De onde vêm os leads</h2>
+            </div>
+            <div className="funnel-bars">
+              {funnel.sources.map((s) => (
+                <div key={s.label} className="funnel-row">
+                  <span className="funnel-label">{s.label}</span>
+                  <div className="funnel-track">
+                    <div className="funnel-fill" style={{ width: `${(s.n / funnel.maxSource) * 100}%` }} />
+                  </div>
+                  <span className="funnel-value">{s.n} <small>{s.closed ? `${s.closed} fech.` : ""}</small></span>
+                </div>
+              ))}
+            </div>
+          </section>
+        </div>
+      )}
+
+      <PropertiesTable products={products} leads={leads} compact title="Mais vistos" />
     </div>
   );
 }

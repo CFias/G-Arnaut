@@ -1,0 +1,57 @@
+.capture-tabs { display: flex; gap: 4px; padding: 4px; margin-bottom: 18px; border-radius: var(--r-control); background: var(--bg-soft); }
+.capture-tabs button {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 38px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.capture-tabs button.is-on { background: #FFFFFF; color: var(--ink); box-shadow: 0 1px 2px rgba(15, 27, 51, .08); }
+
+.capture-form { display: flex; flex-direction: column; gap: 14px; }
+.capture-form .form-error {
+  padding: 10px 12px;
+  border-radius: var(--r-control);
+  background: #FBF1EF;
+  color: var(--error);
+  font-size: 13px;
+  font-weight: 600;
+}
+.capture-form .field-label small { font-weight: 500; }
+.capture-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding-bottom: 14px; border-bottom: 1px solid var(--divider); }
+.capture-full { grid-column: 1 / -1; }
+.capture-periods { border: none; padding: 0; margin: 0; }
+.capture-periods legend { float: left; width: 100%; margin-bottom: 6px; }
+.capture-chips { clear: both; display: flex; flex-wrap: wrap; gap: 8px; }
+.capture-skip { align-self: center; font-size: 13px; font-weight: 600; color: var(--muted); }
+.capture-skip:hover { color: var(--ink); }
+.capture-note { font-size: 12px; color: var(--muted-2); text-align: center; }
+
+.capture-done { display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
+.capture-done p { font-size: 15px; color: var(--muted); }
+.capture-done strong { color: var(--ink); }
+.capture-check { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; background: var(--success-bg); color: var(--success-text); }
+
+/* Faixa "Não achou?" no fim da listagem */
+.alert-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 32px;
+  padding: 20px 24px;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--r-block);
+}
+.alert-strip strong { display: block; font-size: 15px; }
+.alert-strip span { font-size: 14px; color: var(--muted); }
+
+@media (max-width: 420px) { .capture-grid { grid-template-columns: minmax(0, 1fr); } }

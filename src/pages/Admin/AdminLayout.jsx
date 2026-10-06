@@ -2,6 +2,7 @@ import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
   Building2,
+  CalendarDays,
   ExternalLink,
   FileText,
   LayoutDashboard,
@@ -25,6 +26,7 @@ const TITLES = {
   "/admin/imoveis": "Imóveis",
   "/admin/cadastrar": "Novo imóvel",
   "/admin/leads": "Leads",
+  "/admin/agenda": "Agenda",
 };
 
 function greeting(name) {
@@ -69,6 +71,13 @@ export default function AdminLayout() {
   useDocumentTitle(`${title} · Painel`);
 
   const newLeads = leads.filter((l) => l.stage === "Novo").length;
+  // Retornos vencidos/hoje + visitas pedidas para hoje
+  const agendaCount = leads.filter((l) => {
+    if (l.stage === "Fechado") return false;
+    const end = new Date();
+    end.setHours(23, 59, 59, 999);
+    return (l.followUpAt && l.followUpAt <= end) || (l.visitAt && l.visitAt <= end && l.visitAt >= new Date(new Date().setHours(0, 0, 0, 0)));
+  }).length;
   const firstName = (userName || AGENT.firstName).split(" ")[0];
 
   const nav = useMemo(
@@ -77,8 +86,9 @@ export default function AdminLayout() {
       { to: "/admin/imoveis", label: "Imóveis", icon: Building2, badge: products.length || "" },
       { to: "/admin/cadastrar", label: "Cadastrar imóvel", icon: PlusCircle },
       { to: "/admin/leads", label: "Leads", icon: Users, badge: newLeads || "" },
+      { to: "/admin/agenda", label: "Agenda", icon: CalendarDays, badge: agendaCount || "" },
     ],
-    [products.length, newLeads],
+    [products.length, newLeads, agendaCount],
   );
 
   const handleLogout = async () => {
@@ -90,7 +100,7 @@ export default function AdminLayout() {
     }
   };
 
-  const showNewButton = !["/admin/cadastrar", "/admin/leads"].includes(location.pathname) && !location.pathname.startsWith("/admin/editar");
+  const showNewButton = !["/admin/cadastrar", "/admin/leads", "/admin/agenda"].includes(location.pathname) && !location.pathname.startsWith("/admin/editar");
 
   return (
     <div className="admin">

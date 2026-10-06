@@ -25,6 +25,17 @@ function normalizeNote(n = {}) {
   };
 }
 
+function normalizeWants(w) {
+  if (!w || typeof w !== "object") return null;
+  return {
+    negocio: w.negocio || "",
+    tipo: w.tipo || "",
+    bairro: w.bairro || "",
+    priceMax: Number(w.priceMax) || 0,
+    quartos: Number(w.quartos) || 0,
+  };
+}
+
 export function normalizeLead(id, d = {}) {
   const notes = Array.isArray(d.notes) ? d.notes.map(normalizeNote) : [];
   notes.sort((a, b) => (b.at?.getTime() || 0) - (a.at?.getTime() || 0));
@@ -42,6 +53,9 @@ export function normalizeLead(id, d = {}) {
     stage: d.stage || "Novo",
     message: d.message || "",
     followUpAt: toDate(d.followUpAt),
+    visitAt: toDate(d.visitAt),
+    visitPeriod: d.visitPeriod || "",
+    wants: normalizeWants(d.wants),
     notes,
     createdAt: toDate(d.createdAt),
     updatedAt: toDate(d.updatedAt),
@@ -62,22 +76,37 @@ const newNote = (text, kind = "note") => ({
  * WhatsApp. Exige regra no Firestore permitindo `create` público em
  * `leads` (ver FIRESTORE_RULES.md); sem ela, falha em silêncio.
  */
-export async function createLead({ name = "", phone = "", productId = null, productTitle = "", productCode = "", source = "whatsapp", message = "" }) {
+export async function createLead({
+  name = "",
+  phone = "",
+  productId = null,
+  productTitle = "",
+  productCode = "",
+  source = "whatsapp",
+  message = "",
+  wants = null,
+  visitAt = null,
+  visitPeriod = "",
+}) {
   try {
     await addDoc(collection(db, COLLECTION), {
-      name: name.slice(0, 120),
-      phone: phone.slice(0, 30),
+      name: name.trim().slice(0, 120),
+      phone: phoneDigits(phone),
       productId,
       productTitle: productTitle.slice(0, 200),
       productCode: productCode.slice(0, 40),
       source,
       message: message.slice(0, 1000),
       stage: "Novo",
+      ...(wants ? { wants: normalizeWants(wants) } : {}),
+      ...(visitAt ? { visitAt, visitPeriod } : {}),
       createdAt: serverTimestamp(),
     });
     if (productId) incrementLeads(productId);
+    return true;
   } catch (error) {
     if (import.meta.env.DEV) console.warn("Lead não registrado:", error?.code || error);
+    return false;
   }
 }
 
@@ -98,6 +127,7 @@ function leadFields(form, product) {
     productTitle: product?.title || "",
     productCode: product?.code || "",
     followUpAt: form.followUpAt || null,
+    wants: form.wants ? normalizeWants(form.wants) : null,
   };
 }
 

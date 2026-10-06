@@ -7,6 +7,7 @@ registros simplesmente não acontecem (os erros são ignorados em silêncio).
 | Recurso | O que precisa | Onde aparece |
 |---|---|---|
 | Leads | `create` público (só os campos do site) na coleção `leads`; criação manual, leitura, edição e exclusão só admin | Painel → Leads, KPIs da visão geral |
+| Proprietários | coleção `owners` acessível só por admins (dados privados do dono do imóvel) | Cadastro de imóvel → seção 06, Agenda (fim de exclusividade) |
 | Visualizações / contagem de leads | visitante poder **apenas incrementar** `views` e `leadsCount` em `products` | Painel → colunas Views/Leads, "Mais vistos" |
 
 Revise antes de publicar (Firebase Console → Firestore → Regras). Os UIDs
@@ -41,11 +42,18 @@ service cloud.firestore {
     match /leads/{id} {
       // Admin cadastra leads manuais com todos os campos (notes, followUpAt, email...)
       allow create: if isAdmin() || request.resource.data.keys().hasOnly(
-          ['name', 'phone', 'productId', 'productTitle', 'productCode', 'source', 'message', 'stage', 'createdAt'])
+          ['name', 'phone', 'productId', 'productTitle', 'productCode', 'source', 'message', 'stage', 'createdAt',
+           'wants', 'visitAt', 'visitPeriod'])
+        && request.resource.data.source in ['whatsapp', 'form', 'visita', 'alerta']
         && request.resource.data.stage == 'Novo'
         && request.resource.data.name is string && request.resource.data.name.size() <= 120
         && request.resource.data.message is string && request.resource.data.message.size() <= 1000;
       allow read, update, delete: if isAdmin();
+    }
+
+    // Proprietários: privado, nunca legível pelo site público
+    match /owners/{productId} {
+      allow read, write: if isAdmin();
     }
 
     match /users/{uid} {
@@ -61,7 +69,7 @@ service cloud.firestore {
 
 > ⚠️ Se as suas regras atuais forem diferentes para `users`, `posts`,
 > `featured_products`, `imoveis` ou `videos`, mantenha as suas — copie só os
-> blocos `products` e `leads`.
+> blocos `products`, `leads` e `owners`.
 
 A consulta de leads usa `orderBy("createdAt", "desc")` em um único campo, que
 não precisa de índice composto.

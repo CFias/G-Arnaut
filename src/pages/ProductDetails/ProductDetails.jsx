@@ -17,6 +17,8 @@ import {
 import PublicLayout from "../../components/PublicLayout/PublicLayout";
 import PropertyCard from "../../components/PropertyCard/PropertyCard";
 import Lightbox from "../../components/Lightbox/Lightbox";
+import MapView from "../../components/MapView/MapView";
+import InterestModal from "../../components/LeadCapture/InterestModal";
 import { useProducts } from "../../hooks/useProducts";
 import { useFavorites } from "../../contexts/FavoritesContext";
 import { useToast } from "../../contexts/ToastContext";
@@ -24,7 +26,7 @@ import { useDocumentTitle } from "../../hooks/useDocumentTitle";
 import { fetchProduct, registerView } from "../../services/products";
 import { AGENT, negocioLabel, situacaoLabel } from "../../lib/constants";
 import { brl, formatPrice, priceLabel, priceSuffix, youtubeId } from "../../lib/format";
-import { productMessage, productUrl, trackWhatsApp, waLink } from "../../lib/whatsapp";
+import { productUrl } from "../../lib/whatsapp";
 import Profile from "../../assets/image/arnaut-profile.webp";
 import "./styles.css";
 
@@ -76,6 +78,7 @@ export const ProductDetails = () => {
   const { products } = useProducts();
   const [product, setProduct] = useState(undefined); // undefined = carregando, null = não existe
   const [lightbox, setLightbox] = useState(null);
+  const [interest, setInterest] = useState(null); // null | "whatsapp" | "visita"
 
   useEffect(() => {
     let alive = true;
@@ -256,6 +259,11 @@ export const ProductDetails = () => {
 
             <section className="detail-section">
               <h2>Onde fica</h2>
+              {p.lat != null && p.lng != null && (
+                <div className="detail-map-real">
+                  <MapView markers={[{ id: p.id, lat: p.lat, lng: p.lng, label: p.neighborhood || "Aqui" }]} zoom={15} />
+                </div>
+              )}
               <a className="detail-map" href={mapsUrl} target="_blank" rel="noopener noreferrer">
                 <span className="detail-map-pin"><MapPin size={20} /></span>
                 <span>
@@ -283,15 +291,14 @@ export const ProductDetails = () => {
                 ))}
               </dl>
 
-              <a
-                className="btn btn--primary btn--lg btn--block price-cta"
-                href={waLink(productMessage(p))}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => trackWhatsApp({ product: p })}
-              >
-                Tenho interesse — WhatsApp <ArrowUpRight size={16} />
-              </a>
+              <div className="price-actions">
+                <button type="button" className="btn btn--primary btn--lg btn--block price-cta" onClick={() => setInterest("whatsapp")}>
+                  Tenho interesse — WhatsApp <ArrowUpRight size={16} />
+                </button>
+                <button type="button" className="btn btn--outline btn--block" onClick={() => setInterest("visita")}>
+                  <CalendarDays size={16} /> Agendar visita
+                </button>
+              </div>
 
               <div className="price-agent">
                 <img src={Profile} alt="" width={44} height={44} loading="lazy" />
@@ -322,16 +329,12 @@ export const ProductDetails = () => {
             {p.price > 0 && <em>{priceSuffix(p.negocio)}</em>}
           </strong>
         </span>
-        <a
-          className="btn btn--primary"
-          href={waLink(productMessage(p))}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={() => trackWhatsApp({ product: p })}
-        >
+        <button type="button" className="btn btn--primary" onClick={() => setInterest("whatsapp")}>
           Tenho interesse
-        </a>
+        </button>
       </div>
+
+      {interest && <InterestModal product={p} initialTab={interest} onClose={() => setInterest(null)} />}
 
       {lightbox !== null && p.images.length > 0 && (
         <Lightbox

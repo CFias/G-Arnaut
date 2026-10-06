@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { ArrowRight, List, Map as MapIcon, SlidersHorizontal, X } from "lucide-react";
+import { ArrowRight, BellRing, List, Map as MapIcon, SlidersHorizontal, X } from "lucide-react";
 import PublicLayout from "../../components/PublicLayout/PublicLayout";
 import { PropertyCard, PropertyCardSkeleton } from "../../components/PropertyCard/PropertyCard";
 import MapView from "../../components/MapView/MapView";
 import FiltersDrawer from "./FiltersDrawer";
+import AlertModal from "../../components/LeadCapture/AlertModal";
 import { useProducts } from "../../hooks/useProducts";
 import { useFavorites } from "../../contexts/FavoritesContext";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
@@ -41,6 +42,7 @@ export const Listing = () => {
   const { favorites } = useFavorites();
   const [selectedPin, setSelectedPin] = useState(null);
   const [drawerOpen, setDrawerOpen] = useState(params.get("filtros") === "1");
+  const [alertOpen, setAlertOpen] = useState(false);
 
   const filters = useMemo(() => filtersFromParams(params), [params]);
   const onlyFavs = params.get("favoritos") === "1";
@@ -89,6 +91,18 @@ export const Listing = () => {
     () => [...new Set(products.map((p) => p.neighborhood).filter(Boolean))].sort((a, b) => a.localeCompare(b, "pt-BR")),
     [products],
   );
+
+  // Pré-preenche o alerta com a busca atual (teto da faixa de preço vira o valor máximo)
+  const alertInitial = useMemo(() => {
+    const fx = faixasFor(filters.negocio).find((x) => x[0] === filters.faixa);
+    return {
+      negocio: filters.negocio,
+      tipo: filters.tipo,
+      bairro: filters.bairro,
+      quartos: filters.quartos,
+      priceMax: fx && Number.isFinite(fx[3]) ? fx[3] : 0,
+    };
+  }, [filters]);
 
   const chips = activeChips(filters);
   const extraCount = extraChips(filters).length;
@@ -223,7 +237,12 @@ export const Listing = () => {
               >
                 Pedir busca no WhatsApp
               </a>
-              <button type="button" className="btn btn--outline" onClick={clearAll}>
+              {!onlyFavs && (
+                <button type="button" className="btn btn--outline" onClick={() => setAlertOpen(true)}>
+                  <BellRing size={16} /> Me avise quando surgir
+                </button>
+              )}
+              <button type="button" className="btn btn--ghost" onClick={clearAll}>
                 Limpar filtros
               </button>
             </div>
@@ -274,6 +293,24 @@ export const Listing = () => {
           </div>
         )}
       </section>
+
+      {!loading && results.length > 0 && !onlyFavs && (
+        <div className="container">
+          <div className="alert-strip">
+            <div>
+              <strong>Não encontrou o que procura?</strong>
+              <span>Deixe sua busca salva e receba um aviso quando surgir um imóvel assim.</span>
+            </div>
+            <button type="button" className="btn btn--outline" onClick={() => setAlertOpen(true)}>
+              <BellRing size={16} /> Me avise quando surgir
+            </button>
+          </div>
+        </div>
+      )}
+
+      {alertOpen && (
+        <AlertModal initial={alertInitial} bairros={bairros} onClose={() => setAlertOpen(false)} />
+      )}
 
       {drawerOpen && (
         <FiltersDrawer
