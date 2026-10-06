@@ -4,8 +4,10 @@ import { Link } from "react-router-dom";
 import { ArrowUpRight, CalendarCheck, Trash2, X } from "lucide-react";
 import { Dialog } from "@mui/material";
 import { useToast } from "../../contexts/ToastContext";
+import { cancelBooking } from "../../services/scheduling";
 import {
   addLeadNote,
+  clearLeadVisit,
   completeFollowUp,
   createManualLead,
   deleteLead,
@@ -166,11 +168,27 @@ export default function LeadDrawer({ lead, products, onClose, onSaved, onDeleted
     }
   };
 
+  /** Libera o horário na agenda pública e tira a visita do lead. */
+  const cancelVisit = async () => {
+    setSaving(true);
+    try {
+      if (!lead.visitPeriod) await cancelBooking(lead.visitAt).catch(() => { });
+      onSaved(await clearLeadVisit(lead));
+      toast("Visita cancelada e horário liberado");
+    } catch (err) {
+      console.error(err);
+      toast("Não foi possível cancelar a visita");
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const remove = async () => {
     setConfirmDelete(false);
     setSaving(true);
     try {
       await deleteLead(lead.id);
+      if (lead.visitAt && !lead.visitPeriod) await cancelBooking(lead.visitAt).catch(() => { });
       toast("Lead excluído");
       onDeleted(lead.id);
       onClose();
@@ -231,10 +249,15 @@ export default function LeadDrawer({ lead, products, onClose, onSaved, onDeleted
           {!isNew && lead.visitAt && (
             <div className="followup-banner followup-banner--visita">
               <span>
-                Pediu visita para{" "}
+                Visita {lead.source === "visita" ? "agendada pelo site" : ""} para{" "}
                 {lead.visitAt.toLocaleDateString("pt-BR", { weekday: "long", day: "numeric", month: "long" })}
-                {lead.visitPeriod ? ` (${visitPeriodLabel(lead.visitPeriod).toLowerCase()})` : ""}
+                {lead.visitPeriod
+                  ? ` (${visitPeriodLabel(lead.visitPeriod).toLowerCase()})`
+                  : `, às ${lead.visitAt.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}`}
               </span>
+              <button type="button" className="btn btn--outline btn--sm" onClick={cancelVisit} disabled={saving}>
+                Cancelar visita
+              </button>
             </div>
           )}
 

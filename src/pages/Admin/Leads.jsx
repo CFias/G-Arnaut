@@ -81,8 +81,10 @@ export function LeadCard({ lead, compact = false, onStage, onOpen }) {
         {product}
         {lead.visitAt && lead.stage !== "Fechado" && (
           <span className="followup-tag followup-tag--visita">
-            Visita pedida: {lead.visitAt.toLocaleDateString("pt-BR", { day: "numeric", month: "short" }).replace(".", "")}
-            {lead.visitPeriod ? ` · ${visitPeriodLabel(lead.visitPeriod).toLowerCase()}` : ""}
+            Visita: {lead.visitAt.toLocaleDateString("pt-BR", { day: "numeric", month: "short" }).replace(".", "")}
+            {lead.visitPeriod
+              ? ` · ${visitPeriodLabel(lead.visitPeriod).toLowerCase()}`
+              : ` · ${lead.visitAt.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}`}
           </span>
         )}
         {lead.phone && (

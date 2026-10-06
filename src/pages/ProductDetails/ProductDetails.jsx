@@ -24,6 +24,7 @@ import { useFavorites } from "../../contexts/FavoritesContext";
 import { useToast } from "../../contexts/ToastContext";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
 import { fetchProduct, registerView } from "../../services/products";
+import { fetchSchedule } from "../../services/scheduling";
 import { AGENT, negocioLabel, situacaoLabel } from "../../lib/constants";
 import { brl, formatPrice, priceLabel, priceSuffix, youtubeId } from "../../lib/format";
 import { productUrl } from "../../lib/whatsapp";
@@ -79,6 +80,14 @@ export const ProductDetails = () => {
   const [product, setProduct] = useState(undefined); // undefined = carregando, null = não existe
   const [lightbox, setLightbox] = useState(null);
   const [interest, setInterest] = useState(null); // null | "whatsapp" | "visita"
+  const [schedule, setSchedule] = useState(null);
+
+  // Agendamento só aparece se estiver ligado no painel
+  useEffect(() => {
+    fetchSchedule()
+      .then(setSchedule)
+      .catch(() => setSchedule(null));
+  }, []);
 
   useEffect(() => {
     let alive = true;
@@ -295,9 +304,11 @@ export const ProductDetails = () => {
                 <button type="button" className="btn btn--primary btn--lg btn--block price-cta" onClick={() => setInterest("whatsapp")}>
                   Tenho interesse — WhatsApp <ArrowUpRight size={16} />
                 </button>
-                <button type="button" className="btn btn--outline btn--block" onClick={() => setInterest("visita")}>
-                  <CalendarDays size={16} /> Agendar visita
-                </button>
+                {schedule?.enabled && !unavailable && (
+                  <button type="button" className="btn btn--outline btn--block" onClick={() => setInterest("visita")}>
+                    <CalendarDays size={16} /> Agendar visita
+                  </button>
+                )}
               </div>
 
               <div className="price-agent">
@@ -334,7 +345,7 @@ export const ProductDetails = () => {
         </button>
       </div>
 
-      {interest && <InterestModal product={p} initialTab={interest} onClose={() => setInterest(null)} />}
+      {interest && <InterestModal product={p} initialTab={interest} schedule={unavailable ? null : schedule} onClose={() => setInterest(null)} />}
 
       {lightbox !== null && p.images.length > 0 && (
         <Lightbox

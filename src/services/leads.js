@@ -209,3 +209,15 @@ export async function completeFollowUp(lead) {
 export async function deleteLead(id) {
   await deleteDoc(doc(db, COLLECTION, id));
 }
+
+/** Remove a visita do lead (a reserva do horário é apagada à parte). */
+export async function clearLeadVisit(lead, reason = "Visita cancelada") {
+  const note = newNote(reason, "system");
+  await updateDoc(doc(db, COLLECTION, lead.id), {
+    visitAt: null,
+    visitPeriod: "",
+    notes: arrayUnion(note),
+    updatedAt: serverTimestamp(),
+  });
+  return normalizeLead(lead.id, { ...lead.raw, visitAt: null, visitPeriod: "", notes: [...(lead.raw.notes || []), note] });
+}

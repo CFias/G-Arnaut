@@ -7,6 +7,7 @@ registros simplesmente não acontecem (os erros são ignorados em silêncio).
 | Recurso | O que precisa | Onde aparece |
 |---|---|---|
 | Leads | `create` público (só os campos do site) na coleção `leads`; criação manual, leitura, edição e exclusão só admin | Painel → Leads, KPIs da visão geral |
+| Agendamento | `settings` com leitura pública e escrita admin; `bookings` com leitura e criação públicas, sem sobrescrever | Botão "Agendar visita", Agenda → Disponibilidade |
 | Proprietários | coleção `owners` acessível só por admins (dados privados do dono do imóvel) | Cadastro de imóvel → seção 06, Agenda (fim de exclusividade) |
 | Visualizações / contagem de leads | visitante poder **apenas incrementar** `views` e `leadsCount` em `products` | Painel → colunas Views/Leads, "Mais vistos" |
 
@@ -51,6 +52,24 @@ service cloud.firestore {
       allow read, update, delete: if isAdmin();
     }
 
+    // Disponibilidade de visitas: o site lê, só admin altera
+    match /settings/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Horários reservados. O id é o horário (AAAA-MM-DDTHH:mm) e só
+    // `create` é permitido ao público: um horário já reservado não pode ser
+    // sobrescrito, o que impede duas pessoas no mesmo slot.
+    match /bookings/{slot} {
+      allow read: if true;
+      allow create: if request.resource.data.keys().hasOnly(['at', 'createdAt'])
+        && request.resource.data.at is timestamp
+        && request.resource.data.at > request.time;
+      allow update: if false;
+      allow delete: if isAdmin();
+    }
+
     // Proprietários: privado, nunca legível pelo site público
     match /owners/{productId} {
       allow read, write: if isAdmin();
@@ -69,7 +88,7 @@ service cloud.firestore {
 
 > ⚠️ Se as suas regras atuais forem diferentes para `users`, `posts`,
 > `featured_products`, `imoveis` ou `videos`, mantenha as suas — copie só os
-> blocos `products`, `leads` e `owners`.
+> blocos `products`, `leads`, `settings`, `bookings` e `owners`.
 
 A consulta de leads usa `orderBy("createdAt", "desc")` em um único campo, que
 não precisa de índice composto.

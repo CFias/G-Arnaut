@@ -3,6 +3,7 @@ import { useNavigate, useOutletContext } from "react-router-dom";
 import { fetchOwners } from "../../services/owners";
 import { CalendarDays, Phone } from "lucide-react";
 import LeadDrawer from "./LeadDrawer";
+import Availability from "./Availability";
 import { visitPeriodLabel } from "../../lib/crm";
 import { formatPhone } from "../../lib/format";
 
@@ -18,13 +19,31 @@ function dayTitle(date, today) {
 }
 
 /** Agenda de retornos e visitas pedidas, montada a partir dos leads. */
-export default function Agenda() {
+/** Abas: compromissos | disponibilidade para agendamento pelo site. */
+export default function AgendaPage() {
+  const [tab, setTab] = useState("agenda");
+  return (
+    <div className="admin-stack">
+      <div className="agenda-tabs" role="tablist" aria-label="Agenda">
+        <button type="button" role="tab" aria-selected={tab === "agenda"} onClick={() => setTab("agenda")}>
+          Compromissos
+        </button>
+        <button type="button" role="tab" aria-selected={tab === "disponibilidade"} onClick={() => setTab("disponibilidade")}>
+          Disponibilidade
+        </button>
+      </div>
+      {tab === "agenda" ? <Agenda /> : <Availability />}
+    </div>
+  );
+}
+
+function Agenda() {
   const { leads, setLeads, leadsState, products } = useOutletContext();
   const [openId, setOpenId] = useState(null);
   const [owners, setOwners] = useState([]);
   const navigate = useNavigate();
 
-  // Fim de exclusividade dos imóveis (coleção privada `owners`) 
+  // Fim de exclusividade dos imóveis (coleção privada `owners`)
   useEffect(() => {
     fetchOwners()
       .then(setOwners)
@@ -90,7 +109,7 @@ export default function Agenda() {
         <span className="agenda-main">
           <strong className="text-ellipsis">{e.lead.name}</strong>
           <small className="text-ellipsis">
-            {e.kind === "visita" ? "Visita pedida" : "Retorno"}
+            {e.kind === "visita" ? (e.lead.source === "visita" ? "Visita agendada pelo site" : "Visita") : "Retorno"}
             {e.lead.productTitle ? ` · ${e.lead.productTitle}` : ""}
           </small>
         </span>
