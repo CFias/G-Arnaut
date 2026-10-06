@@ -76,7 +76,9 @@
 }
 
 /* ---------- Reset ---------- */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -99,21 +101,38 @@ body {
   overflow-x: hidden;
 }
 
-h1, h2, h3, h4, h5, h6, p, figure, blockquote {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+figure,
+blockquote {
   margin: 0;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font);
   color: var(--ink);
 }
 
-ul, ol {
+ul,
+ol {
   margin: 0;
   padding: 0;
 }
 
-img, picture, video, svg {
+img,
+picture,
+video,
+svg {
   display: block;
   max-width: 100%;
 }
@@ -122,7 +141,10 @@ img {
   height: auto;
 }
 
-input, select, textarea, button {
+input,
+select,
+textarea,
+button {
   font: inherit;
   color: inherit;
 }
@@ -251,7 +273,8 @@ a:hover {
   text-decoration: none;
 }
 
-.btn:disabled, .btn[aria-disabled="true"] {
+.btn:disabled,
+.btn[aria-disabled="true"] {
   opacity: .55;
   cursor: not-allowed;
 }
@@ -366,7 +389,9 @@ a:hover {
   color: var(--muted);
 }
 
-.input, .select, .textarea {
+.input,
+.select,
+.textarea {
   width: 100%;
   min-width: 0;
   height: 48px;
@@ -379,15 +404,20 @@ a:hover {
   transition: border-color .2s, background-color .2s;
 }
 
-.input::placeholder, .textarea::placeholder {
+.input::placeholder,
+.textarea::placeholder {
   color: var(--muted-2);
 }
 
-.input:hover, .select:hover, .textarea:hover {
+.input:hover,
+.select:hover,
+.textarea:hover {
   border-color: var(--border-strong);
 }
 
-.input:focus, .select:focus, .textarea:focus {
+.input:focus,
+.select:focus,
+.textarea:focus {
   border-color: var(--primary);
 }
 
@@ -495,24 +525,45 @@ a:hover {
   white-space: nowrap;
 }
 
-.pill--ativo, .pill--visita-marcada {
+.pill--ativo,
+.pill--visita-marcada {
   background: var(--success-bg);
   color: var(--success-text);
 }
 
-.pill--reservado, .pill--novo, .pill--gold {
+.pill--reservado,
+.pill--novo,
+.pill--gold {
   background: var(--gold-tint);
   color: var(--gold-tint-text);
 }
 
-.pill--vendido, .pill--alugado, .pill--em-contato, .pill--primary {
+.pill--vendido,
+.pill--alugado,
+.pill--em-contato,
+.pill--primary {
   background: var(--primary-tint);
   color: var(--primary);
 }
 
-.pill--rascunho, .pill--fechado {
+.pill--rascunho,
+.pill--fechado {
   background: var(--neutral-bg);
   color: var(--neutral-text);
+}
+
+.link-btn {
+  border: none;
+  background: none;
+  padding: 6px 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--primary);
+  cursor: pointer;
+}
+
+.link-btn:hover {
+  color: var(--ink);
 }
 
 /* ---------- Toggle (switch) ---------- */
@@ -618,7 +669,9 @@ a:hover {
   margin-top: 4px;
 }
 
-.page-loading, .auth-checking, .admin-loading {
+.page-loading,
+.auth-checking,
+.admin-loading {
   display: grid;
   place-items: center;
   min-height: 50vh;
@@ -692,7 +745,10 @@ a:hover {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+
+  *,
+  *::before,
+  *::after {
     animation-duration: .01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: .01ms !important;

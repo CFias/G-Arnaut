@@ -2,7 +2,8 @@ import { useMemo } from "react";
 import { Link, useOutletContext } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { PropertiesTable } from "./PropertiesTable";
-import { LeadCard } from "./Leads";
+import { LeadCard, isDue } from "./Leads";
+import { followUpLabel } from "../../lib/format";
 
 const WEEKS = 8;
 const DAY = 86400000;
@@ -70,8 +71,25 @@ export default function Overview() {
 
   if (loading) return <div className="admin-loading">Carregando painel…</div>;
 
+  const due = leads.filter(isDue).sort((a, b) => a.followUpAt - b.followUpAt);
+
   return (
     <div className="admin-stack">
+      {due.length > 0 && (
+        <Link to="/admin/leads?filtro=retornos" className="due-banner">
+          <span className="due-dot" aria-hidden="true" />
+          <span>
+            <strong>
+              {due.length === 1 ? "1 retorno pendente" : `${due.length} retornos pendentes`}
+            </strong>
+            <small>
+              {due[0].name} · {followUpLabel(due[0].followUpAt)}
+              {due.length > 1 ? ` e mais ${due.length - 1}` : ""}
+            </small>
+          </span>
+          <ArrowRight size={16} />
+        </Link>
+      )}
       <div className="kpi-grid">
         {stats.kpis.map((k) => (
           <div key={k.label} className="kpi">

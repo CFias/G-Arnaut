@@ -148,19 +148,6 @@
   margin-bottom: 20px;
 }
 
-.link-btn {
-  border: none;
-  background: none;
-  padding: 6px 4px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--primary);
-}
-
-.link-btn:hover {
-  color: var(--ink);
-}
-
 .listing-empty {
   margin-top: 8px;
 }

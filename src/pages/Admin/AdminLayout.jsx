@@ -90,7 +90,7 @@ export default function AdminLayout() {
     }
   };
 
-  const showNewButton = !["/admin/cadastrar"].includes(location.pathname) && !location.pathname.startsWith("/admin/editar");
+  const showNewButton = !["/admin/cadastrar", "/admin/leads"].includes(location.pathname) && !location.pathname.startsWith("/admin/editar");
 
   return (
     <div className="admin">
@@ -144,15 +144,15 @@ export default function AdminLayout() {
 
         <Suspense fallback={<div className="admin-loading">Carregando…</div>}>
           <Outlet
-          context={{
-            products,
-            loading,
-            reload,
-            leads,
-            setLeads,
-            leadsState,
-            reloadLeads: loadLeads,
-          }}
+            context={{
+              products,
+              loading,
+              reload,
+              leads,
+              setLeads,
+              leadsState,
+              reloadLeads: loadLeads,
+            }}
           />
         </Suspense>
       </div>

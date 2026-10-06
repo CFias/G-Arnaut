@@ -108,3 +108,50 @@ export function youtubeId(url) {
 
 export const normalizeText = (s = "") =>
   String(s).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
+/** Só dígitos, no máximo 13 (55 + DDD + número). */
+export const phoneDigits = (v) => String(v ?? "").replace(/\D/g, "").slice(0, 13);
+
+/** "71991900974" → "(71) 99190-0974" (aceita também com 55 na frente). */
+export function formatPhone(v) {
+  let d = phoneDigits(v);
+  if (d.length > 11 && d.startsWith("55")) d = d.slice(2);
+  if (d.length <= 2) return d ? `(${d}` : "";
+  if (d.length <= 6) return `(${d.slice(0, 2)}) ${d.slice(2)}`;
+  if (d.length <= 10) return `(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}`;
+  return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7, 11)}`;
+}
+
+/** Número pronto para wa.me: adiciona 55 quando vier só DDD + número. */
+export function waPhone(v) {
+  const d = phoneDigits(v);
+  if (!d) return "";
+  return d.length <= 11 ? `55${d}` : d;
+}
+
+/** Date → valor de <input type="datetime-local"> no fuso local. */
+export function toLocalInput(date) {
+  if (!date) return "";
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+}
+
+export const fromLocalInput = (value) => (value ? new Date(value) : null);
+
+/** Situação do retorno agendado: atrasado | hoje | futuro | null */
+export function followUpState(date, now = new Date()) {
+  if (!date) return null;
+  if (date < now) return "atrasado";
+  const end = new Date(now);
+  end.setHours(23, 59, 59, 999);
+  return date <= end ? "hoje" : "futuro";
+}
+
+export function followUpLabel(date) {
+  const state = followUpState(date);
+  if (!state) return "";
+  const time = date.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+  if (state === "hoje") return `Retorno hoje, ${time}`;
+  if (state === "atrasado") return `Retorno atrasado · ${relativeDate(date)}`;
+  return `Retorno ${relativeDate(date)}`;
+}

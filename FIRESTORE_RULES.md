@@ -6,7 +6,7 @@ registros simplesmente não acontecem (os erros são ignorados em silêncio).
 
 | Recurso | O que precisa | Onde aparece |
 |---|---|---|
-| Leads | `create` público na coleção `leads`; leitura/edição só admin | Painel → Leads, KPIs da visão geral |
+| Leads | `create` público (só os campos do site) na coleção `leads`; criação manual, leitura, edição e exclusão só admin | Painel → Leads, KPIs da visão geral |
 | Visualizações / contagem de leads | visitante poder **apenas incrementar** `views` e `leadsCount` em `products` | Painel → colunas Views/Leads, "Mais vistos" |
 
 Revise antes de publicar (Firebase Console → Firestore → Regras). Os UIDs
@@ -39,7 +39,8 @@ service cloud.firestore {
     }
 
     match /leads/{id} {
-      allow create: if request.resource.data.keys().hasOnly(
+      // Admin cadastra leads manuais com todos os campos (notes, followUpAt, email...)
+      allow create: if isAdmin() || request.resource.data.keys().hasOnly(
           ['name', 'phone', 'productId', 'productTitle', 'productCode', 'source', 'message', 'stage', 'createdAt'])
         && request.resource.data.stage == 'Novo'
         && request.resource.data.name is string && request.resource.data.name.size() <= 120

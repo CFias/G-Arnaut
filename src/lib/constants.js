@@ -74,6 +74,22 @@ export const PUBLIC_STATUS = ["Ativo", "Reservado"];
 
 export const LEAD_STAGES = ["Novo", "Em contato", "Visita marcada", "Fechado"];
 
+// Origem do lead. "whatsapp" e "form" são gravados pelo site;
+// os demais só existem em leads cadastrados à mão no painel.
+export const LEAD_SOURCES = [
+  { value: "whatsapp", label: "WhatsApp (site)" },
+  { value: "form", label: "Formulário do site" },
+  { value: "telefone", label: "Ligação" },
+  { value: "indicacao", label: "Indicação" },
+  { value: "instagram", label: "Instagram" },
+  { value: "portal", label: "Portal imobiliário" },
+  { value: "presencial", label: "Presencial" },
+  { value: "outro", label: "Outro" },
+];
+
+export const leadSourceLabel = (value) =>
+  LEAD_SOURCES.find((s) => s.value === value)?.label || "Outro";
+
 // Faixas de preço por grupo de negócio: [valor, rótulo, min, max]
 export const FAIXAS = {
   venda: [
