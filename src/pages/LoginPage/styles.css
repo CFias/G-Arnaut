@@ -1,0 +1,69 @@
+.auth { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr); min-height: 100vh; }
+
+.auth-main { position: relative; display: grid; place-items: center; padding: 72px 24px 40px; }
+.auth-back {
+  position: absolute;
+  top: 20px;
+  left: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.auth-back:hover { color: var(--primary); }
+
+.auth-box { width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 8px; }
+.auth-logo { width: 56px; height: 56px; object-fit: contain; margin-left: -6px; }
+.auth-box h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; }
+.auth-box > .muted { font-size: 15px; }
+
+.auth-form { display: flex; flex-direction: column; gap: 16px; margin-top: 20px; }
+.auth-form .form-error {
+  padding: 12px 14px;
+  border-radius: var(--r-control);
+  background: #FBF1EF;
+  color: var(--error);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.password-wrap { position: relative; display: block; }
+.password-wrap .input { padding-right: 48px; }
+.password-toggle {
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+}
+.password-toggle:hover { color: var(--ink); }
+
+.auth-aside {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 14px;
+  margin: 16px;
+  padding: 48px;
+  border-radius: var(--r-block);
+  background: var(--ink);
+  color: #FFFFFF;
+}
+.auth-aside img { width: 96px; height: 96px; object-fit: contain; opacity: .9; margin-bottom: 12px; }
+.auth-aside h2 { color: #FFFFFF; font-size: 26px; font-weight: 700; letter-spacing: -0.02em; }
+.auth-aside p { color: #C3CAD8; max-width: 36ch; }
+
+@media (max-width: 899.95px) {
+  .auth { grid-template-columns: minmax(0, 1fr); }
+  .auth-aside { padding: 28px; margin: 0 16px 16px; }
+  .auth-aside img { display: none; }
+}

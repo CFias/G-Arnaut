@@ -5,15 +5,8 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import {
-  getFirestore,
-  collection,
-  doc,
-  getDocs,
-  deleteDoc,
-  addDoc,
-} from "firebase/firestore"; // Firestore
-import { getStorage } from "firebase/storage"; // Firebase Storage
+import { getFirestore, collection, getDocs, addDoc } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAjrMdHv0FWvOeXLopn6WQqXwbS1L8tIiM",
@@ -24,14 +17,15 @@ const firebaseConfig = {
   appId: "1:595219975927:web:151702a9cac677854c0df2",
 };
 
-// Inicializar Firebase
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
-export const db = getFirestore(app); // Inicializa e exporta o Firestore
-export const storage = getStorage(app); // Inicializa e exporta o Firebase Storage
+export const db = getFirestore(app);
+export const storage = getStorage(app);
 
-export function signup(userName, email, password) {
-  return createUserWithEmailAndPassword(auth, userName, email, password);
+// Antes recebia (userName, email, password) e repassava os três para o
+// Firebase, que só aceita (auth, email, password). Funcionava por acaso.
+export function signup(email, password) {
+  return createUserWithEmailAndPassword(auth, email, password);
 }
 
 export function login(email, password) {
@@ -42,38 +36,23 @@ export function logout() {
   return signOut(auth);
 }
 
-export async function getProductCount() {
-  const productsCollection = collection(db, "products");
-  const productSnapshot = await getDocs(productsCollection);
-  return productSnapshot.size;
-}
-
 export async function getPostCount() {
-  const postsCollection = collection(db, "posts");
-  const postSnapshot = await getDocs(postsCollection);
-  return postSnapshot.size;
+  const snap = await getDocs(collection(db, "posts"));
+  return snap.size;
 }
 
-export async function deleteProduct(productId) {
-  try {
-    const productDoc = doc(db, "products", productId); // Cria a referência ao documento
-    await deleteDoc(productDoc); // Exclui o documento
-    console.log("Produto deletado com sucesso!");
-  } catch (error) {
-    console.error("Erro ao deletar o produto:", error);
-  }
-}
-
+// Usado pela página ImportVideo
 export const addVideoToFirestore = async (videoUrl) => {
   try {
-    const docRef = await addDoc(collection(db, "videos"), {
-      videoUrl: videoUrl,
-      createdAt: new Date(),
-    });
-    console.log("Vídeo adicionado com sucesso, ID:", docRef.id);
+    await addDoc(collection(db, "videos"), { videoUrl, createdAt: new Date() });
   } catch (e) {
     console.error("Erro ao adicionar vídeo: ", e);
     throw new Error("Erro ao adicionar vídeo");
   }
 };
 
+// Exclusão e leitura de imóveis ficam em services/products.js
+export async function getProductCount() {
+  const snap = await getDocs(collection(db, "products"));
+  return snap.size;
+}

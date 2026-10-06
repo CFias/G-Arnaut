@@ -1,0 +1,69 @@
+.contact { padding-top: 48px; padding-bottom: 48px; }
+
+.contact-title {
+  margin-bottom: 36px;
+  font-size: clamp(32px, 4vw, 56px);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.contact-channels { display: flex; flex-direction: column; gap: 12px; }
+
+.wa-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 28px;
+  border-radius: var(--r-block);
+  background: var(--primary);
+  color: #FFFFFF;
+  transition: background-color .2s;
+}
+.wa-card:hover { background: var(--primary-hover); color: #FFFFFF; }
+.wa-card-kicker { font-size: 13px; font-weight: 600; color: var(--gold-light); }
+.wa-card-title { display: inline-flex; align-items: center; gap: 8px; font-size: 30px; font-weight: 700; letter-spacing: -0.02em; }
+.wa-card-number { font-size: 15px; color: #D5DAE4; }
+
+.channel {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-card);
+  color: var(--ink);
+  transition: border-color .2s;
+}
+.channel:hover { border-color: var(--primary); color: var(--ink); }
+.channel-icon { display: grid; place-items: center; width: 40px; height: 40px; border-radius: var(--r-control); background: var(--bg-soft); color: var(--primary); flex-shrink: 0; }
+.channel-text { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+.channel-text small { font-size: 12px; color: var(--muted); }
+.channel-text strong { font-size: 15px; font-weight: 600; overflow-wrap: anywhere; }
+.channel-arrow { color: var(--muted); }
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 28px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-block);
+}
+.contact-form h2 { font-size: 22px; font-weight: 700; letter-spacing: -0.01em; }
+.contact-form .muted { margin-top: 4px; font-size: 14px; }
+.contact-interests { border: none; padding: 0; margin: 0; }
+.contact-interests legend { margin-bottom: 8px; }
+.contact-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+
+@media (max-width: 899.95px) {
+  .contact-grid { grid-template-columns: minmax(0, 1fr); }
+  .contact-form { padding: 20px; }
+}

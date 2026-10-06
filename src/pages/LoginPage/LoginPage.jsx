@@ -1,90 +1,94 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
+import AuthShell from "./AuthShell";
 import { login } from "../../services/FirebaseConfig";
 import { useAuth } from "../../contexts/AuthContext";
-import { NavLink, useNavigate } from "react-router-dom";
-import IconButton from "@mui/material/IconButton";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import Logo from "../../assets/image/garnaut-gray-logo.png";
-import { ArrowBack } from "@mui/icons-material";
-import CircularProgress from "@mui/material/CircularProgress";
+import { isAdminUser } from "../../config/adminUsers";
+import { useDocumentTitle } from "../../hooks/useDocumentTitle";
+
+const ERRORS = {
+  "auth/invalid-credential": "E-mail ou senha incorretos.",
+  "auth/wrong-password": "E-mail ou senha incorretos.",
+  "auth/user-not-found": "E-mail ou senha incorretos.",
+  "auth/invalid-email": "Esse e-mail não parece válido.",
+  "auth/too-many-requests": "Muitas tentativas. Aguarde alguns minutos e tente de novo.",
+  "auth/network-request-failed": "Sem conexão. Verifique a internet.",
+};
 
 export default function Login() {
+  useDocumentTitle("Entrar");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const { currentUser } = useAuth();
   const navigate = useNavigate();
 
+  // Já logado → vai direto para onde faz sentido
+  useEffect(() => {
+    if (currentUser) navigate(isAdminUser(currentUser) ? "/admin" : "/", { replace: true });
+  }, [currentUser, navigate]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
+    setLoading(true);
+    setError("");
     try {
-      await login(email, password);
-      navigate("/");
-    } catch (error) {
-      console.error("Erro ao fazer login:", error);
+      const { user } = await login(email.trim(), password);
+      navigate(isAdminUser(user) ? "/admin" : "/", { replace: true });
+    } catch (err) {
+      console.error("Erro ao fazer login:", err);
+      setError(ERRORS[err?.code] || "Não foi possível entrar. Tente de novo.");
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
   return (
-    <div className="access-container">
-      <form className="access-form" onSubmit={handleSubmit}>
-        <NavLink to="/" className="access-back">
-          <ArrowBack fontSize="10" /> Início
-        </NavLink>
-        <div className="access-logo">
-          <img className="access-img" src={Logo} alt="" />
-        </div>
-        <h2 className="access-title">Acesse a sua conta</h2>
-        {currentUser && <p>Bem-vindo, {currentUser.email}</p>}
-        <input
-          className="access-item"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
-          required
-        />
-        <div className="password-container">
-          <input
-            className="access-item"
-            type={showPassword ? "text" : "password"}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Senha"
-            required
-          />
-          <div className="show-pass">
-            Mostrar senha
-            <IconButton
-              onClick={() => setShowPassword((prev) => !prev)}
-              edge="end"
+    <AuthShell
+      title="Área do corretor"
+      subtitle="Entre para gerenciar imóveis e leads."
+      aside={
+        <>
+          <h2>Novo por aqui?</h2>
+          <p>Crie sua conta para salvar buscas e acompanhar imóveis.</p>
+          <Link className="btn btn--white" to="/register">Criar conta</Link>
+        </>
+      }
+    >
+      <form className="auth-form" onSubmit={handleSubmit} noValidate>
+        {error && <div className="form-error" role="alert">{error}</div>}
+        <label className="field">
+          <span className="field-label">E-mail</span>
+          <input className="input" type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" required />
+        </label>
+        <label className="field">
+          <span className="field-label">Senha</span>
+          <span className="password-wrap">
+            <input
+              className="input"
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoComplete="current-password"
+              required
+            />
+            <button
+              type="button"
+              className="password-toggle"
+              onClick={() => setShowPassword((v) => !v)}
+              aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
             >
-              {showPassword ? (
-                <VisibilityOff fontSize="10" />
-              ) : (
-                <Visibility fontSize="10" />
-              )}
-            </IconButton>
-          </div>
-        </div>
-        <button className="access-btn" type="submit" disabled={isLoading}>
-          {isLoading ? <CircularProgress color="white" size={13} /> : "Entrar"}
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </span>
+        </label>
+        <button className="btn btn--primary btn--lg btn--block" type="submit" disabled={loading || !email || !password}>
+          {loading ? "Entrando…" : "Entrar"}
         </button>
       </form>
-      <div className="access-alt">
-        <h3 className="access-sub">Novo por aqui?</h3>
-        <p className="access-p">
-          Faça já o seu cadastro e encontre <br /> aqui o que você procura
-        </p>
-        <NavLink className="access-nav" to="/register">
-          Criar conta
-        </NavLink>
-      </div>
-    </div>
+    </AuthShell>
   );
 }

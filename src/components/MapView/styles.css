@@ -1,0 +1,52 @@
+.mapview {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 280px;
+  overflow: hidden;
+  border-radius: var(--r-block);
+  border: 1px solid var(--border);
+  background: #E9EEF5;
+}
+
+.mapview-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(#DCE3EE 1px, transparent 1px),
+    linear-gradient(90deg, #DCE3EE 1px, transparent 1px),
+    radial-gradient(ellipse at 20% 85%, #CFE0F2 0 18%, transparent 19%);
+  background-size: 48px 48px, 48px 48px, 100% 100%;
+}
+
+.mapview-caption {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, .92);
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.mapview-pin {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  padding: 5px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-pill);
+  background: #FFFFFF;
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: 0 6px 16px -10px rgba(15, 27, 51, .5);
+  transition: background-color .2s, color .2s, transform .2s;
+}
+.mapview-pin:hover { transform: translate(-50%, -50%) scale(1.05); }
+.mapview-pin.is-on { background: var(--primary); border-color: var(--primary); color: #FFFFFF; }

@@ -1,109 +1,80 @@
-import React, { useState, useEffect } from "react";
-import {
-  Box,
-  Avatar,
-  Typography,
-  Button,
-  TextField,
-  Stack,
-  CircularProgress,
-} from "@mui/material";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { ArrowLeft, Camera } from "lucide-react";
+import { doc, setDoc } from "firebase/firestore";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useAuth } from "../../contexts/AuthContext";
-import { doc, updateDoc, getDoc } from "firebase/firestore";
+import { useToast } from "../../contexts/ToastContext";
 import { db, storage } from "../../services/FirebaseConfig";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { NavLink } from "react-router-dom";
+import { compressImage } from "../../services/images";
+import { useDocumentTitle } from "../../hooks/useDocumentTitle";
+import Profile from "../../assets/image/arnaut-profile.webp";
+import "./styles.css";
 
 const EditProfile = () => {
-  const { currentUser, userName, setUserName } = useAuth();
-  const [newName, setNewName] = useState(userName || "");
+  useDocumentTitle("Editar perfil");
+  const { currentUser, userName, photoURL, setUserName } = useAuth();
+  const toast = useToast();
+  const [name, setName] = useState(userName || "");
   const [image, setImage] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [preview, setPreview] = useState(null);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => setName(userName || ""), [userName]);
 
   useEffect(() => {
-    if (image) {
-      const reader = new FileReader();
-      reader.onloadend = () => setPreviewUrl(reader.result);
-      reader.readAsDataURL(image);
-    } else {
-      setPreviewUrl(null);
-    }
+    if (!image) return setPreview(null);
+    const url = URL.createObjectURL(image);
+    setPreview(url);
+    return () => URL.revokeObjectURL(url);
   }, [image]);
 
-  const handleUpdate = async () => {
+  const handleSave = async (e) => {
+    e.preventDefault();
+    setSaving(true);
     try {
-      setLoading(true);
-      const userRef = doc(db, "users", currentUser.uid);
-
-      let photoURL = null;
-
+      const data = {};
+      if (name.trim()) data.userName = name.trim();
       if (image) {
-        const storageRef = ref(storage, `avatars/${currentUser.uid}`);
-        await uploadBytes(storageRef, image);
-        photoURL = await getDownloadURL(storageRef);
+        const fileRef = ref(storage, `avatars/${currentUser.uid}`);
+        await uploadBytes(fileRef, await compressImage(image));
+        data.photoURL = await getDownloadURL(fileRef);
       }
-
-      const updatedData = {
-        ...(newName && { name: newName }),
-        ...(photoURL && { avatar: photoURL }),
-      };
-
-      await updateDoc(userRef, updatedData);
-
-      if (newName) setUserName(newName);
-
-      alert("Perfil atualizado com sucesso!");
+      // Antes gravava "name"/"avatar", campos que o AuthContext não lia.
+      await setDoc(doc(db, "users", currentUser.uid), data, { merge: true });
+      if (data.userName) setUserName(data.userName);
+      toast("Perfil atualizado");
+      setImage(null);
     } catch (err) {
       console.error("Erro ao atualizar perfil:", err);
-      alert("Erro ao atualizar perfil.");
+      toast("Não foi possível atualizar o perfil");
     } finally {
-      setLoading(false);
+      setSaving(false);
     }
   };
 
   return (
-    <Box sx={{ p: 4, maxWidth: 500, mx: "auto" }}>
-      <NavLink className="access-back" to="/admin">
-        Voltar
-      </NavLink>
-      <Typography variant="h5" mb={3}>
-        Editar Perfil
-      </Typography>
-
-      <Stack spacing={3}>
-        <Avatar
-          src={previewUrl}
-          alt="Avatar"
-          sx={{ width: 120, height: 120, mx: "auto" }}
-        />
-        <Button variant="contained" component="label">
-          Selecionar Foto
-          <input
-            type="file"
-            accept="image/*"
-            hidden
-            onChange={(e) => setImage(e.target.files[0])}
-          />
-        </Button>
-
-        <TextField
-          label="Nome de usuário"
-          value={newName}
-          onChange={(e) => setNewName(e.target.value)}
-          fullWidth
-        />
-
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleUpdate}
-          disabled={loading}
-        >
-          {loading ? <CircularProgress size={24} color="inherit" /> : "Salvar"}
-        </Button>
-      </Stack>
-    </Box>
+    <div className="profile-page">
+      <Link to="/admin" className="auth-back-link">
+        <ArrowLeft size={16} /> Voltar ao painel
+      </Link>
+      <form className="profile-card" onSubmit={handleSave}>
+        <h1>Editar perfil</h1>
+        <label className="profile-avatar">
+          <img src={preview || photoURL || Profile} alt="Foto do perfil" />
+          <span className="profile-avatar-btn"><Camera size={16} /> Trocar foto</span>
+          <input type="file" accept="image/*" hidden onChange={(e) => setImage(e.target.files?.[0] || null)} />
+        </label>
+        <label className="field">
+          <span className="field-label">Nome exibido</span>
+          <input className="input" value={name} onChange={(e) => setName(e.target.value)} />
+        </label>
+        <p className="field-hint">{currentUser?.email}</p>
+        <button type="submit" className="btn btn--primary btn--lg" disabled={saving}>
+          {saving ? "Salvando…" : "Salvar"}
+        </button>
+      </form>
+    </div>
   );
 };
 

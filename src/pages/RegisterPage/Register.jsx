@@ -1,149 +1,100 @@
-import React, { useState } from "react";
-import { signup } from "../../services/FirebaseConfig";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { doc, setDoc } from "firebase/firestore";
+import AuthShell from "../LoginPage/AuthShell";
+import { db, signup } from "../../services/FirebaseConfig";
 import { useAuth } from "../../contexts/AuthContext";
-import { NavLink, useNavigate } from "react-router-dom";
-import { getAuth, fetchSignInMethodsForEmail } from "firebase/auth";
-import { getFirestore, doc, setDoc } from "firebase/firestore";
-import { ArrowBack } from "@mui/icons-material";
-import Logo from "../../assets/image/garnaut-gray-logo.png";
-import CircularProgress from "@mui/material/CircularProgress";
+import { useDocumentTitle } from "../../hooks/useDocumentTitle";
+
+function passwordStrength(pw) {
+  if (pw.length < 8) return "Muito fraca";
+  const score = [/[A-Z]/, /[a-z]/, /[0-9]/, /[^A-Za-z0-9]/].filter((r) => r.test(pw)).length;
+  return score === 4 ? "Forte" : score === 3 ? "Média" : "Fraca";
+}
+
+const ERRORS = {
+  "auth/email-already-in-use": "Este e-mail já está em uso.",
+  "auth/invalid-email": "Esse e-mail não parece válido.",
+  "auth/weak-password": "A senha precisa ter pelo menos 6 caracteres.",
+  "auth/network-request-failed": "Sem conexão. Verifique a internet.",
+};
 
 export default function Register() {
-  const [userName, setUserName] = useState("");
+  useDocumentTitle("Criar conta");
+  const [userName, setUserNameInput] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [passwordStrength, setPasswordStrength] = useState("");
-  const [isLoading, setIsLoading] = useState(false); // Loading state
-  const { currentUser } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const { setUserName } = useAuth();
   const navigate = useNavigate();
-  const db = getFirestore();
-
-  const handlePasswordChange = (e) => {
-    const newPassword = e.target.value;
-    setPassword(newPassword);
-    setPasswordStrength(checkPasswordStrength(newPassword));
-  };
-
-  const checkPasswordStrength = (password) => {
-    let strength = "";
-    if (password.length >= 8) {
-      const hasUpperCase = /[A-Z]/.test(password);
-      const hasLowerCase = /[a-z]/.test(password);
-      const hasNumber = /[0-9]/.test(password);
-      const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-
-      const score = [
-        hasUpperCase,
-        hasLowerCase,
-        hasNumber,
-        hasSpecialChar,
-      ].filter(Boolean).length;
-
-      if (score === 4) strength = "Forte";
-      else if (score === 3) strength = "Média";
-      else strength = "Fraca";
-    } else {
-      strength = "Muito fraca";
-    }
-    return strength;
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (password !== confirmPassword) {
-      console.error("As senhas não coincidem.");
+      setError("As senhas não coincidem.");
       return;
     }
-
-    setIsLoading(true); // Set loading to true at the start
-    const auth = getAuth();
-
+    setLoading(true);
+    setError("");
     try {
-      const signInMethods = await fetchSignInMethodsForEmail(auth, email);
-      if (signInMethods.length > 0) {
-        console.error("Este email já está em uso.");
-        setIsLoading(false);
-        return;
-      }
-
-      const userCredential = await signup(email, password);
-      const user = userCredential.user;
-
-      await setDoc(doc(db, "users", user.uid), {
-        userName,
-        email,
-      });
-
-      setUserName(userName);
+      const { user } = await signup(email.trim(), password);
+      await setDoc(doc(db, "users", user.uid), { userName: userName.trim(), email: email.trim() });
+      setUserName?.(userName.trim());
       navigate("/");
-    } catch (error) {
-      console.error("Erro ao registrar usuário:", error);
+    } catch (err) {
+      console.error("Erro ao registrar usuário:", err);
+      setError(ERRORS[err?.code] || "Não foi possível criar a conta. Tente de novo.");
     } finally {
-      setIsLoading(false); // Reset loading state after registration completes
+      setLoading(false);
     }
   };
 
+  const strength = password ? passwordStrength(password) : "";
+
   return (
-    <div className="access-container">
-      <form className="access-form" onSubmit={handleSubmit}>
-        <NavLink to="/" className="access-back">
-          <ArrowBack fontSize="10" /> Início
-        </NavLink>
-        <div className="access-logo">
-          <img className="access-img" src={Logo} alt="" />
-        </div>
-        <h2 className="access-title">Faça já o seu cadastro</h2>
-        {currentUser && <p>Bem-vindo, {currentUser.email}</p>}
-        <input
-          className="access-item"
-          type="text"
-          value={userName}
-          onChange={(e) => setUserName(e.target.value)}
-          placeholder="Nome de Usuário"
-          required
-        />
-        <input
-          className="access-item"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
-          required
-        />
-        <input
-          className="access-item"
-          type="password"
-          value={password}
-          onChange={handlePasswordChange}
-          placeholder="Senha"
-          required
-        />
-        <input
-          className="access-item"
-          type="password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          placeholder="Confirme a Senha"
-          required
-        />
-        <p className={`password-strength ${passwordStrength.toLowerCase()}`}>
-          Força da senha: {passwordStrength}
-        </p>
-        <button className="access-btn" type="submit" disabled={isLoading}>
-          {isLoading ? <CircularProgress color="white" size={13} /> : "Registrar"}
+    <AuthShell
+      title="Criar conta"
+      aside={
+        <>
+          <h2>Já tem conta?</h2>
+          <p>Entre para continuar de onde parou.</p>
+          <Link className="btn btn--white" to="/login">Entrar</Link>
+        </>
+      }
+    >
+      <form className="auth-form" onSubmit={handleSubmit}>
+        {error && <div className="form-error" role="alert">{error}</div>}
+        <label className="field">
+          <span className="field-label">Nome</span>
+          <input className="input" value={userName} onChange={(e) => setUserNameInput(e.target.value)} autoComplete="name" required />
+        </label>
+        <label className="field">
+          <span className="field-label">E-mail</span>
+          <input className="input" type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" required />
+        </label>
+        <label className="field">
+          <span className="field-label">Senha</span>
+          <input className="input" type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="new-password" required />
+          {strength && <span className="field-hint">Força da senha: {strength}</span>}
+        </label>
+        <label className="field">
+          <span className="field-label">Confirme a senha</span>
+          <input
+            className="input"
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            autoComplete="new-password"
+            aria-invalid={confirmPassword && confirmPassword !== password ? "true" : undefined}
+            required
+          />
+        </label>
+        <button className="btn btn--primary btn--lg btn--block" type="submit" disabled={loading}>
+          {loading ? "Criando…" : "Criar conta"}
         </button>
       </form>
-      <div className="access-alt">
-        <h3 className="access-sub">Já possui conta?</h3>
-        <p className="access-p">
-          Faça já o seu login e encontre <br /> aqui o que você procura
-        </p>
-        <NavLink className="access-nav" to="/login">
-          Login
-        </NavLink>
-      </div>
-    </div>
+    </AuthShell>
   );
 }

@@ -1,84 +1,91 @@
-import React from "react";
+import { Link } from "react-router-dom";
+import Logo from "../../assets/image/garnaut-gray-logo.png";
+import { AGENT, NEGOCIOS } from "../../lib/constants";
+import { listingUrl } from "../../lib/filters";
+import { trackCall, trackWhatsApp, waLink } from "../../lib/whatsapp";
 import "./styles.css";
-import { NavLink } from "react-router-dom";
+
+const SELL_MESSAGE = `Olá, ${AGENT.firstName}! Quero vender ou alugar meu imóvel e gostaria de uma avaliação.`;
+
+/** Bloco escuro "Quer vender ou alugar seu imóvel?" — antes do rodapé. */
+export function CtaBanner() {
+  return (
+    <section className="container cta-wrap" aria-labelledby="cta-title">
+      <div className="cta">
+        <div>
+          <h2 id="cta-title">Quer vender ou alugar seu imóvel?</h2>
+          <p>Faço a avaliação e cuido da divulgação para você.</p>
+        </div>
+        <a
+          className="btn btn--white btn--lg cta-btn"
+          href={waLink(SELL_MESSAGE)}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => trackWhatsApp()}
+        >
+          <span className="cta-dot" aria-hidden="true" />
+          Fale comigo
+        </a>
+      </div>
+    </section>
+  );
+}
 
 export const Footer = () => {
+  const year = new Date().getFullYear();
+
   return (
-    <footer className="footer-container">
-      <div className="footer-content">
-        <h3>Conquiste o seu imóvel</h3>
-        <div className="footer-infos">
-          <div className="info-footer">
-            <h4>Redes</h4>
-            <NavLink className="link-footer">WhatsApp</NavLink>
-            <NavLink className="link-footer">Instagram</NavLink>
-            <NavLink className="link-footer">YouTube</NavLink>
-          </div>
-          <div className="info-footer">
-            <h4>Atendimento personalizado</h4>
-            <NavLink className="link-footer">Falar com o corretor</NavLink>
-            <NavLink className="link-footer">
-              Personalizar via formulário
-            </NavLink>
-          </div>
-          <div className="info-footer">
-            <h4>Precisando de um corretor ?</h4>
-            <NavLink className="link-footer">Fale comigo</NavLink>
-            <NavLink className="link-footer">E-mail</NavLink>
-          </div>
-          <div className="info-footer">
-            <h4>Deseja vender um imóvel ?</h4>
-            <NavLink className="link-footer">Falar com o corretor</NavLink>
-            <NavLink className="link-footer">Apresentar imóvel</NavLink>
-          </div>
-          <div className="info-footer">
-            <h4>Confira a minha biografia</h4>
-            <NavLink className="link-footer">Saiba mais sobre mim</NavLink>
-            <NavLink className="link-footer">Contatos</NavLink>
-          </div>
+    <footer className="site-footer">
+      <div className="container footer-grid">
+        <div className="footer-brand">
+          <Link to="/" className="footer-logo">
+            <img src={Logo} alt="" width={40} height={40} loading="lazy" />
+            <span>{AGENT.name}</span>
+          </Link>
+          <p>
+            Corretor de imóveis em Salvador — BA
+            <br />
+            <a href={AGENT.phoneHref} onClick={trackCall}>
+              {AGENT.phoneDisplay}
+            </a>
+            <br />
+            <a href={`mailto:${AGENT.email}`}>{AGENT.email}</a>
+          </p>
         </div>
-      </div>
-      <div className="footer-content-two">
-        <div className="info-footer">
-          <h4>Atendimento</h4>
-          <NavLink className="link-footer">Suporte</NavLink>
+
+        <div className="footer-col">
+          <h3>Imóveis</h3>
+          {NEGOCIOS.map((n) => (
+            <Link key={n.key} to={listingUrl({ negocio: n.key })}>
+              {n.label}
+            </Link>
+          ))}
         </div>
-        <div className="info-footer">
-          <h4>O que você procura ?</h4>
-          <NavLink className="link-footer">Imóveis à venda</NavLink>
-          <NavLink className="link-footer">Imóveis para alugar</NavLink>
-        </div>
-        <div className="info-footer">
-          <h4>Confira os tipos de imóveis:</h4>
-          <NavLink className="link-footer">Casa</NavLink>
-          <NavLink className="link-footer">Apartamento</NavLink>
-          <NavLink className="link-footer">Galpão</NavLink>
-          <NavLink className="link-footer">Sitio</NavLink>
-          <NavLink className="link-footer">Fazenda</NavLink>
-          <NavLink className="link-footer">Terreno</NavLink>
-        </div>
-        <div className="info-footer">
-          <h4>Minha credencial</h4>
-          <NavLink className="link-footer">Conferir</NavLink>
-        </div>
-        <div className="info-footer">
-          <h4>Condições para adquirir seu imóvel</h4>
-          <NavLink className="link-footer">Conferir</NavLink>
-        </div>
-      </div>
-      <div className="footer-power-by">
-        <span>
-          {`Powered by `}
-          <a
-            href="https://yourwebsite.com"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Cleidson Fias
+
+        <div className="footer-col">
+          <h3>Atendimento</h3>
+          <a href={waLink()} target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsApp()}>
+            Falar no WhatsApp
           </a>
-          {` © ${new Date().getFullYear()} - Todos os direitos reservados.`}
+          <Link to="/contato">Anunciar meu imóvel</Link>
+          <Link to="/contato">Contato</Link>
+        </div>
+
+        <div className="footer-col">
+          <h3>O corretor</h3>
+          <Link to="/about">Sobre Gildavi</Link>
+          <Link to="/about#servicos">Serviços</Link>
+        </div>
+      </div>
+
+      <div className="container footer-bottom">
+        <span>
+          © {year} {AGENT.name} · {AGENT.creci}
         </span>
+        <Link to="/admin">Área do corretor →</Link>
       </div>
     </footer>
   );
 };
+
+export default Footer;

@@ -1,62 +1,64 @@
-import "./App.css";
-import { Routes, Route, useLocation } from "react-router-dom";
 import { Suspense, lazy, useEffect } from "react";
+import { Navigate, Route, Routes, useLocation, useParams } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
+import { FavoritesProvider } from "./contexts/FavoritesContext";
+import { ToastProvider } from "./contexts/ToastContext";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import AdminRoute from "./components/AdminRoute/AdminRoute";
-import DynamicTitle from "./components/DynamicTitle/DynamicTitle";
+import ScrollManager from "./components/ScrollManager/ScrollManager";
 import { pageview } from "./gtag";
 
 // ------------------------------------------------------------------
-// ROTAS PÚBLICAS — carregadas normalmente. São as páginas que o
-// Google precisa indexar e que a maioria dos visitantes acessa.
+// Público — a home entra no bundle principal (primeira pintura);
+// o resto carrega sob demanda.
 // ------------------------------------------------------------------
 import { Home } from "./pages/Home/Home";
-import Login from "./pages/LoginPage/LoginPage";
-import Register from "./pages/RegisterPage/Register";
-import { RentProducts } from "./pages/RentProducts/RentProducts";
-import { SaleProducts } from "./pages/SaleProducts/SaleProducts";
-import { AboutAgent } from "./pages/AboutAgent/AboutAgent";
-import { FilteredProducts } from "./components/FilteredProducts/FilteredProducts";
-import { ProductDetails } from "./pages/ProductDetails/ProductDetails";
-import RentalsPage from "./pages/RentalsPage/RentalsPage";
-import RegisterImovel from "./pages/RegisterImovel/RegisterImovel.jsx";
+
+const named = (loader, name) => lazy(() => loader().then((m) => ({ default: m[name] })));
+
+const Listing = named(() => import("./pages/Listing/Listing"), "Listing");
+const ProductDetails = named(() => import("./pages/ProductDetails/ProductDetails"), "ProductDetails");
+const AboutAgent = named(() => import("./pages/AboutAgent/AboutAgent"), "AboutAgent");
+const Contact = named(() => import("./pages/Contact/Contact"), "Contact");
+const NotFound = lazy(() => import("./pages/NotFound/NotFound"));
+const Login = lazy(() => import("./pages/LoginPage/LoginPage"));
+const Register = lazy(() => import("./pages/RegisterPage/Register"));
+const RegisterImovel = lazy(() => import("./pages/RegisterImovel/RegisterImovel.jsx"));
 
 // ------------------------------------------------------------------
-// ROTAS AUTENTICADAS (qualquer usuário logado) — lazy, pois um
-// visitante anônimo nunca precisa baixar esse código.
+// Autenticado / administrativo
 // ------------------------------------------------------------------
-const Dashboard = lazy(() => import("./components/Dashboard/Dashboard"));
 const EditProfile = lazy(() => import("./pages/EditProfile/EditProfile"));
-
-// ------------------------------------------------------------------
-// ROTAS ADMINISTRATIVAS — lazy + protegidas por AdminRoute. Antes,
-// só "/dashboard" tinha alguma proteção; "/admin", "/add-products",
-// "/add-posts", "/add-dest" e "/admin/manage-products" estavam
-// completamente abertas para qualquer um que soubesse a URL.
-// ------------------------------------------------------------------
-const Admin = lazy(() => import("./pages/Admin/Admin").then((m) => ({ default: m.Admin })));
-const ManageProducts = lazy(() =>
-  import("./pages/ManageProducts/ManageProducts").then((m) => ({ default: m.ManageProducts }))
-);
-const AddProducts = lazy(() =>
-  import("./pages/AddProducts/AddProducts").then((m) => ({ default: m.AddProducts }))
-);
-const AddPosts = lazy(() =>
-  import("./pages/AddPosts/AddPosts").then((m) => ({ default: m.AddPosts }))
-);
-const AddFeaturedProducts = lazy(() =>
-  import("./pages/AddFeaturedProducts/AddFeaturedProducts ").then((m) => ({
-    default: m.AddFeaturedProducts,
-  }))
-);
-const EditProduct = lazy(() =>
-  import("./components/EditProduct/EditProduct").then((m) => ({ default: m.EditProduct }))
+const AdminLayout = lazy(() => import("./pages/Admin/AdminLayout"));
+const Overview = lazy(() => import("./pages/Admin/Overview"));
+const PropertiesPage = lazy(() => import("./pages/Admin/PropertiesTable"));
+const PropertyForm = lazy(() => import("./pages/Admin/PropertyForm"));
+const Leads = lazy(() => import("./pages/Admin/Leads"));
+const AddPosts = named(() => import("./pages/AddPosts/AddPosts"), "AddPosts");
+const AddFeaturedProducts = named(
+  () => import("./pages/AddFeaturedProducts/AddFeaturedProducts"),
+  "AddFeaturedProducts",
 );
 
 function RouteLoading() {
-  return <div className="admin-loading">Carregando...</div>;
+  return <div className="page-loading">Carregando…</div>;
 }
+
+/** Rotas antigas → nova listagem, preservando a query string. */
+function RedirectToListing({ negocio }) {
+  const { search } = useLocation();
+  const params = new URLSearchParams(search);
+  if (negocio && !params.has("negocio")) params.set("negocio", negocio);
+  const qs = params.toString();
+  return <Navigate to={`/imoveis${qs ? `?${qs}` : ""}`} replace />;
+}
+
+function RedirectToEdit() {
+  const { id } = useParams();
+  return <Navigate to={`/admin/editar/${id}`} replace />;
+}
+
+const admin = (el) => <AdminRoute>{el}</AdminRoute>;
 
 function App() {
   const location = useLocation();
@@ -67,98 +69,60 @@ function App() {
 
   return (
     <AuthProvider>
-      <DynamicTitle />
-      <Suspense fallback={<RouteLoading />}>
-        <Routes>
-          {/* ---------- Público ---------- */}
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/register-imovel" element={<RegisterImovel />} />
-          <Route path="/Rent-Products" element={<RentProducts />} />
-          <Route path="/Sale-Products" element={<SaleProducts />} />
-          <Route path="/about" element={<AboutAgent />} />
-          <Route path="/filtered-products" element={<FilteredProducts />} />
-          <Route path="/location" element={<RentalsPage />} />
-          <Route path="/product/:id" element={<ProductDetails />} />
+      <FavoritesProvider>
+        <ToastProvider>
+          <ScrollManager />
+          <Suspense fallback={<RouteLoading />}>
+            <Routes>
+              {/* ---------- Público ---------- */}
+              <Route path="/" element={<Home />} />
+              <Route path="/imoveis" element={<Listing />} />
+              <Route path="/product/:id" element={<ProductDetails />} />
+              <Route path="/about" element={<AboutAgent />} />
+              <Route path="/contato" element={<Contact />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/register-imovel" element={<RegisterImovel />} />
 
-          {/* ---------- Autenticado (qualquer usuário logado) ---------- */}
-          <Route
-            path="/dashboard"
-            element={
-              <PrivateRoute>
-                <Dashboard />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/edit-profile"
-            element={
-              <PrivateRoute>
-                <EditProfile />
-              </PrivateRoute>
-            }
-          />
+              {/* ---------- Rotas antigas (links já compartilhados) ---------- */}
+              <Route path="/Sale-Products" element={<RedirectToListing negocio="venda" />} />
+              <Route path="/Rent-Products" element={<RedirectToListing negocio="aluguel" />} />
+              <Route path="/location" element={<RedirectToListing negocio="aluguel" />} />
+              <Route path="/filtered-products" element={<RedirectToListing />} />
+              <Route path="/favorites" element={<Navigate to="/imoveis?favoritos=1" replace />} />
+              <Route path="/contact" element={<Navigate to="/contato" replace />} />
+              <Route path="/dashboard" element={<Navigate to="/admin" replace />} />
+              <Route path="/admin/manage-products" element={<Navigate to="/admin/imoveis" replace />} />
+              <Route path="/add-products" element={<Navigate to="/admin/cadastrar" replace />} />
+              <Route path="/edit-produto/:id" element={<RedirectToEdit />} />
+              <Route path="/manage-product/edit-product/:id" element={<RedirectToEdit />} />
 
-          {/* ---------- Administrativo (somente admins) ---------- */}
-          <Route
-            path="/admin"
-            element={
-              <AdminRoute>
-                <Admin />
-              </AdminRoute>
-            }
-          />
-          <Route
-            path="/admin/manage-products"
-            element={
-              <AdminRoute>
-                <ManageProducts />
-              </AdminRoute>
-            }
-          />
-          <Route
-            path="/add-products"
-            element={
-              <AdminRoute>
-                <AddProducts />
-              </AdminRoute>
-            }
-          />
-          <Route
-            path="/add-posts"
-            element={
-              <AdminRoute>
-                <AddPosts />
-              </AdminRoute>
-            }
-          />
-          <Route
-            path="/add-dest"
-            element={
-              <AdminRoute>
-                <AddFeaturedProducts />
-              </AdminRoute>
-            }
-          />
-          <Route
-            path="/edit-produto/:id"
-            element={
-              <AdminRoute>
-                <EditProduct />
-              </AdminRoute>
-            }
-          />
-          <Route
-            path="/manage-product/edit-product/:id"
-            element={
-              <AdminRoute>
-                <EditProduct />
-              </AdminRoute>
-            }
-          />
-        </Routes>
-      </Suspense>
+              {/* ---------- Autenticado ---------- */}
+              <Route
+                path="/edit-profile"
+                element={
+                  <PrivateRoute>
+                    <EditProfile />
+                  </PrivateRoute>
+                }
+              />
+
+              {/* ---------- Painel (somente admins) ---------- */}
+              <Route path="/admin" element={admin(<AdminLayout />)}>
+                <Route index element={<Overview />} />
+                <Route path="imoveis" element={<PropertiesPage />} />
+                <Route path="cadastrar" element={<PropertyForm key="novo" />} />
+                <Route path="editar/:id" element={<PropertyForm />} />
+                <Route path="leads" element={<Leads />} />
+              </Route>
+              <Route path="/add-posts" element={admin(<AddPosts />)} />
+              <Route path="/add-dest" element={admin(<AddFeaturedProducts />)} />
+
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
+        </ToastProvider>
+      </FavoritesProvider>
     </AuthProvider>
   );
 }

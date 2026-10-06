@@ -1,5 +1,4 @@
-// components/CookieConsent/CookieConsent.jsx
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import "./styles.css";
 
@@ -7,38 +6,32 @@ export const CookieConsent = () => {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    const consent = Cookies.get("cookieConsent");
-    if (!consent) {
-      setShow(true);
-    }
+    if (!Cookies.get("cookieConsent")) setShow(true);
   }, []);
 
-  const handleAcceptAll = () => {
-    Cookies.set("cookieConsent", "all", { expires: 365 });
-    setShow(false);
-  };
-
-  const handleAcceptNecessary = () => {
-    Cookies.set("cookieConsent", "necessary", { expires: 365 });
+  const accept = (value) => {
+    Cookies.set("cookieConsent", value, { expires: 365, sameSite: "Lax" });
     setShow(false);
   };
 
   if (!show) return null;
 
   return (
-    <div className="cookie-consent">
+    <div className="cookie-consent" role="dialog" aria-live="polite" aria-label="Aviso de cookies">
       <p>
-        Usamos cookies para melhorar sua experiência. Você pode aceitar todos ou
-        utilizar apenas os necessários.
+        Usamos cookies para melhorar sua experiência e medir o desempenho do site. Você pode aceitar todos ou usar
+        apenas os necessários.
       </p>
       <div className="cookie-buttons">
-        <button className="btn-necessary" onClick={handleAcceptNecessary}>
-          Usar somente os necessários
+        <button type="button" className="btn btn--outline btn--sm" onClick={() => accept("necessary")}>
+          Só os necessários
         </button>
-        <button className="btn-accept" onClick={handleAcceptAll}>
+        <button type="button" className="btn btn--primary btn--sm" onClick={() => accept("all")}>
           Aceitar todos
         </button>
       </div>
     </div>
   );
 };
+
+export default CookieConsent;

@@ -1,258 +1,250 @@
-import React, { useState, useEffect, useRef } from "react";
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
-import { Navbar } from "../../components/Navbar/Navbar";
-import { Footer } from "../../components/Footer/Footer";
-import { Banner } from "../../components/Banner/Banner";
-import { CardFilter } from "../../components/CardFilter/CardFilter";
-import { collection, query, where, limit, getDocs } from "firebase/firestore";
-import { db } from "../../services/FirebaseConfig";
-import { FeaturedProducts } from "../../components/FeaturedProducts/FeaturedProducts.jsx";
-import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
+import { useMemo, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { ArrowRight, MessageCircle, Search } from "lucide-react";
+import PublicLayout from "../../components/PublicLayout/PublicLayout";
+import { PropertyCard, PropertyCardSkeleton } from "../../components/PropertyCard/PropertyCard";
+import { useProducts } from "../../hooks/useProducts";
+import { useDocumentTitle } from "../../hooks/useDocumentTitle";
+import { AGENT, BAIRRO_VIBE, NEGOCIOS, TIPOS } from "../../lib/constants";
+import { listingUrl } from "../../lib/filters";
+import { trackWhatsApp, waLink } from "../../lib/whatsapp";
+import HeroImage from "../../assets/image/g-arnaut-banner.webp";
+import Profile from "../../assets/image/arnaut-profile.webp";
 import "./styles.css";
-import { SocialCard } from "../../components/SocialCard/SocialCard.jsx";
-import { CookieConsent } from "../../components/CookieConsent/CookieConsent.jsx";
 
-const Section = ({ title, subtitle, loading, children }) => (
-  <section className="section-2">
-    <h3 className="home-h3">
-      {loading ? <Skeleton width={300} /> : title}
-      {loading ? (
-        <Skeleton width={250} height={30} />
-      ) : (
-        <p className="home-p">{subtitle}</p>
-      )}
-    </h3>
-    {children}
-  </section>
-);
+const SEARCH_TABS = [
+  ["filtros", "Buscar imóveis"],
+  ["palavra", "Por palavra-chave"],
+  ["avancado", "Filtros avançados"],
+];
 
-export const Home = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [featuredProducts, setFeaturedProducts] = useState([]);
-  const [recentProducts, setRecentProducts] = useState([]);
-  const [launchProducts, setLaunchProducts] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [isProductsLoaded, setIsProductsLoaded] = useState(false);
+const RESIDENCIAL = ["Apartamento", "Casa", "Cobertura"];
+const TERRENOS = ["Terreno", "Sítio", "Fazenda"];
 
-  const itemsPerPage = 12;
-  const recentSectionRef = useRef(null);
+const CATEGORIES = [
+  {
+    label: "Residencial",
+    match: (p) => RESIDENCIAL.includes(p.category) && (p.negocio === "venda" || p.negocio === "aluguel"),
+    url: listingUrl(),
+  },
+  { label: "Lançamentos", match: (p) => p.negocio === "lancamento", url: listingUrl({ negocio: "lancamento" }) },
+  { label: "Comercial", match: (p) => p.negocio === "comercial", url: listingUrl({ negocio: "comercial" }) },
+  { label: "Temporada", match: (p) => p.negocio === "temporada", url: listingUrl({ negocio: "temporada" }) },
+  { label: "Terrenos", match: (p) => TERRENOS.includes(p.category), url: listingUrl({ tipo: "Terreno" }) },
+];
 
-  const renderSkeletonCards = (count = 6) => (
-    <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f5f5f5">
-      <div className="skeleton-grid">
-        {Array.from({ length: count }).map((_, i) => (
-          <div key={i} className="skeleton-card-item">
-            <Skeleton height={150} borderRadius={10} />
-            <Skeleton height={20} width="80%" style={{ marginTop: 10 }} />
-            <Skeleton height={15} width="60%" />
-          </div>
-        ))}
-      </div>
-    </SkeletonTheme>
-  );
+function HeroSearch({ bairros }) {
+  const navigate = useNavigate();
+  const [tab, setTab] = useState("filtros");
+  const [negocio, setNegocio] = useState("");
+  const [tipo, setTipo] = useState("");
+  const [bairro, setBairro] = useState("");
+  const [kw, setKw] = useState("");
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        // Três queries filtradas e limitadas no próprio Firestore, em
-        // paralelo, em vez de baixar a coleção inteira e filtrar no
-        // navegador. "Lançamento"/"lançamento" grafias diferentes viravam
-        // duas queries só por segurança de dado legado.
-        const [featuredSnap, recentSnap, launchSnap] = await Promise.all([
-          getDocs(
-            query(
-              collection(db, "products"),
-              where("isFeatured", "==", "sim"),
-              limit(6),
-            ),
-          ),
-          getDocs(
-            query(
-              collection(db, "products"),
-              where("isFeatured", "==", "não"),
-              limit(48),
-            ),
-          ),
-          getDocs(
-            query(
-              collection(db, "products"),
-              where("status", "==", "Lançamento"),
-              limit(12),
-            ),
-          ),
-        ]);
-
-        const mapDocs = (snap) =>
-          snap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-
-        setFeaturedProducts(mapDocs(featuredSnap));
-        setRecentProducts(mapDocs(recentSnap));
-        setLaunchProducts(mapDocs(launchSnap));
-        setIsProductsLoaded(true);
-      } catch (error) {
-        console.error("Erro ao buscar produtos:", error);
-      } finally {
-        // O loading geral da página some assim que os dados reais
-        // chegam — antes ficava um atraso fixo de 1,5s desacoplado do
-        // carregamento de verdade.
-        setIsLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, []);
-
-  const totalPages = Math.ceil(recentProducts.length / itemsPerPage);
-  const paginatedProducts = recentProducts.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage,
-  );
-
-  const handlePageChange = (pageNumber) => {
-    if (pageNumber > 0 && pageNumber <= totalPages) {
-      setCurrentPage(pageNumber);
-      recentSectionRef.current?.scrollIntoView({ behavior: "smooth" });
-    }
+  const selectTab = (key) => {
+    if (key === "avancado") navigate(listingUrl({ negocio, tipo, bairro }, { filtros: "1" }));
+    else setTab(key);
   };
 
-  useEffect(() => {
-    if (window.location.pathname === "/") {
-      const showFloatingCard = () => {
-        const floatingCard = document.getElementById("floating-card");
-        floatingCard.style.display = "block";
-        setTimeout(() => {
-          floatingCard.style.opacity = "1";
-        }, 100);
-      };
-
-      if (performance.navigation.type === 1) {
-        showFloatingCard();
-      }
-
-      document.getElementById("close-card")?.addEventListener("click", () => {
-        const floatingCard = document.getElementById("floating-card");
-        floatingCard.style.opacity = "0";
-        setTimeout(() => {
-          floatingCard.style.display = "none";
-        }, 300);
-      });
-    }
-  }, []);
+  const submit = (e) => {
+    e.preventDefault();
+    navigate(tab === "palavra" ? listingUrl({ kw: kw.trim() }) : listingUrl({ negocio, tipo, bairro }));
+  };
 
   return (
-    <>
-      <Navbar />
-      <CookieConsent />
-      <main className="home-container">
-        <div id="floating-card" className="floating-card">
-          <div className="card-content-floating">
-            <h4>Bem-vindo ao nosso site!</h4>
-            <p>Confira nossos imóveis.</p>
-            <button className="close-card" id="close-card">
-              Fechar
-            </button>
+    <div className="hero-search">
+      <div className="hero-search-tabs" role="tablist" aria-label="Tipo de busca">
+        {SEARCH_TABS.map(([key, label]) => (
+          <button
+            key={key}
+            type="button"
+            role="tab"
+            aria-selected={tab === key}
+            className={`hero-search-tab${tab === key ? " is-on" : ""}`}
+            onClick={() => selectTab(key)}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
+      <form className="hero-search-row" onSubmit={submit} role="search">
+        {tab === "filtros" ? (
+          <>
+            <label className="visually-hidden" htmlFor="hs-negocio">Finalidade</label>
+            <select id="hs-negocio" className="select" value={negocio} onChange={(e) => setNegocio(e.target.value)}>
+              <option value="">Finalidade</option>
+              {NEGOCIOS.map((n) => (
+                <option key={n.key} value={n.key}>{n.label}</option>
+              ))}
+            </select>
+            <label className="visually-hidden" htmlFor="hs-tipo">Tipo de imóvel</label>
+            <select id="hs-tipo" className="select" value={tipo} onChange={(e) => setTipo(e.target.value)}>
+              <option value="">Tipo de imóvel</option>
+              {TIPOS.map((t) => (
+                <option key={t} value={t}>{t}</option>
+              ))}
+            </select>
+            <label className="visually-hidden" htmlFor="hs-bairro">Bairro</label>
+            <select id="hs-bairro" className="select" value={bairro} onChange={(e) => setBairro(e.target.value)}>
+              <option value="">Bairro</option>
+              {bairros.map((b) => (
+                <option key={b} value={b}>{b}</option>
+              ))}
+            </select>
+          </>
+        ) : (
+          <>
+            <label className="visually-hidden" htmlFor="hs-kw">Palavra-chave</label>
+            <input
+              id="hs-kw"
+              className="input hero-search-kw"
+              value={kw}
+              onChange={(e) => setKw(e.target.value)}
+              placeholder="Ex: vista mar, piscina, Rio Vermelho ou código GA-0002"
+              autoComplete="off"
+            />
+          </>
+        )}
+        <button type="submit" className="btn btn--primary btn--lg hero-search-btn">
+          <Search size={17} /> Buscar
+        </button>
+      </form>
+    </div>
+  );
+}
+
+export const Home = () => {
+  useDocumentTitle("Imóveis em Salvador");
+  const { products, loading } = useProducts();
+  const [category, setCategory] = useState(CATEGORIES[0].label);
+
+  const bairros = useMemo(() => {
+    const counts = new Map();
+    products.forEach((p) => p.neighborhood && counts.set(p.neighborhood, (counts.get(p.neighborhood) || 0) + 1));
+    return [...counts.entries()].sort((a, b) => b[1] - a[1]);
+  }, [products]);
+
+  const activeCat = CATEGORIES.find((c) => c.label === category) || CATEGORIES[0];
+  const catList = useMemo(
+    () =>
+      products
+        .filter(activeCat.match)
+        .sort((a, b) => Number(b.isFeatured) - Number(a.isFeatured) || b.views - a.views)
+        .slice(0, 8),
+    [products, activeCat],
+  );
+
+  return (
+    <PublicLayout>
+      {/* ---------- Hero ---------- */}
+      <section className="hero-wrap">
+        <div className="hero" style={{ backgroundImage: `url(${HeroImage})` }}>
+          <div className="hero-content">
+            <span className="hero-kicker">
+              {AGENT.role} · {AGENT.creci}
+            </span>
+            <h1>
+              Encontre o seu <span>lugar</span> em Salvador com {AGENT.name}
+            </h1>
+            <p>{AGENT.bio}</p>
           </div>
         </div>
+        <div className="container hero-search-wrap">
+          <HeroSearch bairros={bairros.map(([b]) => b).sort((a, b) => a.localeCompare(b, "pt-BR"))} />
+        </div>
+      </section>
 
-        <section className="section-1">
-          <Banner />
-        </section>
+      {/* ---------- Categorias ---------- */}
+      <section className="section container home-cats" aria-labelledby="cats-title">
+        <h2 id="cats-title" className="section-title">Busque seu imóvel por categoria</h2>
+        <div className="cat-tabs" role="tablist" aria-label="Categorias">
+          {CATEGORIES.map((c) => (
+            <button
+              key={c.label}
+              type="button"
+              role="tab"
+              aria-selected={category === c.label}
+              className={`cat-tab${category === c.label ? " is-on" : ""}`}
+              onClick={() => setCategory(c.label)}
+            >
+              {c.label}
+            </button>
+          ))}
+        </div>
 
-        <section className="section-card">
-          <CardFilter />
-        </section>
-        <Section
-          title="Imóveis em Destaque"
-          subtitle="Imóveis que podem te interessar"
-          loading={isLoading}
-        >
-          <div className="featured-products">
-            {isProductsLoaded ? (
-              featuredProducts.length > 0 ? (
-                featuredProducts.map((product, index) => (
-                  <FeaturedProducts key={index} product={product} />
-                ))
-              ) : (
-                <p>Não há produtos em destaque no momento.</p>
-              )
-            ) : (
-              renderSkeletonCards(6)
-            )}
+        {loading ? (
+          <div className="property-grid">
+            {Array.from({ length: 4 }, (_, i) => <PropertyCardSkeleton key={i} />)}
           </div>
-        </Section>
-
-        <Section
-          title="Lançamentos"
-          subtitle="Confira os imóveis recém-lançados"
-          loading={isLoading}
-        >
-          <div className="featured-products">
-            {isProductsLoaded ? (
-              launchProducts.length > 0 ? (
-                launchProducts.map((product, index) => (
-                  <FeaturedProducts key={index} product={product} />
-                ))
-              ) : (
-                <p>Não há imóveis com status Lançamento.</p>
-              )
-            ) : (
-              renderSkeletonCards(6)
-            )}
+        ) : catList.length ? (
+          <div className="property-grid">
+            {catList.map((p, i) => <PropertyCard key={p.id} product={p} priority={i < 3} />)}
           </div>
-        </Section>
-        <section className="section-3" ref={recentSectionRef}>
-          <h3 className="home-h3">
-            {isLoading ? <Skeleton width={150} /> : "Imóveis Recentes"}
-            <p className="home-p">Imóveis adicionados recentemente</p>
-          </h3>
-          {isLoading ? (
-            renderSkeletonCards(6)
-          ) : (
-            <>
-              <div className="featured-products">
-                {paginatedProducts.length > 0 ? (
-                  paginatedProducts.map((product, index) => (
-                    <FeaturedProducts key={index} product={product} />
-                  ))
-                ) : (
-                  <p>Não há produtos recentes no momento.</p>
-                )}
-              </div>
+        ) : (
+          <div className="empty-box">
+            <strong>Nenhum imóvel nesta categoria agora</strong>
+            <a
+              href={waLink(`Olá, ${AGENT.firstName}! Procuro um imóvel na categoria ${category}. Pode me avisar quando surgir?`)}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackWhatsApp()}
+            >
+              Me avise quando surgir um →
+            </a>
+          </div>
+        )}
 
-              {recentProducts.length > itemsPerPage && (
-                <>
-                  <div className="pagination">
-                    <button
-                      onClick={() => handlePageChange(currentPage - 1)}
-                      disabled={currentPage === 1}
-                    >
-                      <KeyboardArrowLeft fontSize="small" />
-                    </button>
-                    {Array.from({ length: totalPages }, (_, index) => (
-                      <button
-                        key={index + 1}
-                        className={currentPage === index + 1 ? "active" : ""}
-                        onClick={() => handlePageChange(index + 1)}
-                      >
-                        {index + 1}
-                      </button>
-                    ))}
-                    <button
-                      onClick={() => handlePageChange(currentPage + 1)}
-                      disabled={currentPage === totalPages}
-                    >
-                      <KeyboardArrowRight fontSize="small" />
-                    </button>
-                  </div>
-                  <p className="home-p-2">12 imóveis por página</p>
-                </>
-              )}
-            </>
-          )}
+        <div className="home-cats-more">
+          <Link to={activeCat.url} className="btn btn--outline">
+            Ver todos — {category} <ArrowRight size={16} />
+          </Link>
+        </div>
+      </section>
+
+      {/* ---------- Bairros ---------- */}
+      {bairros.length > 0 && (
+        <section className="section container home-bairros" aria-labelledby="bairros-title">
+          <div className="home-bairros-head">
+            <h2 id="bairros-title" className="section-title">Explore por bairro</h2>
+            <span className="muted">Salvador e região metropolitana</span>
+          </div>
+          <div className="bairro-grid">
+            {bairros.slice(0, 8).map(([nome, n]) => (
+              <Link key={nome} to={listingUrl({ bairro: nome })} className="bairro-card">
+                <span className="bairro-text">
+                  <strong>{nome}</strong>
+                  <small>{BAIRRO_VIBE[nome] || "Ver imóveis no bairro"}</small>
+                </span>
+                <span className="bairro-count" aria-label={`${n} imóveis`}>{n}</span>
+              </Link>
+            ))}
+          </div>
         </section>
-      </main>
-      <Footer />
-    </>
+      )}
+
+      {/* ---------- Sobre ---------- */}
+      <section className="section container" aria-labelledby="sobre-title">
+        <div className="home-about">
+          <div className="home-about-photo">
+            <img src={Profile} alt={AGENT.name} loading="lazy" width={640} height={512} />
+          </div>
+          <div className="home-about-text">
+            <span className="eyebrow">{AGENT.role}</span>
+            <h2 id="sobre-title">{AGENT.name}</h2>
+            <span className="creci">{AGENT.creci}</span>
+            <p>{AGENT.bio}</p>
+            <div className="home-about-actions">
+              <a href={waLink()} target="_blank" rel="noopener noreferrer" className="btn btn--primary" onClick={() => trackWhatsApp()}>
+                <MessageCircle size={16} /> Conversar no WhatsApp
+              </a>
+              <Link to="/about" className="btn btn--outline">Saiba mais</Link>
+            </div>
+          </div>
+        </div>
+      </section>
+    </PublicLayout>
   );
 };
+
+export default Home;

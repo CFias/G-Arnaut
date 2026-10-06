@@ -1,61 +1,65 @@
-import React from "react";
-import { Navbar } from "../../components/Navbar/Navbar";
+import { Link } from "react-router-dom";
+import { Calculator, FileText, KeyRound, MessageCircle, Video } from "lucide-react";
+import PublicLayout from "../../components/PublicLayout/PublicLayout";
+import { useDocumentTitle } from "../../hooks/useDocumentTitle";
+import { AGENT } from "../../lib/constants";
+import { trackWhatsApp, waLink } from "../../lib/whatsapp";
+import Profile from "../../assets/image/arnaut-profile.webp";
 import "./styles.css";
-import agentImage from "../../assets/image/arnaut-profile.jpg"; // fallback
-import { useAuth } from "../../contexts/AuthContext"; // ajuste o caminho se necessário
-import Profile from "../../assets/image/arnaut-profile.webp"; // imagem padrão
+
+const SERVICES = [
+  [KeyRound, "Compra, venda e aluguel", "Consultoria do primeiro filtro à assinatura do contrato."],
+  [Calculator, "Avaliação imobiliária", "Preço justo com base em comparativos reais do bairro."],
+  [FileText, "Financiamento e documentação", "Assessoria junto a bancos, cartórios e construtoras."],
+  [Video, "Visitas guiadas", "Tours presenciais ou por vídeo, no seu horário."],
+];
 
 export const AboutAgent = () => {
-  const { currentUser } = useAuth();
-  const profilePhoto = currentUser?.photoURL || Profile;
+  useDocumentTitle("Sobre o corretor");
 
   return (
-    <>
-      <Navbar />
-      <div className="about-agent">
-        <div className="agent-header">
-          <img
-            className="agent-profile"
-            src={profilePhoto}
-            alt="Foto do agente"
-          />
-          <h2>G-Arnaut - Corretor de Imóveis</h2>
+    <PublicLayout>
+      <section className="container about">
+        <div className="about-hero">
+          <div className="about-photo">
+            <img src={Profile} alt={AGENT.name} width={640} height={640} />
+          </div>
+          <div className="about-text">
+            <span className="eyebrow">{AGENT.role}</span>
+            <h1 className="page-title">{AGENT.name}</h1>
+            <span className="creci">{AGENT.creci}</span>
+            <p>{AGENT.bio}</p>
+            <p className="about-contact">
+              <a href={`mailto:${AGENT.email}`}>{AGENT.email}</a>
+              <span aria-hidden="true">·</span>
+              <a href={AGENT.phoneHref}>{AGENT.phoneDisplay}</a>
+            </p>
+            <div className="about-actions">
+              <a className="btn btn--primary" href={waLink()} target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsApp()}>
+                <MessageCircle size={16} /> Conversar no WhatsApp
+              </a>
+              <Link to="/imoveis" className="btn btn--outline">Ver imóveis</Link>
+            </div>
+          </div>
         </div>
 
-        <div className="agent-info">
-          <p>
-            G-Arnaut é um corretor de imóveis com ampla experiência no mercado
-            imobiliário, oferecendo aos seus clientes um atendimento
-            personalizado e serviços de alta qualidade. Ele possui um vasto
-            conhecimento sobre o mercado local e está sempre atualizado sobre as
-            melhores opções de compra, venda e aluguel de imóveis.
-          </p>
-
-          <h3>Serviços:</h3>
-          <ul>
-            <li>Consultoria para compra, venda e aluguel de imóveis</li>
-            <li>Avaliação imobiliária</li>
-            <li>Assessoria em financiamento e documentação</li>
-            <li>Visitas e tour guiado pelos imóveis</li>
-          </ul>
-
-          <h3>Contato:</h3>
-          <p>
-            Email:{" "}
-            <a href="mailto:davimarnaut@gmail.com">davimarnaut@gmail.com</a>
-          </p>
-          <p>
-            Telefone: <a href="tel:+5571991900974">+55 71 99190-0974</a>
-          </p>
+        <div className="about-services" id="servicos">
+          <h2 className="section-title">
+            Como posso ajudar
+          </h2>
+          <div className="service-grid">
+            {SERVICES.map(([Icon, title, desc]) => (
+              <div key={title} className="service-card">
+                <span className="service-icon"><Icon size={20} /></span>
+                <strong>{title}</strong>
+                <p>{desc}</p>
+              </div>
+            ))}
+          </div>
         </div>
-
-        <div className="agent-footer">
-          <p>
-            Entre em contato com G-Arnaut para ajudar a encontrar o imóvel dos
-            seus sonhos!
-          </p>
-        </div>
-      </div>
-    </>
+      </section>
+    </PublicLayout>
   );
 };
+
+export default AboutAgent;
