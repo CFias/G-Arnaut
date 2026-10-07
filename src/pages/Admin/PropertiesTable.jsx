@@ -169,7 +169,7 @@ export function PropertiesTable({ products, leads = [], compact = false, title }
           {products.length ? "Nenhum imóvel encontrado com esse filtro." : "Nenhum imóvel cadastrado ainda."}
         </p>
       ) : (
-        <div className="table-scroll">
+        <div className="table-scroll table-cards">
           <table className="admin-table">
             <thead>
               <tr>
@@ -186,7 +186,7 @@ export function PropertiesTable({ products, leads = [], compact = false, title }
             <tbody>
               {rows.map((p) => (
                 <tr key={p.id} aria-busy={busyId === p.id}>
-                  <td>
+                  <td className="c-prop">
                     <div className="row-property">
                       <div className="row-thumb img-placeholder">
                         {p.cover && <img src={p.cover} alt="" loading="lazy" />}
@@ -199,11 +199,11 @@ export function PropertiesTable({ products, leads = [], compact = false, title }
                       </div>
                     </div>
                   </td>
-                  <td className="nowrap">
+                  <td className="nowrap c-price">
                     {p.price ? brlShort(p.price) : "—"}
                     <small className="muted">{p.price ? priceSuffix(p.negocio) : ""}</small>
                   </td>
-                  <td>
+                  <td className="c-status">
                     <select
                       className={`status-select pill pill--${slug(p.listingStatus)}`}
                       value={p.listingStatus}
@@ -216,9 +216,9 @@ export function PropertiesTable({ products, leads = [], compact = false, title }
                       ))}
                     </select>
                   </td>
-                  <td className="num">{p.views.toLocaleString("pt-BR")}</td>
-                  <td className="num">{p.leadsCount}</td>
-                  <td>
+                  <td className="num c-views" data-label="views">{p.views.toLocaleString("pt-BR")}</td>
+                  <td className="num c-leads" data-label="leads">{p.leadsCount}</td>
+                  <td className="c-match">
                     {(() => {
                       const n = matchingLeads(p, leads, products).length;
                       return (
@@ -233,7 +233,7 @@ export function PropertiesTable({ products, leads = [], compact = false, title }
                       );
                     })()}
                   </td>
-                  <td>
+                  <td className="c-feat" data-label="Destaque">
                     <button
                       type="button"
                       role="switch"
@@ -244,7 +244,7 @@ export function PropertiesTable({ products, leads = [], compact = false, title }
                       disabled={busyId === p.id}
                     />
                   </td>
-                  <td>
+                  <td className="c-actions">
                     <div className="row-actions">
                       <Link to={`/product/${p.id}`} className="row-link" target="_blank" rel="noopener noreferrer">
                         Ver <ArrowRight size={14} />

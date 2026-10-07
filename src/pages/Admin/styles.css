@@ -814,67 +814,194 @@
   .overview-grid {
     grid-template-columns: minmax(0, 1fr);
   }
+
+  .admin {
+    grid-template-columns: 220px minmax(0, 1fr);
+  }
+}
+
+/* ---------- Responsivo: celular e tablet (< 900px) ---------- */
+.admin-topbar,
+.admin-tabbar,
+.more-sheet,
+.more-backdrop {
+  display: none;
+}
+
+.show-xs {
+  display: none;
 }
 
 @media (max-width: 899.95px) {
   .admin {
     grid-template-columns: minmax(0, 1fr);
-    padding: 12px;
-    gap: 12px;
+    gap: 0;
+    padding: 0 0 calc(76px + env(safe-area-inset-bottom));
   }
 
   .admin-side {
+    display: none;
+  }
+
+  .admin-topbar {
     position: sticky;
     top: 0;
-    z-index: 30;
-    min-height: 0;
-    flex-direction: row;
+    z-index: 40;
+    display: flex;
     align-items: center;
-    gap: 8px;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 16px;
+    background: rgba(255, 255, 255, .95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--divider);
+  }
+
+  .admin-topbar .admin-brand {
+    padding: 0;
+  }
+
+  .admin-topbar .admin-brand img {
+    width: 32px;
+    height: 32px;
+  }
+
+  .admin-main {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .admin-head {
+    padding: 0;
+    align-items: center;
+  }
+
+  .admin-head h1 {
+    font-size: 24px;
+  }
+
+  /* Barra inferior */
+  .admin-tabbar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1200;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
+    background: #FFFFFF;
+    border-top: 1px solid var(--border);
+  }
+
+  .tab-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    min-width: 0;
+    padding: 6px 2px;
+    border: none;
+    border-radius: 10px;
+    background: transparent;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+  }
+
+  .tab-item>span:last-child {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .tab-item.is-active {
+    color: var(--primary);
+  }
+
+  .tab-item.is-active .tab-icon {
+    background: var(--primary-tint);
+  }
+
+  .tab-icon {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 28px;
+    border-radius: var(--r-pill);
+    transition: background-color .2s;
+  }
+
+  .tab-badge {
+    position: absolute;
+    top: -4px;
+    right: 2px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: var(--r-pill);
+    background: var(--gold);
+    color: #FFFFFF;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 18px;
+    text-align: center;
+  }
+
+  /* Menu "Mais" */
+  .more-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 1190;
+    background: rgba(15, 27, 51, .35);
+    animation: fadeIn .2s ease;
+  }
+
+  .more-sheet {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: calc(76px + env(safe-area-inset-bottom));
+    z-index: 1195;
+    display: flex;
+    flex-direction: column;
     padding: 8px;
-    overflow-x: auto;
-    scrollbar-width: none;
+    background: #FFFFFF;
+    border-radius: var(--r-block);
+    box-shadow: var(--shadow-dropdown);
+    animation: fadeIn .2s ease;
   }
 
-  .admin-side::-webkit-scrollbar {
-    display: none;
+  .more-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 14px 12px;
+    border: none;
+    border-radius: var(--r-control);
+    background: transparent;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+    text-align: left;
   }
 
-  .admin-side>*,
-  .admin-nav>*,
-  .admin-side-foot>* {
-    flex-shrink: 0;
+  .more-item:hover {
+    background: var(--bg-soft);
+    color: var(--ink);
   }
 
-  .admin-brand span {
-    display: none;
-  }
-
-  .admin-nav {
-    flex-direction: row;
-  }
-
-  .admin-side-foot {
-    flex-direction: row;
-    margin-top: 0;
-    padding-top: 0;
-    border-top: none;
-    padding-left: 8px;
-    border-left: 1px solid var(--divider);
-  }
-
-  .admin-nav-item--muted span {
-    display: none;
+  .more-item--danger {
+    color: var(--error);
   }
 
   .admin-card,
   .form-section {
     padding: 16px;
-  }
-
-  .table-scroll {
-    margin-inline: -16px;
-    padding-inline: 16px;
   }
 
   .table-search .input {
@@ -888,6 +1015,200 @@
 
   .table-filters .select {
     flex: 1;
+  }
+
+  .form-actions {
+    bottom: calc(84px + env(safe-area-inset-bottom));
+  }
+
+  .overview-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .kpi {
+    padding: 14px 16px;
+  }
+
+  .kpi-value {
+    font-size: 26px;
+  }
+
+  .kpi-note {
+    white-space: normal;
+    height: auto;
+    padding: 3px 8px;
+    line-height: 1.3;
+  }
+
+  .chart {
+    height: 180px;
+    gap: 6px;
+  }
+
+  .chart-l {
+    font-size: 10px;
+  }
+
+  .leads-toolbar .leads-search {
+    max-width: none;
+    flex-basis: 100%;
+  }
+
+  .leads-toolbar .leads-sort {
+    flex: 1;
+  }
+
+  .funnel {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    margin-inline: -16px;
+    padding-inline: 16px;
+    scrollbar-width: none;
+  }
+
+  .funnel::-webkit-scrollbar {
+    display: none;
+  }
+
+  .funnel .chip {
+    flex-shrink: 0;
+  }
+
+  .lead-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .due-banner {
+    padding: 12px 14px;
+  }
+
+  .drawer {
+    z-index: 1301;
+  }
+}
+
+@media (max-width: 420px) {
+  .hide-xs {
+    display: none;
+  }
+
+  .show-xs {
+    display: inline;
+  }
+}
+
+/* ---------- Tabela de imóveis vira cards abaixo de 1100px ---------- */
+@media (max-width: 1099.95px) {
+  .table-cards {
+    overflow: visible;
+    margin: 0;
+    padding: 0;
+  }
+
+  .table-cards .admin-table {
+    min-width: 0;
+  }
+
+  .table-cards .admin-table thead {
+    display: none;
+  }
+
+  .table-cards .admin-table,
+  .table-cards .admin-table tbody {
+    display: block;
+  }
+
+  .table-cards .admin-table tr {
+    display: grid;
+    grid-template-columns: auto auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--divider);
+  }
+
+  .table-cards .admin-table tr:last-child {
+    border-bottom: none;
+  }
+
+  .table-cards .admin-table td {
+    display: block;
+    min-width: 0;
+    padding: 0;
+    border: none;
+  }
+
+  .table-cards .admin-table td.c-prop {
+    grid-column: 1 / -1;
+  }
+
+  .table-cards .row-property {
+    max-width: none;
+  }
+
+  .table-cards .admin-table td.c-price {
+    grid-row: 2;
+    grid-column: 1 / 3;
+    font-size: 15px;
+  }
+
+  .table-cards .admin-table td.c-status {
+    grid-row: 2;
+    grid-column: 3 / -1;
+    justify-self: end;
+  }
+
+  .table-cards .admin-table td.c-views,
+  .table-cards .admin-table td.c-leads {
+    grid-row: 3;
+    font-size: 13px;
+    color: var(--muted);
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  .table-cards .admin-table td.c-views {
+    grid-column: 1;
+  }
+
+  .table-cards .admin-table td.c-leads {
+    grid-column: 2;
+  }
+
+  .table-cards .admin-table td.c-match {
+    grid-row: 3;
+    grid-column: 3 / -1;
+    justify-self: end;
+  }
+
+  .table-cards .c-views::after,
+  .table-cards .c-leads::after {
+    content: " " attr(data-label);
+  }
+
+  .table-cards .admin-table td.c-feat {
+    grid-row: 4;
+    grid-column: 1 / 3;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .table-cards .c-feat::before {
+    content: attr(data-label);
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .table-cards .admin-table td.c-actions {
+    grid-row: 4;
+    grid-column: 3 / -1;
+    justify-self: end;
   }
 }
 
@@ -1794,4 +2115,24 @@
 
 .booked-list li:first-child {
   border-top: none;
+}
+
+/* Toast acima da barra inferior no celular */
+@media (max-width: 899.95px) {
+  body:has(.admin-tabbar) .toast-region {
+    bottom: calc(92px + env(safe-area-inset-bottom));
+  }
+}
+
+/* Tablet: cards de imóveis em duas colunas */
+@media (min-width: 600px) and (max-width: 1099.95px) {
+  .table-cards .admin-table tbody {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 28px;
+  }
+
+  .table-cards .admin-table tr:last-child {
+    border-bottom: 1px solid var(--divider);
+  }
 }

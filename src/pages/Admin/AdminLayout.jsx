@@ -7,6 +7,7 @@ import {
   FileText,
   LayoutDashboard,
   LogOut,
+  Menu,
   Plus,
   PlusCircle,
   UserRound,
@@ -58,11 +59,11 @@ export default function AdminLayout() {
     loadLeads();
   }, [loadLeads]);
 
-  // No celular a sidebar vira uma barra rolável: mantém o item ativo visível
+  const [moreOpen, setMoreOpen] = useState(false);
+
+  // Fecha o menu "Mais" ao trocar de página
   useEffect(() => {
-    document
-      .querySelector(".admin-nav-item.is-active")
-      ?.scrollIntoView({ block: "nearest", inline: "center" });
+    setMoreOpen(false);
   }, [location.pathname]);
 
   const title = location.pathname.startsWith("/admin/editar")
@@ -82,7 +83,7 @@ export default function AdminLayout() {
 
   const nav = useMemo(
     () => [
-      { to: "/admin", end: true, label: "Visão geral", icon: LayoutDashboard },
+      { to: "/admin", end: true, label: "Visão geral", short: "Início", icon: LayoutDashboard },
       { to: "/admin/imoveis", label: "Imóveis", icon: Building2, badge: products.length || "" },
       { to: "/admin/cadastrar", label: "Cadastrar imóvel", icon: PlusCircle },
       { to: "/admin/leads", label: "Leads", icon: Users, badge: newLeads || "" },
@@ -139,6 +140,67 @@ export default function AdminLayout() {
         </div>
       </aside>
 
+      {/* Celular e tablet: barra superior + navegação inferior */}
+      <header className="admin-topbar">
+        <Link to="/admin" className="admin-brand">
+          <img src={Logo} alt="" width={32} height={32} />
+          <span>
+            <strong>Gildavi Arnaut</strong>
+            <small>Painel</small>
+          </span>
+        </Link>
+        <Link to="/" className="btn btn--ghost btn--sm" title="Ver o site">
+          <ExternalLink size={15} /> Site
+        </Link>
+      </header>
+
+      <nav className="admin-tabbar" aria-label="Painel">
+        {nav
+          .filter((n) => n.to !== "/admin/cadastrar")
+          .map(({ to, end, short, label, icon: Icon, badge }) => (
+            <NavLink key={to} to={to} end={end} className={({ isActive }) => `tab-item${isActive ? " is-active" : ""}`}>
+              <span className="tab-icon">
+                <Icon size={20} />
+                {badge ? <span className="tab-badge">{badge}</span> : null}
+              </span>
+              <span>{short || label}</span>
+            </NavLink>
+          ))}
+        <button
+          type="button"
+          className={`tab-item${moreOpen ? " is-active" : ""}`}
+          onClick={() => setMoreOpen((v) => !v)}
+          aria-expanded={moreOpen}
+          aria-controls="admin-more"
+        >
+          <span className="tab-icon"><Menu size={20} /></span>
+          <span>Mais</span>
+        </button>
+      </nav>
+
+      {moreOpen && (
+        <>
+          <div className="more-backdrop" onClick={() => setMoreOpen(false)} aria-hidden="true" />
+          <div id="admin-more" className="more-sheet" role="menu">
+            <Link to="/admin/cadastrar" className="more-item" role="menuitem">
+              <PlusCircle size={18} /> Cadastrar imóvel
+            </Link>
+            <Link to="/add-posts" className="more-item" role="menuitem">
+              <FileText size={18} /> Publicar post
+            </Link>
+            <Link to="/edit-profile" className="more-item" role="menuitem">
+              <UserRound size={18} /> Editar perfil
+            </Link>
+            <Link to="/" className="more-item" role="menuitem">
+              <ExternalLink size={18} /> Ver site
+            </Link>
+            <button type="button" className="more-item more-item--danger" role="menuitem" onClick={handleLogout}>
+              <LogOut size={18} /> Sair
+            </button>
+          </div>
+        </>
+      )}
+
       <div className="admin-main">
         <header className="admin-head">
           <div>
@@ -147,7 +209,7 @@ export default function AdminLayout() {
           </div>
           {showNewButton && (
             <Link to="/admin/cadastrar" className="btn btn--primary">
-              <Plus size={16} /> Cadastrar imóvel
+              <Plus size={16} /> <span className="hide-xs">Cadastrar imóvel</span><span className="show-xs">Novo</span>
             </Link>
           )}
         </header>
