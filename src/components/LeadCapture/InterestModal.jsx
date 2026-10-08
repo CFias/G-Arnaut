@@ -3,7 +3,7 @@ import { ArrowUpRight, CalendarDays, Check, MessageCircle } from "lucide-react";
 import Modal from "../Modal/Modal";
 import { readContact, saveContact } from "./contactMemory";
 import { AGENT } from "../../lib/constants";
-import { availableDays, bookSlot, fetchBookings } from "../../services/scheduling";
+import { availableDays, bookSlot, fetchBookings, isSlotTaken } from "../../services/scheduling";
 import { formatPhone, phoneDigits } from "../../lib/format";
 import { productMessage, trackWhatsApp, waLink } from "../../lib/whatsapp";
 import "./styles.css";
@@ -73,11 +73,17 @@ export default function InterestModal({ product: p, initialTab = "whatsapp", sch
     try {
       await bookSlot(slot);
     } catch {
-      setSending(false);
-      setSlot(null);
-      setBooked(null); // recarrega os horários
-      setError("Esse horário acabou de ser reservado. Escolha outro, por favor.");
-      return;
+      // Só bloqueia se o horário realmente já tem reserva. Se a falha foi de
+      // permissão (regra de `bookings` ausente), o pedido segue mesmo assim:
+      // o lead é registrado e o corretor confirma o horário.
+      if (await isSlotTaken(slot)) {
+        setSending(false);
+        setSlot(null);
+        setBooked(null); // recarrega os horários
+        setError("Esse horário acabou de ser reservado. Escolha outro, por favor.");
+        return;
+      }
+      console.warn("Agendamento: reserva não gravada em bookings (confira as regras). Pedido enviado como lead.");
     }
     remember();
     trackWhatsApp({
@@ -116,14 +122,14 @@ export default function InterestModal({ product: p, initialTab = "whatsapp", sch
   return (
     <Modal title={p.title} subtitle={`${p.code} · ${p.neighborhood || p.city}`} onClose={onClose}>
       {canSchedule && (
-        <div className="capture-tabs" role="tablist">
-          <button type="button" role="tab" aria-selected={tab === "whatsapp"} className={tab === "whatsapp" ? "is-on" : ""} onClick={() => { setTab("whatsapp"); setError(""); }}>
-            <MessageCircle size={15} /> Conversar
-          </button>
-          <button type="button" role="tab" aria-selected={tab === "visita"} className={tab === "visita" ? "is-on" : ""} onClick={() => { setTab("visita"); setError(""); }}>
-            <CalendarDays size={15} /> Agendar visita
-          </button>
-        </div>
+      <div className="capture-tabs" role="tablist">
+        <button type="button" role="tab" aria-selected={tab === "whatsapp"} className={tab === "whatsapp" ? "is-on" : ""} onClick={() => { setTab("whatsapp"); setError(""); }}>
+          <MessageCircle size={15} /> Conversar
+        </button>
+        <button type="button" role="tab" aria-selected={tab === "visita"} className={tab === "visita" ? "is-on" : ""} onClick={() => { setTab("visita"); setError(""); }}>
+          <CalendarDays size={15} /> Agendar visita
+        </button>
+      </div>
       )}
 
       <form className="capture-form" onSubmit={tab === "visita" ? requestVisit : (e) => e.preventDefault()} noValidate>

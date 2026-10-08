@@ -1,5 +1,15 @@
-import { collection, deleteDoc, doc, getDoc, getDocs, query, serverTimestamp, setDoc, where } from "firebase/firestore";
-import { db } from "./FirebaseConfig";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  serverTimestamp,
+  setDoc,
+  where,
+} from "firebase/firestore";
+import { db, firebaseConfig } from "./FirebaseConfig";
 import { toDate } from "../lib/format";
 
 /**
@@ -13,7 +23,15 @@ import { toDate } from "../lib/format";
  *   Guarda só a data — nenhum dado pessoal fica público.
  */
 
-export const WEEKDAYS = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"];
+export const WEEKDAYS = [
+  "Domingo",
+  "Segunda",
+  "Terça",
+  "Quarta",
+  "Quinta",
+  "Sexta",
+  "Sábado",
+];
 
 export const DEFAULT_SCHEDULE = {
   enabled: false,
@@ -22,21 +40,40 @@ export const DEFAULT_SCHEDULE = {
   maxDaysAhead: 21,
   week: {
     0: [],
-    1: [{ start: "09:00", end: "12:00" }, { start: "14:00", end: "18:00" }],
-    2: [{ start: "09:00", end: "12:00" }, { start: "14:00", end: "18:00" }],
-    3: [{ start: "09:00", end: "12:00" }, { start: "14:00", end: "18:00" }],
-    4: [{ start: "09:00", end: "12:00" }, { start: "14:00", end: "18:00" }],
-    5: [{ start: "09:00", end: "12:00" }, { start: "14:00", end: "18:00" }],
+    1: [
+      { start: "09:00", end: "12:00" },
+      { start: "14:00", end: "18:00" },
+    ],
+    2: [
+      { start: "09:00", end: "12:00" },
+      { start: "14:00", end: "18:00" },
+    ],
+    3: [
+      { start: "09:00", end: "12:00" },
+      { start: "14:00", end: "18:00" },
+    ],
+    4: [
+      { start: "09:00", end: "12:00" },
+      { start: "14:00", end: "18:00" },
+    ],
+    5: [
+      { start: "09:00", end: "12:00" },
+      { start: "14:00", end: "18:00" },
+    ],
     6: [{ start: "09:00", end: "12:00" }],
   },
   blockedDates: [],
 };
 
 const pad = (n) => String(n).padStart(2, "0");
-export const dayKey = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
-export const slotKey = (d) => `${dayKey(d)}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+export const dayKey = (d) =>
+  `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+export const slotKey = (d) =>
+  `${dayKey(d)}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 const toMinutes = (hhmm) => {
-  const [h, m] = String(hhmm || "0:0").split(":").map(Number);
+  const [h, m] = String(hhmm || "0:0")
+    .split(":")
+    .map(Number);
   return (h || 0) * 60 + (m || 0);
 };
 
@@ -45,16 +82,22 @@ function normalizeSchedule(d = {}) {
   for (let i = 0; i < 7; i += 1) {
     const list = d.week?.[i] ?? d.week?.[String(i)];
     week[i] = Array.isArray(list)
-      ? list.filter((r) => r && r.start && r.end && toMinutes(r.end) > toMinutes(r.start))
+      ? list.filter(
+          (r) => r && r.start && r.end && toMinutes(r.end) > toMinutes(r.start),
+        )
       : [];
   }
   return {
     enabled: Boolean(d.enabled),
-    slotMinutes: [30, 45, 60, 90, 120].includes(Number(d.slotMinutes)) ? Number(d.slotMinutes) : 60,
+    slotMinutes: [30, 45, 60, 90, 120].includes(Number(d.slotMinutes))
+      ? Number(d.slotMinutes)
+      : 60,
     minNoticeHours: Math.max(0, Number(d.minNoticeHours) || 0),
     maxDaysAhead: Math.min(90, Math.max(1, Number(d.maxDaysAhead) || 21)),
     week,
-    blockedDates: Array.isArray(d.blockedDates) ? d.blockedDates.filter(Boolean).sort() : [],
+    blockedDates: Array.isArray(d.blockedDates)
+      ? d.blockedDates.filter(Boolean).sort()
+      : [],
   };
 }
 
@@ -62,21 +105,38 @@ let cached = null;
 
 export async function fetchSchedule({ force = false } = {}) {
   if (cached && !force) return cached;
-  const snap = await getDoc(doc(db, "settings", "agenda"));
-  cached = snap.exists() ? normalizeSchedule(snap.data()) : { ...DEFAULT_SCHEDULE, enabled: false, _missing: true };
+  let snap;
+  try {
+    snap = await getDoc(doc(db, "settings", "agenda"));
+  } catch (e) {
+    // Normalmente: regra do Firestore não libera leitura pública de `settings`
+    console.warn(
+      "Agendamento: não foi possível ler settings/agenda.",
+      e?.code || e,
+    );
+    throw e;
+  }
+  cached = snap.exists()
+    ? normalizeSchedule(snap.data())
+    : { ...DEFAULT_SCHEDULE, enabled: false, _missing: true };
   return cached;
 }
 
 export async function saveSchedule(s) {
   const data = normalizeSchedule(s);
-  await setDoc(doc(db, "settings", "agenda"), { ...data, updatedAt: serverTimestamp() });
+  await setDoc(doc(db, "settings", "agenda"), {
+    ...data,
+    updatedAt: serverTimestamp(),
+  });
   cached = data;
   return data;
 }
 
 /** Horários já reservados a partir de agora: Set de slotKey. */
 export async function fetchBookings() {
-  const snap = await getDocs(query(collection(db, "bookings"), where("at", ">=", new Date())));
+  const snap = await getDocs(
+    query(collection(db, "bookings"), where("at", ">=", new Date())),
+  );
   return new Set(snap.docs.map((d) => d.id));
 }
 
@@ -86,13 +146,51 @@ export async function fetchAllBookings() {
   return snap.docs.map((d) => ({ id: d.id, at: toDate(d.data().at) }));
 }
 
+/** O horário já existe em `bookings`? (distingue "ocupado" de "sem permissão") */
+export async function isSlotTaken(date) {
+  try {
+    const snap = await getDoc(doc(db, "bookings", slotKey(date)));
+    return snap.exists();
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Testa o que um visitante SEM login consegue ler, usando a API REST do
+ * Firestore sem autenticação (o painel está logado como admin, então o
+ * SDK não serve para esse teste). Nada é gravado.
+ * → { settings: "ok" | "bloqueado" | "erro", bookings: idem }
+ */
+export async function checkPublicAccess() {
+  const base = `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/(default)/documents`;
+  const probe = async (path) => {
+    try {
+      const res = await fetch(`${base}/${path}?key=${firebaseConfig.apiKey}`);
+      if (res.ok || res.status === 404) return "ok";
+      if (res.status === 403 || res.status === 401) return "bloqueado";
+      return "erro";
+    } catch {
+      return "erro";
+    }
+  };
+  const [settings, bookings] = await Promise.all([
+    probe("settings/agenda"),
+    probe("bookings?pageSize=1"),
+  ]);
+  return { settings, bookings };
+}
+
 /**
  * Reserva o horário. Lança `SLOT_TAKEN` se outro visitante já pegou
  * (a regra recusa sobrescrever um documento existente).
  */
 export async function bookSlot(date) {
   try {
-    await setDoc(doc(db, "bookings", slotKey(date)), { at: date, createdAt: serverTimestamp() });
+    await setDoc(doc(db, "bookings", slotKey(date)), {
+      at: date,
+      createdAt: serverTimestamp(),
+    });
   } catch (e) {
     const err = new Error("SLOT_TAKEN");
     err.cause = e;
@@ -117,13 +215,27 @@ export function availableDays(schedule, booked = new Set(), now = new Date()) {
   const start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
   for (let i = 0; i <= schedule.maxDaysAhead; i += 1) {
-    const day = new Date(start.getFullYear(), start.getMonth(), start.getDate() + i);
+    const day = new Date(
+      start.getFullYear(),
+      start.getMonth(),
+      start.getDate() + i,
+    );
     const key = dayKey(day);
     if (blocked.has(key)) continue;
     const slots = [];
     (schedule.week[day.getDay()] || []).forEach((range) => {
-      for (let m = toMinutes(range.start); m + schedule.slotMinutes <= toMinutes(range.end); m += schedule.slotMinutes) {
-        const at = new Date(day.getFullYear(), day.getMonth(), day.getDate(), Math.floor(m / 60), m % 60);
+      for (
+        let m = toMinutes(range.start);
+        m + schedule.slotMinutes <= toMinutes(range.end);
+        m += schedule.slotMinutes
+      ) {
+        const at = new Date(
+          day.getFullYear(),
+          day.getMonth(),
+          day.getDate(),
+          Math.floor(m / 60),
+          m % 60,
+        );
         if (at >= earliest && !booked.has(slotKey(at))) slots.push(at);
       }
     });

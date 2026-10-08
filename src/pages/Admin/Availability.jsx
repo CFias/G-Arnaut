@@ -6,6 +6,7 @@ import {
   WEEKDAYS,
   availableDays,
   cancelBooking,
+  checkPublicAccess,
   fetchAllBookings,
   fetchSchedule,
   saveSchedule,
@@ -24,6 +25,12 @@ export default function Availability() {
   const [blockInput, setBlockInput] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [access, setAccess] = useState(null); // { settings, bookings } | "checking" | null
+
+  const runCheck = async () => {
+    setAccess("checking");
+    setAccess(await checkPublicAccess());
+  };
 
   useEffect(() => {
     fetchSchedule({ force: true })
@@ -38,9 +45,10 @@ export default function Availability() {
         setError("Não foi possível ler a configuração. Confira as regras do Firestore (settings).");
         setForm(clone(DEFAULT_SCHEDULE));
       });
+    runCheck();
     fetchAllBookings()
       .then((list) => setBookings(list.filter((b) => b.at && b.at > new Date()).sort((a, b) => a.at - b.at)))
-      .catch(() => { });
+      .catch(() => {});
   }, []);
 
   const booked = useMemo(() => new Set(bookings.map((b) => b.id)), [bookings]);
@@ -126,6 +134,30 @@ export default function Availability() {
           onClick={() => save(!form.enabled)}
         />
       </section>
+
+      {form.enabled && access && access !== "checking" && (access.settings !== "ok" || access.bookings !== "ok") && (
+        <section className="admin-card access-alert" role="alert">
+          <strong>Os visitantes ainda não conseguem agendar</strong>
+          <p>
+            O agendamento está ativo aqui, mas as regras do Firestore{" "}
+            {access.settings !== "ok"
+              ? "não deixam o site ler a disponibilidade (coleção settings) — por isso o botão “Agendar visita” não aparece para o cliente."
+              : "não deixam o site ler as reservas (coleção bookings)."}{" "}
+            Você vê tudo normalmente porque está logado como admin.
+          </p>
+          <p>
+            Para resolver: no Firebase Console → Firestore → Regras, cole os blocos <code>settings</code> e{" "}
+            <code>bookings</code> do arquivo FIRESTORE_RULES.md e publique.
+          </p>
+          <button type="button" className="btn btn--outline btn--sm" onClick={runCheck}>
+            Verificar de novo
+          </button>
+        </section>
+      )}
+
+      {form.enabled && access && access !== "checking" && access.settings === "ok" && access.bookings === "ok" && (
+        <p className="access-ok">✓ Visitantes conseguem ver os horários. O botão “Agendar visita” aparece na página de cada imóvel.</p>
+      )}
 
       <section className="form-section">
         <div className="form-section-head">
